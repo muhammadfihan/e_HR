@@ -17,7 +17,9 @@ class DataPegawaiController extends Controller
         $pegawai = [
             'name' => 'required|string',
             'email' => 'required|string',
-            'jabatan' => 'required|string',
+            'id_perusahaan' => 'required|integer',
+            'id_jabatan' => 'required|integer',
+            'id_admin' => 'required|integer',
             'no_hp' => 'required|bigInteger',
             'no_ktp' => 'required|bigInteger',
             'gender' => 'required|string',
@@ -30,7 +32,9 @@ class DataPegawaiController extends Controller
             'no_pegawai' => 'PN'.$nopegawai,
             'name' => $request->name,
             'email' => Auth::user()->email,
-            'jabatan' => $request->jabatan,
+            'id_perusahaan' => $request->id_perusahaan,
+            'id_jabatan' => $request->id_jabatan,
+            'id_admin' => $request->id_admin,
             'no_hp' => $request->no_hp,
             'no_ktp' => $request->no_ktp,
             'gender' => $request->gender,
@@ -46,8 +50,9 @@ class DataPegawaiController extends Controller
     public function datapegawai()
     {
        $datapegawai = DB::table('pegawais')
-       ->select('*')
-       ->get();
+           ->select('*')
+           ->where('id_admin', Auth::user()->id)
+           ->get();
        return response([
            'data' => $datapegawai,
            'message' => 'get data berhasil',
@@ -67,41 +72,34 @@ class DataPegawaiController extends Controller
        ]);
 
     }
-    public function editPegawai($id)
+    public function editpegawai($id)
     {
-        $pegawai = DataPegawai::find($id);
-        return response()->json($pegawai);
+        $edit = DB::table('pegawais')
+            ->where('id' ,$id)
+            ->get();
+       return response([
+           'data' => $edit,
+           'message' => 'get data berhasil',
+           'status' => true,
+       ]);
     }
 
-    public function updatePegawai(Request $request, $id)
+    public function updatepegawai(Request $request)
     {
-        $validate = Validator::make($request->all(), [
-            'name' => 'required',
-            'role' => 'required',
-            'jabatan' => 'required',
-            'status' => 'required',
-        ]);
-
-        if ($validate->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Update Data Gagal!',
-            ]);
-        } else {
-            DB::table('pegawais')->where('id', $id)->update([
+        
+            DB::table('pegawais')->where('id', $request->id)->update([
                 'name' => $request->name,
-                'role' => $request->role,
-                'jabatan' => $request->jabatan,
+                'id_jabatan' => $request->id_jabatan,
                 'status' => $request->status
             ]);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Update Data Berhasil!',
             ]);
-        }
+        
     }
-    public function hapusPegawai(Request $request, $id)
+    public function hapuspegawai(Request $request, $id)
     {
         $data = DataPegawai::findOrFail($id);
         $data->delete();

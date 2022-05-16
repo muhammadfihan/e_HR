@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Jabatan;
 use App\Models\Pegawai;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,14 +15,22 @@ class JabatanController extends Controller
 {
     public function alljabatan()
     {
-        $jabatan = Jabatan::all()->toArray();
-        return array_reverse($jabatan);
+        $jabatan = DB::table('jabatan')
+            ->select('*')
+            ->where('id_admin', Auth::user()->id)
+            ->get();
+        return response([
+            'data' => $jabatan,
+            'message' => 'get data berhasil',
+            'status' => true
+        ]);
     }
 
     // add book
     public function tambahjabatan(Request $request)
     {
         $jabatan = new Jabatan([
+            'id_admin' => Auth::user()->id,
             'jabatan' => $request->jabatan,
             'gaji' => $request->gaji,
             'tunjangan' => $request->tunjangan
@@ -42,25 +52,39 @@ class JabatanController extends Controller
     }
 
     // update book
-    public function updatejabatan($id, Request $request)
+    public function updatejabatan(Request $request)
     {
-        $jabatan = Jabatan::find($id);
-        $jabatan->update($request->all());
-        $success = true;
-        return response()->json([
-            'message'=>'Jabatan successfully updated',
-            'success' => $success]);
+        $validate = Validator::make($request->all(), [
+            'jabatan' => 'required',
+            'gaji' => 'required',
+            'tunjangan' => 'required'
+         ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Update Data Gagal!',
+            ]);
+        } else {
+            DB::table('jabatan')->where('id', $request->id)->update([
+                'jabatan' => $request->jabatan,
+                'gaji' => $request->gaji,
+                'tunjangan' => $request->tunjangan
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Update Jabatan Berhasil!',
+            ]);
+        }
     }
-
-    // delete book
-    public function hapusjabatan($id)
+    public function hapusjabatan(Request $request, $id)
     {
-        $jabatan = Jabatan::find($id);
-        $jabatan->delete();
-
-        $success = true;
+        $data = Jabatan::findOrFail($id);
+        $data->delete();
         return response()->json([
-            'message'=>'Jabatan successfully deleted',
-            'success' => $success]);
+            'success' => true,
+            'message' => 'Hapus data berhasil'
+        ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Jabatan;
 use App\Models\Pegawai;
+use App\Models\Perusahaan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use phpDocumentor\Reflection\Element;
+use App\Models\AkunPegawai;
 
 class UserController extends Controller
 {
@@ -30,18 +32,11 @@ class UserController extends Controller
             ]);
         } else {
             $user = User::where('email', $request->email)->first();
-            if ($user->role == "Admin") {
-                $detail = DB::table('users')
-                    ->select('*')
-                    ->where('role', "Admin")
-                    ->first();
-            } else
-            {
-                $detail = DB::table('users')
+            $detail = DB::table('users')
                     ->select('*')
                     ->where('id', $user->id)
                     ->first();
-            }
+
             $data = [
                 'email'     => $request->input('email'),
                 'password'  => $request->input('password'),
@@ -62,15 +57,15 @@ class UserController extends Controller
                 ]);
 
             }
-//            }
+
         }
     }
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(),[
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'role' => 'required|string|',
             'jabatan' => 'required|string|max:255',
             'nama_perusahaan' => 'required|string|max:255',
             'jumlah_karyawan' => 'required|integer',
@@ -86,11 +81,17 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'role' => $request->role,
             'jabatan' => $request->jabatan,
             'nama_perusahaan' => $request->nama_perusahaan,
             'jumlah_karyawan' => $request->jumlah_karyawan,
             'password' => Hash::make($request->password),
+
+        $pt = Perusahaan::updateOrCreate([
+            'admin_perusahaan' => $request->name,
+            'nama_perusahaan' => $request->nama_perusahaan,
+            'jumlah_karyawan' => $request->jumlah_karyawan,
+            'email_perusahaan' => $request->email,
+         ])
 
         ]);
         $success = true;
@@ -99,6 +100,7 @@ class UserController extends Controller
         return response()
             ->json([
                 'data' => $user,
+                'dat_perusahaan' => $pt,
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'success' => $success,
@@ -109,8 +111,8 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'name' => 'required|string|max:255',
+            'role' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'jabatan' => 'required|string|max:255',
             'password' => 'required|string|min:8',
 
         ]);
@@ -120,19 +122,28 @@ class UserController extends Controller
                 ->json(['message' => 'Unauthorized', 'success'=>$success], 401);
         }
 
-        $user = User::create([
+        $user = AkunPegawai::create([
+            'id_admin' => Auth::user()->id,
             'name' => $request->name,
+            'role' => $request->role,
             'email' => $request->email,
-            'jabatan' => $request->jabatan,
             'password' => Hash::make($request->password),
-
         ]);
+        $akunpegawai = User::updateOrCreate([
+            'name' => $request->name,
+            'role' => $request->role,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);    
+    
+
         $success = true;
         $message = 'User register successfully';
         $token = $user->createToken('auth_token')->plainTextToken;
         return response()
             ->json([
                 'data' => $user,
+                'akunpegawai' => $akunpegawai,
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'success' => $success,
@@ -141,7 +152,10 @@ class UserController extends Controller
     }
     public function allUser()
     {
-        $pegawai = Pegawai::all();
+        $pegawai = DB::table('akunpegawai')
+        ->select('*')
+        ->where('id_admin', Auth::user()->id)
+        ->get();
 
         return response()->json([
             'status' => true,
@@ -151,17 +165,23 @@ class UserController extends Controller
     }
     public function editUser($id)
     {
-        $pegawai = Pegawai::find($id);
-        return response()->json($pegawai);
+        $edit = DB::table('akunpegawai')
+        ->where('id' ,$id)
+        ->get();
+        return response([
+       'data' => $edit,
+       'message' => 'get data berhasil',
+       'status' => true,
+        ]);
     }
 
-    public function updateUser(Request $request, $id)
+    public function updateUser(Request $request)
     {
         $validate = Validator::make($request->all(), [
             'name' => 'required',
-            'role' => 'required',
-            'jabatan' => 'required',
-        ]);
+            'email' => 'required',
+            'password' => 'required'
+         ]);
 
         if ($validate->fails()) {
             return response()->json([
@@ -169,10 +189,10 @@ class UserController extends Controller
                 'message' => 'Update Data Gagal!',
             ]);
         } else {
-            DB::table('pegawais')->where('id', $id)->update([
+            DB::table('akunpegawai')->where('id', $request->id)->update([
                 'name' => $request->name,
-                'role' => $request->role,
-                'jabatan' => $request->jabatan
+                'email' => $request->email,
+                'password' => $request->password
             ]);
 
             return response()->json([
@@ -183,7 +203,7 @@ class UserController extends Controller
     }
     public function hapusUser(Request $request, $id)
     {
-        $data = Pegawai::findOrFail($id);
+        $data = AkunPegawai::findOrFail($id);
         $data->delete();
         return response()->json([
             'success' => true,

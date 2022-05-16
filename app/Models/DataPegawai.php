@@ -9,15 +9,22 @@ class DataPegawai extends Model
 {
     use HasFactory;
     protected $table = "pegawais";
-    
+
     protected $fillable = [
         'name',
+        'id_perusahaan',
+        'id_admin',
         'email',
         'no_pegawai',
-        'jabatan',
+        'id_jabatan',
         'no_ktp',
         'no_hp',
         'gender',
         'alamat',
     ];
+
+    public function jabatan()
+    {
+        return $this->hasMany(Jabatan::class);
+    }
 }

@@ -6,6 +6,10 @@ import ManagerDashboard from "../dashboard/ManagerDashboard";
 import PegawaiDashboard from "../dashboard/PegawaiDashboard";
 import TopBar from "../dashboard/TopBar";
 import DataPegawai from "../components/Admin/DataPegawai";
+import AkunPegawai from "../components/Admin/AkunPegawai";
+import Jabatan from "../components/Admin/Jabatan";
+import Kehadiran from "../components/Admin/Kehadiran";
+import Payroll from "../components/Admin/Payroll";
 import Navbar from "../components/Navbar";
 import { next } from "lodash/seq";
 
@@ -66,6 +70,30 @@ export const routes = [{
         name: 'DataPegawai',
         path: '/DataPegawai',
         component: DataPegawai,
+        beforeEnter: admin,
+    },
+    {
+        name: 'AkunPegawai',
+        path: '/AkunPegawai',
+        component: AkunPegawai,
+        beforeEnter: admin,
+    },
+    {
+        name: 'Jabatan',
+        path: '/Jabatan',
+        component: Jabatan,
+        beforeEnter: admin,
+    },
+    {
+        name: 'Kehadiran',
+        path: '/Kehadiran',
+        component: Kehadiran,
+        beforeEnter: admin,
+    },
+    {
+        name: 'Payroll',
+        path: '/Payroll',
+        component: Payroll,
         beforeEnter: admin,
     }
 ];

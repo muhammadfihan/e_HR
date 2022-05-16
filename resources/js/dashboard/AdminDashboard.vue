@@ -1,29 +1,6 @@
 <template>
     <body>
     <div class="main">
-        <h1>Fixed Top Menu</h1>
-        <h2>Scroll this page to see the effect</h2>
-        <h2>The navigation bar will stay at the top of the page while scrolling</h2>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
-        <p>Some text some text some text some text..</p>
     </div>
     </body>
 
@@ -36,9 +13,24 @@ export default {
     mounted() {
     },
 
+    // beforeRouteEnter(to, from, next) {
+    //     if (JSON.parse(window.localStorage.getItem("loggedIn"))) {
+    //         if(window.localStorage.getItem("role") == 'Manager'){
+    //             return next();
+    //         } else if (window.localStorage.getItem("role") == 'Admin') {
+    //             return next();
+    //         } else if (window.localStorage.getItem("role") == 'Pegawai') {
+    //             return next();
+    //         }
+    //     }
+    //     next();
+    // }
+
+
 }
 
 
 </script>
+
 
 

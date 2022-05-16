@@ -8,7 +8,7 @@
         <TopBar/>
         <Navbar/>
     </div>
- 
+
     <router-view />
 
 </template>
@@ -24,15 +24,16 @@ export default {
 
     data() {
         return {
+             token: localStorage.getItem("token"),
             loggedIn: null,
             statusPage: null
         };
     },
-    
+
     methods: {
         getLoggedIn() {
             this.loggedIn = localStorage.getItem("loggedIn");
-            // localStorage.clear(); 
+            //localStorage.clear();
         },
     },
 

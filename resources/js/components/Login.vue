@@ -27,7 +27,7 @@
                     </div>
                     <div class="input-field">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" placeholder="Email" v-model="email"/>
+                        <input type="email" placeholder="Email/Email Perusahaan" v-model="email"/>
                     </div>
                     <div class="input-field">
                         <i class="fa-solid fa-building-user"></i>
@@ -40,15 +40,6 @@
                     <div class="input-field">
                         <i class="fa-solid fa-users"></i>
                         <input type="text" placeholder="Jumlah Karyawan" v-model="jumlah_karyawan" />
-                    </div>
-                    <div class="input-field">
-                        <i class="fa-solid fa-id-card"></i>
-<!--                        <input type="text" placeholder="Role Sebagai" v-model="role"/>-->
-                        <select class="boxpilih" v-model="role" >
-                            <option value="" disabled selected>Role Sebagai</option>
-                            <option value="Admin">Admin</option>
-                            <option value="Manager">Manager</option>
-                        </select>
                     </div>
                     <div class="input-field">
                         <i class="fas fa-lock"></i>

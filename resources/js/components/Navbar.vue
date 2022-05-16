@@ -4,9 +4,10 @@
             <ul>
                 <router-link to="AdminDashboard"><li class="active">Dashboard</li></router-link>
                 <router-link to="DataPegawai"><li>Pegawai</li></router-link>
-                <li>Data User</li>
-                <li>Kehadiran</li>
-                <li>Payroll</li>
+                <router-link  to="AkunPegawai"><li>Data User</li> </router-link>
+               <router-link  to="Jabatan"><li>Jabatan</li> </router-link>
+               <router-link  to="Kehadiran"><li>Kehadiran</li> </router-link>
+               <router-link  to="Payroll"><li>Payroll</li> </router-link>
                 <li>Laporan</li>
                 <li>Cuti</li>
                 <li>Lembur</li>

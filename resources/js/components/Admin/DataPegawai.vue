@@ -6,8 +6,6 @@
         <div class="main">
             <div class="row" style=" margin-bottom:6px; margin-left:-2px; font-style: normal; font-size:30px; line-height: 47px;color: #E95A09;">
                 <p>Data Pegawai</p>
-                <button class="btn print" style="margin-left:933px; color:white">Print</button>
-                <button class="btn download" style="margin-left:10px; color:white" >Download</button>
             </div>
             <table class="table align-middle border" >
                 <thead class="" >
@@ -37,17 +35,22 @@
                                 <p class="text-muted mb-0">{{ data.email }}</p>
                             </div>
                         </td>
-                        <td>{{ data.jabatan }}</td>
-                        <td>{{ data.no_pegawai }}</td>
                         <td>
-                            <span class="badge badge-success rounded-pill">{{data.status}}</span>
+                            <a v-for="(dat) in jabatan" :key="dat.id" >
+                            <a v-if="dat.id == data.id_jabatan" >{{ dat.jabatan }}</a>
+                            </a>
+                        </td>
+                        <td><a>{{ data.no_pegawai }}</a></td>
+                        <td>
+                            <span class="badge badge-success" v-if="data.status == 'Aktif'" >{{data.status}}</span>
+                            <span class="badge badge-danger" v-else-if="data.status == 'Tidak Aktif'" >{{data.status}}</span>
                         </td>
                         <td>{{ data.gender }}</td>
                         <td style="text-align: center;">
-                             <button type="button" class="btn btn-link btn-sm btn-rounded" data-toggle="modal" data-target=".bd-example-modal-lg" @click.prevent="detailPegawai(data.id)">
+                             <button type="button" class="btn btn-link btn-sm btn-rounded" data-toggle="modal" data-target="#detailmodal" @click.prevent="detailPegawai(data.id)">
                                     Detail
                             </button>
-                             <button type="button" class="btn btn-link btn-sm btn-rounded" >
+                             <button type="button" class="btn btn-link btn-sm btn-rounded" data-toggle="modal"  @click="editModal(data)">
                                     Edit
                             </button>
                              <button type="button" class="btn btn-link danger btn-sm btn-rounded" style="color:red;" @click.prevent="hapusPegawai(data.id)">
@@ -58,60 +61,114 @@
             </tbody>
             </table>
         </div>
-
-       <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="detailPegawaiLabel" aria-hidden="true">
-         <div class="modal-dialog modal-lg">
+        <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <div style="padding:35px">
-                    <h2 style="color:#E95A09" >Detail Data Pegawai</h2>
-                    <table class="table align-left border" style="table-layout:fixed">
-                    <thead class="" v-for="(data) in detpegawai" :key="data.id" >
-                        <tr>
-                            <td style="font-weight:bold">Pegawai</td>
-                            <td>{{ data.name }}</td> 
-                        </tr>
-                        <tr>
-                            <td style="font-weight:bold">Jabatan</td>
-                            <td>{{ data.jabatan }}</td> 
-                        </tr>
-                        <tr>
-                            <td style="font-weight:bold">No Pegawai</td>
-                            <td>{{ data.no_pegawai }}</td> 
-                        </tr>
-                        <tr>
-                            <td style="font-weight:bold">Email</td>
-                            <td>{{ data.email }}</td> 
-                        </tr>
-                        <tr >
-                            <td style="font-weight:bold">No KTP</td>
-                            <td>{{ data.no_ktp }}</td> 
-                        </tr>
-                        <tr>
-                            <td style="font-weight:bold">No HP</td>
-                            <td>{{ data.no_hp }}</td> 
-                        </tr>
-                        <tr >
-                            <td style="font-weight:bold">Alamat</td>
-                            <td>{{ data.alamat }}</td> 
-                        </tr>
-                        <tr >
-                            <td style="font-weight:bold">Gender</td>
-                            <td>{{ data.gender }}</td> 
-                        </tr>
-                        <tr >
-                            <td style="font-weight:bold">Status</td>
-                            <td><span class="badge badge-success rounded-pill">{{data.status}}</span></td> 
-                        </tr>
-                    </thead>
-                    
-                    </table>
-                    <div style="text-align:right;">
-                     <button type="button" class="btn" style=" border-radius:6px; background-color:#124EB2;color:white;width:100px " data-dismiss="modal">Close</button>   
-                    </div> 
+                <div class="modal-header">
+                    <h2 class="modal-title" id="detailmodal" style="color:#E95A09">Detail Data Pegawai</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="padding:30px">
+                    <div class="alert alert-danger" style="display:none"></div>
+                    <form v-for="(data) in detpegawai" :key="data.id">
+                        <div class="form-group">
+                            <label style="font-weight:bold">Nama Pegawai</label>
+                            <div type="text" class="form-control">{{data.name}}</div>
+                        </div>
+                        <div class="form-group" >
+                            <label style="font-weight:bold">Jabatan</label>
+                            <div v-for="(dat) in jabatan" :key="dat.id ">
+                           <div  type="text" class="form-control" v-if="dat.id == data.id_jabatan">{{dat.jabatan}}</div>
+                           </div>
+                        </div>
+                         <div class="form-group">
+                            <label style="font-weight:bold">No Pegawai</label>
+                           <div type="text"  class="form-control">{{data.no_pegawai}}</div>
+                        </div>
+                         <div class="form-group">
+                            <label style="font-weight:bold">Email</label>
+                           <div type="text"  class="form-control">{{data.email}}</div>
+                        </div>
+                         <div class="form-group">
+                            <label style="font-weight:bold">No KTP</label>
+                           <div type="text" class="form-control">{{data.no_ktp}}</div>
+                        </div>
+                         <div class="form-group">
+                            <label style="font-weight:bold">No HP</label>
+                           <div type="text" class="form-control">{{data.no_hp}}</div>
+                        </div>
+                         <div class="form-group">
+                            <label style="font-weight:bold"> Gender</label>
+                           <div type="text"  class="form-control">{{data.gender}}</div>
+                        </div>
+                         <div class="form-group">
+                            <label style="font-weight:bold">Status</label>
+                           <div type="text"  class="form-control" >
+                              <span class="badge badge-success" v-if="data.status == 'Aktif'" >{{data.status}}</span>
+                            <span class="badge badge-danger" v-else-if="data.status == 'Tidak Aktif'" >{{data.status}}</span>
+                           </div>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-weight:bold">Alamat</label>
+                            <textarea disabled name="description" class="textarea form-control" cols="40" rows="5"
+                                style="background-color:white" v-model="data.alamat"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                   <button type="button" class="btn" style=" border-radius:6px; background-color:#124EB2;color:white;width:100px " data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="modal fade" id="editPegawai" tabindex="-1" role="dialog" aria-labelledby="editPegawai" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="editPegawai" style="color:#E95A09">Update Data Pegawai</h2>
+                    <button type="button" @click="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="padding:30px">
+                    <div class="alert alert-danger" style="display:none"></div>
+                    <form @submit.prevent="updatePegawai()" >
+                        <div class="form-group">
+                            <label style="font-weight:bold">Nama Pegawai</label>
+                            <input type="text" class="form-control" v-model="form.name">
+                        </div>
+                        <div class="form-group" >
+                            <label style="font-weight:bold">Jabatan</label>
+                            <select class='form-control' v-model="form.id_jabatan">
+                            <option disabled selected>Ubah Jabatan</option>
+                            <option v-for="data in jabatan" :key="data.id"
+                                            :selected="data.id == form.id_jabatan ? selected : null"
+                                            :value="data.id">
+                                        {{data.jabatan}}
+                            </option>
+                           </select>
+
+                        </div>
+                         <div class="form-group">
+                            <label style="font-weight:bold">Status</label>
+                           <select class='form-control' v-model="form.status">
+                                <option >Aktif</option>
+                                <option >Tidak Aktif</option>
+                            </select>
+                        </div>
+                         <div class="modal-footer">
+                   <button type="button" class="btn" style=" border-radius:6px; background-color:#E95A09;color:white;   width:100px " @click="closeModal()" data-dismiss="modal">Batal</button>
+                     <button type="submit"  class="btn" style=" border-radius:6px; background-color:#124EB2;color:white;  width:100px">Simpan</button>
+                </div>
+                    </form>
+                </div>
+
+            </div>
         </div>
+    </div>
+
 
     </div>
     </body>
@@ -127,13 +184,39 @@ export default {
         return {
             pegawai: [],
             detpegawai: [],
+            jabatan:[],
+            editpegawai:[],
+            updatepegawai :[],
             delpegawai:[],
+            form: new Form ({
+                id : "",
+                name : "",
+                id_jabatan : "",
+                status : ""
+            }),
             token: localStorage.getItem("token"),
             role: localStorage.getItem('role'),
         }
     },
     created() {
-        this.$axios.get('/sanctum/csrf-cookie').then(response => {
+    },
+    methods:{
+         closeModal() {
+            this.form.reset();
+            $("#editPegawai").modal("hide");
+        },
+        editModal(data) {
+            // this.form.reset()
+            $("#editPegawai").modal("show")
+            this.form.fill({
+                id: data.id,
+                name: data.name,
+                id_jabatan: data.id_jabatan,
+                status: data.status,
+            })
+        },
+        getdataPegawai(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/datapegawai',{
                 headers: {Authorization: "Bearer " + this.token},
             })
@@ -144,41 +227,79 @@ export default {
                     console.error(error);
                 });
         })
-    },
-    methods:{
-        // detailPegawaid(id){
-        //     $('#detailPegawai').modal('show')
-        //     this.$axios.get('/sanctum/csrf-cookie').then(response => {
-        //     this.$axios.get('/api/detailpegawai'+id,{
-        //         headers: {Authorization: "Bearer " + this.token},
-        //     })
-        //         .then(response => {
-        //             this.pegawai = response.data.data;
-        //         })
-        //         .catch(function (error) {
-        //             console.error(error);
-        //         });
-        //      })
-        // },
+        },
         detailPegawai(id){
             $('#detailPegawai').modal('show')
-            axios.get('/api/detailpegawai/'+id,  {
+            axios.get('/api/detailpegawai/'+id,{
                 headers: { Authorization: "Bearer " + this.token }
             }).then((response) => {
                 this.detpegawai = response.data.data
-                console.log(this.detpegawai)
             })
         },
-        // hapusPegawai(id){
-        //     this.showAlertConfirm(),
-        //     axios.delete('/api/hapusPegawai/'+id,  {
+
+        // editPegawai(id){
+        //     $('#editPegawai').modal('show')
+        //     axios.get('/api/editpegawai/'+id,  {
         //         headers: { Authorization: "Bearer " + this.token }
         //     }).then((response) => {
-        //         this.delpegawai = response.data.data
-        //         console.log(this.delpegawai)
+        //         this.editpegawai = response.data.data
         //     })
         // },
+
+        // updatePegawai(id){
+        //     axios.post('/api/updatepegawai/'+
+        //      {
+        //             id: this.form.id,
+        //             name: this.form.name,
+        //             jabatan: this.form.jabatan,
+        //             status: this.form.status                },
+        //          {
+        //         headers: { Authorization: "Bearer " + this.token }
+        //     }). then((response) => {
+        //         this.updatepegawai = response.data.data
+        //     })
+        //     // console.log("ubah Data")
+
+        // },
+         updatePegawai(){
+             this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            axios.post('/api/updatepegawai',
+                {
+                   id: this.form.id,
+                    name: this.form.name,
+                    id_jabatan: this.form.id_jabatan,
+                    status: this.form.status
+                }).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Data Berhasil Diupdate",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    }),
+                    $('#editPegawai').modal('hide');
+                    this.getdataPegawai();
+                }
+            })
+            })
+        },
+
+        getJabatan(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/alljabatan',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.jabatan = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
         hapusPegawai(id){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
             Swal.fire({
             title: 'Hapus Data Pegawai ?',
             text: "Anda tidak akan bisa mengembalikannya lagi!",
@@ -190,22 +311,29 @@ export default {
             cancelButtonText: 'Batal',
             }).then((result) => {
                  if (result.isConfirmed) {
-                 axios.delete('/api/hapusPegawai/'+id,  {
+                 axios.delete('/api/hapuspegawai/'+id,  {
                 headers: { Authorization: "Bearer " + this.token }
-                
-            }, location.reload())
-                }
-               
-            },
 
-            )
-            
-             
-        }
+            },)
+             Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Menghapus Data Pegawai",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    }),
+                    this.getdataPegawai()
+
+                }
+
+            },)
+            }
+        )}
     },
 
     mounted() {
-       
+        this.getJabatan();
+        this.getdataPegawai();
     },
     // beforeRouteEnter(to, from, next) {
     //     if (JSON.parse(window.localStorage.getItem("loggedIn"))) {

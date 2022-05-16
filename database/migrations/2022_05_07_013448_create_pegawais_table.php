@@ -14,16 +14,20 @@ return new class extends Migration
     public function up()
     {
         Schema::create('pegawais', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
+            $table->integer('id_perusahaan')->unsigned();
+            $table->foreign('id_perusahaan')->references('id')->on('perusahaan');
+            $table->integer('id_admin')->unsigned();
+            $table->foreign('id_admin')->references('id')->on('users');
             $table->string('no_pegawai');
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('jabatan');
+            $table->integer('id_jabatan')->unsigned();
+            $table->foreign('id_jabatan')->references('id')->on('jabatan');
             $table->bigInteger('no_ktp');
             $table->bigInteger('no_hp');
             $table->longText('alamat');
             $table->enum('status', ['Aktif', 'Tidak Aktif'])->default('Aktif');
-            // $table->string('status')->default('Aktif');
             $table->enum('gender',['Laki-Laki','Perempuan'])->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
