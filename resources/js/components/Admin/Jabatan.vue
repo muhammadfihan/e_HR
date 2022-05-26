@@ -6,7 +6,7 @@
         <div class="main">
             <div class="row">
                 <div class="col-md-12 text-left">
-                    <h3 style="color:#E95A09">Data Jabtan Pegawai</h3>
+                    <h3 style="color:#E95A09">Data Jabatan Pegawai</h3>
                     <!-- <button type="button" class="btn btn-warning ">Save</button> -->
                 </div>
                 <div class="col-md-12 text-right">

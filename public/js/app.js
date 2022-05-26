@@ -25145,7 +25145,7 @@ var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
   style: {
     "color": "#E95A09"
   }
-}, "Data Jabtan Pegawai"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <button type=\"button\" class=\"btn btn-warning \">Save</button> ")], -1
+}, "Data Jabatan Pegawai"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <button type=\"button\" class=\"btn btn-warning \">Save</button> ")], -1
 /* HOISTED */
 );
 
