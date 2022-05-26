@@ -12,6 +12,8 @@ class DataPegawai extends Model
 
     protected $fillable = [
         'name',
+        'nama_lengkap',
+        'id',
         'id_perusahaan',
         'id_admin',
         'email',

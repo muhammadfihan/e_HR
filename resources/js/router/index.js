@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
-
+import Landing from '../components/Landing'
 import Login from '../components/Login'
+import Register from '../components/Register'
 import AdminDashboard from "../dashboard/AdminDashboard";
 import ManagerDashboard from "../dashboard/ManagerDashboard";
 import PegawaiDashboard from "../dashboard/PegawaiDashboard";
@@ -10,6 +11,9 @@ import AkunPegawai from "../components/Admin/AkunPegawai";
 import Jabatan from "../components/Admin/Jabatan";
 import Kehadiran from "../components/Admin/Kehadiran";
 import Payroll from "../components/Admin/Payroll";
+import Laporan from "../components/Admin/Laporan";
+import Lembur from "../components/Admin/Lembur";
+import Cuti from "../components/Admin/Cuti";
 import Navbar from "../components/Navbar";
 import { next } from "lodash/seq";
 
@@ -34,9 +38,19 @@ function pegawai(to, from, next) {
     } else next({ name: 'Login' });
 }
 export const routes = [{
-        name: 'Login',
+        name: 'Landing',
         path: '/',
+        component: Landing
+    },
+    {
+        name: 'Login',
+        path: '/Login',
         component: Login
+    },
+    {
+        name: 'Register',
+        path: '/Register',
+        component: Register
     },
     {
         name: 'AdminDashboard',
@@ -95,7 +109,26 @@ export const routes = [{
         path: '/Payroll',
         component: Payroll,
         beforeEnter: admin,
-    }
+    },
+    {
+        name: 'Laporan',
+        path: '/Laporan',
+        component: Laporan,
+        beforeEnter: admin,
+    },
+    {
+        name: 'Lembur',
+        path: '/Lembur',
+        component: Lembur,
+        beforeEnter: admin,
+    },
+    {
+        name: 'Cuti',
+        path: '/Cuti',
+        component: Cuti,
+        beforeEnter: admin,
+    },
+
 ];
 
 const router = createRouter({

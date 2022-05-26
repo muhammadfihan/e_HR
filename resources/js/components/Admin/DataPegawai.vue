@@ -12,7 +12,8 @@
                 <tr>
                     <th>&nbsp;</th>
                     <th>No</th>
-                    <th>Pegawai</th>
+                    <th>Akun Pegawai</th>
+                    <th>Nama Pegawai</th>
                     <th>Jabatan</th>
                     <th>No Pegawai</th>
                     <th>Status</th>
@@ -35,6 +36,7 @@
                                 <p class="text-muted mb-0">{{ data.email }}</p>
                             </div>
                         </td>
+                        <td><a>{{ data.nama_lengkap }}</a></td>
                         <td>
                             <a v-for="(dat) in jabatan" :key="dat.id" >
                             <a v-if="dat.id == data.id_jabatan" >{{ dat.jabatan }}</a>
@@ -74,8 +76,12 @@
                     <div class="alert alert-danger" style="display:none"></div>
                     <form v-for="(data) in detpegawai" :key="data.id">
                         <div class="form-group">
-                            <label style="font-weight:bold">Nama Pegawai</label>
+                            <label style="font-weight:bold">Username</label>
                             <div type="text" class="form-control">{{data.name}}</div>
+                        </div>
+                         <div class="form-group">
+                            <label style="font-weight:bold">Nama Lengkap</label>
+                            <div type="text" class="form-control">{{data.nama_lengkap}}</div>
                         </div>
                         <div class="form-group" >
                             <label style="font-weight:bold">Jabatan</label>
@@ -135,10 +141,6 @@
                 <div class="modal-body" style="padding:30px">
                     <div class="alert alert-danger" style="display:none"></div>
                     <form @submit.prevent="updatePegawai()" >
-                        <div class="form-group">
-                            <label style="font-weight:bold">Nama Pegawai</label>
-                            <input type="text" class="form-control" v-model="form.name">
-                        </div>
                         <div class="form-group" >
                             <label style="font-weight:bold">Jabatan</label>
                             <select class='form-control' v-model="form.id_jabatan">
@@ -210,7 +212,6 @@ export default {
             $("#editPegawai").modal("show")
             this.form.fill({
                 id: data.id,
-                name: data.name,
                 id_jabatan: data.id_jabatan,
                 status: data.status,
             })
@@ -266,7 +267,6 @@ export default {
             axios.post('/api/updatepegawai',
                 {
                    id: this.form.id,
-                    name: this.form.name,
                     id_jabatan: this.form.id_jabatan,
                     status: this.form.status
                 }).then((response) => {

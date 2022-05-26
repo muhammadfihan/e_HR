@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'pegawai' => [
+            'driver' => 'session',
+            'provider' => 'pegawais',
+        ],
     ],
 
     /*
@@ -63,6 +68,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        
+        'pegawais' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\AkunPegawai::class,
         ],
 
         // 'users' => [
@@ -89,6 +99,12 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'pegawais' => [
+            'provider' => 'pegawais',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

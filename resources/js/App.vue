@@ -6,7 +6,7 @@
 
     <div v-else-if="loggedIn">
         <TopBar/>
-        <Navbar/>
+        <!-- <Navbar/> -->
     </div>
 
     <router-view />
@@ -33,7 +33,7 @@ export default {
     methods: {
         getLoggedIn() {
             this.loggedIn = localStorage.getItem("loggedIn");
-            //localStorage.clear();
+            // localStorage.clear();
         },
     },
 

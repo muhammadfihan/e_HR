@@ -398,31 +398,6 @@
         box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.25);
     }
     
-    .menugaji {
-        width: 100vw;
-        background-color: white;
-        height: 57px;
-        place-content: center;
-        display: flex;
-        justify-content: center;
-    }
-    
-    .menunya {
-        width: 378px;
-        height: 209px;
-        color: #E95A09;
-        border: #fff;
-        border-radius: 17px;
-        background: #FFFFFF;
-        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.20);
-    }
-    
-    .menunya:hover {
-        background-color: #E95A09;
-        color: white;
-        border: #fff;
-    }
-    
     .nav_warp {
         padding-top: 57px;
         position: fixed;
@@ -430,8 +405,7 @@
         display: flex;
         justify-content: center;
     }
-    
-    ul {
+    /* ul {
         list-style-type: none;
         background-color: white;
         display: flex;
@@ -457,7 +431,7 @@
         color: #E95A09;
         display: inline-block;
         position: relative;
-    }
+    } */
     /* li.active::after {
     position: absolute;
     content: "";
@@ -484,7 +458,7 @@
         position: absolute;
         left: 60px;
         right: 60px;
-        top: 160px;
+        top: 100px;
         z-index: -1;
         /* Used in this example to enable scrolling */
     }
@@ -524,9 +498,14 @@
         color: white;
         line-height: 8px;
     }
-    
-    .router-link-exact-active li {
+    /* .router-link-exact-active li {
         color: #E95A09;
         font-weight: 500;
         border-bottom: 3px solid #E95A09;
     }
+    
+    .router-link-exact-active button {
+        background-color: #E95A09;
+        color: white;
+        outline: none;
+    } */

@@ -64,13 +64,6 @@
                             <label style="font-weight:bold">Email</label>
                             <input v-model="form.email" type="email" class="form-control">
                         </div>
-                        <div class="form-group" v-show="!statusmodal">
-                            <label style="font-weight:bold">Role</label>
-                             <select v-model="form.role" class='form-control'>
-                                <option>Pegawai</option>
-                            </select>
-                        
-                        </div>
                           <div class="form-group" >
                             <label style="font-weight:bold">Password</label>
                             <input v-model="form.password" type="password" class="form-control">
@@ -89,51 +82,6 @@
         </div>
         
     </div>
-        <!-- <div class="modal fade" id="editAkun" tabindex="-1" role="dialog" aria-labelledby="editAkun" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title"  id="editAkun" style="color:#E95A09">Update Akun Pegawai</h2>
-                    <button type="button" @click="closeEdit()" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <form  >
-                <div class="modal-body" style="padding:30px">
-                    <div class="alert alert-danger" style="display:none"></div>
-                    
-                        <div class="form-group">
-                            <label style="font-weight:bold">Username</label>
-                            <input v-model="form.name" type="name" class="form-control">
-                        </div>
-                        <div class="form-group" >
-                            <label style="font-weight:bold">Email</label>
-                            <input v-model="form.email" type="email" class="form-control">
-                        </div>
-                        <div class="form-group"  >
-                            <label style="font-weight:bold">Role</label>
-                             <select v-model="form.role" class='form-control'>
-                                <option>Pegawai</option>
-                            </select>
-                        
-                        </div>
-                          <div class="form-group" >
-                            <label style="font-weight:bold">Password</label>
-                            <input v-model="form.password" type="password" class="form-control">
-                        </div>
-
-                        <div class="modal-footer end">
-                        <button type="button" class="btn" style=" border-radius:6px; background-color:#E95A09;color:white;   width:100px " @click="closeEdit()" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn" style=" border-radius:6px; background-color:#124EB2;color:white;  width:100px " >Tambah</button>
-                     </div>
-                       
-                    
-                </div>
-                </form>
-            </div>
-        </div>
-        
-    </div> -->
 
     </div>
     </body>
@@ -154,7 +102,6 @@ export default {
                 name : "",
                 email : "",
                 password : "",
-                role : "",
             }),
             token: localStorage.getItem("token"),
             role: localStorage.getItem('role'),

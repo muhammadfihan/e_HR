@@ -9,13 +9,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Validator;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class DataPegawaiController extends Controller
 {
     public function isibiodata(Request $request){
         $pegawai = [
             'name' => 'required|string',
+            'nama_lengkap' => 'required|string',
             'email' => 'required|string',
             'id_perusahaan' => 'required|integer',
             'id_jabatan' => 'required|integer',
@@ -30,8 +32,10 @@ class DataPegawaiController extends Controller
         $nopegawai = strtoupper(substr(str_shuffle($huruf), 0, 9));
         $pegawai = DataPegawai::create([
             'no_pegawai' => 'PN'.$nopegawai,
-            'name' => $request->name,
+            'name' => Auth::user()->name,
+            'nama_lengkap' => $request->nama_lengkap,
             'email' => Auth::user()->email,
+            'id' =>  Auth::user()->id,
             'id_perusahaan' => $request->id_perusahaan,
             'id_jabatan' => $request->id_jabatan,
             'id_admin' => $request->id_admin,
@@ -52,7 +56,7 @@ class DataPegawaiController extends Controller
        $datapegawai = DB::table('pegawais')
            ->select('*')
            ->where('id_admin', Auth::user()->id)
-           ->get();
+           ->paginate(10);
        return response([
            'data' => $datapegawai,
            'message' => 'get data berhasil',
@@ -87,16 +91,36 @@ class DataPegawaiController extends Controller
     public function updatepegawai(Request $request)
     {
         
-            DB::table('pegawais')->where('id', $request->id)->update([
-                'name' => $request->name,
-                'id_jabatan' => $request->id_jabatan,
-                'status' => $request->status
-            ]);
+            // DB::table('pegawais')->where('id', $request->id)->update([
+            //     'name' => $request->name,
+            //     'id_jabatan' => $request->id_jabatan,
+            //     'status' => $request->status
+            // ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Update Data Berhasil!',
-            ]);
+            // return response()->json([
+            //     'success' => true,
+            //     'message' => 'Update Data Berhasil!',
+            // ]);
+            $validate = Validator::make($request->all(), [
+                'id_jabatan' => 'required',
+                'status' => 'required'
+             ]);
+    
+            if ($validate->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Update Data Gagal!',
+                ]);
+            } else {
+                DB::table('pegawais')->where('id', $request->id)->update([
+                    'id_jabatan' => $request->id_jabatan,
+                    'status' => $request->status
+                ]);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Update Data Berhasil!',
+                ]);
+            }
         
     }
     public function hapuspegawai(Request $request, $id)

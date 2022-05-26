@@ -41,7 +41,7 @@ class UserController extends Controller
                 'email'     => $request->input('email'),
                 'password'  => $request->input('password'),
             ];
-            if (Auth::attempt($data)) {
+            if (Auth::guard('web')->attempt($data)) {
                 $token = $user->createToken('auth_token')->plainTextToken;
                 $response = [
                     'success'   => true,
@@ -50,7 +50,9 @@ class UserController extends Controller
                     'token'     => $token,
                 ];
                 return response($response, 201);
-            } else {
+            }
+            
+            else {
                 return response()->json([
                     'success' => false,
                     'message' => 'Access Denied!',
@@ -58,7 +60,53 @@ class UserController extends Controller
 
             }
 
-        }
+        } 
+
+    }
+    public function loginpegawai(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Login Failed!',
+            ]);
+        } else {
+            $user = AkunPegawai::where('email', $request->email)->first();
+            $detail = DB::table('akunpegawai')
+                    ->select('*')
+                    ->where('id', $user->id)
+                    ->first();
+
+            $data = [
+                'email'     => $request->input('email'),
+                'password'  => $request->input('password'),
+            ];
+            if (Auth::guard('pegawai')->attempt($data)) {
+                $token = $user->createToken('auth_token')->plainTextToken;
+                $response = [
+                    'success'   => true,
+                    'user'      => $detail,
+                    'errors'    => null,
+                    'token'     => $token,
+                ];
+                return response($response, 201);
+            }
+            
+            else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Access Denied!',
+                ]);
+
+            }
+
+        } 
+
     }
 
     public function register(Request $request)
@@ -111,7 +159,6 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'name' => 'required|string|max:255',
-            'role' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
 
@@ -121,34 +168,33 @@ class UserController extends Controller
             return response()
                 ->json(['message' => 'Unauthorized', 'success'=>$success], 401);
         }
+        // $user = User::create([
+        //     'id' => $request->id,
+        //     'name' => $request->name,
+        //     'role' => $request->role,
+        //     'email' => $request->email,
+        //     'password' => Hash::make($request->password),
+        // ]);    
 
-        $user = AkunPegawai::create([
+        $akunpegawai = AkunPegawai::create([
             'id_admin' => Auth::user()->id,
             'name' => $request->name,
-            'role' => $request->role,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        $akunpegawai = User::updateOrCreate([
-            'name' => $request->name,
-            'role' => $request->role,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);    
-    
-
         $success = true;
         $message = 'User register successfully';
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $akunpegawai->createToken('auth_token')->plainTextToken;
         return response()
             ->json([
-                'data' => $user,
+                // 'user' => $user,
                 'akunpegawai' => $akunpegawai,
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'success' => $success,
                 'message' => $message,
             ]);
+         
     }
     public function allUser()
     {
@@ -192,9 +238,12 @@ class UserController extends Controller
             DB::table('akunpegawai')->where('id', $request->id)->update([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->password
+                'password' => Hash::make($request->password)
             ]);
-
+            DB::table('pegawais')->where('id', $request->id)->update([
+                'name' => $request->name,
+                'email' => $request->email,
+            ]);
             return response()->json([
                 'success' => true,
                 'message' => 'Update Data Berhasil!',

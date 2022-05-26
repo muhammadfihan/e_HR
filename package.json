@@ -25,6 +25,7 @@
     "dependencies": {
         "bootstrap-table": "^1.20.0",
         "bootstrap-vue": "^2.22.0",
+        "laravel-vue-pagination": "^3.0.0",
         "sweetalert2": "^11.4.10",
         "vform": "^2.1.2",
         "vue": "^3.2.33",
