@@ -4,11 +4,22 @@
     <div class="container-md" >
 
         <div class="main">
-            <div class="row" style=" margin-bottom:6px; margin-left:-2px; font-style: normal; font-size:30px; line-height: 47px;color: #E95A09;">
+            <!-- <div class="row" style=" margin-bottom:6px; margin-left:-2px; font-style: normal; font-size:30px; line-height: 47px;color: #E95A09;">
                 <p>Data Akun Pegawai</p>
                 <button class="btn tambah" data-toggle="modal" @click="showModal()" style="margin-left:942px; color:white">Add Akun</button>
-            </div>
-            <table class="table align-start border"  >
+            </div> -->
+            <div class="row">
+                <div class="col-md-12 text-left">
+                    <h3 style="color:#E95A09">Data Akun Pegawai</h3>
+                    <!-- <button type="button" class="btn btn-warning ">Save</button> -->
+                </div>
+                <div class="col-md-12 text-right">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" @click="showModal()"  style="background-color:#124EB2">Tambah Akun</button>
+                    <!-- <button type="button" class="btn btn-warning ">Save</button> -->
+                </div>
+                </div>
+            <div style="margin-top:10px">
+                  <table class="table align-start border"  >
                 <thead class="" >
                 <tr>
                     <th>&nbsp;</th>
@@ -40,6 +51,8 @@
                 </tr>
             </tbody>
             </table>
+            </div>
+          
         </div>
 
     <div class="modal fade" id="tambahAkun" tabindex="-1" role="dialog" aria-labelledby="tambahAkun" aria-hidden="true">

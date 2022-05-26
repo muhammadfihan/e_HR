@@ -4,9 +4,10 @@
     <div class="container-md" >
 
         <div class="main">
-            <div class="row" style=" margin-bottom:6px; margin-left:-2px; font-style: normal; font-size:30px; line-height: 47px;color: #E95A09;">
-                <p>Data Pegawai</p>
-            </div>
+            <div>
+                <h3 style="color:#E95A09">Data Pegawai</h3>
+           </div>
+            <div style="margin-top:20px">
             <table class="table align-middle border" >
                 <thead class="" >
                 <tr>
@@ -62,6 +63,7 @@
                 </tr>
             </tbody>
             </table>
+            </div>
         </div>
         <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">

@@ -4,10 +4,17 @@
     <div class="container-md" >
 
         <div class="main">
-            <div class="row" style=" margin-bottom:6px; margin-left:-2px; font-style: normal; font-size:30px; line-height: 47px;color: #E95A09;">
-                <p>Data Jabatan</p>
-                <button class="btn tambah" data-toggle="modal" @click="showModal()" style="margin-left:1025px; color:white">Add Jabatan</button>
-            </div>
+            <div class="row">
+                <div class="col-md-12 text-left">
+                    <h3 style="color:#E95A09">Data Jabtan Pegawai</h3>
+                    <!-- <button type="button" class="btn btn-warning ">Save</button> -->
+                </div>
+                <div class="col-md-12 text-right">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" @click="showModal()"  style="background-color:#124EB2">Tambah Jabatan</button>
+                    <!-- <button type="button" class="btn btn-warning ">Save</button> -->
+                </div>
+                </div>
+            <div style="margin-top:10px">
             <table class="table align-start border"  >
                 <thead class="" >
                 <tr>
@@ -42,6 +49,7 @@
                 </tr>
             </tbody>
             </table>
+            </div>
         </div>
 
     <div class="modal fade" id="tambahJabatan" tabindex="-1" role="dialog" aria-labelledby="tambahJabatan" aria-hidden="true">

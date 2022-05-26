@@ -4,9 +4,10 @@
     <div class="container-md" >
 
         <div class="main">
-            <div class="row" style=" margin-bottom:6px; margin-left:-2px; font-style: normal; font-size:30px; line-height: 47px;color: #E95A09;">
-                <p>Approvement Lembur</p>
-            </div>
+              <div>
+                <h3 style="color:#E95A09">Approvement Lembur</h3>
+           </div>
+            <div style="margin-top:20px">
             <table class="table align-start border"  >
                 <thead class="" >
                 <tr>
@@ -25,6 +26,7 @@
                 </tr>
             </tbody>
             </table>
+            </div>
         </div>
     </div>
     </body>

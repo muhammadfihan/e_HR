@@ -5,8 +5,10 @@
 
         <div class="main">
             <div class="row" style=" margin-bottom:6px; margin-left:-2px; font-style: normal; font-size:30px; line-height:47px;color: #E95A09;">
-                <p>Payroll</p>
-                 <div class="menugaji" style="justify-content: space-between;">
+               <div>
+                <h3 style="color:#E95A09">Payroll dan Penggajian</h3>
+                </div>
+                 <div class="menugaji" style="justify-content: space-between; margin-top: 20px;">
                     <button class="menunya active" data-id="gaji" style="padding:28px">
                         <p style="text-align:left">Data Gaji Karyawan</p>
                         <p style="text-align:left"><i class="fa-solid fa-users" style="font-size:70px"></i></p>
