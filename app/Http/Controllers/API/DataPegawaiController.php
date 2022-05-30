@@ -56,7 +56,7 @@ class DataPegawaiController extends Controller
        $datapegawai = DB::table('pegawais')
            ->select('*')
            ->where('id_admin', Auth::user()->id)
-           ->paginate(10);
+           ->get();
        return response([
            'data' => $datapegawai,
            'message' => 'get data berhasil',

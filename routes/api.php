@@ -21,7 +21,7 @@ Route::post('loginpegawai', [UserController::class, 'loginpegawai']);
 Route::post('register', [UserController::class, 'register']);
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum,web,pegawai'])->group(function () {
     //CRUD USER OLEH ADMIN DAN MANAGER
     Route::post('addAkunPegawai', [UserController::class, 'addAkunPegawai'])->middleware('role:Manager,Admin');
     Route::get('allUser', [UserController::class, 'allUser'])->middleware('role:Manager,Admin');

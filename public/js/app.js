@@ -23014,7 +23014,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.$axios.get('/sanctum/csrf-cookie').then(function (response) {
-        _this2.form.post('/api/updateUser', +_this2.form.id).then(function (response) {
+        _this2.form.post('/api/updateUser', +_this2.form.id, {
+          headers: {
+            Authorization: "Bearer " + _this2.token
+          }
+        }).then(function (response) {
           if (response.data.success) {
             Swal.fire({
               icon: "success",
@@ -23041,7 +23045,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       this.$axios.get('/sanctum/csrf-cookie').then(function (response) {
-        _this3.form.post('/api/addAkunPegawai').then(function (response) {
+        _this3.form.post('/api/addAkunPegawai', {
+          headers: {
+            Authorization: "Bearer " + _this3.token
+          }
+        }).then(function (response) {
           if (response.data.success) {
             Swal.fire({
               icon: "success",

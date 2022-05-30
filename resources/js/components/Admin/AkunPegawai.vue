@@ -151,7 +151,9 @@ export default {
         },
        editAkun() {
            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-              this.form.post('/api/updateUser', + this.form.id).then((response) => {
+              this.form.post('/api/updateUser', + this.form.id, {
+                headers : { Authorization: "Bearer " + this.token },
+            }).then((response) => {
                 if (response.data.success){
                     Swal.fire({
                         icon: "success",
@@ -174,7 +176,9 @@ export default {
         },
         addAkun() {
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-              this.form.post('/api/addAkunPegawai').then((response) => {
+              this.form.post('/api/addAkunPegawai', {
+                    headers: {Authorization: "Bearer " + this.token},
+                }).then((response) => {
                 if (response.data.success){
                     Swal.fire({
                         icon: "success",
