@@ -29,7 +29,7 @@ class JabatanController extends Controller
     // add book
     public function tambahjabatan(Request $request)
     {
-        $jabatan = new Jabatan([
+        $jabatan = Jabatan::create([
             'id_admin' => Auth::user()->id,
             'jabatan' => $request->jabatan,
             'gaji' => $request->gaji,
