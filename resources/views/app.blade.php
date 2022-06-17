@@ -11,11 +11,17 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     
+    <link rel="shortcut icon" href="/images/favicon.png"/>
+
+    
+    
     <script src="https://kit.fontawesome.com/83326efe66.js" crossorigin="anonymous"></script>
+
+    
    
    
     
-    <title>{{env('APP_NAME')}}</title>
+    <title>Prisen Online</title>
 
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -27,7 +33,7 @@
     
 <div id="app"></div>
     <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="{{ mix('js/app.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/app.js') }}" type="text/javascript"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     

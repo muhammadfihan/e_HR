@@ -150,7 +150,9 @@ export default {
 
         addJabatan() {
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.form.post('/api/tambahjabatan').then((response) => {
+            this.form.post('/api/tambahjabatan', {
+                headers : { Authorization: "Bearer " + this.token },
+            }).then((response) => {
                 if (response.data.success){
                     Swal.fire({
                         icon: "success",
@@ -169,8 +171,17 @@ export default {
                     })
         },
         editJabatan(){
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-              this.form.post('/api/updatejabatan', + this.form.id).then((response) => {
+        
+              axios.post('/api/updatejabatan',
+                {
+                    id: this.form.id,
+                    jabatan: this.form.jabatan,
+                    gaji: this.form.gaji,
+                    tunjangan: this.form.tunjangan,
+                },
+                {
+                    headers: { Authorization: "Bearer " + this.token }
+                }).then((response) => {
                 if (response.data.success){
                     Swal.fire({
                         icon: "success",
@@ -184,7 +195,7 @@ export default {
                     this.allJabatan()
                 }
             
-            })
+
            })
         },
 

@@ -265,12 +265,14 @@ export default {
 
         // },
          updatePegawai(){
-             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             axios.post('/api/updatepegawai',
                 {
-                   id: this.form.id,
+                    id: this.form.id,
                     id_jabatan: this.form.id_jabatan,
                     status: this.form.status
+                },
+                {
+                    headers: { Authorization: "Bearer " + this.token }
                 }).then((response) => {
                 if (response.data.success){
                     Swal.fire({
@@ -283,7 +285,6 @@ export default {
                     $('#editPegawai').modal('hide');
                     this.getdataPegawai();
                 }
-            })
             })
         },
 

@@ -87,9 +87,11 @@ export default {
     methods: {
         reset_admin() {
         document.getElementById("reset_admin").reset();
+        localStorage.clear()
         },
         reset_peg() {
         document.getElementById("reset_peg").reset();
+        localStorage.clear();
         },
 
         loginAdmin(e) {

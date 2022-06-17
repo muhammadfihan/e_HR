@@ -17,7 +17,7 @@
                     <button type="button" class="btn btn-primary" data-toggle="modal" @click="showModal()"  style="background-color:#124EB2">Tambah Akun</button>
                     <!-- <button type="button" class="btn btn-warning ">Save</button> -->
                 </div>
-                </div>
+            </div>
             <div style="margin-top:10px">
                   <table class="table align-start border"  >
                 <thead class="" >
@@ -121,7 +121,7 @@ export default {
         }
     },
     created() {
-        this.$axios.get('/sanctum/csrf-cookie').then(response => {
+         this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/allUser',{
                 headers: {Authorization: "Bearer " + this.token},
             })
@@ -150,10 +150,16 @@ export default {
             $("#tambahAkun").modal("hide");
         },
        editAkun() {
-           this.$axios.get('/sanctum/csrf-cookie').then(response => {
-              this.form.post('/api/updateUser', + this.form.id, {
-                headers : { Authorization: "Bearer " + this.token },
-            }).then((response) => {
+              axios.post('/api/updateUser', 
+               {
+                    id: this.form.id,
+                    name: this.form.name,
+                    email: this.form.email,
+                    password: this.form.password,
+                },
+                {
+                    headers: { Authorization: "Bearer " + this.token }
+                }).then((response) => {
                 if (response.data.success){
                     Swal.fire({
                         icon: "success",
@@ -168,7 +174,7 @@ export default {
                 }
             
             })
-           })
+           
         },
         closeEdit() {
             this.form.reset();
@@ -195,6 +201,19 @@ export default {
             }
         )
             })
+        },
+         allUser(){
+             this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/allUser',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.akunpegawai = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
         },
         // editAkun(id) {
         //      $("#editAkun").modal("show");
@@ -250,22 +269,18 @@ export default {
             })
         },
 
-        allUser() {
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/allUser',{
-                headers: {Authorization: "Bearer " + this.token},
-            })
-                .then(response => {
-                    this.akunpegawai = response.data.data;
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        })
-        }
     },
 
     mounted() {
+        // axios.get('/api/allUser',{
+        //         headers: {Authorization: "Bearer " + this.token},
+        //     })
+        //         .then(response => {
+        //             this.akunpegawai = response.data.data;
+        //         })
+        //         .catch(function (error) {
+        //             console.error(error);
+        //         });
     },
     // beforeRouteEnter(to, from, next) {
     //     if (JSON.parse(window.localStorage.getItem("loggedIn"))) {

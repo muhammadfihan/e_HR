@@ -14,7 +14,6 @@ class DataPegawai extends Model
         'name',
         'nama_lengkap',
         'id',
-        'id_perusahaan',
         'id_admin',
         'email',
         'no_pegawai',

@@ -2,10 +2,12 @@ import { createWebHistory, createRouter } from "vue-router";
 import Landing from '../components/Landing'
 import Login from '../components/Login'
 import Register from '../components/Register'
+import TopBar from "../dashboard/TopBar";
+
+// Admin Role
 import AdminDashboard from "../dashboard/AdminDashboard";
 import ManagerDashboard from "../dashboard/ManagerDashboard";
 import PegawaiDashboard from "../dashboard/PegawaiDashboard";
-import TopBar from "../dashboard/TopBar";
 import DataPegawai from "../components/Admin/DataPegawai";
 import AkunPegawai from "../components/Admin/AkunPegawai";
 import Jabatan from "../components/Admin/Jabatan";
@@ -14,7 +16,13 @@ import Payroll from "../components/Admin/Payroll";
 import Laporan from "../components/Admin/Laporan";
 import Lembur from "../components/Admin/Lembur";
 import Cuti from "../components/Admin/Cuti";
-import Navbar from "../components/Navbar";
+
+//Pegawai Role
+import Absen from "../components/Pegawai/Absen";
+import GajiPegawai from "../components/Pegawai/GajiPegawai";
+import LaporanHarian from "../components/Pegawai/LaporanHarian";
+import Pengajuan from "../components/Pegawai/Pengajuan";
+
 import { next } from "lodash/seq";
 
 function manager(to, from, next) {
@@ -76,11 +84,6 @@ export const routes = [{
         component: TopBar
     },
     {
-        name: 'Navbar',
-        path: '/Navbar',
-        component: Navbar
-    },
-    {
         name: 'DataPegawai',
         path: '/DataPegawai',
         component: DataPegawai,
@@ -128,6 +131,31 @@ export const routes = [{
         component: Cuti,
         beforeEnter: admin,
     },
+    {
+        name: 'Absen',
+        path: '/Absen',
+        component: Absen,
+        beforeEnter: pegawai,
+    },
+    {
+        name: 'GajiPegawai',
+        path: '/GajiPegawai',
+        component: GajiPegawai,
+        beforeEnter: pegawai,
+    },
+    {
+        name: 'LaporanHarian',
+        path: '/LaporanHarian',
+        component: LaporanHarian,
+        beforeEnter: pegawai,
+    },
+    {
+        name: 'Pengajuan',
+        path: '/Pengajuan',
+        component: Pengajuan,
+        beforeEnter: pegawai,
+    },
+
 
 ];
 

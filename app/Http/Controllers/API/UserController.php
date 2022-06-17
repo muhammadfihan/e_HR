@@ -41,7 +41,7 @@ class UserController extends Controller
                 'email'     => $request->input('email'),
                 'password'  => $request->input('password'),
             ];
-            if (Auth::guard('web')->attempt($data)) {
+            if (Auth::attempt($data)) {
                 $token = $user->createToken('auth_token')->plainTextToken;
                 $response = [
                     'success'   => true,

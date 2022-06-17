@@ -13,25 +13,22 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pegawais', function (Blueprint $table) {
+        Schema::create('absensipegawai', function (Blueprint $table) {
             $table->integer('id')->unsigned();
             $table->foreign('id')->references('id')->on('akunpegawai');
             $table->integer('id_admin')->unsigned();
             $table->foreign('id_admin')->references('id')->on('akunpegawai');
-            $table->string('no_pegawai');
             $table->string('name');
             $table->string('nama_lengkap');
-            $table->string('email')->unique();
-            $table->integer('id_jabatan')->unsigned();
-            $table->foreign('id_jabatan')->references('id')->on('jabatan');
-            $table->bigInteger('no_ktp');
-            $table->bigInteger('no_hp');
-            $table->longText('alamat');
-            $table->enum('status', ['Aktif', 'Tidak Aktif'])->default('Aktif');
-            $table->enum('gender',['Laki-Laki','Perempuan'])->nullable();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('email');
+            $table->string('foto_selfie')->nullable();
+            $table->date('tanggal')->nullable();
+            $table->time('jam_masuk')->nullable();
+            $table->time('jam_pulang')->nullable();
+            $table->time('jam_kerja')->nullable();
+            $table->string('keterangan')->nullable();
+            $table->string('lokasi');
             $table->timestamps();
-            $table->date('logout_at')->nullable();
         });
     }
 
@@ -42,6 +39,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pegawais');
+        Schema::dropIfExists('absensipegawai');
     }
 };

@@ -1,36 +1,69 @@
 <template>
+
     <body>
-        
-    <div class="container-md" >
+ <div class="container-md" >
 
         <div class="main">
             <div class="row" style=" margin-bottom:6px; margin-left:-2px; font-style: normal; font-size:30px; line-height:47px;color: #E95A09;">
                <div>
-                <h3 style="color:#E95A09">Payroll dan Penggajian</h3>
+                <h3 style="color:#E95A09">Pengajuan</h3>
                 </div>
-                 <div class="menugaji" style="justify-content: space-between; margin-top: 20px;">
-                    <button class="menunya active" data-id="gaji" style="padding:28px">
-                        <p style="text-align:left">Data Gaji Karyawan</p>
-                        <p style="text-align:left"><i class="fa-solid fa-users" style="font-size:70px"></i></p>
+                 <div class="menupengajuan" style="justify-content: space-between; margin-top: 20px;">
+                    <button class="menunya active" data-id="cuti" style="padding:28px">
+                        <p style="text-align:left">Pengajuan Cuti</p>
+                        <p style="text-align:left"><i class="fa-solid fa-person-breastfeeding" style="font-size:70px"></i></p>
+                        
                     </button>
-                   <button class="menunya" data-id="laporan" style="padding:28px">
-                        <p style="text-align:left">Laporan Gaji</p>
-                        <p style="text-align:left"><i class="fa-regular fa-file-lines" style="font-size:70px"></i></p>
+                   <button class="menunya" data-id="lembur" style="padding:28px">
+                        <p style="text-align:left">Pengajuan Lembur</p>
+                        <p style="text-align:left"><i class="fa-solid fa-chalkboard-user" style="font-size:70px"></i></p>
+                        
                     </button>
-                    <button class="menunya" data-id="tunjangan" style="padding:28px">
-                        <p style="text-align:left">Tunjangan dan Bonus</p>
-                        <p style="text-align:left"><i class="fa-solid fa-circle-dollar-to-slot" style="font-size:70px"></i></p>
+                    <button class="menunya" data-id="jabatan" style="padding:28px">
+                        <p style="text-align:left">Kenaikan Jabatan</p>
+                        <p style="text-align:left"><i class="fa-solid fa-person-arrow-up-from-line" style="font-size:70px"></i></p>
+                        
                     </button>
                 </div>
             </div>
 
             <div class="tab-content">
-               <div class="tab-pane active" id="gaji"> 
-                <div style="margin-top:180px">
-                    <div class="row" style=" margin-bottom:-4px; margin-left:0px; font-style: normal; font-size:25px; line-height: 47px;color: #E95A09;">
-                    <p>Gaji Karyawan</p>
-
+               <div class="tab-pane active" id="cuti"> 
+                 <div class="row" style="margin-top:180px">
+                    <div class="col-md-12 text-left">
+                        <p style="color:#E95A09;font-size: 25px;">Riwayat Pengajuan Cuti</p>
                     </div>
+                    <div class="col-md-12 text-right">
+                        <button type="button" class="btn btn-primary" data-toggle="modal"  style="background-color:#124EB2;margin-bottom: 8px;">Ajukan Cuti</button>
+                </div>
+             </div>
+                <table class="table align-start border"  >
+                    <thead class="" >
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>No</th>
+                        <th>Pegawai</th>
+                        <th>Jabatan</th>
+                        <th>No Pegawai</th>
+                        <th>Status</th>
+                        <th>Gaji Pokok</th>
+                        <th style="text-align: center;">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                    </tr>
+                    </tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="lembur"> 
+                <div class="row" style="margin-top:180px">
+                    <div class="col-md-12 text-left">
+                        <p style="color:#E95A09;font-size: 25px;">Riwayat Pengajuan Lembur</p>
+                    </div>
+                    <div class="col-md-12 text-right">
+                        <button type="button" class="btn btn-primary" data-toggle="modal"  style="background-color:#124EB2;margin-bottom: 8px;">Ajukan Lembur</button>
+                </div>
                 </div>
                 <table class="table align-start border"  >
                     <thead class="" >
@@ -51,38 +84,14 @@
                     </tbody>
                 </table>
               </div>
-              <div class="tab-pane" id="laporan"> 
-                <div style="margin-top:180px">
-                    <div class="row" style=" margin-bottom:-4px; margin-left:0px; font-style: normal; font-size:25px; line-height: 47px;color: #E95A09;">
-                    <p>Laporan Gaji Karyawan</p>
-
+              <div class="tab-pane" id="jabatan"> 
+               <div class="row" style="margin-top:180px">
+                    <div class="col-md-12 text-left">
+                        <p style="color:#E95A09;font-size: 25px;">Riwayat Kenaikan Jabatan</p>
                     </div>
+                    <div class="col-md-12 text-right">
+                        <button type="button" class="btn btn-primary" data-toggle="modal"  style="background-color:#124EB2;margin-bottom: 8px;">Ajukan Kenaikan</button>
                 </div>
-                <table class="table align-start border"  >
-                    <thead class="" >
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>No</th>
-                        <th>Pegawai</th>
-                        <th>Jabatan</th>
-                        <th>No Pegawai</th>
-                        <th>Status</th>
-                        <th>Gaji Pokok</th>
-                        <th style="text-align: center;">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                    </tr>
-                    </tbody>
-                </table>
-              </div>
-              <div class="tab-pane" id="tunjangan"> 
-                <div style="margin-top:180px">
-                    <div class="row" style=" margin-bottom:-4px; margin-left:0px; font-style: normal; font-size:25px; line-height: 47px;color: #E95A09;">
-                    <p>Tunjangan dan Bonus</p>
-
-                    </div>
                 </div>
                 <table class="table align-start border"  >
                     <thead class="" >
@@ -117,20 +126,15 @@
 <script>
 
 export default {
-    name: "Payroll",
+    name: "Pengajuan",
     data() {
         return {
             token: localStorage.getItem("token"),
             role: localStorage.getItem('role'),
         }
     },
-    method:{
-        
-        
-        
-    },
-
-    mounted () {
+    
+ mounted () {
             $(document).ready(function() {
                 $(".menunya").on("click", function() {
                     var card = $(this).data("id");
@@ -142,14 +146,12 @@ export default {
             
     }
 
-
 }
 
 
 </script>
-
 <style scope>
-    .menugaji {
+    .menupengajuan {
         width: 100vw;
         background-color: white;
         border: none;

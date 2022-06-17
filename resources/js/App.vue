@@ -15,11 +15,9 @@
 
 <script>
 import TopBar from './dashboard/TopBar.vue'
-import Navbar from './components/Navbar.vue'
 export default {
     components: {
         TopBar,
-        Navbar
     },
 
     data() {
