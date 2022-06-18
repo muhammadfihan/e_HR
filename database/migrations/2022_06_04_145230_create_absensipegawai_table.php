@@ -16,12 +16,12 @@ return new class extends Migration
         Schema::create('absensipegawai', function (Blueprint $table) {
             $table->integer('id')->unsigned();
             $table->foreign('id')->references('id')->on('akunpegawai');
-            $table->integer('id_admin')->unsigned();
-            $table->foreign('id_admin')->references('id')->on('akunpegawai');
+            $table->integer('id_admin');
             $table->string('name');
             $table->string('nama_lengkap');
             $table->string('email');
-            $table->string('foto_selfie')->nullable();
+            $table->string('selfie_masuk')->nullable();
+            $table->string('selfie_pulang')->nullable();
             $table->date('tanggal')->nullable();
             $table->time('jam_masuk')->nullable();
             $table->time('jam_pulang')->nullable();

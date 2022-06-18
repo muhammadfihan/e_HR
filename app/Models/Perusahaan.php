@@ -16,6 +16,12 @@ class Perusahaan extends Model
         'email_perusahaan',
         'id_admin',
         'admin_perusahaan',
+        'provinsi',
+        'kota',
+        'npwp',
+        'kode_pos',
+        'det_alamat',
         'jumlah_karyawan',
+        'bidang',
     ];
 }

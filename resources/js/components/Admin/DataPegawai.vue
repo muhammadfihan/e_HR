@@ -1,181 +1,294 @@
 <template>
-    <body>
 
-    <div class="container-md" >
+    <div class="subheader py-2 py-lg-12 subheader-transparent" id="kt_subheader">
+							<div class="container d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+								<div class="d-flex align-items-center flex-wrap mr-1">
+									<div class="d-flex flex-column">
+										<h2 class="text-white font-weight-bold my-2 mr-5">Data Pegawai</h2>
+										<div class="d-flex align-items-center font-weight-bold my-2">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+						<!--begin::Subheader-->
+					
+						<!--end::Subheader-->
+						<!--begin::Entry-->
+						<div class="d-flex flex-column-fluid">
+							<!--begin::Container-->
+							<div class="container">
+								<!--begin::Teachers-->
+								<div class="d-flex flex-row">
+									<!--begin::Aside-->
+									<!--end::Aside-->
+									<!--begin::Content-->
+									<div class="flex-row-fluid ml-lg-8">
+										<!--begin::Card-->
+										<div class="card card-custom">
+											<!--begin::Header-->
+											<div class="card-header flex-wrap border-0 pt-6 pb-0">
+												<h3 class="card-title align-items-start flex-column">
+													<span class="card-label font-weight-bolder text-dark" >Informasi Pegawai</span>
+													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Daftar Pegawai Yang Bekerja di {{ data.nama_perusahaan }}</span>
+												</h3>
+												
+											</div>
+											<!--end::Header-->
+											<!--begin::Body-->
+											<div class="card-body">
+												<!--begin::Search Form-->
+												<!--begin::Search Form-->
+												<div class="mb-10">
+													<div class="row align-items-center">
+														<div class="col-lg-9 col-xl-8">
+															<div class="row align-items-center">
+																<div class="col-md-4 my-2 my-md-0">
+																	<div class="input-icon">
+																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<span>
+																			<i class="flaticon2-search-1 text-muted"></i>
+																		</span>
+																	</div>
+																</div>
+																<div class="col-md-4 my-2 my-md-0">
+																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
+																		<option value="">Status</option>
+																		<option value="1">Pending</option>
+																		<option value="2">Delivered</option>
+																		<option value="3">Canceled</option>
+																	</select>
+																</div>
+																<div class="col-md-4 my-2 my-md-0">
+																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
+																		<option value="">Type</option>
+																		<option value="4">Success</option>
+																		<option value="5">Info</option>
+																		<option value="6">Danger</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
+															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														</div>
+													</div>
+												</div>
+												<!--end::Search Form-->
+												<!--end: Search Form-->
+												<!--begin::Datatable-->
+												<div class="datatable-bordered">
+                                                     <table class="table align-middle bordered" >
+                                                        <thead class="" >
+                                                        <tr>
+                                                            <th>&nbsp;</th>
+                                                            <th>No</th>
+                                                            <th>Akun Pegawai</th>
+                                                            <th>Nama Pegawai</th>
+                                                            <th>Jabatan</th>
+                                                            <th>No Pegawai</th>
+                                                            <th>Status</th>
+                                                            <th>Gender</th>
+                                                            <th style="text-align: center;">Action</th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody>
+                                                            <tr v-for="(data,index) in pegawai" :key="data.id">
+                                                                    <td>
+                                                                        <label class="checkbox-wrap checkbox-success">
+                                                                            <input type="checkbox">
+                                                                            <span class="checkmark"></span>
+                                                                        </label>
+                                                                    </td>
+                                                                    <td>{{index+1}} </td>
+                                                                    <td>
+                                                                        <div class="ms-3">
+                                                                            <p class="fw-bold mb-1">{{ data.name }}</p>
+                                                                            <p class="text-muted mb-0">{{ data.email }}</p>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td><a>{{ data.nama_lengkap }}</a></td>
+                                                                    <td><a>{{ data.jabatan }}</a></td>
+                                                                    <td><a>{{ data.no_pegawai }}</a></td>
+                                                                    <td>
+                                                                        <span class="badge badge-success" v-if="data.status == 'Aktif'" >{{data.status}}</span>
+                                                                        <span class="badge badge-danger" v-else-if="data.status == 'Tidak Aktif'" >{{data.status}}</span>
+                                                                    </td>
+                                                                    <td>{{ data.gender }}</td>
+                                                                    <td style="text-align: center;">
+                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" data-target="#detailmodal" @click.prevent="detailPegawai(data.id)">
+                                                                          </a>
+                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="editModal(data)">
+                                                                          </a>
+                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-trash-alt" @click.prevent="hapusPegawai(data.id)">
+                                                                          </a>
+                                                                       
+                                                                    </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
 
-        <div class="main">
-            <div>
-                <h3 style="color:#E95A09">Data Pegawai</h3>
-           </div>
-            <div style="margin-top:20px">
-            <table class="table align-middle border" >
-                <thead class="" >
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>No</th>
-                    <th>Akun Pegawai</th>
-                    <th>Nama Pegawai</th>
-                    <th>Jabatan</th>
-                    <th>No Pegawai</th>
-                    <th>Status</th>
-                    <th>Gender</th>
-                    <th style="text-align: center;">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(data,index) in pegawai" :key="data.id">
-                        <td>
-						    <label class="checkbox-wrap checkbox-success">
-								<input type="checkbox">
-								<span class="checkmark"></span>
-							</label>
-                        </td>
-                        <td>{{index+1}} </td>
-                        <td>
-                            <div class="ms-3">
-                                <p class="fw-bold mb-1">{{ data.name }}</p>
-                                <p class="text-muted mb-0">{{ data.email }}</p>
-                            </div>
-                        </td>
-                        <td><a>{{ data.nama_lengkap }}</a></td>
-                        <td>
-                            <a v-for="(dat) in jabatan" :key="dat.id" >
-                            <a v-if="dat.id == data.id_jabatan" >{{ dat.jabatan }}</a>
-                            </a>
-                        </td>
-                        <td><a>{{ data.no_pegawai }}</a></td>
-                        <td>
-                            <span class="badge badge-success" v-if="data.status == 'Aktif'" >{{data.status}}</span>
-                            <span class="badge badge-danger" v-else-if="data.status == 'Tidak Aktif'" >{{data.status}}</span>
-                        </td>
-                        <td>{{ data.gender }}</td>
-                        <td style="text-align: center;">
-                             <button type="button" class="btn btn-link btn-sm btn-rounded" data-toggle="modal" data-target="#detailmodal" @click.prevent="detailPegawai(data.id)">
-                                    Detail
-                            </button>
-                             <button type="button" class="btn btn-link btn-sm btn-rounded" data-toggle="modal"  @click="editModal(data)">
-                                    Edit
-                            </button>
-                             <button type="button" class="btn btn-link danger btn-sm btn-rounded" style="color:red;" @click.prevent="hapusPegawai(data.id)">
-                                    Hapus
-                            </button>
-                        </td>
-                </tr>
-            </tbody>
-            </table>
-            </div>
-        </div>
-        <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title" id="detailmodal" style="color:#E95A09">Detail Data Pegawai</h2>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="padding:30px">
-                    <div class="alert alert-danger" style="display:none"></div>
-                    <form v-for="(data) in detpegawai" :key="data.id">
-                        <div class="form-group">
-                            <label style="font-weight:bold">Username</label>
-                            <div type="text" class="form-control">{{data.name}}</div>
-                        </div>
-                         <div class="form-group">
-                            <label style="font-weight:bold">Nama Lengkap</label>
-                            <div type="text" class="form-control">{{data.nama_lengkap}}</div>
-                        </div>
-                        <div class="form-group" >
-                            <label style="font-weight:bold">Jabatan</label>
-                            <div v-for="(dat) in jabatan" :key="dat.id ">
-                           <div  type="text" class="form-control" v-if="dat.id == data.id_jabatan">{{dat.jabatan}}</div>
-                           </div>
-                        </div>
-                         <div class="form-group">
-                            <label style="font-weight:bold">No Pegawai</label>
-                           <div type="text"  class="form-control">{{data.no_pegawai}}</div>
-                        </div>
-                         <div class="form-group">
-                            <label style="font-weight:bold">Email</label>
-                           <div type="text"  class="form-control">{{data.email}}</div>
-                        </div>
-                         <div class="form-group">
-                            <label style="font-weight:bold">No KTP</label>
-                           <div type="text" class="form-control">{{data.no_ktp}}</div>
-                        </div>
-                         <div class="form-group">
-                            <label style="font-weight:bold">No HP</label>
-                           <div type="text" class="form-control">{{data.no_hp}}</div>
-                        </div>
-                         <div class="form-group">
-                            <label style="font-weight:bold"> Gender</label>
-                           <div type="text"  class="form-control">{{data.gender}}</div>
-                        </div>
-                         <div class="form-group">
-                            <label style="font-weight:bold">Status</label>
-                           <div type="text"  class="form-control" >
-                              <span class="badge badge-success" v-if="data.status == 'Aktif'" >{{data.status}}</span>
-                            <span class="badge badge-danger" v-else-if="data.status == 'Tidak Aktif'" >{{data.status}}</span>
-                           </div>
-                        </div>
-                        <div class="form-group">
-                            <label style="font-weight:bold">Alamat</label>
-                            <textarea disabled name="description" class="textarea form-control" cols="40" rows="5"
-                                style="background-color:white" v-model="data.alamat"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                   <button type="button" class="btn" style=" border-radius:6px; background-color:#124EB2;color:white;width:100px " data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="editPegawai" tabindex="-1" role="dialog" aria-labelledby="editPegawai" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title" id="editPegawai" style="color:#E95A09">Update Data Pegawai</h2>
-                    <button type="button" @click="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="padding:30px">
-                    <div class="alert alert-danger" style="display:none"></div>
-                    <form @submit.prevent="updatePegawai()" >
-                        <div class="form-group" >
-                            <label style="font-weight:bold">Jabatan</label>
-                            <select class='form-control' v-model="form.id_jabatan">
-                            <option disabled selected>Ubah Jabatan</option>
-                            <option v-for="data in jabatan" :key="data.id"
-                                            :selected="data.id == form.id_jabatan ? selected : null"
-                                            :value="data.id">
-                                        {{data.jabatan}}
-                            </option>
-                           </select>
+                                                </div>
+												<!--end::Datatable-->
+											</div>
+											<!--end::Body-->
+										</div>
+										<!--end::Card-->
+									</div>
+									<!--end::Content-->
+								</div>
+								<!--end::Teachers-->
+							</div>
+							<!--end::Container-->
+						</div>
+						<!--end::Entry-->
+					</div>
+                    <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="detailmodal">Detail Data Pegawai</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" class="ki ki-close"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form class="form pt-9" v-for="(data) in detpegawai" :key="data.id">
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Username</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.name}}</div>
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Email</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.email}}</div>
+																					</div>
+																				</div>
+																				<div class="separator separator-dashed my-10"></div>
+                                                                                <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Nama Lengkap</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.nama_lengkap}}</div>
+																					</div>
+																				</div>
+                                                                                <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">No Pegawai</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.no_pegawai}}</div>
+																					</div>
+																				</div>
+                                                                                 <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Pendidikan</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.pendidikan}}</div>
+																					</div>
+																				</div>
+                                                                                <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jabatan</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.jabatan}}</div>
+																					</div>
+																				</div>
+                                                                                <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">No KTP</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.no_ktp}}</div>
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">No Hp</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<div class="input-group input-group-lg input-group-solid">
+																							<div class="input-group-prepend">
+																								<span class="input-group-text">
+																									<i class="la la-phone"></i>
+																								</span>
+																							</div>
+																							<div class="form-control form-control-lg form-control-solid" type="text">{{data.no_hp}}</div>
+																						</div>
+																					</div>
+																				</div>
+                                                                                <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Gender</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.gender}}</div>
+																					</div>
+																				</div>
+                                                                                <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Status</label>
+																					<div class="col-lg-9 col-xl-6">
+                                                                                        <div class="form-control form-control-lg form-control-solid" type="text"><span class="badge badge-success" v-if="data.status == 'Aktif'" >{{data.status}}</span>
+                                                                                        <span class="badge badge-danger" v-else-if="data.status == 'Tidak Aktif'" >{{data.status}}</span></div>
+																						
+																					</div>
+																				</div>
+                                                                                <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Alamat</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<textarea disabled class="form-control form-control-lg form-control-solid" type="text" style="background-color:#F3F6F9" v-model="data.alamat"></textarea>
+																					</div>
+																				</div>
 
-                        </div>
-                         <div class="form-group">
-                            <label style="font-weight:bold">Status</label>
-                           <select class='form-control' v-model="form.status">
-                                <option >Aktif</option>
-                                <option >Tidak Aktif</option>
-                            </select>
-                        </div>
-                         <div class="modal-footer">
-                   <button type="button" class="btn" style=" border-radius:6px; background-color:#E95A09;color:white;   width:100px " @click="closeModal()" data-dismiss="modal">Batal</button>
-                     <button type="submit"  class="btn" style=" border-radius:6px; background-color:#124EB2;color:white;  width:100px">Simpan</button>
-                </div>
-                    </form>
-                </div>
+																			</form>
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+																		
+																		<button type="button"  data-dismiss="modal" class="btn btn-primary font-weight-bold">Tutup</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+                            <div class="modal fade" id="editPegawai" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="editPegawai">Edit Data Pegawai</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" class="ki ki-close" @click="closeModal()"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form @submit.prevent="updatePegawai()">
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jabatan</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<select class="form-control form-control-lg form-control-solid" v-model="form.jabatan">
 
-            </div>
-        </div>
-    </div>
+                                                                                            <option v-for="data in jabatan" :key="data.jabatan"
+                                                                                                            :selected="data.jabatan == form.jabatan ? selected : null"
+                                                                                                            :value="data.jabatan">
+                                                                                                        {{data.jabatan}}
+                                                                                            </option>
+                                                                                        </select>
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Status</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <select class="form-control form-control-lg form-control-solid" v-model="form.status">
+                                                                                            <option >Aktif</option>
+                                                                                            <option >Tidak Aktif</option>
+                                                                                        </select>
+																					</div>
+																				</div>
+																			</form>
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+																		
+																		<button type="submit" @click="updatePegawai()"  class="btn btn-primary font-weight-bold">Update</button>
+                                                                        <button type="button"  data-dismiss="modal" @click="closeModal()" class="btn btn-primary font-weight-bold">Batal</button>
+																	</div>
+																</div>
+															</div>
+														</div>
 
-
-    </div>
-    </body>
 
 </template>
 
@@ -192,10 +305,11 @@ export default {
             editpegawai:[],
             updatepegawai :[],
             delpegawai:[],
+            infopt:[],
             form: new Form ({
                 id : "",
                 name : "",
-                id_jabatan : "",
+                jabatan : "",
                 status : ""
             }),
             token: localStorage.getItem("token"),
@@ -205,7 +319,7 @@ export default {
     created() {
     },
     methods:{
-         closeModal() {
+        closeModal() {
             this.form.reset();
             $("#editPegawai").modal("hide");
         },
@@ -214,7 +328,7 @@ export default {
             $("#editPegawai").modal("show")
             this.form.fill({
                 id: data.id,
-                id_jabatan: data.id_jabatan,
+                jabatan: data.jabatan,
                 status: data.status,
             })
         },
@@ -225,6 +339,19 @@ export default {
             })
                 .then(response => {
                     this.pegawai = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
+        getpt(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/infopt',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.infopt = response.data.data;
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -268,7 +395,7 @@ export default {
             axios.post('/api/updatepegawai',
                 {
                     id: this.form.id,
-                    id_jabatan: this.form.id_jabatan,
+                    jabatan: this.form.jabatan,
                     status: this.form.status
                 },
                 {
@@ -282,7 +409,7 @@ export default {
                         showConfirmButton: false,
                         timer: 1600,
                     }),
-                    $('#editPegawai').modal('hide');
+                     $("#editPegawai").modal("hide");
                     this.getdataPegawai();
                 }
             })
@@ -308,8 +435,8 @@ export default {
             text: "Anda tidak akan bisa mengembalikannya lagi!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#124EB2',
-            cancelButtonColor: '#E95A09',
+             confirmButtonColor: '#1BC5BD',
+            cancelButtonColor: '',
             confirmButtonText: 'Hapus',
             cancelButtonText: 'Batal',
             }).then((result) => {
@@ -337,6 +464,7 @@ export default {
     mounted() {
         this.getJabatan();
         this.getdataPegawai();
+        this.getpt();
     },
     // beforeRouteEnter(to, from, next) {
     //     if (JSON.parse(window.localStorage.getItem("loggedIn"))) {

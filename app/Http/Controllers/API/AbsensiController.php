@@ -9,6 +9,7 @@ use DateTimeZone;
 use App\Models\Absensi;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AbsensiController extends Controller
 {
@@ -30,6 +31,14 @@ class AbsensiController extends Controller
                 'message' => 'Sudah Presensi!',
             ]);
         }else{
+            $image = $request->file('selfie_masuk');
+            $nama = str_replace('data:image/jpeg;base64,','', $image);
+            $image->move('upload/', $nama);
+            $nama = $presensi->selfie_masuk ;
+            // $image = base64_decode($image);
+            // $filename = 'image_'.time().'.png';
+            // file_put_contents('/upload/'.$filename,$image);
+
             $ip = $request->ip();
             $absen = Absensi::create([
                 'id' => Auth::user()->id,
@@ -37,6 +46,7 @@ class AbsensiController extends Controller
                 'id_admin' => Auth::user()->id_admin,
                 'name' => Auth::user()->name,
                 'nama_lengkap' => Auth::user()->name,
+                'selfie_masuk' => $nama,
                 'tanggal' => $tanggal,
                 'jam_masuk' => $localtime,
                 'lokasi' => $ip

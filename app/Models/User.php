@@ -19,7 +19,13 @@ class User extends Authenticatable
         'role',
         'jabatan',
         'nama_perusahaan',
+        'provinsi',
+        'kota',
+        'det_alamat',
+        'npwp',
+        'kode_pos',
         'jumlah_karyawan',
+        'bidang',
         'password',
     ];
 

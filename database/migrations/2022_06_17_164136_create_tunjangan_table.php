@@ -13,17 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('akunpegawai', function (Blueprint $table) {
+        Schema::create('tunjangan', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_admin')->unsigned();
             $table->foreign('id_admin')->references('id')->on('users');
-            $table->string('name');
-            $table->string('jabatan');
-            $table->enum('role', ['Manager', 'Admin', 'Pegawai'])->default('Pegawai');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->rememberToken();
+            $table->string('jenis_tunjangan');
+            $table->integer('nominal');
             $table->timestamps();
         });
     }
@@ -35,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('akunpegawai');
+        Schema::dropIfExists('tunjangan');
     }
 };

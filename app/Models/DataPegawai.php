@@ -12,12 +12,13 @@ class DataPegawai extends Model
 
     protected $fillable = [
         'name',
-        'nama_lengkap',
         'id',
+        'nama_lengkap',
         'id_admin',
         'email',
         'no_pegawai',
-        'id_jabatan',
+        'pendidikan',
+        'jabatan',
         'no_ktp',
         'no_hp',
         'gender',

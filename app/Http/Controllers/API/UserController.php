@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use phpDocumentor\Reflection\Element;
 use App\Models\AkunPegawai;
+use App\Models\DataPegawai;
 
 class UserController extends Controller
 {
@@ -32,10 +33,19 @@ class UserController extends Controller
             ]);
         } else {
             $user = User::where('email', $request->email)->first();
-            $detail = DB::table('users')
-                    ->select('*')
-                    ->where('id', $user->id)
-                    ->first();
+            if ($user === null) {
+                $response = [
+                    'success'   => false,
+                    'errors'    => true,
+                ];
+                return response($response, 201);
+             }else{
+                $detail = DB::table('users')
+                ->select('*')
+                ->where('id', $user->id)
+                ->first();
+             }
+           
 
             $data = [
                 'email'     => $request->input('email'),
@@ -77,10 +87,19 @@ class UserController extends Controller
             ]);
         } else {
             $user = AkunPegawai::where('email', $request->email)->first();
-            $detail = DB::table('akunpegawai')
-                    ->select('*')
-                    ->where('id', $user->id)
-                    ->first();
+            if ($user === null) {
+                $response = [
+                    'success'   => false,
+                    'errors'    => true,
+                ];
+                return response($response, 201);
+             }else{
+                $detail = DB::table('akunpegawai')
+                ->select('*')
+                ->where('id', $user->id)
+                ->first();
+             }
+           
 
             $data = [
                 'email'     => $request->input('email'),
@@ -116,6 +135,12 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'jabatan' => 'required|string|max:255',
             'nama_perusahaan' => 'required|string|max:255',
+            'provinsi' => 'required|string|max:255',
+            'kota' => 'required|string|max:255',
+            'kode_pos' => 'required|string|max:255',
+            'npwp' => 'required|string|max:255',
+            'det_alamat' => 'required|string|max:255',
+            'bidang' => 'required|string|max:255',
             'jumlah_karyawan' => 'required|integer',
             'password' => 'required|string|min:8',
 
@@ -131,11 +156,22 @@ class UserController extends Controller
             'email' => $request->email,
             'jabatan' => $request->jabatan,
             'nama_perusahaan' => $request->nama_perusahaan,
-            'jumlah_karyawan' => $request->jumlah_karyawan,
+            'provinsi' => $request->provinsi,
+            'kota' => $request->kota,
+            'npwp' => $request->npwp,
+            'kode_pos' => $request->kode_pos,
+            'det_alamat' => $request->det_alamat,
+            'bidang' => $request->bidang,
             'password' => Hash::make($request->password),
 
         $pt = Perusahaan::updateOrCreate([
             'admin_perusahaan' => $request->name,
+            'provinsi' => $request->provinsi,
+            'kota' => $request->kota,
+            'det_alamat' => $request->det_alamat,
+            'npwp' => $request->npwp,
+            'kode_pos' => $request->kode_pos,
+            'bidang' => $request->bidang,
             'nama_perusahaan' => $request->nama_perusahaan,
             'jumlah_karyawan' => $request->jumlah_karyawan,
             'email_perusahaan' => $request->email,
@@ -175,19 +211,32 @@ class UserController extends Controller
         //     'email' => $request->email,
         //     'password' => Hash::make($request->password),
         // ]);    
-
         $akunpegawai = AkunPegawai::create([
+            'id' => $request->id,
             'id_admin' => Auth::user()->id,
             'name' => $request->name,
+            'jabatan' => $request->jabatan,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        $huruf = "1234567890";
+        $nopegawai = strtoupper(substr(str_shuffle($huruf), 0, 9));
+        $pegawai = DataPegawai::create([
+            'no_pegawai' => 'PN'.$nopegawai,
+            'name' => $request->name,
+            'email' => $request->email,
+            'id' => $akunpegawai->id,
+            'jabatan' => $request->jabatan,
+            'id_admin' => Auth::user()->id,
+
+        ]);
+        
         $success = true;
         $message = 'User register successfully';
         $token = $akunpegawai->createToken('auth_token')->plainTextToken;
         return response()
             ->json([
-                // 'user' => $user,
+                'data' => $pegawai,
                 'akunpegawai' => $akunpegawai,
                 'access_token' => $token,
                 'token_type' => 'Bearer',
@@ -225,6 +274,7 @@ class UserController extends Controller
     {
         $validate = Validator::make($request->all(), [
             'name' => 'required',
+            'jabatan' => 'required',
             'email' => 'required',
             'password' => 'required'
          ]);
@@ -237,11 +287,13 @@ class UserController extends Controller
         } else {
             DB::table('akunpegawai')->where('id', $request->id)->update([
                 'name' => $request->name,
+                'jabatan' => $request->jabatan,
                 'email' => $request->email,
                 'password' => Hash::make($request->password)
             ]);
             DB::table('pegawais')->where('id', $request->id)->update([
                 'name' => $request->name,
+                'jabatan' => $request->jabatan,
                 'email' => $request->email,
             ]);
             return response()->json([
@@ -278,7 +330,43 @@ class UserController extends Controller
         ];
         return response()->json($response);
     }
-    public function coba(){
-        echo "hello word";
+    public function getakun()
+    {
+        $pegawai = DB::table('akunpegawai')
+        ->select('*')
+        ->where('id', Auth::user()->id)
+        ->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Ambil data berhasil',
+            'data' => $pegawai
+        ]);
+    }
+    public function getakunAdmin()
+    {
+        $admin = DB::table('users')
+        ->select('*')
+        ->where('id', Auth::user()->id)
+        ->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Ambil data berhasil',
+            'data' => $admin
+        ]);
+    }
+    public function infopt()
+    {
+        $pt = DB::table('perusahaan')
+        ->select('*')
+        ->where('id', Auth::user()->id)
+        ->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Ambil data berhasil',
+            'data' => $pt
+        ]);
     }
 }

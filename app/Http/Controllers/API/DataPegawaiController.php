@@ -19,8 +19,10 @@ class DataPegawaiController extends Controller
             'name' => 'required|string',
             'nama_lengkap' => 'required|string',
             'email' => 'required|string',
-            'id_jabatan' => 'required|integer',
+            'jabatan' => 'required|integer',
             'id_admin' => 'required|integer',
+            'id' => 'required|integer',
+            'pendidikan' => 'required|string',
             'no_hp' => 'required|bigInteger',
             'no_ktp' => 'required|bigInteger',
             'gender' => 'required|string',
@@ -29,23 +31,31 @@ class DataPegawaiController extends Controller
 
         $huruf = "1234567890";
         $nopegawai = strtoupper(substr(str_shuffle($huruf), 0, 9));
-        $pegawai = DataPegawai::create([
+        $pegawai = DataPegawai::updateOrCreate([
             'no_pegawai' => 'PN'.$nopegawai,
             'name' => Auth::user()->name,
             'nama_lengkap' => $request->nama_lengkap,
             'email' => Auth::user()->email,
-            'id' =>  Auth::user()->id,
-            'id_jabatan' => $request->id_jabatan,
+            'id' => Auth::user()->id,
+            'jabatan' => Auth::user()->jabatan,
             'id_admin' => Auth::user()->id_admin,
             'no_hp' => $request->no_hp,
             'no_ktp' => $request->no_ktp,
             'gender' => $request->gender,
+            'pendidikan' => $request->pendidikan,
             'alamat' => $request->alamat
 
 
         ]);
         $response = ['pegawai' => $pegawai];
-        return response()->json($response, 200);
+        return response([
+            'data' => $response,
+            'message' => 'Berhasil mengisi biodata',
+            'status' => true,
+            'isi' => 'berhasil',
+            'success' => true,
+        ]);
+ 
 
 
     }
@@ -83,6 +93,7 @@ class DataPegawaiController extends Controller
            'data' => $edit,
            'message' => 'get data berhasil',
            'status' => true,
+        
        ]);
     }
 
@@ -100,7 +111,7 @@ class DataPegawaiController extends Controller
             //     'message' => 'Update Data Berhasil!',
             // ]);
             $validate = Validator::make($request->all(), [
-                'id_jabatan' => 'required',
+                'jabatan' => 'required',
                 'status' => 'required'
              ]);
     
@@ -111,8 +122,11 @@ class DataPegawaiController extends Controller
                 ]);
             } else {
                 DB::table('pegawais')->where('id', $request->id)->update([
-                    'id_jabatan' => $request->id_jabatan,
+                    'jabatan' => $request->jabatan,
                     'status' => $request->status
+                ]);
+                DB::table('akunpegawai')->where('id', $request->id)->update([
+                    'jabatan' => $request->jabatan,
                 ]);
                 return response()->json([
                     'success' => true,
@@ -120,6 +134,50 @@ class DataPegawaiController extends Controller
                 ]);
             }
         
+    }
+    public function updatedata(Request $request)
+    {
+
+            $validate = Validator::make($request->all(), [
+                'nama_lengkap' => 'required',
+                'pendidikan' => 'required',
+                'no_hp' => 'required',
+                'no_ktp' => 'required',
+                'gender' => 'required',
+                'alamat' => 'required',
+             ]);
+    
+            if ($validate->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Update Data Gagal!',
+                ]);
+            } else {
+                $data = DB::table('pegawais')->where('id', Auth::user()->id)->update([
+                    'nama_lengkap' => $request->nama_lengkap,
+                    'pendidikan' => $request->pendidikan,
+                    'no_hp' => $request->no_hp,
+                    'no_ktp' => $request->no_ktp,
+                    'gender' => $request->gender,
+                    'alamat' => $request->alamat,
+                ]);
+                return response()->json([
+                    'data' => $data,
+                    'success' => true,
+                    'message' => 'Update Data Berhasil!',
+                ]);
+            }
+        
+    }
+
+    public function getprofile(Request $request){
+        $profile = DataPegawai::where('id' ,Auth::user()->id)->get();
+            return response([
+                'data' => $profile,
+                'message' => 'get data berhasil',
+                'status' => true,
+            ]);
+       
     }
     public function hapuspegawai(Request $request, $id)
     {

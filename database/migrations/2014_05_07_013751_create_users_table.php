@@ -20,6 +20,12 @@ return new class extends Migration
             $table->enum('role', ['Manager', 'Admin', 'Pegawai'])->default('Admin');
             $table->string('jabatan')->nullable();
             $table->string('nama_perusahaan')->nullable();
+            $table->string('provinsi')->nullable();
+            $table->string('kota')->nullable();
+            $table->longText('det_alamat')->nullable();
+            $table->bigInteger('npwp')->nullable();
+            $table->integer('kode_pos')->nullable();
+            $table->string('bidang')->nullable();
             $table->integer('jumlah_karyawan')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

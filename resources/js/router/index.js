@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Landing from '../components/Landing'
 import Login from '../components/Login'
+import LoginPegawai from '../components/LoginPegawai'
 import Register from '../components/Register'
 import TopBar from "../dashboard/TopBar";
 
@@ -16,12 +17,14 @@ import Payroll from "../components/Admin/Payroll";
 import Laporan from "../components/Admin/Laporan";
 import Lembur from "../components/Admin/Lembur";
 import Cuti from "../components/Admin/Cuti";
+import ProfileAdmin from "../components/Admin/ProfileAdmin";
 
 //Pegawai Role
 import Absen from "../components/Pegawai/Absen";
 import GajiPegawai from "../components/Pegawai/GajiPegawai";
 import LaporanHarian from "../components/Pegawai/LaporanHarian";
 import Pengajuan from "../components/Pegawai/Pengajuan";
+import Profile from "../components/Pegawai/Profile";
 
 import { next } from "lodash/seq";
 
@@ -56,6 +59,11 @@ export const routes = [{
         component: Login
     },
     {
+        name: 'LoginPegawai',
+        path: '/LoginPegawai',
+        component: LoginPegawai
+    },
+    {
         name: 'Register',
         path: '/Register',
         component: Register
@@ -87,6 +95,12 @@ export const routes = [{
         name: 'DataPegawai',
         path: '/DataPegawai',
         component: DataPegawai,
+        beforeEnter: admin,
+    },
+    {
+        name: 'ProfileAdmin',
+        path: '/ProfileAdmin',
+        component: ProfileAdmin,
         beforeEnter: admin,
     },
     {
@@ -153,6 +167,12 @@ export const routes = [{
         name: 'Pengajuan',
         path: '/Pengajuan',
         component: Pengajuan,
+        beforeEnter: pegawai,
+    },
+    {
+        name: 'Profile',
+        path: '/Profile',
+        component: Profile,
         beforeEnter: pegawai,
     },
 

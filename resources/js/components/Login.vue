@@ -1,77 +1,94 @@
 <template>
-
-       <div class="tab-form">
-           <div >
-               <div class="tab-header">
-                    <div class="active" @click="reset_admin" style=" font-size: 20px;font-weight: 500;">
-                        Admin
-                    </div>
-                    <div @click="reset_peg" style=" font-size: 20px; font-weight: 500;"> Pegawai</div>
-                </div>
-           </div>
-                
-        <div class="tab-body" >
-            <div class="signup active">
-                <h2>Login Admin</h2>
-                <form id="reset_admin">
-                     <div class="input-field">
-                        <i style="background:none" class="fas fa-envelope"></i>
-                        <input type="email" placeholder="Email Perusahaan" v-model="email" />
-                    </div>
-                    <div class="input-field">
-                        <i style="background:none" class="fas fa-lock"></i>
-                        <input type="password" placeholder="Password" v-model="password"/>
-                    </div>
-                    <div class="form-input" @click="loginAdmin" >
-                        <button type="submit">Masuk</button>
-                    </div>
-                </form>
-            </div>
-            
-            <div class="login">
-                <h2>Login Pegawai</h2>
-                <form id="reset_peg">
-                    <div class="input-field">
-                        <i style="background:none" class="fas fa-envelope"></i>
-                        <input type="email" placeholder="Email Pegawai" v-model="email" />
-                    </div>
-                    <div class="input-field">
-                        <i style="background:none" class="fas fa-lock"></i>
-                        <input type="password" placeholder="Password" v-model="password"/>
-                    </div>
-                    <div class="form-input" @click="loginPegawai">
-                        <button type="submit" >Masuk</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-
-    </div>
+     <div class="d-flex flex-column flex-root">
+			<!--begin::Login-->
+			<div class="login login-3 wizard d-flex flex-column flex-lg-row flex-column-fluid">
+				<!--begin::Aside-->
+				<div class="login-aside d-flex flex-column flex-row-auto">
+					<!--begin::Aside Top-->
+					<div class="d-flex flex-column-auto flex-column pt-lg-40 pt-15">
+						<!--begin::Aside header-->
+						<a href="#" class="login-logo text-center pt-lg-25 pb-10">
+							<img src="assets/media/logos/custom.png" class="max-h-70px" style="border-radius:10px" alt="" />
+						</a>
+						<!--end::Aside header-->
+						<!--begin::Aside Title-->
+						<h3 class="font-weight-bolder text-center font-size-h4 text-dark-50 line-height-xl">User Experience &amp; Interface Design
+						<br />Strategy SaaS Solutions</h3>
+						<!--end::Aside Title-->
+					</div>
+					<!--end::Aside Top-->
+					<!--begin::Aside Bottom-->
+					<div class="aside-img d-flex flex-row-fluid bgi-no-repeat bgi-position-x-center" style="background-position-y: calc(100% + 5rem); background-image: url(assets/media/svg/illustrations/login-visual-5.svg)"></div>
+					<!--end::Aside Bottom-->
+				</div>
+				<!--begin::Aside-->
+				<!--begin::Content-->
+				<div class="login-content flex-row-fluid d-flex flex-column p-10">
+					<!--begin::Top-->
+					<div class="text-right d-flex justify-content-center">
+						<div class="top-signin text-right d-flex justify-content-end pt-5 pb-lg-0 pb-10" @click="reload()">
+							<span class="font-weight-bold text-muted font-size-h4">Belum Punya Akun ?</span>
+							<router-link to="Register" ><a href="#" class="font-weight-bold text-primary font-size-h4 ml-2" id="kt_login_signup" >Daftar</a></router-link>
+						</div>
+					</div>
+					<!--end::Top-->
+					<!--begin::Wrapper-->
+					<div class="d-flex flex-row-fluid flex-center">
+						<!--begin::Signin-->
+						<div class="login-form">
+							<!--begin::Form-->
+							<form class="form" id="kt_login_singin_form" action="">
+								<!--begin::Title-->
+								<div class="pb-5 pb-lg-15">
+									<h3 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg">Login Admin</h3>
+									<div class="text-muted font-weight-bold font-size-h4">Anda akan login sebagai : 
+									<a href="custom/pages/login/login-3/signup.html" class="text-primary font-weight-bolder">Admin</a></div>
+								</div>
+								<!--begin::Title-->
+								<!--begin::Form group-->
+								<div class="form-group">
+									<label class="font-size-h6 font-weight-bolder text-dark">Email</label>
+									<input class="form-control h-auto py-7 px-6 rounded-lg border-0" v-model="email" type="email" autocomplete="off" />
+								</div>
+								<!--end::Form group-->
+								<!--begin::Form group-->
+								<div class="form-group">
+									<div class="d-flex justify-content-between mt-n5">
+										<label class="font-size-h6 font-weight-bolder text-dark pt-5">Password</label>
+										<a href="custom/pages/login/login-3/forgot.html" class="text-primary font-size-h6 font-weight-bolder text-hover-primary pt-5">Forgot Password ?</a>
+									</div>
+									<input class="form-control h-auto py-7 px-6 rounded-lg border-0" type="password" autocomplete="off" v-model="password" />
+								</div>
+								<!--end::Form group-->
+								<!--begin::Action-->
+								<div class="pb-lg-0 pb-5">
+									<button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3" @click="loginAdmin" >Login</button>
+                                    <button class="btn btn-outline-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3" @click="toPegawai()">Login Pegawai</button>
+									
+								</div>
+								<!--end::Action-->
+							</form>
+							<!--end::Form-->
+						</div>
+						<!--end::Signin-->
+					</div>
+					<!--end::Wrapper-->
+				</div>
+				<!--end::Content-->
+			</div>
+			<!--end::Login-->
+		</div>
+      
 </template>
 
 <script>
+
+
 import Dashboard from "./Dashboard";
 export default {
     components: {Dashboard},
     mounted() {
-        
-
-        let tab = document.querySelector(".tab-form");
-        let tabHeader = tab.querySelector(".tab-header");
-        let tabHeaderElements = tab.querySelectorAll(".tab-header > div");
-        let tabBody = tab.querySelector(".tab-body");
-        let tabBodyElements = tab.querySelectorAll(".tab-body > div");
-
-        for (let i = 0; i < tabHeaderElements.length; i++) {
-        tabHeaderElements[i].addEventListener("click", function() {
-            tabHeader.querySelector(".active").classList.remove("active");
-            tabHeaderElements[i].classList.add("active");
-            tabBody.querySelector(".active").classList.remove("active");
-            tabBodyElements[i].classList.add("active");
-        });
-
-    }
+    
     },
     data() {
         return {
@@ -94,16 +111,31 @@ export default {
         localStorage.clear();
         },
 
+        toPegawai(){
+          this.$router.push("/LoginPegawai");  
+        },
+         toRegister(){
+          this.$router.push("/Register");  
+        },
+        reload(){
+          location.reload()
+        },
+
         loginAdmin(e) {
             e.preventDefault()
-            if (this.password.length > 0) {
                 this.$axios.get('/sanctum/csrf-cookie').then(response => {
                     this.$axios.post('api/login', {
                         email: this.email,
                         password: this.password
-                    })
-                        .then(response => {
-                            console.log(response.data)
+                    }).then(response => {
+                        if (response.data.success) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Login Berhasil',
+                text: 'Anda berhasil masuk',
+                showConfirmButton: false,
+                timer: 1500
+              })
                             if (response.data.success) {
                                 window.localStorage.setItem("loggedIn", true)
                                 window.localStorage.setItem("token", response.data.token)
@@ -121,12 +153,23 @@ export default {
                             } else {
                                 this.error = response.data.message
                             }
+
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Gagal!!',
+                    text: 'Terjadi Kesalahan',
+                    showConfirmButton: false,
+                    timer: 1800
+                })
+            }  
+                      
                         })
                         .catch(function (error) {
                             console.error(error);
                         });
                 })
-            }
         },
         loginPegawai(e) {
             e.preventDefault()
@@ -179,145 +222,21 @@ export default {
 }
 </script>
 
-<style scoped>
- * {
-        margin: 0px;
-        padding: 0px;
-        box-sizing: border-box;
-        background-color: white;
-        border-radius: 10px;
-        
-    }
-    
-    body {
-        background: rgb(237, 237, 237);
-        
-    }
-    .input-field {
+ <!-- console.log(response.data)
+                            if (response.data.success) {
+                                window.localStorage.setItem("loggedIn", true)
+                                window.localStorage.setItem("token", response.data.token)
+                                window.localStorage.setItem("role", response.data.user.role)
+                                window.localStorage.setItem("name", response.data.user.name)
 
-    max-width: 380px;
-    width: 100%;
-    background-color: #f0f0f0;
-    margin: 18px 0;
-    height: 55px;
-    border-radius: 7px;
-    display: grid;
-    grid-template-columns: 15% 85%;
-    padding: 0 0.4rem;
-    position: relative;
-}
-
-.input-field i {
-    text-align: center;
-    line-height: 55px;
-    color: #acacac;
-    transition: 0.5s;
-    font-size: 1.1rem;
-}
-
-.input-field input {
-    background: none;
-    outline: none;
-    border: none;
-    line-height: 1;
-    font-weight: 600;
-    font-size: 1.1rem;
-    color: #333;
-}
-
-.input-field input::placeholder {
-    color: #aaa;
-    font-weight: 500;
-}
-    .tab-form {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 95%;
-        max-width: 400px;
-        box-shadow: 10px 10px 5px 10px rgba(0, 0, 0, 0.08);
-    }
-    
-    .tab-form .tab-header {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-        /* background-color: #124EB2; */
-    }
-    
-    .tab-form .tab-header>div {
-        flex: 1;
-        padding: 10px;
-        text-align: center;
-        color: #124EB2;
-        margin: 10px;
-        background-color: #f0f0f0;;
-        cursor: pointer;
-        border-radius: 7px;
-    }
-    
-    .tab-form .tab-header>div.active {
-        border-radius: 10px;
-        color: white;
-        background-color: #124EB2;
-    }
-    
-    .tab-form .tab-body {
-        position: relative;
-        min-height: 360px;
-        overflow: hidden;
-    }
-    
-    .tab-form .tab-body>div {
-        position: absolute;
-        width: 100%;
-        top: -150vh;
-        opacity: 0;
-        padding: 5px 25px;
-        transition: opacity 300ms ease-in-out;
-    }
-    
-    .tab-form .tab-body>div.active {
-        top: 0px;
-        opacity: 1;
-        transition: opacity 300ms ease-in-out;
-    }
-    
-    .tab-form .tab-body>div h2 {
-        font-size: 25px;
-        color: #124EB2;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    
-    .tab-form .tab-body>div .form-input {
-        margin: 10px 0px;
-    }
-    
-    .tab-form .tab-body>div .form-input label {
-        display: block;
-        font-size: 15px;
-    }
-    
-    .tab-form .tab-body>div .form-input input {
-        border-radius: 7px;
-        width: 100%;
-        color: #124EB2;
-        margin-top: 10px;
-        font-size: 15px;
-        padding: 8px;
-    }
-    
-    .tab-form .tab-body>div .form-input button {
-        width: 100%;
-        color: white;
-        margin-top: 70px;
-        padding: 10px;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        background-color: #124EB2;
-        border-radius: 7px;
-    }
-</style>
+                                if (response.data.user.role == 'Manager') {
+                                    this.$router.push("/ManagerDashboard")
+                                } else if (response.data.user.role == 'Admin') {
+                                    this.$router.push("/AdminDashboard")
+                                } else if (response.data.user.role == 'Pegawai') {
+                                    this.$router.push("/PegawaiDashboard")
+                                }
+                                this.loggedIn = true;
+                            } else {
+                                this.error = response.data.message
+                            } -->

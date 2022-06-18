@@ -20,6 +20,7 @@ class AkunPegawai extends Authenticatable
     protected $table = "akunpegawai";
      protected $fillable = [
         'id_admin',
+        'jabatan',
         'name',
         'email',
         'password',
