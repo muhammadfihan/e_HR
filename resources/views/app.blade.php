@@ -35,7 +35,9 @@
 	
 		<!-- webcamjs  -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.js"></script>
-    
+		<script src="assets/js/pages/crud/forms/widgets/bootstrap-datetimepicker.js"></script>
+		<script src="assets/js/pages/crud/forms/widgets/bootstrap-timepicker.js"></script>
+		
     <title>Prisen Online</title>
 
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -43,7 +45,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
 
 </head>
-<body id="app" id="kt_body" style="background-image: url(assets/media/bg/bg-10.jpg);" class="quick-panel-right demo-panel-right offcanvas-right header-fixed subheader-enabled page-loading">
+<body id="app" id="kt_body" style="background-image: url(assets/media/bg/bg-5.jpg);" class="quick-panel-right demo-panel-right offcanvas-right header-fixed subheader-enabled page-loading">
     
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/app.js') }}" type="text/javascript"></script>

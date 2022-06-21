@@ -182,6 +182,12 @@
 																					</div>
 																				</div>
                                                                                  <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Golongan</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.golongan}}</div>
+																					</div>
+																				</div>
+                                                                                 <div class="form-group row">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Pendidikan</label>
 																					<div class="col-lg-9 col-xl-6">
 																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.pendidikan}}</div>
@@ -268,6 +274,19 @@
                                                                                         </select>
 																					</div>
 																				</div>
+                                                                                <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Golongan</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<select class="form-control form-control-lg form-control-solid" v-model="form.jabatan">
+
+                                                                                            <option v-for="data in golongan" :key="data.golongan"
+                                                                                                            :selected="data.golongan == form.golongan ? selected : null"
+                                                                                                            :value="data.golongan">
+                                                                                                        {{data.golongan}}
+                                                                                            </option>
+                                                                                        </select>
+																					</div>
+																				</div>
 																				<div class="form-group row">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Status</label>
 																					<div class="col-lg-9 col-xl-6">
@@ -302,6 +321,7 @@ export default {
             pegawai: [],
             detpegawai: [],
             jabatan:[],
+            golongan:[],
             editpegawai:[],
             updatepegawai :[],
             delpegawai:[],
@@ -309,6 +329,7 @@ export default {
             form: new Form ({
                 id : "",
                 name : "",
+                golongan : "",
                 jabatan : "",
                 status : ""
             }),
@@ -331,6 +352,19 @@ export default {
                 jabatan: data.jabatan,
                 status: data.status,
             })
+        },
+         allgolongan(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/allgolongan',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.golongan = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
         },
         getdataPegawai(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
@@ -465,6 +499,7 @@ export default {
         this.getJabatan();
         this.getdataPegawai();
         this.getpt();
+        this.allgolongan();
     },
     // beforeRouteEnter(to, from, next) {
     //     if (JSON.parse(window.localStorage.getItem("loggedIn"))) {

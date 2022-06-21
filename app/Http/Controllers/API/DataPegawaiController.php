@@ -23,6 +23,7 @@ class DataPegawaiController extends Controller
             'id_admin' => 'required|integer',
             'id' => 'required|integer',
             'pendidikan' => 'required|string',
+            'golongan' => 'required|string',
             'no_hp' => 'required|bigInteger',
             'no_ktp' => 'required|bigInteger',
             'gender' => 'required|string',
@@ -42,6 +43,7 @@ class DataPegawaiController extends Controller
             'no_hp' => $request->no_hp,
             'no_ktp' => $request->no_ktp,
             'gender' => $request->gender,
+            'golongan' => $request->Auth::user()->golongan,
             'pendidikan' => $request->pendidikan,
             'alamat' => $request->alamat
 
@@ -112,6 +114,7 @@ class DataPegawaiController extends Controller
             // ]);
             $validate = Validator::make($request->all(), [
                 'jabatan' => 'required',
+                'golongan' => 'required',
                 'status' => 'required'
              ]);
     
@@ -123,10 +126,12 @@ class DataPegawaiController extends Controller
             } else {
                 DB::table('pegawais')->where('id', $request->id)->update([
                     'jabatan' => $request->jabatan,
+                    'golongan' => $request->golongan,
                     'status' => $request->status
                 ]);
                 DB::table('akunpegawai')->where('id', $request->id)->update([
                     'jabatan' => $request->jabatan,
+                    'golongan' => $request->golongan,
                 ]);
                 return response()->json([
                     'success' => true,

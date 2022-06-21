@@ -1,16 +1,18 @@
 // Class definition
 
-var KTBootstrapTimepicker = function () {
-    
+var KTBootstrapTimepicker = function() {
+
     // Private functions
-    var demos = function () {
+    var demos = function() {
         // minimum setup
         $('#kt_timepicker_1, #kt_timepicker_1_modal').timepicker();
 
         // minimum setup
         $('#kt_timepicker_2, #kt_timepicker_2_modal').timepicker({
             minuteStep: 1,
-            defaultTime: '',
+            format: 'HH:mm:ss',
+            defaultTime: '00:00:00',
+
             showSeconds: true,
             showMeridian: false,
             snapToStep: true
@@ -26,7 +28,7 @@ var KTBootstrapTimepicker = function () {
 
         // default time
         $('#kt_timepicker_4, #kt_timepicker_4_modal').timepicker({
-            defaultTime: '10:30:20 AM',           
+            defaultTime: '10:30:20 AM',
             minuteStep: 1,
             showSeconds: true,
             showMeridian: true
@@ -45,7 +47,7 @@ var KTBootstrapTimepicker = function () {
     return {
         // public functions
         init: function() {
-            demos(); 
+            demos();
         }
     };
 }();

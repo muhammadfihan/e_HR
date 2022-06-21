@@ -3,38 +3,39 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Jabatan;
-use App\Models\Pegawai;
+
+use App\Models\Golongan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class JabatanController extends Controller
+
+class GolonganController extends Controller
 {
-    public function alljabatan()
+    public function allgolongan()
     {
-        $jabatan = DB::table('jabatan')
+        $golongan = DB::table('golongan')
             ->select('*')
             ->where('id_admin', Auth::user()->id)
             ->get();
         return response([
-            'data' => $jabatan,
+            'data' => $golongan,
             'message' => 'get data berhasil',
             'status' => true
         ]);
     }
 
     // add book
-    public function tambahjabatan(Request $request)
+    public function tambahgolongan(Request $request)
     {
-        $jabatan = Jabatan::create([
+        $golongan = Golongan::create([
             'id_admin' => Auth::user()->id,
-            'jabatan' => $request->jabatan,
-            'gaji' => $request->gaji,
+            'golongan' => $request->golongan,
+            'pendidikan' => $request->pendidikan,
+            'nominal' => $request->nominal,
         ]);
-        $jabatan->save();
+        $golongan->save();
         $success = true;
         return response()->json([
             'message' =>'Jabatan successfully added',
@@ -44,18 +45,14 @@ class JabatanController extends Controller
     }
 
     // edit book
-    public function editjabatan($id)
-    {
-        $jabatan = Jabatan::find($id);
-        return response()->json($jabatan);
-    }
 
     // update book
-    public function updatejabatan(Request $request)
+    public function updategolongan(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'jabatan' => 'required',
-            'gaji' => 'required',
+            'golongan' => 'required',
+            'pendidikan' => 'required',
+            'nominal' => 'required',
          ]);
 
         if ($validate->fails()) {
@@ -64,9 +61,10 @@ class JabatanController extends Controller
                 'message' => 'Update Data Gagal!',
             ]);
         } else {
-            DB::table('jabatan')->where('id', $request->id)->update([
-                'jabatan' => $request->jabatan,
-                'gaji' => $request->gaji,
+            DB::table('golongan')->where('id', $request->id)->update([
+                'golongan' => $request->golongan,
+                'pendidikan' => $request->pendidikan,
+                'nominal' => $request->nominal,
             ]);
 
             return response()->json([
@@ -75,9 +73,9 @@ class JabatanController extends Controller
             ]);
         }
     }
-    public function hapusjabatan(Request $request, $id)
+    public function hapusgolongan(Request $request, $id)
     {
-        $data = Jabatan::findOrFail($id);
+        $data = Golongan::findOrFail($id);
         $data->delete();
         return response()->json([
             'success' => true,

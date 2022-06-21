@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Tunjangan;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use App\Models\Bonus;
 
 class GajiController extends Controller
 {
@@ -67,6 +68,68 @@ class GajiController extends Controller
         ->get();
     return response([
         'data' => $tunjangan,
+        'message' => 'get data berhasil',
+        'status' => true
+    ]);
+    }
+
+    //bonus
+    public function tambahbonus(Request $request){
+        $tunjangan = Bonus::create([
+            'id_admin' => Auth::user()->id,
+            'jenis_bonus' => $request->jenis_bonus,
+            'nominal' => $request->nominal,
+        ]);
+        $tunjangan->save();
+        $success = true;
+        return response()->json([
+            'message' =>'Tunjangan successfully added',
+            'success' => $success
+
+            ]);
+    }
+
+    public function updatebonus(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'jenis_bonus' => 'required',
+            'nominal' => 'required',
+         ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Update Data Gagal!',
+            ]);
+        } else {
+            DB::table('bonus')->where('id', $request->id)->update([
+                'jenis_bonus' => $request->jenis_bonus,
+                'nominal' => $request->nominal,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Update Bonus Berhasil!',
+            ]);
+        }
+    }
+    public function hapusbonus(Request $request, $id)
+    {
+        $data = Bonus::findOrFail($id);
+        $data->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Hapus data berhasil'
+        ]);
+    }
+
+    public function allbonus(){
+        $bonus = DB::table('bonus')
+        ->select('*')
+        ->where('id_admin', Auth::user()->id)
+        ->get();
+    return response([
+        'data' => $bonus,
         'message' => 'get data berhasil',
         'status' => true
     ]);

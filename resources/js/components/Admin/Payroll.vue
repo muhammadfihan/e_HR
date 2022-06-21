@@ -38,10 +38,30 @@
 											<!--begin::Body-->
 											<div class="card-body">
 												<!--begin::Nav Tabs-->
-												<ul class="dashboard-tabs nav nav-pills nav-danger row row-paddingless m-0 p-0 flex-column flex-sm-row" role="tablist">
-												
+											<ul class="dashboard-tabs nav nav-pills nav-danger row row-paddingless m-0 p-0 flex-column flex-sm-row" role="tablist">
+													<!--begin::Item-->
 													<li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
 														<a class="nav-link active border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#forms_widget_tab_1">
+															<span class="nav-icon py-2 w-auto">
+																<span class="svg-icon svg-icon-3x">
+																	<!--begin::Svg Icon | path:assets/media/svg/icons/Home/Library.svg-->
+																	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+																		<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																			<rect x="0" y="0" width="24" height="24" />
+																			<path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000" />
+																			<rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
+																		</g>
+																	</svg>
+																	<!--end::Svg Icon-->
+																</span>
+															</span>
+															<span class="nav-text font-size-lg py-2 font-weight-bold text-center">Penggajian</span>
+														</a>
+													</li>
+													<!--end::Item-->
+													<!--begin::Item-->
+													<li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
+														<a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#forms_widget_tab_2">
 															<span class="nav-icon py-2 w-auto">
 																<span class="svg-icon svg-icon-3x">
 																	<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
@@ -55,11 +75,12 @@
 																	<!--end::Svg Icon-->
 																</span>
 															</span>
-															<span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Penggajian Pegawai</span>
+															<span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Management Tunjangan</span>
 														</a>
 													</li>
+												
 													<li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
-														<a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#forms_widget_tab_2">
+														<a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#forms_widget_tab_3">
 															<span class="nav-icon py-2 w-auto">
 																<span class="svg-icon svg-icon-3x">
 																	<!--begin::Svg Icon | path:assets/media/svg/icons/Media/Equalizer.svg-->
@@ -75,13 +96,13 @@
 																	<!--end::Svg Icon-->
 																</span>
 															</span>
-															<span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Management Tunjangan</span>
+															<span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Management Bonus</span>
 														</a>
 													</li>
 													<!--end::Item-->
 													<!--begin::Item-->
 													<li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
-														<a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#forms_widget_tab_3">
+														<a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#forms_widget_tab_4">
 															<span class="nav-icon py-2 w-auto">
 																<span class="svg-icon svg-icon-3x">
 																	<!--begin::Svg Icon | path:assets/media/svg/icons/General/Shield-check.svg-->
@@ -95,26 +116,34 @@
 																	<!--end::Svg Icon-->
 																</span>
 															</span>
-															<span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Management Bonus </span>
+															<span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Management Golongan</span>
 														</a>
 													</li>
-												
+													<!--end::Item-->
+													<!--begin::Item-->
+													<li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-0 mb-3 mb-lg-0">
+														<a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#forms_widget_tab_5">
+															<span class="nav-icon py-2 w-auto">
+																<span class="svg-icon svg-icon-3x">
+																	<!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Group.svg-->
+																	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+																		<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																			<polygon points="0 0 24 0 24 24 0 24" />
+																			<path d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+																			<path d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z" fill="#000000" fill-rule="nonzero" />
+																		</g>
+																	</svg>
+																	<!--end::Svg Icon-->
+																</span>
+															</span>
+															<span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Riwayat Penggajian</span>
+														</a>
+													</li>
+													<!--end::Item-->
 												</ul>
 												<!--end::Nav Tabs-->
 												<!--begin::Nav Content-->
 												<div class="tab-content m-0 p-0">
-													<!-- <div class="tab-pane show active" id="forms_widget_tab_1s" role="tabpanel">
-                                                        A
-                                                    </div>
-													<div class="tab-pane" id="forms_widget_tab_2" role="tabpanel">
-                                                        B
-                                                    </div>
-													<div class="tab-pane" id="forms_widget_tab_3" role="tabpanel">
-                                                        C
-                                                    </div>
-													<div class="tab-pane" id="forms_widget_tab_4" role="tabpanel">
-                                                        D
-                                                    </div> -->
 												</div>
 												<!--end::Nav Content-->
 											</div>
@@ -131,6 +160,7 @@
 											<div class="card-header flex-wrap border-0 pt-6 pb-0">
 												<h3 class="card-title align-items-start flex-column">
 													<span class="card-label font-weight-bolder text-dark" >Data Gaji Karyawan</span>
+                                                    <span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Data Gaji Karyawan di {{ data.nama_perusahaan }}</span>
 												</h3>
                                                  <div class="card-toolbar">
 													<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
@@ -193,8 +223,8 @@
                                                             <th>Nama Pegawai</th>
                                                             <th>Jabatan</th>
                                                             <th>Periode</th>
+                                                            <th>Total Jam Kerja</th>
                                                             <th>Gaji Pokok</th>
-                                                            <th>Tunjangan Jabatan</th>
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
                                                         </thead>
@@ -243,7 +273,7 @@
 											<div class="card-header flex-wrap border-0 pt-6 pb-0">
 												<h3 class="card-title align-items-start flex-column">
 													<span class="card-label font-weight-bolder text-dark" >Management Tunjangan</span>
-													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Pengajuan Cuti di {{ data.nama_perusahaan }}</span>
+													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Management Tunjangan di {{ data.nama_perusahaan }}</span>
 												</h3>
                                                  <div class="card-toolbar">
 													<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
@@ -339,11 +369,12 @@
 											<div class="card-header flex-wrap border-0 pt-6 pb-0">
 												<h3 class="card-title align-items-start flex-column">
 													<span class="card-label font-weight-bolder text-dark" >Management Bonus</span>
+                                                    <span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Management Bonus di {{ data.nama_perusahaan }}</span>
 												</h3>
                                                  <div class="card-toolbar">
 													<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
 														<!--begin::Trigger Modal-->
-														<a href="#" class="btn btn-success font-weight-bolder font-size-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal">Manage</a>
+														<a href="#" class="btn btn-success font-weight-bolder font-size-sm" aria-haspopup="true" aria-expanded="false" @click="showModal2()" data-toggle="modal">Tambah</a>
                                                     </div>
                                                 </div>
 												
@@ -403,7 +434,235 @@
                                                         </tr>
                                                         </thead>
                                                          <tbody>
-                
+                                                             <tr v-for="(data,index) in bonus" :key="data.id">
+                                                                    <td>
+                                                                        <label class="checkbox-wrap checkbox-success">
+                                                                            <input type="checkbox">
+                                                                            <span class="checkmark"></span>
+                                                                        </label>
+                                                                    </td>
+                                                                    <td>{{index+1}} </td>
+                                                                    <td>{{ data.jenis_bonus }}</td>
+                                                                    <td>{{convertToRupiah (data.nominal) }}</td>
+                                                                    <td style="text-align: center;">
+                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="showModalEdit2(data)">
+                                                                          </a>
+                                                                           <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-trash-alt" @click.prevent="hapusbonus(data.id)">
+                                                                          </a>
+                                                                       
+                                                                    </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+												<!--end::Datatable-->
+											</div>
+											<!--end::Body-->
+										</div>
+                                          <div class="card card-custom tab-pane" id="forms_widget_tab_4" role="tabpanel">
+											<!--begin::Header-->
+											<div class="card-header flex-wrap border-0 pt-6 pb-0">
+												<h3 class="card-title align-items-start flex-column">
+													<span class="card-label font-weight-bolder text-dark" >Management Golongan</span>
+                                                    <span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Management Golongan di {{ data.nama_perusahaan }}</span>
+												</h3>
+                                                 <div class="card-toolbar">
+													<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
+														<!--begin::Trigger Modal-->
+														<a href="#" class="btn btn-success font-weight-bolder font-size-sm" aria-haspopup="true" aria-expanded="false" @click="showModal3()" data-toggle="modal">Tambah</a>
+                                                    </div>
+                                                </div>
+												
+											</div>
+											<!--end::Header-->
+											<!--begin::Body-->
+											<div class="card-body">
+												<!--begin::Search Form-->
+												<!--begin::Search Form-->
+												<div class="mb-10">
+													<div class="row align-items-center">
+														<div class="col-lg-9 col-xl-8">
+															<div class="row align-items-center">
+																<div class="col-md-4 my-2 my-md-0">
+																	<div class="input-icon">
+																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<span>
+																			<i class="flaticon2-search-1 text-muted"></i>
+																		</span>
+																	</div>
+																</div>
+																<div class="col-md-4 my-2 my-md-0">
+																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
+																		<option value="">Status</option>
+																		<option value="1">Pending</option>
+																		<option value="2">Delivered</option>
+																		<option value="3">Canceled</option>
+																	</select>
+																</div>
+																<div class="col-md-4 my-2 my-md-0">
+																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
+																		<option value="">Type</option>
+																		<option value="4">Success</option>
+																		<option value="5">Info</option>
+																		<option value="6">Danger</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
+															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														</div>
+													</div>
+												</div>
+												<!--end::Search Form-->
+												<!--end: Search Form-->
+												<!--begin::Datatable-->
+												<div class="datatable-bordered">
+                                                  <table class="table align-middle bordered" >
+                                                        <thead class="" >
+                                                        <tr>
+                                                            <th>&nbsp;</th>
+                                                            <th>No</th>
+                                                            <th>Golongan</th>
+                                                            <th>Pendidikan</th>
+                                                            <th>Nominal</th>
+                                                            <th style="text-align: center;">Action</th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody>
+                                                            <tr v-for="(data,index) in golongan" :key="data.id">
+                                                                    <td>
+                                                                        <label class="checkbox-wrap checkbox-success">
+                                                                            <input type="checkbox">
+                                                                            <span class="checkmark"></span>
+                                                                        </label>
+                                                                    </td>
+                                                                    <td>{{index+1}} </td>
+                                                                    <td>{{ data.golongan }}</td>
+                                                                    <td>{{ data.pendidikan }}</td>
+                                                                    <td>{{ data.nominal }}</td>
+                                                                   
+                                                                    <td style="text-align: center;">
+                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="showModalEdit3(data)">
+                                                                          </a>
+                                                                           <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-trash-alt" @click.prevent="hapusgolongan(data.id)">
+                                                                          </a>
+                                                                       
+                                                                    </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+												<!--end::Datatable-->
+											</div>
+											<!--end::Body-->
+										</div>
+                                         <div class="card card-custom tab-pane show" id="forms_widget_tab_5" role="tabpanel">
+											<!--begin::Header-->
+											<div class="card-header flex-wrap border-0 pt-6 pb-0">
+												<h3 class="card-title align-items-start flex-column">
+													<span class="card-label font-weight-bolder text-dark" >Riwayat Penggajian Karyawan</span>
+                                                    <span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Riwayat Gaji Karyawan di {{ data.nama_perusahaan }}</span>
+												</h3>
+                                                 <div class="card-toolbar">
+													<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
+														<!--begin::Trigger Modal-->
+														
+                                                    </div>
+                                                </div>
+												
+											</div>
+											<!--end::Header-->
+											<!--begin::Body-->
+											<div class="card-body">
+												<!--begin::Search Form-->
+												<!--begin::Search Form-->
+												<div class="mb-10">
+													<div class="row align-items-center">
+														<div class="col-lg-9 col-xl-8">
+															<div class="row align-items-center">
+																<div class="col-md-4 my-2 my-md-0">
+																	<div class="input-icon">
+																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<span>
+																			<i class="flaticon2-search-1 text-muted"></i>
+																		</span>
+																	</div>
+																</div>
+																<div class="col-md-4 my-2 my-md-0">
+																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
+																		<option value="">Status</option>
+																		<option value="1">Pending</option>
+																		<option value="2">Delivered</option>
+																		<option value="3">Canceled</option>
+																	</select>
+																</div>
+																<div class="col-md-4 my-2 my-md-0">
+																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
+																		<option value="">Type</option>
+																		<option value="4">Success</option>
+																		<option value="5">Info</option>
+																		<option value="6">Danger</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
+															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														</div>
+													</div>
+												</div>
+												<!--end::Search Form-->
+												<!--end: Search Form-->
+												<!--begin::Datatable-->
+												<div class="datatable-bordered">
+                                                     <table class="table align-middle bordered" >
+                                                        <thead class="" >
+                                                        <tr>
+                                                            <th>&nbsp;</th>
+                                                            <th>No</th>
+                                                            <th>Pegawai</th>
+                                                            <th>Nama Pegawai</th>
+                                                            <th>Jabatan</th>
+                                                            <th>Periode</th>
+                                                            <th>Gaji Pokok</th>
+                                                            <th style="text-align: center;">Action</th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody>
+                                                            <tr v-for="(data,index) in absensipegawai" :key="data.id">
+                                                                    <td>
+                                                                        <label class="checkbox-wrap checkbox-success">
+                                                                            <input type="checkbox">
+                                                                            <span class="checkmark"></span>
+                                                                        </label>
+                                                                    </td>
+                                                                    <td>{{index+1}} </td>
+                                                                     <td>
+                                                                        <div class="ms-3">
+                                                                            <p class="fw-bold mb-1">{{ data.name }}</p>
+                                                                            <p class="text-muted mb-0">{{ data.email }}</p>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>{{ data.nama_lengkap }}</td>
+                                                                    <td>{{ data.tanggal }}</td>
+                                                                    <td>{{ data.jam_masuk }}</td>
+                                                                    <td>{{ data.jam_pulang }}</td>
+                                                                    <td>{{ data.jam_kerja }}</td>
+                                                                     <td>
+                                                                        <span class="badge badge-success" v-if="data.keterangan == 'On Time'" >{{data.keterangan}}</span>
+                                                                        <span class="badge badge-danger" v-else-if="data.keterangan == 'Terlambat'" >{{data.keterangan}}</span>
+                                                                    </td>
+                                                                    <td>{{ data.lokasi }}</td>
+                                                                   
+                                                                    <td style="text-align: center;">
+                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="showModalEdit(data)">
+                                                                          </a>
+                                                                       
+                                                                    </td>
+                                                            </tr>
                                                         </tbody>
                                                     </table>
 
@@ -430,7 +689,7 @@
 						</div>
 						<!--end::Entry-->
 					</div>
-                     <div class="modal fade" id="tambahtunjangan" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+<div class="modal fade" id="tambahtunjangan" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
 															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
 																<div class="modal-content">
 																	<div class="modal-header">
@@ -446,7 +705,7 @@
 																				<div class="form-group row">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jenis Tunjangan</label>
 																					<div class="col-lg-9 col-xl-6">
-																						 <input v-model="form.jenis_tunjangan" placeholder="Masukan Jabatan" type="text" class="form-control form-control-lg form-control-solid">
+																						 <input v-model="form.jenis_tunjangan" placeholder="Masukan Jenis Tunjangan" type="text" class="form-control form-control-lg form-control-solid">
 																					</div>
 																				</div>
 																				<div class="form-group row">
@@ -468,6 +727,86 @@
 															</div>
 														</div>
 
+ <div class="modal fade" id="tambahbonus" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+                                                                        <h5 class="modal-title" v-show="!statusmodal2" id="tambahbonus">Tambah Bonus</h5>
+																		<h5 class="modal-title" v-show="statusmodal2" id="tambahbonus">Edit Bonus</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" class="ki ki-close" @click="closeModal2()"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form @submit.prevent="statusmodal2 ? editbonus() : addbonus()">
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jenis Bonus</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.jenis_bonus" placeholder="Masukan Jenis Bonus" type="text" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Nominal</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.nominal" placeholder="Masukan angka saja" type="text" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																			</form>
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+																		
+																		<button type="submit" v-show="!statusmodal2"  @click="addbonus()"  class="btn btn-primary font-weight-bold">Tambah</button>
+                                                                        <button type="submit" v-show="statusmodal2"   @click="editbonus()"  class="btn btn-primary font-weight-bold">Update</button>
+                                                                        <button type="button"  data-dismiss="modal" @click="closeModal2()" class="btn btn-primary font-weight-bold">Batal</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+<div class="modal fade" id="tambahgolongan" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+                                                                        <h5 class="modal-title" v-show="!statusmodal3" id="tambahgolongan">Tambah Golongan</h5>
+																		<h5 class="modal-title" v-show="statusmodal3" id="tambahgolongan">Edit Golongan</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" class="ki ki-close" @click="closeModal3()"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form @submit.prevent="statusmodal2 ? editgolongan() : addgolongan()">
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Golongan</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.golongan" placeholder="Masukan Nama Golongan" type="text" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Pendidikan</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.pendidikan" placeholder="Masukan Pendidikan Untuk Golongan" type="text" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+                                                                                <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Nominal</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.nominal" placeholder="Masukan Angka Saja" type="text" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																			</form>
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+																		
+																		<button type="submit" v-show="!statusmodal3"  @click="addgolongan()"  class="btn btn-primary font-weight-bold">Tambah</button>
+                                                                        <button type="submit" v-show="statusmodal3"   @click="editgolongan()"  class="btn btn-primary font-weight-bold">Update</button>
+                                                                        <button type="button"  data-dismiss="modal" @click="closeModal3()" class="btn btn-primary font-weight-bold">Batal</button>
+																	</div>
+																</div>
+															</div>
+														</div>                                                        
 
 
 </template>
@@ -479,19 +818,37 @@ export default {
     name: "Payroll",
     data() {
         return {
+            infopt:[],
             tunjangan:[],
+            bonus:[],
+            golongan:[],
             infopt:[],
             statusmodal: false,
+            statusmodal2: false,
+            statusmodal3: false,
             form : new Form({
                 id : "",
                 jenis_tunjangan : "",
                 nominal : "",
             }),
+            form: new Form({
+                id : "",
+                jenis_bonus : "",
+                nominal : "",
+            }),
+             form: new Form({
+                id : "",
+                golongan : "",
+                pendidikan : "",
+                nominal : "",
+            }),
+
             token: localStorage.getItem("token"),
             role: localStorage.getItem('role'),
         }
     },
     methods:{
+        //TUNJANGAN
          showModal() {
             this.statusmodal = false;
             this.form.reset();
@@ -507,6 +864,39 @@ export default {
             this.form.reset();
             $("#tambahtunjangan").modal("hide");
         },
+        //BONUS
+         showModal2() {
+            this.statusmodal2 = false;
+            this.form.reset();
+            $("#tambahbonus").modal("show");
+        },
+        showModalEdit2(data) {
+            this.statusmodal2 = true;
+            this.form.reset();
+            $("#tambahbonus").modal("show");
+            this.form.fill(data);
+        },
+        closeModal2() {
+            this.form.reset();
+            $("#tambahbonus").modal("hide");
+        },
+        //GOLONGAN
+        showModal3() {
+            this.statusmodal3 = false;
+            this.form.reset();
+            $("#tambahgolongan").modal("show");
+        },
+        showModalEdit3(data) {
+            this.statusmodal3 = true;
+            this.form.reset();
+            $("#tambahgolongan").modal("show");
+            this.form.fill(data);
+        },
+        closeModal3() {
+            this.form.reset();
+            $("#tambahgolongan").modal("hide");
+        },
+
          getpt(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/infopt',{
@@ -520,6 +910,7 @@ export default {
                 });
         })
         },
+        //TUNJANGAN
         edittunjangan(){
         
               axios.post('/api/updatetunjangan',
@@ -569,26 +960,7 @@ export default {
                 )
                     })
         },
-          convertToRupiah(value) {
-            // value = value.toString()
-            value = parseFloat(value)
-            let rupiah = ''
-            let valueRev = value.toString().split('').reverse().join('')
-            for (let i = 0; i < valueRev.length; i++) {
-                if (i % 3 === 0) rupiah += `${valueRev.substr(i, 3)}.`
-            }
-
-            const rp = rupiah
-                .split('', rupiah.length - 1)
-                .reverse()
-                .join('')
-            // console.log('rupiah', isNaN(rp), rupiah.length, rp, rupiah)
-            if (rupiah === 'NaN.' || rupiah === 'NaN') {
-                return '...'
-            }
-            return `Rp ${rp}`
-        },
-        alltunjangan(){
+         alltunjangan(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/alltunjangan',{
                 headers: {Authorization: "Bearer " + this.token},
@@ -635,26 +1007,234 @@ export default {
 
             })
         },
-
-
+        //BONUS
+        editbonus(){
         
-    },
-     created() {
-         this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/alltunjangan',{
+              axios.post('/api/updatebonus',
+                {
+                    id: this.form.id,
+                    jenis_bonus: this.form.jenis_bonus,
+                    nominal: this.form.nominal,
+                },
+                {
+                    headers: { Authorization: "Bearer " + this.token }
+                }).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Update Akun Pegawai",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    this.form.reset();
+                    $("#tambahbonus").modal("hide");
+                    this.allbonus()
+                }
+            
+
+           })
+        },
+        addbonus() {
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.form.post('/api/tambahbonus', {
+                headers : { Authorization: "Bearer " + this.token },
+            }).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Menambahkan Jabatan",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    this.form.reset();
+                    $('#tambahbonus').modal('hide')
+                    this.allbonus()
+                }
+                    
+                    }
+                )
+                    })
+        },
+         allbonus(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/allbonus',{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
-                    this.tunjangan = response.data.data;
+                    this.bonus = response.data.data;
                 })
                 .catch(function (error) {
                     console.error(error);
                 });
         })
+        },
+         hapusbonus(id){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            Swal.fire({
+            title: 'Hapus Bonus ?',
+            text: "Anda tidak akan bisa mengembalikannya lagi!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1BC5BD',
+            cancelButtonColor: '',
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal',
+            }).then((result) => {
+                 if (result.isConfirmed) {
+                 axios.delete('/api/hapusbonus/'+id,  {
+                headers: { Authorization: "Bearer " + this.token },
+                },
+                )
+                  Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Menghapus Bonus Pegawai",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    };
+           
+                    this.allbonus()
+
+            },
+
+            )
+
+            })
+        },
+        //GOLONGAN
+        editgolongan(){
+        
+              axios.post('/api/updategolongan',
+                {
+                    id: this.form.id,
+                    golongan: this.form.golongan,
+                    pendidikan: this.form.pendidikan,
+                    nominal: this.form.nominal,
+                },
+                {
+                    headers: { Authorization: "Bearer " + this.token }
+                }).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Update Akun Pegawai",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    this.form.reset();
+                    $("#tambahgolongan").modal("hide");
+                    this.allgolongan()
+                }
+            
+
+           })
+        },
+        addgolongan() {
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.form.post('/api/tambahgolongan', {
+                headers : { Authorization: "Bearer " + this.token },
+            }).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Menambahkan Golongan",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    this.form.reset();
+                    $('#tambahgolongan').modal('hide')
+                    this.allgolongan()
+                }
+                    
+                    }
+                )
+                    })
+        },
+         allgolongan(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/allgolongan',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.golongan = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
+         hapusgolongan(id){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            Swal.fire({
+            title: 'Hapus Golongan ?',
+            text: "Anda tidak akan bisa mengembalikannya lagi!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1BC5BD',
+            cancelButtonColor: '',
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal',
+            }).then((result) => {
+                 if (result.isConfirmed) {
+                 axios.delete('/api/hapusgolongan/'+id,  {
+                headers: { Authorization: "Bearer " + this.token },
+                },
+                )
+                  Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Menghapus Golongan Pegawai",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    };
+           
+                    this.allgolongan()
+
+            },
+
+            )
+
+            })
+        },
+
+          convertToRupiah(value) {
+            // value = value.toString()
+            value = parseFloat(value)
+            let rupiah = ''
+            let valueRev = value.toString().split('').reverse().join('')
+            for (let i = 0; i < valueRev.length; i++) {
+                if (i % 3 === 0) rupiah += `${valueRev.substr(i, 3)}.`
+            }
+
+            const rp = rupiah
+                .split('', rupiah.length - 1)
+                .reverse()
+                .join('')
+            // console.log('rupiah', isNaN(rp), rupiah.length, rp, rupiah)
+            if (rupiah === 'NaN.' || rupiah === 'NaN') {
+                return '...'
+            }
+            return `Rp ${rp}`
+        },
+       
+
+
+        
+    },
+     created() {
     },
 
     mounted () {
-            
+            this.alltunjangan();
+            this.allgolongan();
+            this.allbonus();
+            this.getpt();
     }
 
 

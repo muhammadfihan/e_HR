@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('id_admin')->references('id')->on('users');
             $table->string('name');
             $table->string('jabatan');
+            $table->string('golongan');
             $table->enum('role', ['Manager', 'Admin', 'Pegawai'])->default('Pegawai');
             $table->string('email')->unique();
             $table->string('password');

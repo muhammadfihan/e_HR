@@ -5,6 +5,8 @@ use App\Http\Controllers\API\DataPegawaiController;
 use App\Http\Controllers\API\GajiController;
 use App\Http\Controllers\API\JabatanController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\GolonganController;
+use App\Http\Controllers\API\JamAbsenController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -46,7 +48,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('tambahtunjangan', [GajiController::class, 'tambahtunjangan'])->middleware('role:Manager,Admin');
     Route::post('updatetunjangan',[GajiController::class, 'updatetunjangan'])->middleware('role:Manager,Admin');
     Route::delete('hapustunjangan/{id}', [GajiController::class, 'hapustunjangan'])->middleware('role:Manager,Admin');
-
+    
+    Route::get('allbonus',[GajiController::class, 'allbonus'])->middleware('role:Manager,Admin,Pegawai');
+    Route::post('tambahbonus', [GajiController::class, 'tambahbonus'])->middleware('role:Manager,Admin');
+    Route::post('updatebonus',[GajiController::class, 'updatebonus'])->middleware('role:Manager,Admin');
+    Route::delete('hapusbonus/{id}', [GajiController::class, 'hapusbonus'])->middleware('role:Manager,Admin');
+    
+    Route::get('allgolongan',[GolonganController::class, 'allgolongan'])->middleware('role:Manager,Admin,Pegawai');
+    Route::post('tambahgolongan', [GolonganController::class, 'tambahgolongan'])->middleware('role:Manager,Admin');
+    Route::post('updategolongan',[GolonganController::class, 'updategolongan'])->middleware('role:Manager,Admin');
+    Route::delete('hapusgolongan/{id}', [GolonganController::class, 'hapusgolongan'])->middleware('role:Manager,Admin');
 
     Route::post('isibiodata', [DataPegawaiController::class, 'isibiodata'])->middleware('role:Pegawai');
     Route::get('getprofile', [DataPegawaiController::class, 'getprofile'])->middleware('role:Pegawai');
@@ -61,4 +72,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('absenpulang', [AbsensiController::class, 'absenpulang'])->middleware('role:Pegawai');
 
     Route::get('tampilabsen', [AbsensiController::class, 'tampilabsen'])->middleware('role:Admin');
+    Route::get('detailabsen/{id}', [AbsensiController::class, 'detailabsen'])->middleware('role:Manager,Admin');
+
+    Route::post('aturjamabsen', [JamAbsenController::class, 'aturjamabsen'])->middleware('role:Admin');
+    Route::post('updateabsen', [JamAbsenController::class, 'updateabsen'])->middleware('role:Admin');
+    Route::get('tampil', [JamAbsenController::class, 'tampil'])->middleware('role:Admin');
+
+    Route::get('absendashboard', [AbsensiController::class, 'absendashboard'])->middleware('role:Admin');
+    Route::get('counthadir', [AbsensiController::class, 'counthadir'])->middleware('role:Admin');
+    Route::get('counttidakhadir', [AbsensiController::class, 'counttidakhadir'])->middleware('role:Admin');
 });

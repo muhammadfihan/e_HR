@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use phpDocumentor\Reflection\Element;
 use App\Models\AkunPegawai;
 use App\Models\DataPegawai;
+use App\Models\JamAbsen;
 
 class UserController extends Controller
 {
@@ -151,6 +152,8 @@ class UserController extends Controller
                 ->json(['message' => 'Unauthorized', 'success'=>$success], 401);
         }
 
+        
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -158,6 +161,7 @@ class UserController extends Controller
             'nama_perusahaan' => $request->nama_perusahaan,
             'provinsi' => $request->provinsi,
             'kota' => $request->kota,
+            'jumlah_karyawan' => $request->jumlah_karyawan,
             'npwp' => $request->npwp,
             'kode_pos' => $request->kode_pos,
             'det_alamat' => $request->det_alamat,
@@ -178,11 +182,11 @@ class UserController extends Controller
          ])
 
         ]);
+
         $success = true;
         $message = 'User register successfully';
         $token = $user->createToken('auth_token')->plainTextToken;
-        return response()
-            ->json([
+        return response()->json([
                 'data' => $user,
                 'dat_perusahaan' => $pt,
                 'access_token' => $token,
@@ -195,6 +199,8 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'name' => 'required|string|max:255',
+            'jabatan' => 'required|string|max:255',
+            'golongan' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
 
@@ -216,6 +222,7 @@ class UserController extends Controller
             'id_admin' => Auth::user()->id,
             'name' => $request->name,
             'jabatan' => $request->jabatan,
+            'golongan' => $request->golongan,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -226,6 +233,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'id' => $akunpegawai->id,
+            'golongan' => $request->golongan,
             'jabatan' => $request->jabatan,
             'id_admin' => Auth::user()->id,
 
@@ -275,6 +283,7 @@ class UserController extends Controller
         $validate = Validator::make($request->all(), [
             'name' => 'required',
             'jabatan' => 'required',
+            'golongan' => 'required',
             'email' => 'required',
             'password' => 'required'
          ]);
@@ -288,11 +297,13 @@ class UserController extends Controller
             DB::table('akunpegawai')->where('id', $request->id)->update([
                 'name' => $request->name,
                 'jabatan' => $request->jabatan,
+                'golongan' => $request->golongan,
                 'email' => $request->email,
                 'password' => Hash::make($request->password)
             ]);
             DB::table('pegawais')->where('id', $request->id)->update([
                 'name' => $request->name,
+                'golongan' => $request->golongan,
                 'jabatan' => $request->jabatan,
                 'email' => $request->email,
             ]);

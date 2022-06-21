@@ -57,12 +57,11 @@
 						
 
  </div>
-
- <div class="modal fade" id="camera" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+<div class="modal fade" id="camera" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
 															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
 																<div class="modal-content">
 																	<div class="modal-header">
-                                                                        <h5 class="modal-title" id="camera"></h5>
+																		<h5 class="modal-title" id="camera"></h5>
 																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 																			<i aria-hidden="true" id="stop-button" class="ki ki-close" @click="closeModal()"></i>
 																		</button>
@@ -75,24 +74,19 @@
 																<!--begin::Image-->
 																<div>
 																	<div class="card-body p-0 rounded px-10 py-15 d-flex align-items-center justify-content-center" >
-																		<div >
-                                                                            
-                                                                        </div>
+																		<div ></div>
 																	</div>
 																</div>
-                                                                
 																<!--end::Image-->
 															</div>
-                                                            
 														<div class="col-xxl-7 pl-xxl-20">
 																<h2 class="font-weight-bolder text-primary mb-3" style="font-size: 32px;">Presensi Masuk</h2>
-                                                                <h4 class="font-weight-bolder text-success mb-3" >{{data.nama_lengkap}}</h4>
-                                                                <a href="#" @click="take_picture();" class="btn btn-success font-weight-bold mr-2">
-                                                                    <i class="flaticon-photo-camera"></i>Ambil Gambar
+                                                                <p class="text-danger mb-2">Silahkan ambil gambar terlebih dahulu dan otomatis akan melakukan presensi masuk !</p>
+                                                               <a href="#" @click="ambil()" class="btn btn-success font-weight-bold mr-2">
+                                                                    <i class="flaticon-photo-camera"></i>Ambil gambar dan absen
                                                                 </a>
 															</div>
 														</div>
-                                                        
 														<div class="row mb-6">
 															<!--begin::Info-->
 															<div class="col-6 col-md-4">
@@ -135,8 +129,7 @@
 												</div>
                                                                         <div class="modal-footer">
 																		
-																		<button type="submit" class="btn btn-primary font-weight-bold" @click="absenmasuk()">Absen Masuk</button>
-                                                                        <button type="submit" class="btn btn-secondary font-weight-bold" @click="closeModal()">Batal</button>
+                                                                        <button type="submit" data-dismiss="modal" aria-label="Close" class=" btn btn-secondary font-weight-bold" @click="closeModal()">Batal</button>
                                                                        
 																	</div>
 																	</div>
@@ -144,13 +137,14 @@
                                                                 	
 															</div>
 														</div>
+
         <div class="modal fade" id="camera2" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
 															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
 																<div class="modal-content">
 																	<div class="modal-header">
 																		<h5 class="modal-title" id="camera2"></h5>
 																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-																			<i aria-hidden="true" id="stop-button" class="ki ki-close" @click="closeModal()"></i>
+																			<i aria-hidden="true" id="stop-button" class="ki ki-close" @click="closeModal2()"></i>
 																		</button>
 																	</div>
 																	<div class="modal-body">
@@ -168,9 +162,9 @@
 															</div>
 														<div class="col-xxl-7 pl-xxl-20">
 																<h2 class="font-weight-bolder text-primary mb-3" style="font-size: 32px;">Presensi Pulang</h2>
-                                                                <h4 class="font-weight-bolder text-success mb-3" >{{data.nama_lengkap}}</h4>
-                                                               <a href="#" class="btn btn-success font-weight-bold mr-2">
-                                                                    <i class="flaticon-photo-camera"></i>Ambil Gambar
+                                                                <p class="text-danger mb-2">Silahkan ambil gambar terlebih dahulu dan otomatis akan melakukan presensi pulang !</p>
+                                                               <a href="#" @click="ambilpulang()" class="btn btn-success font-weight-bold mr-2">
+                                                                    <i class="flaticon-photo-camera"></i>Ambil gambar dan absen
                                                                 </a>
 															</div>
 														</div>
@@ -216,8 +210,7 @@
 												</div>
                                                                         <div class="modal-footer">
 																		
-																		<button type="submit" class="btn btn-primary font-weight-bold">Absen Pulang</button>
-                                                                        <button type="submit" class="btn btn-secondary font-weight-bold" @click="closeModal2()">Batal</button>
+                                                                        <button type="submit" data-dismiss="modal" aria-label="Close" class=" btn btn-secondary font-weight-bold" @click="closeModal2()">Batal</button>
                                                                        
 																	</div>
 																	</div>
@@ -240,7 +233,7 @@ export default {
                 absensimasuk:[],
                 pegawais:[],
                 currentUrl: "",
-                 form : new Form({
+                form : new Form({
                     id : "",
                     name : "",
                     email : "",
@@ -254,6 +247,8 @@ export default {
                     lokasi : "",
                     
                 }),
+
+                mimes: "",
                 loggedIn: localStorage.getItem("loggedIn"),
                 token: localStorage.getItem("token"),
                 name: localStorage.getItem("name"),
@@ -262,7 +257,79 @@ export default {
         },
     
     methods: {
-
+    ambil(){
+        var image = ''
+        Webcam.snap( function(data_uri) {
+                image = data_uri
+             } );
+            axios.post('/api/absenmasuk',  {
+                 selfie_masuk : image
+             },
+             {
+                headers : { Authorization: "Bearer " + this.token },
+            }).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                    title: 'Berhasil Presensi',
+                    text: "Klik tombol dibawah ini untuk kembali !",
+                    icon: 'success',
+                    confirmButtonColor: '#1BC5BD',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                      location.reload()
+                    }
+                    })
+                }
+                if (response.data.success == false){
+                    Swal.fire({
+                        icon: "error",
+                        title: "Sudah Presensi Masuk",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    
+                }
+            })
+       
+    },
+     ambilpulang(){
+        var image = ''
+        Webcam.snap( function(data_uri) {
+                image = data_uri
+             } );
+            axios.post('/api/absenpulang',  {
+                 selfie_pulang : image
+             },
+             {
+                headers : { Authorization: "Bearer " + this.token },
+            }).then((response) => {
+               if (response.data.success){
+                    Swal.fire({
+                    title: 'Berhasil Presensi',
+                    text: "Klik tombol dibawah ini untuk kembali !",
+                    icon: 'success',
+                    confirmButtonColor: '#1BC5BD',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                      location.reload()
+                    }
+                    })
+                }
+                if (response.data.success == false){
+                    Swal.fire({
+                        icon: "error",
+                        title: "Sudah Presensi Pulang",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    
+                }
+            })
+       
+    },
+      
         showModal() {
         $("#camera").modal("show");
         this.kamera();
@@ -275,11 +342,11 @@ export default {
 
         closeModal() {
             $("#camera").modal("hide");
-            location.reload();
+             Webcam.reset();
         },
-         closeModal2() {
+        closeModal2() {
             $("#camera2").modal("hide");
-            location.reload();
+            Webcam.reset();
         },
         getprofile(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
@@ -295,7 +362,27 @@ export default {
         })
         },
         absenmasuk() {
-             this.form.post('/api/absenmasuk', {
+            
+            Webcam.snap(function (data_uri) { 
+            const arr = data_uri.split(',')
+            const mime = arr[0].match(/:(.*?);/)[1]
+            const bstr = atob(arr[1])
+            let n = bstr.length
+            let u8arr = new Uint8Array(n);
+                
+            while (n > 0) {
+                u8arr[n] = bstr.charCodeAt(n);
+                n -= 1;
+            }
+        
+        // let File = ''
+        // file = data_uri
+
+            gambar = new File([u8arr], 'image.jpg', { type:mime })
+            });
+             axios.post('/api/absenmasuk',{
+                 selfie_masuk : gambar
+             }, {
                 headers : { Authorization: "Bearer " + this.token },
             }).then((response) => {
                 if (response.data.success){
@@ -306,6 +393,7 @@ export default {
                         showConfirmButton: false,
                         timer: 1600,
                     })
+                   location.reload()
                 }
                 if (response.data.success == false){
                     Swal.fire({
@@ -329,6 +417,7 @@ export default {
                         showConfirmButton: false,
                         timer: 1600,
                     })
+                    location.reload()
                 }
                 if (response.data.success == false){
                     Swal.fire({
@@ -380,6 +469,7 @@ export default {
         this.getprofile();
         // this.kamera();
        
+
     },
     created(){
         

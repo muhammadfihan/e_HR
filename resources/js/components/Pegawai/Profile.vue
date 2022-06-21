@@ -91,10 +91,16 @@
 															<div class="form-control form-control-lg form-control-solid" type="text">{{ data.jabatan}}</div>
 														</div>
 													</div>
-                                                    <div class="form-group row">
+                                                     <div class="form-group row">
 														<label class="col-xl-3 col-lg-3 col-form-label">Pendidikan</label>
 														<div class="col-lg-9 col-xl-6">
 															<div class="form-control form-control-lg form-control-solid" type="text">{{data.pendidikan}}</div>
+														</div>
+													</div>
+                                                     <div class="form-group row">
+														<label class="col-xl-3 col-lg-3 col-form-label">Golongan</label>
+														<div class="col-lg-9 col-xl-6">
+															<div class="form-control form-control-lg form-control-solid" type="text">{{data.golongan}}</div>
 														</div>
 													</div>
                                                     <div class="form-group row">
@@ -222,15 +228,6 @@ export default {
     },
 
     methods:{
-         update(data) {
-            // this.form.reset()
-
-            this.form.fill({
-                id: data.id,
-                name: data.name,
-                
-            })
-        },
         updateprofil() {
               axios.post('/api/updatedata', 
                {

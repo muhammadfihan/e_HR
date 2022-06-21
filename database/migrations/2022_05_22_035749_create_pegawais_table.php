@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('nama_lengkap')->nullable();
             $table->string('email')->unique();
             $table->string('pendidikan')->nullable();
+            $table->string('golongan')->nullable();
             $table->string('jabatan');
             $table->bigInteger('no_ktp')->nullable();
             $table->bigInteger('no_hp')->nullable();

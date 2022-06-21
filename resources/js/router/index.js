@@ -25,6 +25,7 @@ import GajiPegawai from "../components/Pegawai/GajiPegawai";
 import LaporanHarian from "../components/Pegawai/LaporanHarian";
 import Pengajuan from "../components/Pegawai/Pengajuan";
 import Profile from "../components/Pegawai/Profile";
+import Penggajian from "../components/Pegawai/Penggajian";
 
 import { next } from "lodash/seq";
 
@@ -173,6 +174,12 @@ export const routes = [{
         name: 'Profile',
         path: '/Profile',
         component: Profile,
+        beforeEnter: pegawai,
+    },
+    {
+        name: 'Penggajian',
+        path: '/Penggajian',
+        component: Penggajian,
         beforeEnter: pegawai,
     },
 

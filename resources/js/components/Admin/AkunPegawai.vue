@@ -94,6 +94,7 @@
                                                             <th>Username</th>
                                                             <th>Email</th>
                                                             <th>Jabatan</th>
+                                                            <th>Golongan</th>
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
                                                         </thead>
@@ -109,7 +110,7 @@
                                                                     <td>{{ data.name }}</td>
                                                                     <td>{{ data.email }}</td>
                                                                     <td>{{ data.jabatan }}</td>
-                                                                   
+                                                                    <td>{{ data.golongan }}</td>
                                                                     <td style="text-align: center;">
                                                                           <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="showModalEdit(data)">
                                                                           </a>
@@ -174,6 +175,19 @@
                                                                                     </select>
 																					</div>
 																				</div>
+                                                                                 <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Golongan</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<select class="form-control form-control-lg form-control-solid" v-model="form.golongan">
+
+                                                                                            <option v-for="data in golongan" :key="data.golongan"
+                                                                                                            :selected="data.golongan == form.golongan ? selected : null"
+                                                                                                            :value="data.golongan">
+                                                                                                        {{data.golongan}}
+                                                                                            </option>
+                                                                                        </select>
+																					</div>
+																				</div>
                                                                                 <div class="form-group row">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Password</label>
 																					<div class="col-lg-9 col-xl-6">
@@ -205,10 +219,12 @@ export default {
             statusmodal: false,
             akunpegawai :[],
             detjabatan:[],
+            golongan:[],
             form : new Form({
                 id : "",
                 name : "",
                 jabatan : "",
+                golongan : "",
                 email : "",
                 password : "",
             }),
@@ -264,6 +280,7 @@ export default {
                     id: this.form.id,
                     name: this.form.name,
                     jabatan: this.form.jabatan,
+                    golongan: this.form.golongan,
                     email: this.form.email,
                     password: this.form.password,
                 },
@@ -356,6 +373,19 @@ export default {
                 });
         })
         },
+         allgolongan(){
+             this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/allgolongan',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.golongan = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
 
         hapusAkun(id){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
@@ -397,6 +427,7 @@ export default {
     mounted() {
         this.allJabatan();
         this.getpt();
+        this.allgolongan();
         // axios.get('/api/allUser',{
         //         headers: {Authorization: "Bearer " + this.token},
         //     })

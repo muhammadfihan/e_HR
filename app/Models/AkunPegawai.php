@@ -21,6 +21,7 @@ class AkunPegawai extends Authenticatable
      protected $fillable = [
         'id_admin',
         'jabatan',
+        'golongan',
         'name',
         'email',
         'password',

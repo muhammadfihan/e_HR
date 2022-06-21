@@ -1,5 +1,5 @@
 <template>
-   <body id="kt_body" style="background-image: url(assets/media/bg/bg-10.jpg);" class="quick-panel-right demo-panel-right offcanvas-right header-fixed subheader-enabled page-loading">
+   <body id="kt_body" style="background-image: url(assets/media/bg/bg-5.jpg);" class="quick-panel-right demo-panel-right offcanvas-right header-fixed subheader-enabled page-loading">
     <!--begin::Main-->
     <!--begin::Header Mobile-->
     <div id="kt_header_mobile" class="header-mobile">
@@ -138,6 +138,11 @@
                                                 <span class="menu-text">Pengajuan</span>
                                             </a>
                                         </li>
+                                         <li class="menu-item menu-item-submenu menu-item-rel" aria-haspopup="true" @click="penggajian">
+                                            <a href="javascript:;" class="menu-link menu-toggle">
+                                                <span class="menu-text">Penggajian</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                     <!--end::Header Nav-->
                                 </div>
@@ -251,13 +256,15 @@ export default {
             fixerror(){
                 location.reload();
             },
+            //profile Pegawai
             profile(){
                  this.$router.push("/Profile")
                  
             },
+            //profileAdmin
              profileAdmin(){
                  this.$router.push("/ProfileAdmin")
-                 
+            //Pegawai     
             },
             pegawai(){
                 this.$router.push("/PegawaiDashboard");
@@ -270,6 +277,9 @@ export default {
             },
             pengajuan(){
                 this.$router.push("/Pengajuan");
+            },
+            penggajian(){
+                this.$router.push("/Penggajian");
             },
             //admin
             admin(){

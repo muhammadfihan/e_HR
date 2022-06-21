@@ -124,7 +124,7 @@
                                                                     <td>{{ data.lokasi }}</td>
                                                                    
                                                                     <td style="text-align: center;">
-                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="showModalEdit(data)">
+                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" data-target="#detailmodal" @click.prevent="detailabsen(data.id)">
                                                                           </a>
                                                                        
                                                                     </td>
@@ -147,7 +147,43 @@
 						</div>
 						<!--end::Entry-->
 					</div>
-
+<div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="detailmodal">Detail Absen Pegawai</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" class="ki ki-close"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form class="form pt-9" v-for="(data) in detabsen" :key="data.id">
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Foto Selfie Masuk</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<!-- <div class="form-control form-control-lg form-control-solid" type="text"></div> -->
+                                                                                        <img :src="`upload/${data.selfie_masuk}`" lass="form-control form-control-lg form-control-solid" style="height:100px; width:100px;">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Foto Selfie Pulang</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<!-- <div class="form-control form-control-lg form-control-solid" type="text"></div> -->
+                                                                                        <img :src="`upload/${data.selfie_pulang}`" lass="form-control form-control-lg form-control-solid" style="height:100px; width:100px;">
+																					</div>
+																				</div>
+																				
+																			</form>
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+																		
+																		<button type="button"  data-dismiss="modal" class="btn btn-primary font-weight-bold" @click="close()">Tutup</button>
+																	</div>
+																</div>
+															</div>
+														</div>
 </template>
 
 
@@ -158,6 +194,7 @@ export default {
     data() {
         return {
             infopt:[],
+            detabsen:[],
             absensipegawai : [],
             token: localStorage.getItem("token"),
             role: localStorage.getItem('role'),
@@ -178,6 +215,17 @@ export default {
         })
     },
     methods:{
+         detailabsen(id){
+             $('#detailmodal').modal('show')
+             axios.get('/api/detailabsen/'+id,{
+                headers: { Authorization: "Bearer " + this.token }
+            }).then((response) => {
+                this.detabsen = response.data.data
+            })
+         },
+          close(){
+             $('#detailmodal').modal('hide')
+         },
          getpt(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/infopt',{

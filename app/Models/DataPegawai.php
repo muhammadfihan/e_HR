@@ -17,6 +17,7 @@ class DataPegawai extends Model
         'id_admin',
         'email',
         'no_pegawai',
+        'golongan',
         'pendidikan',
         'jabatan',
         'no_ktp',
