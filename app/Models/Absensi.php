@@ -11,8 +11,10 @@ class Absensi extends Model
 
     protected $table = "absensipegawai";
 
+    public $timestamps = false;
     protected $fillable = [
         'name',
+        'uid',
         'id',
         'id_admin',
         'name',

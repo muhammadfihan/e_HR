@@ -116,7 +116,9 @@
                                                              <div class="col-6 col-md-4">
 																<div class="mb-8 d-flex flex-column">
 																	<span class="text-dark font-weight-bold mb-4">Jabatan</span>
-																	<span class="text-muted font-weight-bolder font-size-lg">{{data.jabatan}}</span>
+																	<span class="text-muted font-weight-bolder font-size-lg"><span v-for="jab in jabatan" :key="jab.id">
+                                                                            <a v-if="data.id_jabatan == jab.id">{{jab.jabatan}}</a>
+                                                                        </span></span>
 																</div>
 															</div>
 															
@@ -163,7 +165,7 @@
 														<div class="col-xxl-7 pl-xxl-20">
 																<h2 class="font-weight-bolder text-primary mb-3" style="font-size: 32px;">Presensi Pulang</h2>
                                                                 <p class="text-danger mb-2">Silahkan ambil gambar terlebih dahulu dan otomatis akan melakukan presensi pulang !</p>
-                                                               <a href="#" @click="ambilpulang()" class="btn btn-success font-weight-bold mr-2">
+                                                               <a href="#" @click="ambilpulang(uid)" class="btn btn-success font-weight-bold mr-2">
                                                                     <i class="flaticon-photo-camera"></i>Ambil gambar dan absen
                                                                 </a>
 															</div>
@@ -197,7 +199,9 @@
                                                              <div class="col-6 col-md-4">
 																<div class="mb-8 d-flex flex-column">
 																	<span class="text-dark font-weight-bold mb-4">Jabatan</span>
-																	<span class="text-muted font-weight-bolder font-size-lg">{{data.jabatan}}</span>
+																	<span class="text-muted font-weight-bolder font-size-lg"> <span v-for="jab in jabatan" :key="jab.id">
+                                                                            <a v-if="data.id_jabatan == jab.id">{{jab.jabatan}}</a>
+                                                                        </span></span>
 																</div>
 															</div>
 															
@@ -232,9 +236,11 @@ export default {
             return {
                 absensimasuk:[],
                 pegawais:[],
+                jabatan:[],
                 currentUrl: "",
                 form : new Form({
                     id : "",
+                    uid: "",
                     name : "",
                     email : "",
                     nama_lengkap : "",
@@ -257,6 +263,20 @@ export default {
         },
     
     methods: {
+     getJabatan(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/jabatanpegawai',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.jabatan = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
+    
     ambil(){
         var image = ''
         Webcam.snap( function(data_uri) {
@@ -291,15 +311,24 @@ export default {
                     })
                     
                 }
+                if (response.data.status == false){
+                    Swal.fire({
+                        icon: "error",
+                        title: "Maaf Anda Sedang Izin",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    
+                }
             })
        
     },
-     ambilpulang(){
+     ambilpulang(uid){
         var image = ''
         Webcam.snap( function(data_uri) {
                 image = data_uri
              } );
-            axios.post('/api/absenpulang',  {
+            axios.post('/api/absenpulang/' +uid,  {
                  selfie_pulang : image
              },
              {
@@ -321,6 +350,15 @@ export default {
                     Swal.fire({
                         icon: "error",
                         title: "Sudah Presensi Pulang",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    
+                }
+                if (response.data.status == false){
+                    Swal.fire({
+                        icon: "error",
+                        title: "Harap Presensi Pulang Terlebih Dahulu",
                         showConfirmButton: false,
                         timer: 1600,
                     })
@@ -467,6 +505,7 @@ export default {
     mounted(){
         // this.initClock();
         this.getprofile();
+        this.getJabatan();
         // this.kamera();
        
 

@@ -99,18 +99,26 @@
                                                         </tr>
                                                         </thead>
                                                          <tbody>
-                                                            <tr v-for="(data,index) in akunpegawai" :key="data.id">
+                                                            <tr v-for="(data, index) in akunpegawai" :key="data.name">
                                                                     <td>
                                                                         <label class="checkbox-wrap checkbox-success">
                                                                             <input type="checkbox">
                                                                             <span class="checkmark"></span>
                                                                         </label>
                                                                     </td>
-                                                                    <td>{{index+1}} </td>
+                                                                     <td>{{index+1}} </td>
                                                                     <td>{{ data.name }}</td>
                                                                     <td>{{ data.email }}</td>
-                                                                    <td>{{ data.jabatan }}</td>
-                                                                    <td>{{ data.golongan }}</td>
+                                                                    <td>
+                                                                         <span v-for="jab in detjabatan" :key="jab.id">
+                                                                            <a v-if="data.id_jabatan == jab.id">{{jab.jabatan}}</a>
+                                                                        </span>
+                                                                    </td>
+                                                                    <td>
+                                                                         <span v-for="gol in golongan" :key="gol.id">
+                                                                            <a v-if="data.id_golongan == gol.id">{{gol.golongan}}</a>
+                                                                        </span>
+                                                                    </td>
                                                                     <td style="text-align: center;">
                                                                           <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="showModalEdit(data)">
                                                                           </a>
@@ -165,11 +173,11 @@
                                                                                 <div class="form-group row">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jabatan</label>
 																					<div class="col-lg-9 col-xl-6">
-																						 <select class="form-control form-control-lg form-control-solid" v-model="form.jabatan">
+																						 <select class="form-control form-control-lg form-control-solid" v-model="form.id_jabatan">
                                                                                         <option disabled selected>Ubah Jabatan</option>
-                                                                                        <option v-for="data in detjabatan" :key="data.jabatan"
-                                                                                                        :selected="data.jabatan == form.jabatan ? selected : null"
-                                                                                                        :value="data.jabatan">
+                                                                                        <option v-for="data in detjabatan" :key="data.id"
+                                                                                                        :selected="data.jabatan == form.id_jabatan ? selected : null"
+                                                                                                        :value="data.id">
                                                                                                     {{data.jabatan}}
                                                                                         </option>
                                                                                     </select>
@@ -178,11 +186,11 @@
                                                                                  <div class="form-group row">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Golongan</label>
 																					<div class="col-lg-9 col-xl-6">
-																						<select class="form-control form-control-lg form-control-solid" v-model="form.golongan">
+																						<select class="form-control form-control-lg form-control-solid" v-model="form.id_golongan">
 
-                                                                                            <option v-for="data in golongan" :key="data.golongan"
-                                                                                                            :selected="data.golongan == form.golongan ? selected : null"
-                                                                                                            :value="data.golongan">
+                                                                                            <option v-for="data in golongan" :key="data.id"
+                                                                                                            :selected="data.golongan == form.id_golongan ? selected : null"
+                                                                                                            :value="data.id">
                                                                                                         {{data.golongan}}
                                                                                             </option>
                                                                                         </select>
@@ -223,8 +231,8 @@ export default {
             form : new Form({
                 id : "",
                 name : "",
-                jabatan : "",
-                golongan : "",
+                id_jabatan : "",
+                id_golongan : "",
                 email : "",
                 password : "",
             }),
@@ -279,8 +287,8 @@ export default {
                {
                     id: this.form.id,
                     name: this.form.name,
-                    jabatan: this.form.jabatan,
-                    golongan: this.form.golongan,
+                    id_jabatan: this.form.id_jabatan,
+                    id_golongan: this.form.id_golongan,
                     email: this.form.email,
                     password: this.form.password,
                 },

@@ -98,14 +98,9 @@
                                                 <span class="menu-text">Laporan</span>
                                             </a>
                                         </li>
-                                        <li class="menu-item menu-item-submenu" aria-haspopup="true">
+                                        <li class="menu-item menu-item-submenu" aria-haspopup="true" @click="approvement">
                                             <a href="javascript:;" class="menu-link menu-toggle">
-                                                <span class="menu-text">Cuti</span>
-                                            </a>
-                                        </li>
-                                        <li class="menu-item menu-item-submenu" aria-haspopup="true">
-                                            <a href="javascript:;" class="menu-link menu-toggle">
-                                                <span class="menu-text">Lembur</span>
+                                                <span class="menu-text">Approvement</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -141,6 +136,16 @@
                                          <li class="menu-item menu-item-submenu menu-item-rel" aria-haspopup="true" @click="penggajian">
                                             <a href="javascript:;" class="menu-link menu-toggle">
                                                 <span class="menu-text">Penggajian</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <ul class="menu-nav" v-if="role === 'Manager'">
+
+                                        <li class="menu-item menu-item-submenu menu-item-rel" aria-haspopup="true" @click="manager">
+                                            <a class="menu-link menu-toggle">
+                                               <span class="menu-text">Data User</span>
+
+                                                <i class="menu-arrow"></i>
                                             </a>
                                         </li>
                                     </ul>
@@ -212,6 +217,36 @@
 
                                 <!--end::Toggle-->
                             </div>
+                            <div class="dropdown" v-if="role === 'Manager'">
+
+                                <!--begin::Toggle-->
+                                <div class="topbar-item">
+                                    <div class="dropdown dropdown-inline">
+                                        <a href="#" class="btn btn-light-primary font-weight-bold dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-user"></i>{{name}}
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-md py-5">
+                                            <ul class="navi navi-hover">
+                                                <li class="navi-item" @click="profile">
+                                                    <a class="navi-link" href="#">
+                                                        <span class="navi-icon"><i class="far fa-user text-warning"></i></span>
+                                                        <span class="navi-text">Informasi Akun</span>
+                                                    </a>
+                                                </li>
+                                                <li class="navi-item" @click="logout">
+                                                    <a class="navi-link" href="#">
+                                                        <span class="navi-icon"><i class="fas fa-sign-out-alt text-primary"></i></span>
+                                                        <span class="navi-text">Logout</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--end::Toggle-->
+                            </div>
+                            
 
                             <!--end::User-->
                         </div>
@@ -248,7 +283,6 @@ export default {
                             Authorization: "Bearer " + this.token
                         }
                     }).then((response) => {
-                    window.location.reload();
                     localStorage.clear()
                     return this.$router.push({ name: "Login" });
                 })
@@ -256,6 +290,9 @@ export default {
             fixerror(){
                 location.reload();
             },
+            manager(){
+                this.$router.push("/SuperAdminDashboard")
+            },  
             //profile Pegawai
             profile(){
                  this.$router.push("/Profile")
@@ -285,8 +322,8 @@ export default {
             admin(){
                 this.$router.push("/AdminDashboard");
             },
-            cuti(){
-                this.$router.push("/Cuti");
+            approvement(){
+                this.$router.push("/Approvement");
             },
             datapegawai(){
                 this.$router.push("/DataPegawai");

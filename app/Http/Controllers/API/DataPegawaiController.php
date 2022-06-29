@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataPegawai;
+use App\Models\Gaji;
 use App\Models\Pegawai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -33,7 +34,7 @@ class DataPegawaiController extends Controller
         $huruf = "1234567890";
         $nopegawai = strtoupper(substr(str_shuffle($huruf), 0, 9));
         $pegawai = DataPegawai::updateOrCreate([
-            'no_pegawai' => 'PN'.$nopegawai,
+            'no_pegawai' => Auth::user()->no_pegawai,
             'name' => Auth::user()->name,
             'nama_lengkap' => $request->nama_lengkap,
             'email' => Auth::user()->email,
@@ -46,11 +47,20 @@ class DataPegawaiController extends Controller
             'golongan' => $request->Auth::user()->golongan,
             'pendidikan' => $request->pendidikan,
             'alamat' => $request->alamat
-
-
+        ]);
+        $datagaji = Gaji::create([
+            'no_pegawai' => Auth::user()->no_pegawai,
+            'name' => Auth::user()->name,
+            'nama_lengkap' => $request->nama_lengkap,
+            'email' => Auth::user()->email,
+            'id' => Auth::user()->id,
+            'jabatan' => Auth::user()->jabatan,
+            'id_admin' => Auth::user()->id_admin,
+            'golongan' => Auth::user()->golongan,
         ]);
         $response = ['pegawai' => $pegawai];
         return response([
+            'datagaji' => $datagaji,
             'data' => $response,
             'message' => 'Berhasil mengisi biodata',
             'status' => true,
@@ -113,8 +123,7 @@ class DataPegawaiController extends Controller
             //     'message' => 'Update Data Berhasil!',
             // ]);
             $validate = Validator::make($request->all(), [
-                'jabatan' => 'required',
-                'golongan' => 'required',
+                'id_jabatan' => 'required',
                 'status' => 'required'
              ]);
     
@@ -125,13 +134,17 @@ class DataPegawaiController extends Controller
                 ]);
             } else {
                 DB::table('pegawais')->where('id', $request->id)->update([
-                    'jabatan' => $request->jabatan,
-                    'golongan' => $request->golongan,
+                    'id_jabatan' => $request->id_jabatan,
+                    'id_golongan' => $request->id_golongan,
                     'status' => $request->status
                 ]);
                 DB::table('akunpegawai')->where('id', $request->id)->update([
-                    'jabatan' => $request->jabatan,
-                    'golongan' => $request->golongan,
+                    'id_jabatan' => $request->id_jabatan,
+                    'id_golongan' => $request->id_golongan,
+                ]);
+                DB::table('datagaji')->where('id', $request->id)->update([
+                    'id_jabatan' => $request->id_jabatan,
+                    'id_golongan' => $request->id_golongan,
                 ]);
                 return response()->json([
                     'success' => true,
@@ -166,10 +179,49 @@ class DataPegawaiController extends Controller
                     'gender' => $request->gender,
                     'alamat' => $request->alamat,
                 ]);
+                $nopegawai  = DB::table('pegawais')->where('id', Auth::user()->id)
+                ->pluck('no_pegawai')
+                ->first();
+                $data = DB::table('pegawais')->where('id', Auth::user()->id)->update([
+                    'nama_lengkap' => $request->nama_lengkap,
+                    'pendidikan' => $request->pendidikan,
+                    'no_hp' => $request->no_hp,
+                    'no_ktp' => $request->no_ktp,
+                    'gender' => $request->gender,
+                    'alamat' => $request->alamat,
+                ]);
+                $jam_kerja  = DB::table('pegawais')->where('id', Auth::user()->id)
+                ->pluck('jam_kerja')
+                ->first();
+                $gaji = DB::table('datagaji')->where('id', Auth::user()->id)->first();
+                if($gaji->id != null){
+                    DB::table('pegawais')->where('id', Auth::user()->id)->update([
+                        'nama_lengkap' => $request->nama_lengkap,
+                        'pendidikan' => $request->pendidikan,
+                        'no_hp' => $request->no_hp,
+                        'no_ktp' => $request->no_ktp,
+                        'gender' => $request->gender,
+                        'alamat' => $request->alamat,
+                    ]);
+                }
+                if($gaji->id == null){
+                $gaji = Gaji::create([
+                    'no_pegawai' => $nopegawai,
+                    'name' => Auth::user()->name,
+                    'nama_lengkap' => $request->nama_lengkap,
+                    'email' => Auth::user()->email,
+                    'id' => Auth::user()->id,
+                    'jam_kerja' => $jam_kerja,
+                    'id_jabatan' => Auth::user()->id_jabatan,
+                    'id_admin' => Auth::user()->id_admin,
+                    'id_golongan' => Auth::user()->id_golongan,
+                ]);
+                }
                 return response()->json([
                     'data' => $data,
+                    'datagaji' => $gaji,
                     'success' => true,
-                    'message' => 'Update Data Berhasil!',
+                    'message' => 'Berhasil Update Data',
                 ]);
             }
         

@@ -32,11 +32,14 @@
 		<!-- <script src="assets/js/pages/crud/ktdatatable/base/html-table.js"></script> -->
 		<script src="assets/js/pages/custom/education/school/teachers.js"></script>
 
+		<link href="assets/plugins/custom/uppy/uppy.bundle.css" rel="stylesheet" type="text/css" />
+
 	
 		<!-- webcamjs  -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.js"></script>
 		<script src="assets/js/pages/crud/forms/widgets/bootstrap-datetimepicker.js"></script>
 		<script src="assets/js/pages/crud/forms/widgets/bootstrap-timepicker.js"></script>
+		
 		
     <title>Prisen Online</title>
 

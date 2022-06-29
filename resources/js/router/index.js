@@ -7,7 +7,7 @@ import TopBar from "../dashboard/TopBar";
 
 // Admin Role
 import AdminDashboard from "../dashboard/AdminDashboard";
-import ManagerDashboard from "../dashboard/ManagerDashboard";
+import SuperAdminDashboard from "../dashboard/SuperAdminDashboard";
 import PegawaiDashboard from "../dashboard/PegawaiDashboard";
 import DataPegawai from "../components/Admin/DataPegawai";
 import AkunPegawai from "../components/Admin/AkunPegawai";
@@ -15,8 +15,7 @@ import Jabatan from "../components/Admin/Jabatan";
 import Kehadiran from "../components/Admin/Kehadiran";
 import Payroll from "../components/Admin/Payroll";
 import Laporan from "../components/Admin/Laporan";
-import Lembur from "../components/Admin/Lembur";
-import Cuti from "../components/Admin/Cuti";
+import Approvement from "../components/Admin/Approvement";
 import ProfileAdmin from "../components/Admin/ProfileAdmin";
 
 //Pegawai Role
@@ -50,11 +49,6 @@ function pegawai(to, from, next) {
     } else next({ name: 'Login' });
 }
 export const routes = [{
-        name: 'Landing',
-        path: '/',
-        component: Landing
-    },
-    {
         name: 'Login',
         path: '/Login',
         component: Login
@@ -66,7 +60,7 @@ export const routes = [{
     },
     {
         name: 'Register',
-        path: '/Register',
+        path: '/',
         component: Register
     },
     {
@@ -76,9 +70,9 @@ export const routes = [{
         beforeEnter: admin,
     },
     {
-        name: 'ManagerDashboard',
-        path: '/ManagerDashboard',
-        component: ManagerDashboard,
+        name: 'SuperAdminDashboard',
+        path: '/SuperAdminDashboard',
+        component: SuperAdminDashboard,
         beforeEnter: manager,
     },
     {
@@ -135,15 +129,9 @@ export const routes = [{
         beforeEnter: admin,
     },
     {
-        name: 'Lembur',
-        path: '/Lembur',
-        component: Lembur,
-        beforeEnter: admin,
-    },
-    {
-        name: 'Cuti',
-        path: '/Cuti',
-        component: Cuti,
+        name: 'Approvement',
+        path: '/Approvement',
+        component: Approvement,
         beforeEnter: admin,
     },
     {

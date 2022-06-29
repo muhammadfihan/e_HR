@@ -26,6 +26,19 @@ class GolonganController extends Controller
         ]);
     }
 
+    public function golonganpegawai()
+    {
+        $golongan = DB::table('golongan')
+            ->select('*')
+            ->where('id_admin', Auth::user()->id_admin)
+            ->get();
+        return response([
+            'data' => $golongan,
+            'message' => 'get data berhasil',
+            'status' => true
+        ]);
+    }
+
     // add book
     public function tambahgolongan(Request $request)
     {

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->increments('id')->unique();
             $table->integer('id_admin')->unsigned();
             $table->foreign('id_admin')->references('id')->on('users');
-            $table->time('jam_masuk')->nullable();
-            $table->time('jam_pulang')->nullable();
+            $table->time('jam_masuk')->default('00:00:00');
+            $table->time('jam_pulang')->default('00:00:00');
             $table->timestamps();
         });
     }

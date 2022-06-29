@@ -199,8 +199,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'name' => 'required|string|max:255',
-            'jabatan' => 'required|string|max:255',
-            'golongan' => 'required|string|max:255',
+            'id_jabatan' => 'required',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
 
@@ -221,11 +220,12 @@ class UserController extends Controller
             'id' => $request->id,
             'id_admin' => Auth::user()->id,
             'name' => $request->name,
-            'jabatan' => $request->jabatan,
-            'golongan' => $request->golongan,
+            'id_jabatan' => $request->id_jabatan,
+            'id_golongan' => $request->id_golongan,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        $akunpegawai->save();
         $huruf = "1234567890";
         $nopegawai = strtoupper(substr(str_shuffle($huruf), 0, 9));
         $pegawai = DataPegawai::create([
@@ -233,11 +233,12 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'id' => $akunpegawai->id,
-            'golongan' => $request->golongan,
-            'jabatan' => $request->jabatan,
+            'id_golongan' => $request->id_golongan,
+            'id_jabatan' => $request->id_jabatan,
             'id_admin' => Auth::user()->id,
 
         ]);
+        $pegawai->save();
         
         $success = true;
         $message = 'User register successfully';
@@ -282,8 +283,7 @@ class UserController extends Controller
     {
         $validate = Validator::make($request->all(), [
             'name' => 'required',
-            'jabatan' => 'required',
-            'golongan' => 'required',
+            'id_jabatan' => 'required',
             'email' => 'required',
             'password' => 'required'
          ]);
@@ -296,15 +296,21 @@ class UserController extends Controller
         } else {
             DB::table('akunpegawai')->where('id', $request->id)->update([
                 'name' => $request->name,
-                'jabatan' => $request->jabatan,
-                'golongan' => $request->golongan,
+                'id_jabatan' => $request->id_jabatan,
+                'id_golongan' => $request->id_golongan,
                 'email' => $request->email,
                 'password' => Hash::make($request->password)
             ]);
             DB::table('pegawais')->where('id', $request->id)->update([
                 'name' => $request->name,
-                'golongan' => $request->golongan,
-                'jabatan' => $request->jabatan,
+                'id_golongan' => $request->id_golongan,
+                'id_jabatan' => $request->id_jabatan,
+                'email' => $request->email,
+            ]);
+            DB::table('datagaji')->where('id', $request->id)->update([
+                'name' => $request->name,
+                'id_golongan' => $request->id_golongan,
+                'id_jabatan' => $request->id_jabatan,
                 'email' => $request->email,
             ]);
             return response()->json([
@@ -380,4 +386,6 @@ class UserController extends Controller
             'data' => $pt
         ]);
     }
+
+   
 }

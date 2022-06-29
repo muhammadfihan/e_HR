@@ -18,10 +18,11 @@ class AkunPegawai extends Authenticatable
      * @var array<int, string>
      */
     protected $table = "akunpegawai";
+    
      protected $fillable = [
         'id_admin',
-        'jabatan',
-        'golongan',
+        'id_jabatan',
+        'id_golongan',
         'name',
         'email',
         'password',

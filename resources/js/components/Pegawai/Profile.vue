@@ -88,7 +88,9 @@
 													<div class="form-group row">
 														<label class="col-xl-3 col-lg-3 col-form-label">Jabatan</label>
 														<div class="col-lg-9 col-xl-6">
-															<div class="form-control form-control-lg form-control-solid" type="text">{{ data.jabatan}}</div>
+															<div class="form-control form-control-lg form-control-solid" type="text"> <span v-for="jab in jabatan" :key="jab.id">
+                                                                            <a v-if="data.id_jabatan == jab.id">{{jab.jabatan}}</a>
+                                                                        </span></div>
 														</div>
 													</div>
                                                      <div class="form-group row">
@@ -100,7 +102,9 @@
                                                      <div class="form-group row">
 														<label class="col-xl-3 col-lg-3 col-form-label">Golongan</label>
 														<div class="col-lg-9 col-xl-6">
-															<div class="form-control form-control-lg form-control-solid" type="text">{{data.golongan}}</div>
+															<div class="form-control form-control-lg form-control-solid" type="text"><span v-for="gol in golongan" :key="gol.id">
+                                                                            <a v-if="data.id_golongan == gol.id">{{gol.golongan}}</a>
+                                                                        </span></div>
 														</div>
 													</div>
                                                     <div class="form-group row">
@@ -212,7 +216,9 @@ export default {
         return {
             akunpegawai:[],
             pegawais:[],
+            golongan:[],
             jabatan:[],
+            golongan:[],
              form : new Form({
                 id : "",
                 nama_lengkap : "",
@@ -228,6 +234,19 @@ export default {
     },
 
     methods:{
+         allgolongan(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/golonganpegawai',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.golongan = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
         updateprofil() {
               axios.post('/api/updatedata', 
                {
@@ -344,7 +363,7 @@ export default {
         },
         getJabatan(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/alljabatan',{
+            this.$axios.get('/api/jabatanpegawai',{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
@@ -380,6 +399,7 @@ export default {
         this.getprofile();
         this.getJabatan();
         this.getakun();
+        this.allgolongan();
     }
     
 

@@ -12,7 +12,7 @@
 								</div>
 							</div>
 						</div>
-<div class="content d-flex flex-column flex-column-fluid">
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <div class="d-flex flex-column-fluid">
 							<!--begin::Container-->
 							<div class="container mb-13">      
@@ -21,10 +21,10 @@
 										<!--begin::Mixed Widget 4-->
 										<div class="card card-custom bg-radial-gradient-success gutter-b card-stretch">
 											<!--begin::Header-->
-											<div class="card-header border-0 py-5 "  v-for="(data) in jamabsen" :key="data.id">
+											<div class="card-header border-0 py-5 " >
                                                 <a class="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 												</a>
-                                              <button type="submit" @click="showModal(data)" class="btn btn-white text-success font-weight-bolder">Atur Presensi</button>
+                                              <button type="submit" @click="showModal()" class="btn btn-white text-success font-weight-bolder">Atur Presensi</button>
 											</div>
 											<!--end::Header-->
 											<!--begin::Body-->
@@ -50,11 +50,11 @@
 													<!--begin::Row-->
 													<div class="row m-0"  v-for="(data) in jamabsen" :key="data.id">
 														<div class="col px-8 py-6 mr-8">
-															<div class="font-size-sm text-muted font-weight-bold">Jam Masuk</div>
+															<div class="font-size-lg text-muted font-weight-bold">Jam Masuk</div>
 															<div class="font-size-h4 font-weight-bolder">{{data.jam_masuk}}</div>
 														</div>
 														<div class="col px-8 py-6">
-															<div class="font-size-sm text-muted font-weight-bold">Jam Pulang</div>
+															<div class="font-size-lg text-muted font-weight-bold">Jam Pulang</div>
 															<div class="font-size-h4 font-weight-bolder">{{data.jam_pulang}}</div>
 														</div>
 													</div>
@@ -62,13 +62,13 @@
 													<!--begin::Row-->
 													<div class="row m-0">
 														<div class="col px-8 py-6 mr-8">
-															<div class="font-size-sm text-muted font-weight-bold">Hadir</div>
+															<div class="font-size-lg text-muted font-weight-bold">Hadir</div>
 															<div class="d-flex flex-column w-50 mr-2">
 																		<span class="label label-lg label-light-success label-inline font-weight-bold py-4 font-weight-bolder">{{hadir}}</span>
 															</div>
 														</div>
 														<div class="col px-8 py-6"  v-for="(data) in admin" :key="data.id">
-															<div class="font-size-sm text-muted font-weight-bold">Tidak Hadir</div>
+															<div class="font-size-lg text-muted font-weight-bold">Tidak Hadir</div>
 															<div class="d-flex flex-column w-50 mr-2">
 																		<span class="label label-lg label-light-danger label-inline font-weight-bold py-4 font-weight-bolder">{{(data.jumlah_karyawan)-(hadir)}}</span>
 															</div>
@@ -598,20 +598,19 @@
 																	<div class="modal-body">
 																		<div >
 																		<form @submit.prevent="aturabsen()">
-																			 <div class="form-group row">
-                                                                        <label class="col-form-label text-right col-lg-3 col-sm-12">Jam Masuk</label>
-                                                                        <div class="col-lg-9 col-xl-6">
-																						 <input v-model="form.jam_masuk" type="name" placeholder="Format : 00:00:00" class="form-control form-control-lg form-control-solid">
-																				</div>
-                                                                        </div>       
+																			<div class="form-group row">
+														<label for="example-time-input" class="col-2 col-form-label">Jam Masuk</label>
+														<div class="col-10">
+															<input v-model="form.jam_masuk" class="form-control" type="time" id="example-time-input" />
+														</div>
+													</div>
 
-                                                                         <div class="form-group row">
-                                                                        <label class="col-form-label text-right col-lg-3 col-sm-12">Jam Pulang</label>
-                                                                        <div class="col-lg-9 col-xl-6">
-																						 <input v-model="form.jam_pulang" type="name" placeholder="Format : 00:00:00" class="form-control form-control-lg form-control-solid">
-																					</div>
-                                                                        </div>       
-                                                                        
+                                                                       <div class="form-group row">
+														<label for="example-time-input" class="col-2 col-form-label">Jam Pulang</label>
+														<div class="col-10">
+															<input v-model="form.jam_pulang" class="form-control" type="time" id="example-time-input" />
+														</div>
+													</div>
                                                                              
 																		</form>
                                                                        

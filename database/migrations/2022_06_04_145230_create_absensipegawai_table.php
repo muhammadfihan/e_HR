@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('absensipegawai', function (Blueprint $table) {
-            $table->integer('id')->unsigned();
-            $table->foreign('id')->references('id')->on('akunpegawai');
+            $table->increments('uid');
+            $table->integer('id');
             $table->integer('id_admin');
             $table->string('name');
             $table->string('nama_lengkap');

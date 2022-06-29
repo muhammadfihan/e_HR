@@ -28,7 +28,7 @@
 					<div class="text-right d-flex justify-content-center">
 						<div class="top-signin text-right d-flex justify-content-end pt-5 pb-lg-0 pb-10" @click="reload()">
 							<span class="font-weight-bold text-muted font-size-h4">Belum Punya Akun ?</span>
-							<router-link to="Register" ><a href="#" class="font-weight-bold text-primary font-size-h4 ml-2" id="kt_login_signup" >Daftar</a></router-link>
+							<router-link to="/" ><a href="#" class="font-weight-bold text-primary font-size-h4 ml-2" id="kt_login_signup" >Daftar</a></router-link>
 						</div>
 					</div>
 					<!--end::Top-->
@@ -115,7 +115,7 @@ export default {
           this.$router.push("/LoginPegawai");  
         },
          toRegister(){
-          this.$router.push("/Register");  
+          this.$router.push("/");  
         },
         reload(){
           location.reload()
@@ -143,7 +143,7 @@ export default {
                                 window.localStorage.setItem("name", response.data.user.name)
 
                                 if (response.data.user.role == 'Manager') {
-                                    this.$router.push("/ManagerDashboard")
+                                    this.$router.push("/SuperAdminDashboard")
                                 } else if (response.data.user.role == 'Admin') {
                                     this.$router.push("/AdminDashboard")
                                 } else if (response.data.user.role == 'Pegawai') {
@@ -188,7 +188,7 @@ export default {
                                 window.localStorage.setItem("name", response.data.user.name)
 
                                 if (response.data.user.role == 'Manager') {
-                                    this.$router.push("/ManagerDashboard")
+                                    this.$router.push("/SuperAdminDashboard")
                                 } else if (response.data.user.role == 'Admin') {
                                     this.$router.push("/AdminDashboard")
                                 } else if (response.data.user.role == 'Pegawai') {
@@ -209,7 +209,7 @@ export default {
     beforeRouteEnter(to, from, next) {
         if (JSON.parse(window.localStorage.getItem("loggedIn"))) {
             if (window.localStorage.getItem("role") == 'Manager') {
-                return next("/ManagerDashboard");
+                return next("/SuperAdminDashboard");
             } else if (window.localStorage.getItem("role") == 'Admin') {
                 return next("/AdminDashboard");
             } else if (window.localStorage.getItem("role") == 'Pegawai') {

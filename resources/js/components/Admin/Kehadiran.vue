@@ -32,7 +32,7 @@
 											<!--begin::Header-->
 											<div class="card-header flex-wrap border-0 pt-6 pb-0">
 												<h3 class="card-title align-items-start flex-column">
-													<span class="card-label font-weight-bolder text-dark" >Akun Pegawai</span>
+													<span class="card-label font-weight-bolder text-dark" >Data Kehadiran Pegawai</span>
 													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">List Kehadiran Harian {{ data.nama_perusahaan }}</span>
 												</h3>
 												
@@ -114,17 +114,23 @@
                                                                     </td>
                                                                     <td>{{ data.nama_lengkap }}</td>
                                                                     <td>{{ data.tanggal }}</td>
-                                                                    <td>{{ data.jam_masuk }}</td>
-                                                                    <td>{{ data.jam_pulang }}</td>
-                                                                    <td>{{ data.jam_kerja }}</td>
+                                                                    <td>
+                                                                         <span class="badge badge-primary" >{{data.jam_masuk}}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                         <span class="badge badge-success" v-if="data.jam_pulang == null" >Bekerja</span>
+                                                                        <span class="badge badge-primary" v-else-if="data.jam_pulang != null" >{{data.jam_pulang}}</span>
+                                                                    </td>
+                                                                    <td>{{ data.jam_kerja }} (Jam)</td>
                                                                      <td>
                                                                         <span class="badge badge-success" v-if="data.keterangan == 'On Time'" >{{data.keterangan}}</span>
                                                                         <span class="badge badge-danger" v-else-if="data.keterangan == 'Terlambat'" >{{data.keterangan}}</span>
+																		 <span class="badge badge-primary" v-else-if="data.keterangan == 'Request Attendance'" >{{data.keterangan}}</span>
                                                                     </td>
                                                                     <td>{{ data.lokasi }}</td>
                                                                    
                                                                     <td style="text-align: center;">
-                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" data-target="#detailmodal" @click.prevent="detailabsen(data.id)">
+                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" data-target="#detailmodal" @click.prevent="detailabsen(data.uid)">
                                                                           </a>
                                                                        
                                                                     </td>
@@ -215,9 +221,9 @@ export default {
         })
     },
     methods:{
-         detailabsen(id){
+         detailabsen(uid){
              $('#detailmodal').modal('show')
-             axios.get('/api/detailabsen/'+id,{
+             axios.get('/api/detailabsen/'+uid,{
                 headers: { Authorization: "Bearer " + this.token }
             }).then((response) => {
                 this.detabsen = response.data.data

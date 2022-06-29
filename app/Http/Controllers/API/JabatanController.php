@@ -25,6 +25,18 @@ class JabatanController extends Controller
             'status' => true
         ]);
     }
+    public function jabatanpegawai()
+    {
+        $jabatan = DB::table('jabatan')
+            ->select('*')
+            ->where('id_admin', Auth::user()->id_admin)
+            ->get();
+        return response([
+            'data' => $jabatan,
+            'message' => 'get data berhasil',
+            'status' => true
+        ]);
+    }
 
     // add book
     public function tambahjabatan(Request $request)

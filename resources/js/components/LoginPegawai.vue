@@ -132,7 +132,7 @@ export default {
                                 window.localStorage.setItem("name", response.data.user.name)
 
                                 if (response.data.user.role == 'Manager') {
-                                    this.$router.push("/ManagerDashboard")
+                                    this.$router.push("/SuperAdminDashboard")
                                 } else if (response.data.user.role == 'Admin') {
                                     this.$router.push("/AdminDashboard")
                                 } else if (response.data.user.role == 'Pegawai') {
@@ -171,7 +171,7 @@ export default {
                                 window.localStorage.setItem("name", response.data.user.name)
 
                                 if (response.data.user.role == 'Manager') {
-                                    this.$router.push("/ManagerDashboard")
+                                    this.$router.push("/SuperAdminDashboard")
                                 } else if (response.data.user.role == 'Admin') {
                                     this.$router.push("/AdminDashboard")
                                 } else if (response.data.user.role == 'Pegawai') {
@@ -203,7 +203,7 @@ export default {
     beforeRouteEnter(to, from, next) {
         if (JSON.parse(window.localStorage.getItem("loggedIn"))) {
             if (window.localStorage.getItem("role") == 'Manager') {
-                return next("/ManagerDashboard");
+                return next("/SuperAdminDashboard");
             } else if (window.localStorage.getItem("role") == 'Admin') {
                 return next("/AdminDashboard");
             } else if (window.localStorage.getItem("role") == 'Pegawai') {

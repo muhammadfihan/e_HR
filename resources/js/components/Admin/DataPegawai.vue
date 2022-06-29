@@ -89,6 +89,7 @@
                                                             <th>Jabatan</th>
                                                             <th>No Pegawai</th>
                                                             <th>Status</th>
+                                                            <th>Total Jam Kerja</th>
                                                             <th>Gender</th>
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
@@ -109,12 +110,17 @@
                                                                         </div>
                                                                     </td>
                                                                     <td><a>{{ data.nama_lengkap }}</a></td>
-                                                                    <td><a>{{ data.jabatan }}</a></td>
+                                                                    <td>
+                                                                         <span v-for="jab in jabatan" :key="jab.id">
+                                                                            <a v-if="data.id_jabatan == jab.id">{{jab.jabatan}}</a>
+                                                                        </span>
+                                                                    </td>
                                                                     <td><a>{{ data.no_pegawai }}</a></td>
                                                                     <td>
                                                                         <span class="badge badge-success" v-if="data.status == 'Aktif'" >{{data.status}}</span>
                                                                         <span class="badge badge-danger" v-else-if="data.status == 'Tidak Aktif'" >{{data.status}}</span>
                                                                     </td>
+                                                                    <td><a>{{ data.jam_kerja }} (Jam)</a></td>
                                                                     <td>{{ data.gender }}</td>
                                                                     <td style="text-align: center;">
                                                                           <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" data-target="#detailmodal" @click.prevent="detailPegawai(data.id)">
@@ -184,7 +190,11 @@
                                                                                  <div class="form-group row">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Golongan</label>
 																					<div class="col-lg-9 col-xl-6">
-																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.golongan}}</div>
+																						<div class="form-control form-control-lg form-control-solid" type="text">
+                                                                                            <span v-for="gol in golongan" :key="gol.id">
+                                                                            <a v-if="data.id_golongan == gol.id">{{gol.golongan}}</a>
+                                                                        </span>
+                                                                                        </div>
 																					</div>
 																				</div>
                                                                                  <div class="form-group row">
@@ -196,7 +206,9 @@
                                                                                 <div class="form-group row">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jabatan</label>
 																					<div class="col-lg-9 col-xl-6">
-																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.jabatan}}</div>
+																						<div class="form-control form-control-lg form-control-solid" type="text"><span v-for="jab in jabatan" :key="jab.id">
+                                                                            <a v-if="data.id_jabatan == jab.id">{{jab.jabatan}}</a>
+                                                                        </span></div>
 																					</div>
 																				</div>
                                                                                 <div class="form-group row">
@@ -264,24 +276,24 @@
 																				<div class="form-group row">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jabatan</label>
 																					<div class="col-lg-9 col-xl-6">
-																						<select class="form-control form-control-lg form-control-solid" v-model="form.jabatan">
-
-                                                                                            <option v-for="data in jabatan" :key="data.jabatan"
-                                                                                                            :selected="data.jabatan == form.jabatan ? selected : null"
-                                                                                                            :value="data.jabatan">
-                                                                                                        {{data.jabatan}}
-                                                                                            </option>
-                                                                                        </select>
+																						<select class="form-control form-control-lg form-control-solid" v-model="form.id_jabatan">
+                                                                                        <option disabled selected>Ubah Jabatan</option>
+                                                                                        <option v-for="data in jabatan" :key="data.id"
+                                                                                                        :selected="data.jabatan == form.id_jabatan ? selected : null"
+                                                                                                        :value="data.id">
+                                                                                                    {{data.jabatan}}
+                                                                                        </option>
+                                                                                    </select>
 																					</div>
 																				</div>
                                                                                 <div class="form-group row">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Golongan</label>
 																					<div class="col-lg-9 col-xl-6">
-																						<select class="form-control form-control-lg form-control-solid" v-model="form.jabatan">
+																						<select class="form-control form-control-lg form-control-solid" v-model="form.id_golongan">
 
-                                                                                            <option v-for="data in golongan" :key="data.golongan"
-                                                                                                            :selected="data.golongan == form.golongan ? selected : null"
-                                                                                                            :value="data.golongan">
+                                                                                            <option v-for="data in golongan" :key="data.id"
+                                                                                                            :selected="data.golongan == form.id_golongan ? selected : null"
+                                                                                                            :value="data.id">
                                                                                                         {{data.golongan}}
                                                                                             </option>
                                                                                         </select>
@@ -329,8 +341,8 @@ export default {
             form: new Form ({
                 id : "",
                 name : "",
-                golongan : "",
-                jabatan : "",
+                id_golongan : "",
+                id_jabatan : "",
                 status : ""
             }),
             token: localStorage.getItem("token"),
@@ -349,7 +361,8 @@ export default {
             $("#editPegawai").modal("show")
             this.form.fill({
                 id: data.id,
-                jabatan: data.jabatan,
+                id_jabatan: data.id_jabatan,
+                id_golongan: data.id_golongan,
                 status: data.status,
             })
         },
@@ -429,7 +442,8 @@ export default {
             axios.post('/api/updatepegawai',
                 {
                     id: this.form.id,
-                    jabatan: this.form.jabatan,
+                    id_jabatan: this.form.id_jabatan,
+                    id_golongan:this.form.id_golongan,
                     status: this.form.status
                 },
                 {

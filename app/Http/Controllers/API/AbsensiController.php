@@ -20,11 +20,29 @@ class AbsensiController extends Controller
         $tanggal = $date->format('Y-m-d');
         $localtime = $date->format('H:i:s');
 
-        $presensi = Absensi::where([
-            ['id','=', Auth::user()->id],
-            ['email','=', Auth::user()->email],
-            ['tanggal','=',$tanggal],
-        ])->first();
+        // $presensi = Absensi::where([
+        //     ['id','=', Auth::user()->id],
+        //     ['email','=', Auth::user()->email],
+        //     ['tanggal','=',$tanggal],
+        // ]);
+        $presensi = DB::table('absensipegawai')
+            ->select('*')
+            ->whereDate('tanggal', $tanggal)
+            ->where('id', Auth::user()->id)
+            ->first();
+        $izin = DB::table('izin')
+            ->select('*')
+            ->whereDate('tanggal', $tanggal)
+            ->where('email', Auth::user()->email)
+            ->first();
+        if($izin){
+            return response()->json([
+                'sudahizin' => $izin,
+                'success' => false,
+                'status' => false,
+                'message' => 'Anda Sedang izin !',
+            ]);
+        }        
         if ($presensi){
             return response()->json([
                 'sudahabsen' => $presensi,
@@ -32,8 +50,6 @@ class AbsensiController extends Controller
                 'message' => 'Sudah Presensi!',
             ]);
         }else{
-
-
             $filename="";
             $file_path = "upload/";
             $webcam_image = $request->selfie_masuk;
@@ -52,6 +68,9 @@ class AbsensiController extends Controller
             ->first();
 
             $ip = $request->ip();
+            $lokasi = geoip()->getLocation($ip)->country;
+            $kodepos = geoip()->getLocation($ip)->postal_code;
+            $loc = geoip()->getLocation($ip)->lat;
             $absen = Absensi::create([
                 'id' => Auth::user()->id,
                 'email' => Auth::user()->email,
@@ -61,7 +80,7 @@ class AbsensiController extends Controller
                 'selfie_masuk' => $filename,
                 'tanggal' => $tanggal,
                 'jam_masuk' => $localtime,
-                'lokasi' => $ip
+                'lokasi' => implode("   " , array( $lokasi,$kodepos,$loc))
             ]);
             if ($absen->jam_masuk <= $masuk){
                 $ket = [
@@ -111,7 +130,6 @@ class AbsensiController extends Controller
             $data = DB::table('absensipegawai')
                 ->select('*')
                 ->where('id_admin', Auth::user()->id)
-                ->latest()
                 ->get();
             return response()->json([
                 'data' => $data,
@@ -119,11 +137,23 @@ class AbsensiController extends Controller
                 'status' => true
             ]);
     }
+    public function tampilpegawai(){
+        $data = DB::table('absensipegawai')
+            ->select('*')
+            ->where('id', Auth::user()->id)
+            ->latest()
+            ->get();
+        return response()->json([
+            'data' => $data,
+            'message' => 'get data berhasil',
+            'status' => true
+        ]);
+}
     public function absendashboard(){
         $data = DB::table('absensipegawai')
             ->select('*')
             ->where('id_admin', Auth::user()->id)
-            ->whereDate('created_at', Carbon::today())
+            ->whereDate('tanggal', Carbon::today())
             ->get();
       
         return response()->json([
@@ -136,7 +166,7 @@ class AbsensiController extends Controller
         $data = DB::table('absensipegawai')
         ->select('*')
         ->where('id_admin', Auth::user()->id)
-        ->whereDate('created_at', Carbon::today())
+        ->whereDate('tanggal', Carbon::today())
         ->count();
   
     return response()->json([
@@ -172,10 +202,6 @@ class AbsensiController extends Controller
         $tanggal = $date->format('Y-m-d');
         $localtime = $date->format('H:i:s');
 
-        $presensi = Absensi::where([
-            ['id','=',Auth::user()->id],
-            ['tanggal','=',$tanggal],
-        ])->first();
         $filename="";
         $file_path = "upload/";
         $webcam_image = $request->selfie_pulang;
@@ -188,16 +214,59 @@ class AbsensiController extends Controller
         $filename = uniqid() . '.png';
         $file = $file_path . $filename; 
         file_put_contents($file, $image_base64);
+
+        $presensi = Absensi::where('id', Auth::user()->id)
+        // ->where('uid', $request->uid)
+        ->whereDate('tanggal', $tanggal)
+        ->first();
+
+        if ($presensi == null){
+            return response()->json([
+                'sudahabsen' => $presensi,
+                'status' => false,
+                'message' => 'Harap Presensi Terlebih Dahulu',
+            ]);
+        }
+
         $dt=[
             'jam_pulang' => $localtime,
             'jam_kerja' => date('H:i:s', strtotime($localtime) - strtotime($presensi->jam_masuk)),
             'selfie_pulang' => $filename,
-        ];
+        ];   
 
         if ($presensi->jam_pulang == ""){
-            $presensi->update($dt);
+            $hasil = DB::table('absensipegawai')
+            ->where('id', Auth::user()->id)
+            ->whereDate('tanggal', $tanggal)
+            ->update($dt);
+
+            $totaljamkerja = DB::table('pegawais')
+                ->select('*')
+                ->where('id', Auth::user()->id)
+                ->first();
+            $jamkerja = DB::table('absensipegawai')
+                ->select('*')
+                ->where('id', Auth::user()->id)
+                ->whereDate('tanggal', $tanggal)
+                ->first();
+            $total = date('H:i:s' , strtotime($totaljamkerja->jam_kerja) + strtotime($jamkerja->jam_kerja));
+            
+            $hasil = DB::table('datagaji')
+            ->where('id' , Auth::user()->id)
+            ->update([
+                'jam_kerja' => $total
+            ]);
+            $hasil2 = DB::table('pegawais')
+            ->where('id' , Auth::user()->id)
+            ->update([
+                'jam_kerja' => $total
+            ]);
             return response()->json([
                 'data' => $dt,
+                'updategaji' => $hasil2,
+                'data_lagi' => $hasil,
+                'tanggal' => $tanggal,
+                'total_jamkerja' => $total,
                 'message' => 'presensi pulang berhasil',
                 'success' => true
             ]);
@@ -209,16 +278,39 @@ class AbsensiController extends Controller
         }
     }
 
-    public function detailabsen($id)
+    public function detailabsen($uid)
     {
        $detabsen = DB::table('absensipegawai')
-       ->where('id' ,$id)
+       ->where('uid' ,$uid)
        ->get();
        return response([
            'data' => $detabsen,
            'message' => 'get data berhasil',
            'status' => true,
        ]);
+
+    }
+    public function tes(Request $request)
+    {
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
+        $localtime = $date->format('H:i:s');
+
+        $presensi = DB::table('absensipegawai')
+        ->where('id', Auth::user()->id)
+        ->where('uid', $request->uid)
+        ->where('jam_pulang','=', null)
+        ->where('tanggal', $tanggal)
+        ->first();
+
+        return response()->json([
+            'data' => $presensi,
+            // 'total_jamkerja' => $total,
+            // 'hasil' => $hasil,
+            'message' => 'presensi pulang berhasil',
+            'success' => true
+        ]);
 
     }
 }
