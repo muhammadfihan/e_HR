@@ -7,8 +7,8 @@
               <div>
                 <h3 style="color:#E95A09">Laporan Harian Pegawai</h3>
            </div>
-            <div style="margin-top:20px">
-            <table class="table align-start border"  >
+           <div class="table-responsive">
+            <table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                 <thead class="" >
                 <tr>
                     <th>&nbsp;</th>

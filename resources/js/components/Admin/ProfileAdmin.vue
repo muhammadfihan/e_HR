@@ -11,14 +11,9 @@
 							</div>
 						</div>
    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-         <div class="d-flex flex-column-fluid">
-            							<div class="container mb-10">
-								<!--begin::Profile Personal Information-->
-								<div class="d-flex flex-row">
-									<!--begin::Aside-->
-									<!--end::Aside-->
-									<!--begin::Content-->
-									<div class="flex-row-fluid ml-lg-8">
+      <div class="d-flex flex-column-fluid">
+							<!--begin::Container-->
+							<div class="container mb-13">   
 										<!--begin::Card-->
 										<div class="card card-custom gutter-bs">
 											<!--Begin::Header-->
@@ -215,8 +210,7 @@
 								</div>
 								<!--end::Profile Personal Information-->
 							</div>
-        </div>
-   </div>
+
     <div class="modal fade" id="editPegawai" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
 															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
 																<div class="modal-content">

@@ -13,18 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('reqabsen', function (Blueprint $table) {
-            $table->increments('uid');
-            $table->integer('id');
+        Schema::create('izin', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('id_admin');
             $table->string('name');
             $table->string('nama_lengkap');
             $table->string('email');
             $table->string('no_pegawai');
-            $table->string('alasan');
-            $table->string('bukti_pendukung')->nullable();
-            $table->enum('status_req', ['Diproses', 'Diterima', 'Ditolak'])->default('Diproses');
-            $table->date('tanggal_req');
+            $table->string('jenis_izin');
+            $table->string('bukti');
+            $table->enum('status_izin', ['Diproses', 'Diterima', 'Ditolak'])->default('Diproses');
+            $table->date('tanggal');
+            $table->timestamps();
         });
     }
 
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reqabsen');
+        Schema::dropIfExists('izin');
     }
 };

@@ -68,7 +68,7 @@ class AbsensiController extends Controller
             ->first();
 
             $ip = $request->ip();
-            $lokasi = geoip()->getLocation($ip)->country;
+            $lokasi = geoip()->getLocation($ip)->city;
             $kodepos = geoip()->getLocation($ip)->postal_code;
             $loc = geoip()->getLocation($ip)->lat;
             $absen = Absensi::create([
@@ -130,6 +130,7 @@ class AbsensiController extends Controller
             $data = DB::table('absensipegawai')
                 ->select('*')
                 ->where('id_admin', Auth::user()->id)
+                ->latest()
                 ->get();
             return response()->json([
                 'data' => $data,
@@ -150,23 +151,29 @@ class AbsensiController extends Controller
         ]);
 }
     public function absendashboard(){
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
         $data = DB::table('absensipegawai')
-            ->select('*')
-            ->where('id_admin', Auth::user()->id)
-            ->whereDate('tanggal', Carbon::today())
-            ->get();
-      
-        return response()->json([
-            'data' => $data,
-            'message' => 'get data berhasil',
-            'status' => true
-        ]);
+                ->select('*')
+                ->where('id_admin', Auth::user()->id)
+                ->whereDate('tanggal', $tanggal)
+                ->latest()
+                ->get();
+            return response()->json([
+                'data' => $data,
+                'message' => 'get data berhasil',
+                'status' => true
+            ]);
     }
     public function counthadir(){
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
         $data = DB::table('absensipegawai')
         ->select('*')
         ->where('id_admin', Auth::user()->id)
-        ->whereDate('tanggal', Carbon::today())
+        ->whereDate('tanggal', $tanggal)
         ->count();
   
     return response()->json([
@@ -175,11 +182,15 @@ class AbsensiController extends Controller
         'status' => true
     ]);
     }
+
     public function counttidakhadir(){
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
         $data = DB::table('absensipegawai')
         ->select('*')
         ->where('id_admin', Auth::user()->id)
-        ->whereDate('created_at', Carbon::today())
+        ->where('tanggal', $tanggal)
         ->count();
         
         $count = DB::table('users')
@@ -187,7 +198,7 @@ class AbsensiController extends Controller
         ->where('id', Auth::user()->id)
         ->pluck('jumlah_karyawan');
 
-        $tidak_hadir = $data - $count;
+        $tidak_hadir = $count - $data;
 
     return response()->json([
         'data' => $tidak_hadir,

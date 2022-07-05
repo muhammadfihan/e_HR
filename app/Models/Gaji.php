@@ -9,7 +9,11 @@ class Gaji extends Model
 {
     use HasFactory;
     protected $table = "datagaji";
-
+    // protected $casts = [
+    //     'tunjangan' => 'array',
+    //     'bonus' => 'array',
+    //     'potongan' => 'array'
+    // ];
     protected $fillable = [
         'name',
         'id',
@@ -25,9 +29,6 @@ class Gaji extends Model
         'id_tunjangan',
         'id_bonus',
         'id_potongan',
-        'nominal_tunjangan',
-        'nominal_bonus',
-        'nominal_potongan'
     ];
-
+    
 }

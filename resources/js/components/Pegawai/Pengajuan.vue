@@ -17,15 +17,9 @@
 					
 						<!--end::Subheader-->
 						<!--begin::Entry-->
-						<div class="d-flex flex-column-fluid">
+		<div class="d-flex flex-column-fluid">
 							<!--begin::Container-->
-							<div class="container mb-18">
-								<!--begin::Teachers-->
-								<div class="d-flex flex-row">
-									<!--begin::Aside-->
-									<!--end::Aside-->
-									<!--begin::Content-->
-									<div class="flex-row-fluid ml-lg-8">
+							<div class="container mb-13">   
 										<!--begin::Card-->
 										<div class="card card-custom">
 											<div class="card-body">
@@ -227,10 +221,12 @@
 												<!--end::Search Form-->
 												<!--end: Search Form-->
 												<!--begin::Datatable-->
-												<div class="datatable-bordered">
-                                                     <table class="table align-middle bordered" >
-                                                        <thead class="" >
-                                                        <tr>
+												
+												<div class="card-body py-0">
+													<div class="table-responsive">
+													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
+														<thead>
+															<tr>
                                                             <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Tanggal</th>
@@ -239,9 +235,9 @@
 															<th>Status</th>
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
-                                                        </thead>
-                                                         <tbody>
-                                                            <tr v-for="(data,index) in allizin" :key="data.id">
+														</thead>
+														<tbody>
+                                                            <tr v-for="(data,index) in allizin.data" :key="data.id">
                                                                     <td>
                                                                         <label class="checkbox-wrap checkbox-success">
                                                                             <input type="checkbox">
@@ -279,13 +275,22 @@
                                                                     </td>
                                                             </tr>
                                                         </tbody>
-                                                    </table>
-
-                                                </div>
+													</table>
+													<div style="margin-top:20px;">
+													   <pagination align="right" :data="allizin" @pagination-change-page="allIzinPegawai"></pagination>
+													</div>
+												</div>
+												
+												</div>
+											
+												
+												
 												<!--end::Datatable-->
 											</div>
+											
 											<!--end::Body-->
 										</div>
+										
 									<!-- Tabel Lembur -->
                                          <div class="card card-custom tab-pane" id="forms_widget_tab_2" role="tabpanel">
 											<!--begin::Header-->
@@ -345,8 +350,8 @@
 												<!--end::Search Form-->
 												<!--end: Search Form-->
 												<!--begin::Datatable-->
-												<div class="datatable-bordered">
-                                                     <table class="table align-middle bordered" >
+												<div class="table-responsive">
+													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
                                                             <th>&nbsp;</th>
@@ -461,14 +466,14 @@
 												<!--end::Search Form-->
 												<!--end: Search Form-->
 												<!--begin::Datatable-->
-												<div class="datatable-bordered">
-                                                      <table class="table align-middle bordered" >
+												<div class="table-responsive">
+													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
                                                             <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Tanggal</th>
-                                                            <th>Jenis Izin</th>
+                                                            <th>Alasan</th>
                                                             <th>Bukti Pendukung</th>
 															<th>Status</th>
                                                             <th style="text-align: center;">Action</th>
@@ -579,8 +584,8 @@
 												<!--end::Search Form-->
 												<!--end: Search Form-->
 												<!--begin::Datatable-->
-												<div class="datatable-bordered">
-                                                     <table class="table align-middle bordered" >
+												<div class="table-responsive">
+													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
                                                             <th>&nbsp;</th>
@@ -695,8 +700,8 @@
 												<!--end::Search Form-->
 												<!--end: Search Form-->
 												<!--begin::Datatable-->
-												<div class="datatable-bordered">
-                                                     <table class="table align-middle bordered" >
+											<div class="table-responsive">
+													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
                                                             <th>&nbsp;</th>
@@ -767,9 +772,7 @@
 								<!--end::Teachers-->
 							</div>
 							<!--end::Container-->
-						</div>
-						<!--end::Entry-->
-					</div>
+
 					<!-- Modal Izin -->
 <div class="modal fade" id="izin" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
 															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
@@ -799,7 +802,9 @@
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Bukti/Surat Pendukung</label>
 																					<div class="col-lg-9 col-xl-6">
 																						 <input type="file" @change="upload" placeholder="Masukan File Surat Pendukung PDF/JPG" class="form-control form-control-lg form-control-solid">
+																						 <span class="form-text text-muted">File Harus Pdf/Jpeg</span>
 																					</div>
+																						
 																				</div>
 																				
 																				
@@ -845,6 +850,7 @@
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Bukti/Surat Pendukung</label>
 																					<div class="col-lg-9 col-xl-6">
 																						 <input type="file" @change="uploadupdate" placeholder="Masukan File Surat Pendukung PDF/JPG" class="form-control form-control-lg form-control-solid">
+																						  <span class="form-text text-muted">File Harus Pdf/Jpeg</span>
 																					</div>
 																				</div>
 																				
@@ -891,6 +897,7 @@
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Bukti/Surat Pendukung</label>
 																					<div class="col-lg-9 col-xl-6">
 																						 <input type="file" @change="uploadReq" placeholder="Masukan File Surat Pendukung PDF/JPG" class="form-control form-control-lg form-control-solid">
+																						  <span class="form-text text-muted">File Harus Pdf/Jpeg</span>
 																					</div>
 																				</div>
 																				
@@ -937,6 +944,7 @@
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Bukti/Surat Pendukung</label>
 																					<div class="col-lg-9 col-xl-6">
 																						 <input type="file" @change="uploadupdateReq" placeholder="Masukan File Surat Pendukung PDF/JPG" class="form-control form-control-lg form-control-solid">
+																						  <span class="form-text text-muted">File Harus Pdf/Jpeg</span>
 																					</div>
 																				</div>
 																				
@@ -961,11 +969,15 @@
 
 <script>
 
+import LaravelVuePagination from 'laravel-vue-pagination';
 export default {
     name: "Pengajuan",
+	components: {
+        'Pagination': LaravelVuePagination
+    },
     data() {
         return {
-			allizin:[],
+			allizin:{},
             infopt:[],
 			preview: null,
 			allreqabsen:[],
@@ -1053,7 +1065,7 @@ export default {
                     id: this.form.id,
                     jenis_izin: this.form.jenis_izin,
                     tanggal: this.form.tanggal,
-					bukti: this.form.bukti
+					bukti: this.form.bukti,
                 
 			},formData,
 			).then((response) => {
@@ -1229,9 +1241,9 @@ export default {
 
 		},
 		//METHOD MENAMPILKAN PEGAWAI
-		allIzinPegawai(){
+		allIzinPegawai(page = 1){
 			 this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/allizinpegawai',{
+            this.$axios.get('/api/allizinpegawai?page=' + page,{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
@@ -1283,5 +1295,3 @@ export default {
 
 
 </script>
-
-

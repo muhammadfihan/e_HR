@@ -101,7 +101,7 @@
 														<thead>
 															<tr class="text-left">
 																<th class="pr-0" style="width: 50px">Pegawai</th>
-																<th style="min-width: 200px"></th>
+																<th style="min-width: 150px"></th>
 																<th style="min-width: 150px">Jam Masuk</th>
 																<th style="min-width: 150px">Keterangan</th>
 															</tr>

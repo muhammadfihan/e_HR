@@ -17,6 +17,7 @@ class ReqAbsenController extends Controller
         $reqabsen = DB::table('reqabsen')
         ->select('*')
         ->where('id_admin', Auth::user()->id)
+        ->latest()
         ->get();
     return response([
         'data' => $reqabsen,
@@ -29,6 +30,7 @@ class ReqAbsenController extends Controller
         $reqabsen = DB::table('reqabsen')
         ->select('*')
         ->where('id_admin', Auth::user()->id_admin)
+        ->latest()
         ->get();
     return response([
         'data' => $reqabsen,
@@ -39,8 +41,9 @@ class ReqAbsenController extends Controller
     }
     public function ajukanreqabsen(Request $request){
         if($request->hasfile('bukti_pendukung')){
+            $file_path = "files/";
             $filename = str_replace('','',$request->file('bukti_pendukung')->getClientOriginalName());
-            $request->file('bukti_pendukung')->move(public_path('files'), $filename);
+            $request->file('bukti_pendukung')->move($file_path, $filename);
 
             $user = DataPegawai::where('id', Auth::user()->id)->first();
             $reqabsen = ReqAbsen::create([
@@ -89,6 +92,7 @@ class ReqAbsenController extends Controller
                     'message' => 'Ditolak',
                 ]);
             }
+            
             $absen = Absensi::create([
                         'id' => $inputabsen->id,
                         'email' => $inputabsen->email,

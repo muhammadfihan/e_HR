@@ -4,6 +4,7 @@ import Login from '../components/Login'
 import LoginPegawai from '../components/LoginPegawai'
 import Register from '../components/Register'
 import TopBar from "../dashboard/TopBar";
+// import pagination from "../components/Pagination";
 
 // Admin Role
 import AdminDashboard from "../dashboard/AdminDashboard";
@@ -63,6 +64,11 @@ export const routes = [{
         path: '/',
         component: Register
     },
+    // {
+    //     name: 'Pagination',
+    //     path: '/Pagination',
+    //     component: pagination
+    // },
     {
         name: 'AdminDashboard',
         path: '/AdminDashboard',

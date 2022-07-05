@@ -93,7 +93,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('aturjamabsen', [JamAbsenController::class, 'aturjamabsen'])->middleware('role:Admin');
     Route::post('updateabsen', [JamAbsenController::class, 'updateabsen'])->middleware('role:Admin');
-    Route::get('tampil', [JamAbsenController::class, 'tampil'])->middleware('role:Admin');
+    Route::get('tampil', [JamAbsenController::class, 'tampil'])->middleware('role:Admin,Pegawai');
+    Route::get('tampiljampeg', [JamAbsenController::class, 'tampiljampeg'])->middleware('role:Admin,Pegawai');
 
     Route::get('absendashboard', [AbsensiController::class, 'absendashboard'])->middleware('role:Admin');
     Route::get('counthadir', [AbsensiController::class, 'counthadir'])->middleware('role:Admin');

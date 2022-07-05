@@ -93,4 +93,16 @@ class JamAbsenController extends Controller
             'status' => true
         ]);
     }
+
+    public function tampiljampeg (Request $request){
+        $data = DB::table('jamabsen')
+        ->select('*')
+        ->where('id_admin', Auth::user()->id_admin)
+        ->get();
+        return response()->json([
+            'data' => $data,
+            'message' => 'get data berhasil',
+            'status' => true
+        ]);
+    }
 }

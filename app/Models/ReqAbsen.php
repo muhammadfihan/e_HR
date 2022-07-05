@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ReqAbsen extends Model
 {
     use HasFactory;
-    public $timestamps = false;
     protected $table = "reqabsen";
     protected $fillable = [
         'id_admin',

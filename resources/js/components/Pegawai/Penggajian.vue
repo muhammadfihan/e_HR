@@ -16,15 +16,9 @@
 					
 						<!--end::Subheader-->
 						<!--begin::Entry-->
-						<div class="d-flex flex-column-fluid">
+		<div class="d-flex flex-column-fluid">
 							<!--begin::Container-->
-							<div class="container mb-18">
-								<!--begin::Teachers-->
-								<div class="d-flex flex-row">
-									<!--begin::Aside-->
-									<!--end::Aside-->
-									<!--begin::Content-->
-									<div class="flex-row-fluid ml-lg-8">
+							<div class="container mb-13">   
 										<!--begin::Card-->
 										<div class="card card-custom">
 											<div class="card-body">
@@ -147,8 +141,8 @@
 												<!--end::Search Form-->
 												<!--end: Search Form-->
 												<!--begin::Datatable-->
-												<div class="datatable-bordered">
-                                                     <table class="table align-middle bordered" >
+												<div class="table-responsive">
+													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
                                                             <th>&nbsp;</th>
@@ -240,8 +234,8 @@
 												<!--end::Search Form-->
 												<!--end: Search Form-->
 												<!--begin::Datatable-->
-												<div class="datatable-bordered">
-                                                     <table class="table align-middle bordered" >
+												<div class="table-responsive">
+													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
                                                             <th>&nbsp;</th>
@@ -309,10 +303,7 @@
 								</div>
 								<!--end::Teachers-->
 							</div>
-							<!--end::Container-->
-						</div>
-						<!--end::Entry-->
-					</div>
+
 
 </template>
 

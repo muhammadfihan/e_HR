@@ -33,7 +33,7 @@
 		<script src="assets/js/pages/custom/education/school/teachers.js"></script>
 
 		<link href="assets/plugins/custom/uppy/uppy.bundle.css" rel="stylesheet" type="text/css" />
-
+		<script src="assets/js/pages/widgets.js"></script>
 	
 		<!-- webcamjs  -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.js"></script>

@@ -11,14 +11,9 @@
 							</div>
 						</div>
    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-         <div class="d-flex flex-column-fluid">
-            							<div class="container mb-10">
-								<!--begin::Profile Personal Information-->
-								<div class="d-flex flex-row">
-									<!--begin::Aside-->
-									<!--end::Aside-->
-									<!--begin::Content-->
-									<div class="flex-row-fluid ml-lg-6">
+    <div class="d-flex flex-column-fluid">
+							<!--begin::Container-->
+							<div class="container mb-13">   
 										<!--begin::Card-->
 										<div class="card card-custom card-stretch">
 											<!--begin::Header-->
@@ -29,7 +24,8 @@
 												</div>
 												<div class="card-toolbar" v-for="(data) in pegawais" :key="data.id">
 													<button type="submit" @click="showModal(data)" class="btn btn-success mr-2">Update Profile</button>
-													<button type="reset" class="btn btn-secondary">Cancel</button>
+                                                    <button type="submit" @click="ubahpassword(data)" class="btn btn-light-success mr-2">UbahPassword</button>
+
 												</div>
 											</div>
 											<!--end::Header-->
@@ -135,8 +131,6 @@
 								</div>
 								<!--end::Profile Personal Information-->
 							</div>
-        </div>
-   </div>
     <div class="modal fade" id="editPegawai" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
 															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
 																<div class="modal-content">

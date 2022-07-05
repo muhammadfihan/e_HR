@@ -10,7 +10,7 @@ class Izin extends Model
     use HasFactory;
 
     protected $table = "izin";
-    public $timestamps = false;
+
     protected $fillable = [
         'id_admin',
         'id',

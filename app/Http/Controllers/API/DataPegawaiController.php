@@ -194,7 +194,7 @@ class DataPegawaiController extends Controller
                 ->pluck('jam_kerja')
                 ->first();
                 $gaji = DB::table('datagaji')->where('id', Auth::user()->id)->first();
-                if($gaji->id != null){
+                if($gaji){
                     DB::table('pegawais')->where('id', Auth::user()->id)->update([
                         'nama_lengkap' => $request->nama_lengkap,
                         'pendidikan' => $request->pendidikan,
@@ -203,8 +203,11 @@ class DataPegawaiController extends Controller
                         'gender' => $request->gender,
                         'alamat' => $request->alamat,
                     ]);
+                    DB::table('datagaji')->where('id', Auth::user()->id)->update([
+                        'nama_lengkap' => $request->nama_lengkap,
+                    ]);
                 }
-                if($gaji->id == null){
+                else{
                 $gaji = Gaji::create([
                     'no_pegawai' => $nopegawai,
                     'name' => Auth::user()->name,

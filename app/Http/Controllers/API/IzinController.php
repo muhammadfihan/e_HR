@@ -16,6 +16,7 @@ class IzinController extends Controller
         $izin = DB::table('izin')
         ->select('*')
         ->where('id_admin', Auth::user()->id)
+        ->latest()
         ->get();
     return response([
         'data' => $izin,
@@ -25,10 +26,10 @@ class IzinController extends Controller
     }
 
     public function allizinpegawai(){
-        $izin = DB::table('izin')
-        ->select('*')
+        $izin = DB::table('izin')->select('*')
         ->where('email', Auth::user()->email)
-        ->get();
+        ->latest()
+        ->paginate(10);
     return response([
         'data' => $izin,
         'message' => 'get data berhasil',
@@ -39,8 +40,9 @@ class IzinController extends Controller
 
     public function ajukanizin(Request $request){
         if($request->hasfile('bukti')){
+            $file_path = "files/";
             $filename = str_replace('','',$request->file('bukti')->getClientOriginalName());
-            $request->file('bukti')->move(public_path('files'), $filename);
+            $request->file('bukti')->move($file_path, $filename);
 
             $user = DataPegawai::where('id', Auth::user()->id)->first();
             $ajukanizin = Izin::create([

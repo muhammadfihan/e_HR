@@ -17,16 +17,9 @@
 						<!--begin::Subheader-->
 					
 						<!--end::Subheader-->
-						<!--begin::Entry-->
-						<div class="d-flex flex-column-fluid">
+		<div class="d-flex flex-column-fluid">
 							<!--begin::Container-->
-							<div class="container">
-								<!--begin::Teachers-->
-								<div class="d-flex flex-row">
-									<!--begin::Aside-->
-									<!--end::Aside-->
-									<!--begin::Content-->
-									<div class="flex-row-fluid ml-lg-8">
+							<div class="container mb-13">   
 										<!--begin::Card-->
 										<div class="card card-custom">
 											<!--begin::Header-->
@@ -80,8 +73,8 @@
 												<!--end::Search Form-->
 												<!--end: Search Form-->
 												<!--begin::Datatable-->
-												<div class="datatable-bordered">
-                                                     <table class="table align-middle bordered" >
+												<div class="table-responsive">
+													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
                                                             <th>&nbsp;</th>
@@ -132,9 +125,6 @@
 								<!--end::Teachers-->
 							</div>
 							<!--end::Container-->
-						</div>
-						<!--end::Entry-->
-					</div>
 <div class="modal fade" id="approve" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
 															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
 																<div class="modal-content">
