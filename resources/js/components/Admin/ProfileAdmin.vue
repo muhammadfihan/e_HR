@@ -115,7 +115,7 @@
 															<div class="form-group row">
 																<label class="col-xl-3 col-lg-3 text-right col-form-label">Email Perusahaan</label>
 																<div class="col-lg-9 col-xl-6">
-																	<div class="form-control form-control-lg form-control-solid" type="text" >{{data.email_perusahaan}}</div>
+																	<div class="form-control form-control-lg form-control-solid" type="text" >{{data.email}}</div>
 																</div>
 															</div>
 															<div class="form-group row">
@@ -148,7 +148,7 @@
 																<label class="col-xl-3 col-lg-3 text-right col-form-label">Username</label>
 																<div class="col-lg-9 col-xl-6">
 																	<div class="input-group input-group-lg input-group-solid">
-																		<div class="form-control form-control-lg form-control-solid" type="text" >{{data.admin_perusahaan}}</div>
+																		<div class="form-control form-control-lg form-control-solid" type="text" >{{data.name}}</div>
 																	</div>
 																</div>
 															</div>
@@ -161,7 +161,7 @@
 																				<i class="la la-at"></i>
 																			</span>
 																		</div>
-																		<div class="form-control form-control-lg form-control-solid" type="text" >{{data.email_perusahaan}}</div>
+																		<div class="form-control form-control-lg form-control-solid" type="text" >{{data.email}}</div>
 																	</div>
 																</div>
 															</div>

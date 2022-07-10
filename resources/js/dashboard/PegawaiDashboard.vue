@@ -21,13 +21,13 @@
 									<div class="col-lg-6 col-xxl-4">
 										<!--begin::Mixed Widget 4-->
 										<div class="card card-custom bg-radial-gradient-white gutter-b card-stretch">
-                                            <div class="card-header border-0 py-5 " >
+                                            <div class="card-header border-0 py-5 "  >
                                                 <a class="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 												</a>
                                               <button type="submit" @click="history()" class="btn btn-success font-weight-bolder">History</button>
 											</div>
                                             <div class="d-flex flex-center mb-10" >
-                                                <div role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="--value:50;"></div>
+                                                <div role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="--value:75;"></div>
                                             </div>
 								       
                                         <div class="font-size-h4 font-weight-bolder text-center text-success">Statistik Presensi Bulanan</div>
@@ -63,9 +63,15 @@
 									</div>
 									<div class="col-lg-6 col-xxl-8">
 										<!--begin::Advance Table Widget 1-->
-                                            <div class="card card-custom card-stretch gutter-b">
-
-											<div class="card-body" style="text-align:center;padding: 100px;">
+										
+                                            <div class="card card-custom card-stretch gutter-b" >
+												<div  v-for="(data) in pegawais" :key="data.id" style="text-align:right" >
+												<div class="card-header border-0 py-5 ">
+												<button type="submit"  v-if="data.nama_lengkap == null" @click="profile()" class="btn btn-sm btn-light-danger  font-weight-bolder">Penting, Lengkapi biodata sekarang !</button>
+												</div>
+											</div>
+												 
+											<div class="card-body " style="text-align:center;padding: 100px;">
                                                 	<div class="date text-primary display3 display4-lg">
                                                         <span id="dayname">Day</span>,&nbsp;
                                                         <span id="daynum">00</span>&nbsp;
@@ -776,8 +782,11 @@ export default {
         },
     
     methods: {
-        history(){
+    	history(){
             this.$router.push("/Absen");
+        },
+		profile(){
+            this.$router.push("/Profile");
         },
          tampiljam(){
              this.$axios.get('/sanctum/csrf-cookie').then(response => {

@@ -258,7 +258,7 @@
 											<div class="card-header flex-wrap border-0 pt-6 pb-0">
 												<h3 class="card-title align-items-start flex-column">
 													<span class="card-label font-weight-bolder text-dark" >Pengajuan Lembur</span>
-													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Pengajuan Cuti di {{ data.nama_perusahaan }}</span>
+													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Pengajuan Lembur di {{ data.nama_perusahaan }}</span>
 												</h3>
 												
 											</div>
@@ -311,19 +311,19 @@
                                                         <tr>
                                                             <th>&nbsp;</th>
                                                             <th>No</th>
-                                                            <th>Pegawai</th>
-                                                            <th>Nama Pegawai</th>
                                                             <th>Tanggal</th>
-                                                            <th>Jam Masuk</th>
-                                                            <th>Jam Pulang</th>
-                                                            <th>Jam Kerja</th>
-                                                            <th>Keterangan</th> 
-                                                            <th>Lokasi</th>
+															<th>Nama Pegawai</th>
+                                                            <th>No Pegawai</th>
+                                                            <th>Jam Mulai</th>
+                                                            <th>Jam Selesai</th>
+															<th>Aktifitas</th>
+															<th>File Pendukung</th>
+                                                            <th>Status</th>
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
                                                         </thead>
                                                          <tbody>
-                                                            <tr v-for="(data,index) in absensipegawai" :key="data.id">
+                                                            <tr v-for="(data,index) in lembur" :key="data.id">
                                                                     <td>
                                                                         <label class="checkbox-wrap checkbox-success">
                                                                             <input type="checkbox">
@@ -331,27 +331,27 @@
                                                                         </label>
                                                                     </td>
                                                                     <td>{{index+1}} </td>
-                                                                     <td>
-                                                                        <div class="ms-3">
-                                                                            <p class="fw-bold mb-1">{{ data.name }}</p>
-                                                                            <p class="text-muted mb-0">{{ data.email }}</p>
-                                                                        </div>
-                                                                    </td>
+																	<td>{{ data.tanggal_lembur}}</td>
                                                                     <td>{{ data.nama_lengkap }}</td>
-                                                                    <td>{{ data.tanggal }}</td>
-                                                                    <td>{{ data.jam_masuk }}</td>
-                                                                    <td>{{ data.jam_pulang }}</td>
-                                                                    <td>{{ data.jam_kerja }}</td>
-                                                                     <td>
-                                                                        <span class="badge badge-success" v-if="data.keterangan == 'On Time'" >{{data.keterangan}}</span>
-                                                                        <span class="badge badge-danger" v-else-if="data.keterangan == 'Terlambat'" >{{data.keterangan}}</span>
+																	<td>{{ data.no_pegawai }}</td>
+                                                                    <td>{{ data.jammulai }}</td>
+                                                                    <td>{{ data.jamselesai }}</td>
+                                                                    <td>
+																		<span  @click.prevent="detailLembur(data.id)" style="cursor:pointer" class="badge badge-primary">Aktifitas</span>
+																	</td>
+																	<td>
+																		<span class="badge badge-warning"><a style="cursor:pointer;color:white" :href="`files/${data.buktilembur}`"  target="_blank">View File</a></span>
+																	</td>
+                                                                    <td>
+                                                                        <span class="badge badge-success" v-if="data.status_lembur == 'Diterima'" >{{data.status_lembur}}</span>
+                                                                        <span class="badge badge-danger" v-else-if="data.status_lembur == 'Ditolak'" >{{data.status_lembur}}</span>
+                                                                        <span class="badge badge-warning text-white" v-else-if="data.status_lembur == 'Diproses'" >{{data.status_lembur}}</span>
                                                                     </td>
-                                                                    <td>{{ data.lokasi }}</td>
                                                                    
-                                                                    <td style="text-align: center;">
-                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="showModalEdit(data)">
-                                                                          </a>
-                                                                       
+ 																	<td style="text-align: center;">
+                                                                         <span v-if="data.status_lembur == 'Diproses'" @click.prevent="showLembur(data)" style="cursor:pointer" class="badge badge-primary">Approvement</span>
+                                                                         <span v-else-if="data.status_lembur == 'Diterima'" class="badge badge-secondary">Confirmed</span>
+                                                                        <span v-else-if="data.status_lembur == 'Ditolak'" class="badge badge-secondary">Confirmed</span>
                                                                     </td>
                                                             </tr>
                                                         </tbody>
@@ -471,20 +471,13 @@
 											</div>
 											<!--end::Body-->
 										</div>
-                                          <div class="card card-custom tab-pane" id="forms_widget_tab_4" role="tabpanel">
+                                         <div class="card card-custom tab-pane" id="forms_widget_tab_4" role="tabpanel">
 											<!--begin::Header-->
 											<div class="card-header flex-wrap border-0 pt-6 pb-0">
 												<h3 class="card-title align-items-start flex-column">
-													<span class="card-label font-weight-bolder text-dark" >Kenaikan Jabatan</span>
-													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Pengajuan Kenaikan jabatan di {{ data.nama_perusahaan }}</span>
+													<span class="card-label font-weight-bolder text-dark" >Approvement Cuti</span>
+													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Approvement Cuti di {{ data.nama_perusahaan }}</span>
 												</h3>
-                                                 <div class="card-toolbar">
-													<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
-														<!--begin::Trigger Modal-->
-														<a href="#" class="btn btn-success font-weight-bolder font-size-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal">Buat Pengajuan</a>
-                                                    </div>
-                                                </div>
-												
 											</div>
 											<!--end::Header-->
 											<!--begin::Body-->
@@ -535,19 +528,20 @@
                                                         <tr>
                                                             <th>&nbsp;</th>
                                                             <th>No</th>
-                                                            <th>Pegawai</th>
-                                                            <th>Nama Pegawai</th>
                                                             <th>Tanggal</th>
-                                                            <th>Jam Masuk</th>
-                                                            <th>Jam Pulang</th>
-                                                            <th>Jam Kerja</th>
-                                                            <th>Keterangan</th> 
-                                                            <th>Lokasi</th>
+															<th>Nama Pegawai</th>
+                                                            <th>No Pegawai</th> 
+                                                            <th>Awal Tanggal Cuti</th>
+                                                            <th>Akhir Tanggal Cuti</th>
+															<th>Jumlah Hari</th>
+															<th>Keterangan</th>
+                                                            <th>File Pendukung</th>
+                                                            <th>Status</th>
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
                                                         </thead>
                                                          <tbody>
-                                                            <tr v-for="(data,index) in absensipegawai" :key="data.id">
+                                                            <tr v-for="(data,index) in cuti" :key="data.id">
                                                                     <td>
                                                                         <label class="checkbox-wrap checkbox-success">
                                                                             <input type="checkbox">
@@ -555,27 +549,28 @@
                                                                         </label>
                                                                     </td>
                                                                     <td>{{index+1}} </td>
-                                                                     <td>
-                                                                        <div class="ms-3">
-                                                                            <p class="fw-bold mb-1">{{ data.name }}</p>
-                                                                            <p class="text-muted mb-0">{{ data.email }}</p>
-                                                                        </div>
-                                                                    </td>
+																	<td>{{ data.tanggal_cuti }}</td>
                                                                     <td>{{ data.nama_lengkap }}</td>
-                                                                    <td>{{ data.tanggal }}</td>
-                                                                    <td>{{ data.jam_masuk }}</td>
-                                                                    <td>{{ data.jam_pulang }}</td>
-                                                                    <td>{{ data.jam_kerja }}</td>
-                                                                     <td>
-                                                                        <span class="badge badge-success" v-if="data.keterangan == 'On Time'" >{{data.keterangan}}</span>
-                                                                        <span class="badge badge-danger" v-else-if="data.keterangan == 'Terlambat'" >{{data.keterangan}}</span>
+                                                                    <td>{{ data.no_pegawai}}</td>
+                                                                    <td>{{ data.tanggal_mulai }}</td>
+                                                                    <td>{{ data.tanggal_akhir }}</td>
+                                                                    <td>{{ data.jumlah_hari }}</td>
+																	<td>
+																		<span  @click.prevent="detailCuti(data.id)" style="cursor:pointer" class="badge badge-primary">Keterangan</span>
+																	</td>
+																	<td>
+																		<span class="badge badge-warning"><a style="cursor:pointer;color:white" :href="`files/${data.bukti_cuti}`"  target="_blank">View File</a></span>
+																	</td>
+                                                                    <td>
+                                                                        <span class="badge badge-success" v-if="data.status_cuti == 'Diterima'" >{{data.status_cuti}}</span>
+                                                                        <span class="badge badge-danger" v-else-if="data.status_cuti == 'Ditolak'" >{{data.status_cuti}}</span>
+                                                                        <span class="badge badge-warning text-white" v-else-if="data.status_cuti == 'Diproses'" >{{data.status_cuti}}</span>
                                                                     </td>
-                                                                    <td>{{ data.lokasi }}</td>
                                                                    
-                                                                    <td style="text-align: center;">
-                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="showModalEdit(data)">
-                                                                          </a>
-                                                                       
+ 																	<td style="text-align: center;">
+                                                                         <span v-if="data.status_cuti == 'Diproses'" @click.prevent="showCuti(data)" style="cursor:pointer" class="badge badge-primary">Approvement</span>
+                                                                         <span v-else-if="data.status_cuti == 'Diterima'" class="badge badge-secondary">Confirmed</span>
+                                                                        <span v-else-if="data.status_cuti == 'Ditolak'" class="badge badge-secondary">Confirmed</span>
                                                                     </td>
                                                             </tr>
                                                         </tbody>
@@ -668,7 +663,128 @@
 																</div>
 															</div>
 														</div>                                                        
+<div class="modal fade" id="lembur" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="lembur">Approvement Lembur Pegawai</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" class="ki ki-close" @click="closeLembur()"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form  class="form pt-9">
+                                                                                    <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Status</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <select class="form-control form-control-lg form-control-solid" v-model="form.status_lembur">
+                                                                                            <option >Diterima</option>
+                                                                                            <option >Ditolak</option>
+                                                                                        </select>
+																					</div>
+																				</div>
+																			</form>
+                                                                               
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+                                                                         <button type="button"  data-dismiss="modal" @click="confirmlembur()" class="btn btn-primary font-weight-bold">Submit</button>
+                                                                        <button type="button"  data-dismiss="modal" @click="closeLembur()" class="btn btn-primary font-weight-bold">Batal</button>
 
+																	</div>
+																</div>
+															</div>
+														</div>  
+<div class="modal fade" id="cuti" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="cuti">Approvement Cuti Pegawai</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" class="ki ki-close" @click="closeCuti()"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form  class="form pt-9">
+                                                                                    <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Status</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <select class="form-control form-control-lg form-control-solid" v-model="form.status_cuti">
+                                                                                            <option >Diterima</option>
+                                                                                            <option >Ditolak</option>
+                                                                                        </select>
+																					</div>
+																				</div>
+																			</form>
+                                                                               
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+                                                                         <button type="button"  data-dismiss="modal" @click="confirmcuti()" class="btn btn-primary font-weight-bold">Submit</button>
+                                                                        <button type="button"  data-dismiss="modal" @click="closeCuti()" class="btn btn-primary font-weight-bold">Batal</button>
+
+																	</div>
+																</div>
+															</div>
+														</div>                                                      
+<div class="modal fade" id="detailLembur" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="detailLembur">Detail Data Lembur</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" @click="closeDetail()" class="ki ki-close"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form  class="form pt-9" v-for="(data) in detlembur" :key="data.id">
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Aktifitas</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <textarea disabled class="form-control form-control-lg form-control-solid" type="text" style="background-color:#F3F6F9" v-model="data.aktifitas"></textarea>
+																					</div>
+																				</div>
+																				</form>                         
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+                                                                        <button type="button" @click="closeDetail()"  data-dismiss="modal" class="btn btn-primary font-weight-bold">Tutup</button>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+<div class="modal fade" id="detailCuti" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="detailCuti">Detail Data Cuti</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" @click="closeDetailCuti()" class="ki ki-close"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form  class="form pt-9" v-for="(data) in detcuti" :key="data.id">
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Keterangan</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <textarea disabled class="form-control form-control-lg form-control-solid" type="text" style="background-color:#F3F6F9" v-model="data.keterangan"></textarea>
+																					</div>
+																				</div>
+																				</form>                         
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+                                                                        <button type="button" @click="closeDetailCuti()"  data-dismiss="modal" class="btn btn-primary font-weight-bold">Tutup</button>
+
+																	</div>
+																</div>
+															</div>
+														</div>
                         
 </template>
 
@@ -681,11 +797,17 @@ export default {
         return {
             infopt:[],
             reqabsen:[],
+			lembur:[],
+			cuti:[],
+			detlembur:[],
+			detcuti:[],
             form: new Form ({
                uid : "",
                status_req: "",
                id : "",
-               status_izin: ""
+               status_izin: "",
+			   status_lembur: "",
+			   status_cuti: "",
             }),
             //  form: new Form ({
             //    id : "",
@@ -715,6 +837,26 @@ export default {
             this.form.fill({
                 id: data.id,
                 status_izin: data.status_izin,
+            })
+        },
+		closeLembur() {
+            $("#lembur").modal("hide");
+        },
+         showLembur(data) {
+            $("#lembur").modal("show");
+            this.form.fill({
+                id: data.id,
+                status_izin: data.status_lembur,
+            })
+        },
+		closeCuti() {
+            $("#cuti").modal("hide");
+        },
+        showCuti(data) {
+            $("#cuti").modal("show");
+            this.form.fill({
+                id: data.id,
+                status_cuti: data.status_cuti,
             })
         },
          getpt(){
@@ -800,6 +942,103 @@ export default {
                 });
         })
         },
+		tampillembur(){
+			 this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/tampillembur',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.lembur = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+
+		},
+		confirmlembur(){
+            axios.post('/api/confirmlembur',
+                {
+                    id: this.form.id,
+                    status_lembur: this.form.status_lembur,
+                },
+                {
+                    headers: { Authorization: "Bearer " + this.token }
+                }).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Data Berhasil Diupdate",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    }),
+                     $("#lembur").modal("hide");
+                    this.tampillembur();
+                }
+            })
+        },
+        detailLembur(id){
+            $('#detailLembur').modal('show')
+            axios.get('/api/detaillembur/'+id,{
+                headers: { Authorization: "Bearer " + this.token }
+            }).then((response) => {
+                this.detlembur = response.data.data
+            })
+        },
+		closeDetail() {
+            this.form.reset();
+            $("#detailLembur").modal("hide");
+        },
+		// CUTI
+		tampilcuti(){
+			 this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/tampilcuti',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.cuti = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+
+		},
+		confirmcuti(){
+            axios.post('/api/confirmcuti',
+                {
+                    id: this.form.id,
+                    status_cuti: this.form.status_cuti,
+                },
+                {
+                    headers: { Authorization: "Bearer " + this.token }
+                }).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Data Berhasil Diupdate",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    }),
+                     $("#cuti").modal("hide");
+                    this.tampilcuti();
+                }
+            })
+        },
+        detailCuti(id){
+            $('#detailCuti').modal('show')
+            axios.get('/api/detailcuti/'+id,{
+                headers: { Authorization: "Bearer " + this.token }
+            }).then((response) => {
+                this.detcuti = response.data.data
+            })
+        },
+		closeDetailCuti() {
+            this.form.reset();
+            $("#detailCuti").modal("hide");
+        },
         
         
         
@@ -809,6 +1048,8 @@ export default {
            this.getpt();
            this.allizin();
            this.allreqabsen();
+		   this.tampillembur();
+		   this.tampilcuti();
     }
 
 }

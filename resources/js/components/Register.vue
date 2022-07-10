@@ -291,7 +291,7 @@
 										</span>Previous</button>
 									</div>
 									<div>
-										<button class="btn btn-primary font-weight-bolder font-size-h6 pl-5 pr-8 py-4 my-3" data-wizard-type="action-submit" type="submit" @click="register" id="kt_login_signup_form_submit_button">Submit
+										<button class="btn btn-primary font-weight-bolder font-size-h6 pl-5 pr-8 py-4 my-3" data-wizard-type="action-submit" type="submit" @click="register">Submit
 										<span class="svg-icon svg-icon-md ml-2">
 											<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Right-2.svg-->
 											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -391,9 +391,16 @@ export default {
                     })
                         .then(response => {
                             if (response.data.success) {
-                                window.location.href = "/Login"
-
-                            }else {
+								 Swal.fire({
+								icon: 'success',
+								title: 'Perusahaan anda berhasil daftar',
+								text: 'Anda akan diarahkan ke halaman login',
+								showConfirmButton: false,
+								timer: 2000
+							})
+                               this.$router.push("/Login")
+                            }
+							else {
                                 this.error = response.data.message
                             }
                         })

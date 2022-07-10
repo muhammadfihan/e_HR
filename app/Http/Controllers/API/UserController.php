@@ -375,7 +375,7 @@ class UserController extends Controller
     }
     public function infopt()
     {
-        $pt = DB::table('perusahaan')
+        $pt = DB::table('users')
         ->select('*')
         ->where('id', Auth::user()->id)
         ->get();

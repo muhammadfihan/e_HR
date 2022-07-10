@@ -93,7 +93,7 @@
                                                 <span class="menu-text">Payroll</span>
                                             </a>
                                         </li>
-                                        <li class="menu-item menu-item-submenu" aria-haspopup="true">
+                                        <li class="menu-item menu-item-submenu" aria-haspopup="true" @click="laporan">
                                             <a href="javascript:;" class="menu-link menu-toggle">
                                                 <span class="menu-text">Laporan</span>
                                             </a>
@@ -327,6 +327,9 @@ export default {
             },
             datapegawai(){
                 this.$router.push("/DataPegawai");
+            },
+            laporan(){
+                this.$router.push("/Laporan");
             },
             jabatan(){
                 this.$router.push("/Jabatan");

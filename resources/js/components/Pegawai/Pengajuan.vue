@@ -297,12 +297,12 @@
 											<div class="card-header flex-wrap border-0 pt-6 pb-0">
 												<h3 class="card-title align-items-start flex-column">
 													<span class="card-label font-weight-bolder text-dark" >Pengajuan Lembur</span>
-													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Pengajuan Cuti di {{ data.nama_perusahaan }}</span>
+													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Pengajuan Lembur di {{ data.nama_perusahaan }}</span>
 												</h3>
                                                  <div class="card-toolbar">
 													<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
 														<!--begin::Trigger Modal-->
-														<a href="#" class="btn btn-success font-weight-bolder font-size-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal">Buat Pengajuan</a>
+														<a href="#" class="btn btn-success font-weight-bolder font-size-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" @click.prevent="lemburModal()">Buat Pengajuan</a>
                                                     </div>
                                                 </div>
 												
@@ -356,19 +356,17 @@
                                                         <tr>
                                                             <th>&nbsp;</th>
                                                             <th>No</th>
-                                                            <th>Pegawai</th>
-                                                            <th>Nama Pegawai</th>
                                                             <th>Tanggal</th>
-                                                            <th>Jam Masuk</th>
-                                                            <th>Jam Pulang</th>
-                                                            <th>Jam Kerja</th>
-                                                            <th>Keterangan</th> 
-                                                            <th>Lokasi</th>
+                                                            <th>No Pegawai</th>
+                                                            <th>Jam Mulai</th>
+                                                            <th>Jam Selesai</th>
+															<th>Bukti Lembur</th>
+                                                            <th>Status</th>
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
                                                         </thead>
                                                          <tbody>
-                                                            <tr v-for="(data,index) in absensipegawai" :key="data.id">
+                                                            <tr v-for="(data,index) in alllembur" :key="data.id">
                                                                     <td>
                                                                         <label class="checkbox-wrap checkbox-success">
                                                                             <input type="checkbox">
@@ -376,26 +374,35 @@
                                                                         </label>
                                                                     </td>
                                                                     <td>{{index+1}} </td>
+																	<td>{{ data.tanggal_lembur}}</td> 
+																	<td>{{ data.no_pegawai }}</td>
+                                                                    <td>{{ data.jammulai }}</td>
+                                                                    <td>{{ data.jamselesai }}</td>
+                                                                    <td>
+																		  <span class="badge badge-warning">
+																			<a style="cursor:pointer;color:white" :href="`files/${data.buktilembur}`"  target="_blank">File Bukti</a></span>
+																	</td>
                                                                      <td>
-                                                                        <div class="ms-3">
-                                                                            <p class="fw-bold mb-1">{{ data.name }}</p>
-                                                                            <p class="text-muted mb-0">{{ data.email }}</p>
-                                                                        </div>
+                                                                        <span class="badge badge-success" v-if="data.status_lembur == 'Diterima'" >{{data.status_lembur}}</span>
+                                                                        <span class="badge badge-danger" v-else-if="data.status_lembur == 'Ditolak'" >{{data.status_lembur}}</span>
+                                                                        <span class="badge badge-warning text-white" v-else-if="data.status_lembur == 'Diproses'" >{{data.status_lembur}}</span>
                                                                     </td>
-                                                                    <td>{{ data.nama_lengkap }}</td>
-                                                                    <td>{{ data.tanggal }}</td>
-                                                                    <td>{{ data.jam_masuk }}</td>
-                                                                    <td>{{ data.jam_pulang }}</td>
-                                                                    <td>{{ data.jam_kerja }}</td>
-                                                                     <td>
-                                                                        <span class="badge badge-success" v-if="data.keterangan == 'On Time'" >{{data.keterangan}}</span>
-                                                                        <span class="badge badge-danger" v-else-if="data.keterangan == 'Terlambat'" >{{data.keterangan}}</span>
-                                                                    </td>
-                                                                    <td>{{ data.lokasi }}</td>
                                                                    
                                                                     <td style="text-align: center;">
-                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="showModalEdit(data)">
+                                                                    <div v-if="data.status_lembur == 'Diproses'">
+																		  <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" @click.prevent="detailLembur(data.id)">
                                                                           </a>
+																		  <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="editLemburmodal(data)">
+                                                                          </a>
+                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-trash-alt" @click.prevent="hapusLembur(data.id)">
+                                                                          </a>
+																	 </div>
+																	 <div v-else-if="data.status_lembur == 'Ditolak'" >
+                                                                          <span class="badge badge-secondary">Confirmed</span>
+																	 </div>
+																	  <div v-else-if="data.status_lembur == 'Diterima'" >
+                                                                          <span class="badge badge-secondary">Confirmed</span>
+																	 </div>
                                                                        
                                                                     </td>
                                                             </tr>
@@ -642,7 +649,7 @@
 											<!--end::Body-->
 										</div>
 									<!-- Tabel Pengajuan Cuti	 -->
-										 <div class="card card-custom tab-pane" id="forms_widget_tab_5" role="tabpanel">
+										  <div class="card card-custom tab-pane" id="forms_widget_tab_5" role="tabpanel">
 											<!--begin::Header-->
 											<div class="card-header flex-wrap border-0 pt-6 pb-0">
 												<h3 class="card-title align-items-start flex-column">
@@ -652,7 +659,7 @@
                                                  <div class="card-toolbar">
 													<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
 														<!--begin::Trigger Modal-->
-														<a href="#" class="btn btn-success font-weight-bolder font-size-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal">Buat Pengajuan</a>
+														<a href="#" class="btn btn-success font-weight-bolder font-size-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" @click.prevent="cutiModal()">Buat Pengajuan</a>
                                                     </div>
                                                 </div>
 												
@@ -700,25 +707,24 @@
 												<!--end::Search Form-->
 												<!--end: Search Form-->
 												<!--begin::Datatable-->
-											<div class="table-responsive">
+												<div class="table-responsive">
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
                                                             <th>&nbsp;</th>
                                                             <th>No</th>
-                                                            <th>Pegawai</th>
-                                                            <th>Nama Pegawai</th>
                                                             <th>Tanggal</th>
-                                                            <th>Jam Masuk</th>
-                                                            <th>Jam Pulang</th>
-                                                            <th>Jam Kerja</th>
-                                                            <th>Keterangan</th> 
-                                                            <th>Lokasi</th>
+                                                            <th>No Pegawai</th> 
+                                                            <th>Awal Tanggal Cuti</th>
+                                                            <th>Akhir Tanggal Cuti</th>
+															<th>Jumlah Hari</th>
+                                                            <th>Bukti Pendukung</th>
+                                                            <th>Status</th>
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
                                                         </thead>
                                                          <tbody>
-                                                            <tr v-for="(data,index) in absensipegawai" :key="data.id">
+                                                            <tr v-for="(data,index) in allcuti" :key="data.id">
                                                                     <td>
                                                                         <label class="checkbox-wrap checkbox-success">
                                                                             <input type="checkbox">
@@ -726,26 +732,36 @@
                                                                         </label>
                                                                     </td>
                                                                     <td>{{index+1}} </td>
+                                                                     <td>{{ data.tanggal_cuti}}</td>
+																	<td>{{ data.no_pegawai }}</td>
+                                                                    <td>{{ data.tanggal_mulai }}</td>
+                                                                    <td>{{ data.tanggal_akhir }}</td>
+																	<td>{{ data.jumlah_hari}}</td>
+                                                                    <td>
+																		  <span class="badge badge-warning">
+																			<a style="cursor:pointer;color:white" :href="`files/${data.bukti_cuti}`"  target="_blank">File Bukti</a></span>
+																	</td>
                                                                      <td>
-                                                                        <div class="ms-3">
-                                                                            <p class="fw-bold mb-1">{{ data.name }}</p>
-                                                                            <p class="text-muted mb-0">{{ data.email }}</p>
-                                                                        </div>
+                                                                        <span class="badge badge-success" v-if="data.status_cuti == 'Diterima'" >{{data.status_cuti}}</span>
+                                                                        <span class="badge badge-danger" v-else-if="data.status_cuti == 'Ditolak'" >{{data.status_cuti}}</span>
+                                                                        <span class="badge badge-warning text-white" v-else-if="data.status_cuti == 'Diproses'" >{{data.status_cuti}}</span>
                                                                     </td>
-                                                                    <td>{{ data.nama_lengkap }}</td>
-                                                                    <td>{{ data.tanggal }}</td>
-                                                                    <td>{{ data.jam_masuk }}</td>
-                                                                    <td>{{ data.jam_pulang }}</td>
-                                                                    <td>{{ data.jam_kerja }}</td>
-                                                                     <td>
-                                                                        <span class="badge badge-success" v-if="data.keterangan == 'On Time'" >{{data.keterangan}}</span>
-                                                                        <span class="badge badge-danger" v-else-if="data.keterangan == 'Terlambat'" >{{data.keterangan}}</span>
-                                                                    </td>
-                                                                    <td>{{ data.lokasi }}</td>
                                                                    
                                                                     <td style="text-align: center;">
-                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="showModalEdit(data)">
+                                                                    <div v-if="data.status_cuti == 'Diproses'">
+																		  <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" @click.prevent="detailCuti(data.id)">
                                                                           </a>
+																		  <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="editCutiModal(data)">
+                                                                          </a>
+                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-trash-alt" @click.prevent="hapusCuti(data.id)">
+                                                                          </a>
+																	 </div>
+																	 <div v-else-if="data.status_cuti == 'Ditolak'" >
+                                                                          <span class="badge badge-secondary">Confirmed</span>
+																	 </div>
+																	  <div v-else-if="data.status_cuti == 'Diterima'" >
+                                                                          <span class="badge badge-secondary">Confirmed</span>
+																	 </div>
                                                                        
                                                                     </td>
                                                             </tr>
@@ -962,6 +978,355 @@
 																</div>
 															</div>
 														</div>
+<div class="modal fade" id="lembur" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="lembur">Ajukan Lembur</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" @click="closeLembur()" class="ki ki-close"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form  class="form pt-9">
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Tanggal </label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.tanggal_lembur" placeholder="Tanggal Hari Ini" type="date" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jam Mulai</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.jammulai" placeholder="Jam Mulai Lembur" type="time" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jam Selesai</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.jamselesai" placeholder="Jam Selesai Lembur" type="time" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label for="exampleTextarea" class="col-xl-3 col-lg-3 text-right col-form-label">Aktifitas</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <textarea v-model="form.aktifitas" placeholder="Aktifitas yang dilakukan" type="text" class="form-control form-control-lg form-control-solid"></textarea>
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Bukti/Surat Pendukung</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input type="file" @change="uploadlembur" placeholder="Masukan File Surat Pendukung PDF/JPG" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																			</form>
+                                                                               
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+                                                                         <button type="button" @click="ajukanLembur()" data-dismiss="modal"  class="btn btn-primary font-weight-bold">Submit</button>
+                                                                        <button type="button" @click="closeLembur()"  data-dismiss="modal" class="btn btn-primary font-weight-bold">Batal</button>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+					<!-- Modal Update Lembur -->
+<div class="modal fade" id="updateLembur" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="updateLembur">Update Perizinan</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" @click="closeLemburEdit()" class="ki ki-close"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form  class="form pt-9">
+                                                                                   <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Tanggal </label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.tanggal_lembur" placeholder="Tanggal Hari Ini" type="date" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jam Mulai</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.jammulai" placeholder="Jam Mulai Lembur" type="time" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jam Selesai</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.jamselesai" placeholder="Jam Selesai Lembur" type="time" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Aktifitas</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.aktifitas" placeholder="Aktifitas yang dilakukan" type="text" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Bukti/Surat Pendukung</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input type="file" @change="uploadlembur" placeholder="Masukan File Surat Pendukung PDF/JPG" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																			</form>                         
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+                                                                         <button type="button" @click="updateLembur()" data-dismiss="modal"  class="btn btn-primary font-weight-bold">Submit</button>
+                                                                        <button type="button" @click="closeLemburEdit()"  data-dismiss="modal" class="btn btn-primary font-weight-bold">Batal</button>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+					<!-- Modal Detail Lembur -->
+<div class="modal fade" id="detailLembur" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="detailLembur">Detail Data</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" @click="closeDetail()" class="ki ki-close"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form  class="form pt-9" v-for="(data) in detlembur" :key="data.id">
+                                                                                   <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Tanggal </label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <div class="form-control form-control-lg form-control-solid" type="text">{{data.tanggal_lembur}}</div>
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jam Mulai</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <div class="form-control form-control-lg form-control-solid" type="text">{{data.jammulai}}</div>
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jam Selesai</label>
+																					<div class="col-lg-9 col-xl-6">
+																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.jamselesai}}</div>	 
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Aktifitas</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <textarea disabled class="form-control form-control-lg form-control-solid" type="text" style="background-color:#F3F6F9" v-model="data.aktifitas"></textarea>
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Bukti/Surat Pendukung</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <textarea disabled class="form-control form-control-lg form-control-solid" type="text" style="background-color:#F3F6F9" v-model="data.buktilembur"></textarea>
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Status</label>
+																					<div class="col-lg-9 col-xl-6">
+                                                                                        <div class="form-control form-control-lg form-control-solid" type="text">
+                                                                                            <span class="badge badge-success" v-if="data.status_lembur == 'Diterima'" >{{data.status_lembur}}</span>
+                                                                        					<span class="badge badge-danger" v-else-if="data.status_lembur == 'Ditolak'" >{{data.status_lembur}}</span>
+                                                                        					<span class="badge badge-warning text-white" v-else-if="data.status_lembur == 'Diproses'" >{{data.status_lembur}}</span>
+																						</div>
+																					</div>
+																				</div>
+																				</form>                         
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+                                                                        <button type="button" @click="closeDetail()"  data-dismiss="modal" class="btn btn-primary font-weight-bold">Tutup</button>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+					<!-- Modal Cuti -->														
+ <div class="modal fade" id="cuti" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="cuti">Ajukan Cuti</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" @click="closeCuti()" class="ki ki-close"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form  class="form pt-9">
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Tanggal </label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.tanggal_cuti" placeholder="Tanggal Hari Ini" type="date" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Awal Tanggal Cuti</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.tanggal_mulai" placeholder="Jam Mulai Lembur" type="date" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Akhir Tanggal Cuti</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.tanggal_akhir" placeholder="Jam Selesai Lembur" type="date" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jenis Cuti</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.jenis_cuti" placeholder="Jumlah hari cuti" type="text" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Keterangan</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.keterangan" placeholder="Deskripsi yang dilakukan" type="text" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Bukti Pendukung</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input type="file" @change="uploadcuti" placeholder="Masukan File Surat Pendukung PDF/JPG" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																			</form>
+                                                                               
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+                                                                         <button type="button" @click="ajukanCuti()" data-dismiss="modal"  class="btn btn-primary font-weight-bold">Submit</button>
+                                                                        <button type="button" @click="closeCuti()"  data-dismiss="modal" class="btn btn-primary font-weight-bold">Batal</button>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+					<!-- Modal Update Cuti -->
+<div class="modal fade" id="updateCuti" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="updateCuti">Update Cuti</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" @click="closeCutiEdit()" class="ki ki-close"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form  class="form pt-9">
+                                                                                   <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Tanggal </label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.tanggal_cuti" placeholder="Tanggal Hari Ini" type="date" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Awal Tanggal Cuti</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.tanggal_mulai" placeholder="Awal Tanggal Cuti" type="date" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Akhir Tanggal Cuti</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.tanggal_akhir" placeholder="JAkhir Tanggal Cuti" type="date" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Keterangan</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.keterangan" placeholder="Aktifitas yang dilakukan" type="text" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Bukti/Surat Pendukung</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input type="file" @change="uploadupdatecuti" placeholder="Masukan File Surat Pendukung PDF/JPG" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
+																			</form>                         
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+                                                                         <button type="button" @click="updateCuti()" data-dismiss="modal"  class="btn btn-primary font-weight-bold">Submit</button>
+                                                                        <button type="button" @click="closeCutiEdit()"  data-dismiss="modal" class="btn btn-primary font-weight-bold">Batal</button>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+					<!-- Modal Detail Cuti -->
+<div class="modal fade" id="detailCuti" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="detailCuti">Detail Data</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" @click="closeDetailCuti()" class="ki ki-close"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div >
+																			<form  class="form pt-9" v-for="(data) in detcuti" :key="data.id">
+                                                                                   <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Tanggal </label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <div class="form-control form-control-lg form-control-solid" type="text">{{data.tanggal_cuti}}</div>
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Awal Tanggal Cuti</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <div class="form-control form-control-lg form-control-solid" type="text">{{data.tanggal_mulai}}</div>
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Akhir Tanggal Cuti </label>
+																					<div class="col-lg-9 col-xl-6">
+																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.tanggal_akhir}}</div>	 
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Keterangan</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <textarea disabled class="form-control form-control-lg form-control-solid" type="text" style="background-color:#F3F6F9" v-model="data.keterangan"></textarea>
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Bukti/Surat Pendukung</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <textarea disabled class="form-control form-control-lg form-control-solid" type="text" style="background-color:#F3F6F9" v-model="data.bukti_cuti"></textarea>
+																					</div>
+																				</div>
+																				<div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Status</label>
+																					<div class="col-lg-9 col-xl-6">
+                                                                                        <div class="form-control form-control-lg form-control-solid" type="text">
+                                                                                            <span class="badge badge-success" v-if="data.status_cuti == 'Diterima'" >{{data.status_cuti}}</span>
+                                                                        					<span class="badge badge-danger" v-else-if="data.status_cuti == 'Ditolak'" >{{data.status_cuti}}</span>
+                                                                        					<span class="badge badge-warning text-white" v-else-if="data.status_cuti == 'Diproses'" >{{data.status_cuti}}</span>
+																						</div>
+																					</div>
+																				</div>
+																				</form>                         
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+                                                                        <button type="button" @click="closeDetailCuti()"  data-dismiss="modal" class="btn btn-primary font-weight-bold">Tutup</button>
+
+																	</div>
+																</div>
+															</div>
+														</div>														
 
                         
 </template>
@@ -981,6 +1346,10 @@ export default {
             infopt:[],
 			preview: null,
 			allreqabsen:[],
+			alllembur:[],
+			allcuti:[],
+			detlembur:[],
+			detcuti:[],
 			fileupload:null,
 			 form: new Form ({
                 id : "",
@@ -991,6 +1360,22 @@ export default {
                 jenis_izin : "",
                 tanggal : "",
                 bukti : "",
+            }),
+			form: new Form ({
+                id : "",
+				tanggal_lembur : "",
+				jammulai : "",
+				jamselesai : "",
+                aktifitas : "",
+				buktilembur: "",
+            }),
+			form: new Form ({
+                id : "",
+				tanggal_cuti : "",
+				tanggal_mulai : "",
+				tanggal_akhir : "",
+                keterangan : "",
+				bukti_cuti:"",
             }),
             token: localStorage.getItem("token"),
             role: localStorage.getItem('role'),
@@ -1017,6 +1402,26 @@ export default {
 			this.preview = URL.createObjectURL(files)
 			this.form.bukti_pendukung = files
 		},
+				uploadlembur(e){
+			let files = e.target.files[0]
+			this.preview = URL.createObjectURL(files)
+			this.form.buktilembur = files
+		},
+		uploadupdatelembur(e){
+			let files = e.target.files[0]
+			this.preview = URL.createObjectURL(files)
+			this.form.buktilembur = files
+		},
+		uploadcuti(e){
+			let files = e.target.files[0]
+			this.preview = URL.createObjectURL(files)
+			this.form.bukti_cuti = files
+		},
+		uploadupdatecuti(e){
+			let files = e.target.files[0]
+			this.preview = URL.createObjectURL(files)
+			this.form.bukti_cuti = files
+		},
 		  onChange(e) {
                 this.file = e.target.files[0];
             },
@@ -1034,6 +1439,38 @@ export default {
 		},
 		closeEditIzin(){
 		$("#updateIzin").modal("hide");
+		},
+
+			//LEMBUR
+		lemburModal(){
+		$("#lembur").modal("show");
+		},
+		closeLembur(){
+		this.form.reset();
+        $('#lembur').modal('hide')
+		},
+		editLemburmodal(data){
+		$("#updateLembur").modal("show");
+		 this.form.fill(data);
+		},
+		closeLemburEdit(){
+		$("#updateLembur").modal("hide");
+		},
+
+		//CUTI
+		cutiModal(){
+		$("#cuti").modal("show");
+		},
+		closeCuti(){
+		this.form.reset();
+        $('#cuti').modal('hide')
+		},
+		editCutiModal(data){
+		$("#updateCuti").modal("show");
+		 this.form.fill(data);
+		},
+		closeCutiEdit(){
+		$("#updateCuti").modal("hide");
 		},
 
 		//Request Attendance
@@ -1240,6 +1677,219 @@ export default {
 
 
 		},
+		updateLembur(){
+			const formData = new FormData()
+            formData.set('buktilembur', this.form.buktilembur)
+            this.form.post('/api/updatelembur', 
+			{
+                headers : { Authorization: "Bearer " + this.token },
+            },
+			{
+                    id: this.form.id,
+                    tanggal_lembur: this.form.tanggal_lembur,
+					jammulai: this.form.jammulai,
+					jamselesai: this.form.jamselesai,
+					aktifitas: this.form.aktifitas,
+					buktilembur: this.form.buktilembur
+                
+			},formData,
+			).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Update Perizinan ",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    this.form.reset();
+                    $('#updateLembur').modal('hide')
+                    this.tampillemburPegawai()
+                }
+                    
+                    }
+                )
+		},
+		ajukanLembur(){
+			 const formData = new FormData()
+            formData.set('buktilembur', this.form.buktilembur)
+            this.form.post('/api/tambahlembur', 
+			{
+                headers : { Authorization: "Bearer " + this.token },
+            },formData,
+			).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Mengajukan Lembur ",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    this.form.reset();
+                    $('#lembur').modal('hide')
+                    this.tampillemburPegawai()
+                }
+                    
+                    }
+                )
+
+
+		},
+
+		hapusLembur(id){
+		 this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            Swal.fire({
+            title: 'Hapus Pengajuan ?',
+            text: "Anda tidak akan bisa mengembalikannya lagi!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1BC5BD',
+            cancelButtonColor: '',
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal',
+            }).then((result) => {
+                 if (result.isConfirmed) {
+                 axios.delete('/api/hapuslembur/'+id,  {
+                headers: { Authorization: "Bearer " + this.token },
+                },
+                )
+                  Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Menghapus Pengajuan",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    };
+                    this.tampillemburPegawai()
+
+            },
+
+            )
+
+            })	
+
+		},
+		detailLembur(id){
+            $('#detailLembur').modal('show')
+            axios.get('/api/detaillembur/'+id,{
+                headers: { Authorization: "Bearer " + this.token }
+            }).then((response) => {
+                this.detlembur = response.data.data
+            })
+        },
+		closeDetail() {
+            this.form.reset();
+            $("#detailLembur").modal("hide");
+        },
+		//METHOD PENGAJUAN CUTI CRUD
+		updateCuti(){
+			const formData = new FormData()
+            formData.set('bukti_cuti', this.form.bukti_cuti)
+            this.form.post('/api/updatecuti', 
+			{
+                headers : { Authorization: "Bearer " + this.token },
+            },
+			{
+                    id: this.form.id,
+                    tanggal_cuti: this.form.tanggal_cuti,
+					tanggal_mulai: this.form.tanggal_mulai,
+					tanggal_akhir: this.form.tanggal_akhir,
+					keterangan: this.form.keterangan,
+					bukti_cuti: this.form.bukti_cuti
+                
+			},formData,
+			).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Update Perizinan ",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    this.form.reset();
+                    $('#updateCuti').modal('hide')
+                    this.tampilcutiPegawai()
+                }
+                    
+                    }
+                )
+		},
+		ajukanCuti(){
+			 const formData = new FormData()
+            formData.set('bukti_cuti', this.form.buktilembur)
+            this.form.post('/api/tambahcuti', 
+			{
+                headers : { Authorization: "Bearer " + this.token },
+            },formData,
+			).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Mengajukan Cuti ",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    this.form.reset();
+                    $('#cuti').modal('hide')
+                    this.tampilcutiPegawai()
+                }
+                    
+                    }
+                )
+
+
+		},
+
+		hapusCuti(id){
+		 this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            Swal.fire({
+            title: 'Hapus Cuti ?',
+            text: "Anda tidak akan bisa mengembalikannya lagi!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1BC5BD',
+            cancelButtonColor: '',
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal',
+            }).then((result) => {
+                 if (result.isConfirmed) {
+                 axios.delete('/api/hapuscuti/'+id,  {
+                headers: { Authorization: "Bearer " + this.token },
+                },
+                )
+                  Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Menghapus Cuti",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    };
+                    this.tampilcutiPegawai()
+
+            },
+
+            )
+
+            })	
+
+		},
+		detailCuti(id){
+            $('#detailCuti').modal('show')
+            axios.get('/api/detailcuti/'+id,{
+                headers: { Authorization: "Bearer " + this.token }
+            }).then((response) => {
+                this.detcuti = response.data.data
+            })
+        },
+		closeDetailCuti() {
+            this.form.reset();
+            $("#detailCuti").modal("hide");
+        },
 		//METHOD MENAMPILKAN PEGAWAI
 		allIzinPegawai(page = 1){
 			 this.$axios.get('/sanctum/csrf-cookie').then(response => {
@@ -1255,7 +1905,35 @@ export default {
         })
 
 		},
-			allReqPegawai(){
+		tampillemburPegawai(){
+			 this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/tampillemburpegawai',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.alllembur = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+
+		},
+		tampilcutiPegawai(){
+			 this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/tampilcutip',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.allcuti = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+
+		},
+		allReqPegawai(){
 			 this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/allreqpegawai',{
                 headers: {Authorization: "Bearer " + this.token},
@@ -1289,6 +1967,8 @@ export default {
            this.getpt();
 		   this.allIzinPegawai();
 		   this.allReqPegawai();
+		   this.tampillemburPegawai();
+		   this.tampilcutiPegawai();
     }
 
 }

@@ -151,7 +151,7 @@
 																	<div class="modal-header">
 																		<h5 class="modal-title" id="detailmodal">Detail Absen Pegawai</h5>
 																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-																			<i aria-hidden="true" class="ki ki-close"></i>
+																			<i aria-hidden="true" @click="close()" class="ki ki-close"></i>
 																		</button>
 																	</div>
 																	<div class="modal-body">

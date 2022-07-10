@@ -17,18 +17,18 @@ class DataGajiController extends Controller
         ->select('*')
         ->where('id_admin', Auth::user()->id)
         ->get();
-        $tun = explode(',', $tunjangan[0]->id_tunjangan);
-        foreach($tun as $index => $row){ 
-            $data[$index] = DB::table('tunjangan')->where('id', $row)->first();
-            $nominalALL[$index] = $data[$index]->nominal;
-            $jenis[$index] = $data[$index]->jenis_tunjangan;
-        }
+        // $tun = explode(',', $tunjangan[0]->id_tunjangan);
+        // foreach($tun as $index => $row){ 
+        //     $data[$index] = DB::table('tunjangan')->where('id', $row)->first();
+        //     $nominalALL[$index] = $data[$index]->nominal;
+        //     $jenis[$index] = $data[$index]->jenis_tunjangan;
+        // }
         // dd($nominalALL);
        
     return response([
         'data' => $tunjangan,
-        'tunjangan' => $jenis,
-        'nominal' => $nominalALL,
+        // 'tunjangan' => $jenis,
+        // 'nominal' => $nominalALL,
         'message' => 'get data berhasil',
         'status' => true
     ]);

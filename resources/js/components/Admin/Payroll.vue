@@ -880,7 +880,7 @@
                                                                             <div class="col-9 col-form-label">
                                                                                 <div class="checkbox-list">
                                                                                     <label class="checkbox" v-for="data in bonus" :key="data.id" :value="data.id">
-                                                                                        <input type="checkbox"  name="Checkboxes4"/>
+                                                                                        <input type="checkbox" name="Checkboxes4"/>
                                                                                         <span></span>
                                                                                         {{data.jenis_bonus}} : {{convertToRupiah (data.nominal) }}
                                                                                     </label>
@@ -923,8 +923,8 @@
 															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
 																<div class="modal-content">
 																	<div class="modal-header">
-                                                                        <h5 class="modal-title" v-show="!statusmodal" id="tambahtunjangan">Tambah Jabatan Pegawai</h5>
-																		<h5 class="modal-title" v-show="statusmodal" id="tambahtunjangan">Edit Jabatan Pegawai</h5>
+                                                                        <h5 class="modal-title" v-show="!statusmodal" id="tambahtunjangan">Tambah Tunjangan Pegawai</h5>
+																		<h5 class="modal-title" v-show="statusmodal" id="tambahtunjangan">Edit Tunjangan Pegawai</h5>
 																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 																			<i aria-hidden="true" class="ki ki-close" @click="closeModal()"></i>
 																		</button>
@@ -1109,24 +1109,28 @@ export default {
             form : new Form({
                 id : "",
                 jenis_tunjangan : "",
-                nominal : "",
-            }),
-            form: new Form({
-                id : "",
+                golongan : "",
+                pendidikan : "",
                 jenis_bonus : "",
-                nominal : "",
-            }),
-             form: new Form({
-                id : "",
                 jenis_potongan : "",
                 nominal : "",
             }),
-             form: new Form({
-                id : "",
-                golongan : "",
-                pendidikan : "",
-                nominal : "",
-            }),
+            // form: new Form({
+            //     id : "",
+            //     jenis_bonus : "",
+            //     nominal : "",
+            // }),
+            //  form: new Form({
+            //     id : "",
+            //     jenis_potongan : "",
+            //     nominal : "",
+            // }),
+            //  form: new Form({
+            //     id : "",
+            //     golongan : "",
+            //     pendidikan : "",
+            //     nominal : "",
+            // }),
 
             token: localStorage.getItem("token"),
             role: localStorage.getItem('role'),

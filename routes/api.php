@@ -11,6 +11,9 @@ use App\Http\Controllers\API\GolonganController;
 use App\Http\Controllers\API\SuperAdminController;
 use App\Http\Controllers\API\JamAbsenController;
 use App\Http\Controllers\API\ReqAbsenController;
+use App\Http\Controllers\API\CutiController;
+use App\Http\Controllers\API\LemburController;
+use App\Http\Controllers\API\LaporanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -113,5 +116,30 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('approvereqabsen', [ReqAbsenController::class, 'approvereqabsen'])->middleware('role:Admin,Pegawai');
     Route::post('updatereqabsen', [ReqAbsenController::class, 'updatereqabsen'])->middleware('role:Admin,Pegawai');
     Route::delete('hapusreqabsen/{uid}', [ReqAbsenController::class, 'hapusreqabsen'])->middleware('role:Admin,Pegawai');
+
+    Route::get('tampilcuti',[CutiController::class, 'tampilcuti'])->middleware('role:Admin');
+    Route::get('tampilcutip',[CutiController::class, 'tampilcutip'])->middleware('role:Admin,Pegawai');
+    Route::post('tambahcuti',[CutiController::class, 'tambahcuti'])->middleware('role:Admin,Pegawai');
+    Route::post('updatecuti',[CutiController::class, 'updatecuti'])->middleware('role:Admin,Pegawai');
+    Route::post('confirmcuti',[CutiController::class, 'confirmcuti'])->middleware('role:Admin,Pegawai');
+    Route::delete('hapuscuti/{id}',[CutiController::class, 'hapuscuti'])->middleware('role:Admin,Pegawai');
+    Route::get('detailcuti/{id}',[CutiController::class, 'detailcuti'])->middleware('role:Admin,Pegawai');
+    
+    Route::get('tampillembur', [LemburController::class, 'tampillembur'])->middleware('role:Admin');
+    Route::get('tampillemburpegawai', [LemburController::class, 'tampillemburpegawai'])->middleware('role:Admin,Pegawai');
+    Route::post('tambahlembur', [LemburController::class, 'tambahlembur'])->middleware('role:Admin,Pegawai');
+    Route::post('updatelembur', [LemburController::class, 'updatelembur'])->middleware('role:Admin,Pegawai');
+    Route::post('confirmlembur',[LemburController::class, 'confirmlembur'])->middleware('role:Admin,Pegawai');
+    Route::get('detaillembur/{id}', [LemburController::class, 'detaillembur'])->middleware('role:Admin,Pegawai');
+    Route::delete('hapuslembur/{id}', [LemburController::class, 'hapuslembur'])->middleware('role:Admin,Pegawai');
+
+    Route::get('tampillaporan', [LaporanController::class, 'tampillaporan'])->middleware('role:Admin,Pegawai');
+    Route::get('tampillaporanpegawai', [LaporanController::class, 'tampillaporanpegawai'])->middleware('role:Admin,Pegawai');
+    Route::post('tambahlaporan',[LaporanController::class, 'tambahlaporan'])->middleware('role:Admin,Pegawai');
+    Route::post('updatelaporan',[LaporanController::class, 'updatelaporan'])->middleware('role:Admin,Pegawai');
+    Route::post('confirmlaporan',[LaporanController::class, 'confirmlaporan'])->middleware('role:Admin,Pegawai');
+    Route::get('editlaporan/{id}',[LaporanController::class, 'editlaporan'])->middleware('role:Admin,Pegawai');
+    Route::get('detaillaporan/{id}',[LaporanController::class, 'detaillaporan'])->middleware('role:Admin,Pegawai');
+    Route::delete('hapuslaporan/{id}',[LaporanController::class, 'hapuslaporan'])->middleware('role:Admin,Pegawai');
 
 });
