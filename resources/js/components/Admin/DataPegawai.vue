@@ -114,7 +114,7 @@
                                                                         <span class="badge badge-success" v-if="data.status == 'Aktif'" >{{data.status}}</span>
                                                                         <span class="badge badge-danger" v-else-if="data.status == 'Tidak Aktif'" >{{data.status}}</span>
                                                                     </td>
-                                                                    <td><a>{{ data.jam_kerja }} (Jam)</a></td>
+                                                                    <td><a>{{ format(data.jam_kerja)}}</a></td>
                                                                     <td>{{ data.gender }}</td>
                                                                     <td style="text-align: center;">
                                                                           <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" data-target="#detailmodal" @click.prevent="detailPegawai(data.id)">
@@ -343,6 +343,12 @@ export default {
     created() {
     },
     methods:{
+       format(time){
+		if (time != null){
+			return time.replace(/(?:0)?(\d+):(?:0)?(\d+).*/,'$1 Jam');
+		}
+        
+		},
         closeModal() {
             this.form.reset();
             $("#editPegawai").modal("hide");

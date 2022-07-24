@@ -103,7 +103,7 @@
                                                                          <span class="badge badge-success" v-if="data.jam_pulang == null" >Bekerja</span>
                                                                         <span class="badge badge-primary" v-else-if="data.jam_pulang != null" >{{data.jam_pulang}}</span>
                                                                     </td>
-                                                                    <td>{{ data.jam_kerja }}(Jam)</td>
+                                                                    <td>{{ format(data.jam_kerja) }}</td>
                                                                      <td>
                                                                         <span class="badge badge-success" v-if="data.keterangan == 'On Time'" >{{data.keterangan}}</span>
                                                                         <span class="badge badge-danger" v-else-if="data.keterangan == 'Terlambat'" >{{data.keterangan}}</span>
@@ -193,6 +193,9 @@ export default {
         })
     },
     methods:{
+		format(time){
+        return time.replace(/(?:0)?(\d+):(?:0)?(\d+).*/,'$1 Jam');
+		},
           close(){
              $('#detailmodal').modal('hide')
          },

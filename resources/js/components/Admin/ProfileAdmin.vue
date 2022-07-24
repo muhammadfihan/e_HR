@@ -192,7 +192,7 @@
 															<div class="form-group row">
 																<label class="col-xl-3 col-lg-3 text-right col-form-label">Detail Alamat</label>
 																<div class="col-lg-9 col-xl-6">
-																	<textarea class="form-control form-control-lg form-control-solid" type="text" v-model="data.det_alamat"></textarea>
+																	<textarea disabled class="form-control form-control-lg form-control-solid" type="text" v-model="data.det_alamat"></textarea>
 																</div>
 															</div>
 														</form>

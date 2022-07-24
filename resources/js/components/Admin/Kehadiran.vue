@@ -115,7 +115,7 @@
                                                                          <span class="badge badge-success" v-if="data.jam_pulang == null" >Bekerja</span>
                                                                         <span class="badge badge-primary" v-else-if="data.jam_pulang != null" >{{data.jam_pulang}}</span>
                                                                     </td>
-                                                                    <td>{{ data.jam_kerja }} (Jam)</td>
+                                                                    <td>{{ format(data.jam_kerja) }}</td>
                                                                      <td>
                                                                         <span class="badge badge-success" v-if="data.keterangan == 'On Time'" >{{data.keterangan}}</span>
                                                                         <span class="badge badge-danger" v-else-if="data.keterangan == 'Terlambat'" >{{data.keterangan}}</span>
@@ -186,7 +186,6 @@
 
 
 <script>
-
 export default {
     name: "Kehadiran",
     data() {
@@ -198,7 +197,6 @@ export default {
             role: localStorage.getItem('role'),
         }
     },
-
      created() {
          this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/tampilabsen',{
@@ -213,7 +211,19 @@ export default {
         })
     },
     methods:{
-         detailabsen(uid){
+
+		format(time){
+		if (time != null){
+			return time.replace(/(?:0)?(\d+):(?:0)?(\d+).*/,'$1 Jam');
+		}
+        
+		},
+		
+		convertToSeconds(hours, minutes, seconds) {
+		return Number(hours) * 60 * 60 + Number(minutes) * 60 + Number(seconds);
+		},
+
+    	detailabsen(uid){
              $('#detailmodal').modal('show')
              axios.get('/api/detailabsen/'+uid,{
                 headers: { Authorization: "Bearer " + this.token }
@@ -221,10 +231,10 @@ export default {
                 this.detabsen = response.data.data
             })
          },
-          close(){
+        close(){
              $('#detailmodal').modal('hide')
          },
-         getpt(){
+        getpt(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/infopt',{
                 headers: {Authorization: "Bearer " + this.token},
@@ -240,6 +250,9 @@ export default {
     },
     mounted(){
         this.getpt();
+    },
+    computed: {
+    
     }
     
 

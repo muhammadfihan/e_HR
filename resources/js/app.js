@@ -9,6 +9,7 @@ import { Form, HasError, AlertError } from 'vform'
 window.Form = Form;
 
 
+
 const app = createApp(App)
 app.config.globalProperties.$axios = axios;
 app.use(router)

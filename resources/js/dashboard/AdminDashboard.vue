@@ -652,6 +652,9 @@ export default {
         },
     
     methods: {
+		format(time){
+        return time.replace(/(?:0)?(\d+):(?:0)?(\d+).*/,'$1 Jam $2 Menit');
+		},
         tampiljam(){
              this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/tampil',{
@@ -667,11 +670,7 @@ export default {
         },
          showModal(data) {
             $("#editabsen").modal("show");
-            this.form.fill({
-                jam_masuk: data.jam_masuk,
-                jam_pulang: data.jam_pulang,
-                
-            })
+            this.form.fill(data)
         },
         closeModal() {
             $("#editabsen").modal("hide");
