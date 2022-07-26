@@ -21,81 +21,12 @@
 							<div class="container mb-13">   
 										<!--begin::Card-->
 										<div class="card card-custom">
-											<div class="card-body">
 											
-												<div class="container mb-14">
-								<!--begin::Row-->
-								<div class="row">
-									<div class="col-xl-12">
-										<!--begin::Nav Panel Widget 1-->
-										<div class="card card-custom gutter-b">
-											<!--begin::Body-->
-											<div class="card-body">
-												<!--begin::Nav Tabs-->
-												<ul class="dashboard-tabs nav nav-pills nav-danger row row-paddingless m-0 p-0 flex-column flex-sm-row" role="tablist">
-												
-													<li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
-														<a class="nav-link active border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#forms_widget_tab_1">
-															<span class="nav-icon py-2 w-auto">
-																<span class="svg-icon svg-icon-3x">
-																	<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
-																	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																		<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																			<rect x="0" y="0" width="24" height="24" />
-																			<rect fill="#000000" x="4" y="4" width="7" height="7" rx="1.5" />
-																			<path d="M5.5,13 L9.5,13 C10.3284271,13 11,13.6715729 11,14.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,14.5 C4,13.6715729 4.67157288,13 5.5,13 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,9.5 C20,10.3284271 19.3284271,11 18.5,11 L14.5,11 C13.6715729,11 13,10.3284271 13,9.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z M14.5,13 L18.5,13 C19.3284271,13 20,13.6715729 20,14.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,14.5 C13,13.6715729 13.6715729,13 14.5,13 Z" fill="#000000" opacity="0.3" />
-																		</g>
-																	</svg>
-																	<!--end::Svg Icon-->
-																</span>
-															</span>
-															<span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Ambil Gaji</span>
-														</a>
-													</li>
-													<li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
-														<a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#forms_widget_tab_2">
-															<span class="nav-icon py-2 w-auto">
-																<span class="svg-icon svg-icon-3x">
-																	<!--begin::Svg Icon | path:assets/media/svg/icons/Media/Equalizer.svg-->
-																	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																		<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																			<rect x="0" y="0" width="24" height="24" />
-																			<rect fill="#000000" opacity="0.3" x="13" y="4" width="3" height="16" rx="1.5" />
-																			<rect fill="#000000" x="8" y="9" width="3" height="11" rx="1.5" />
-																			<rect fill="#000000" x="18" y="11" width="3" height="9" rx="1.5" />
-																			<rect fill="#000000" x="3" y="13" width="3" height="7" rx="1.5" />
-																		</g>
-																	</svg>
-																	<!--end::Svg Icon-->
-																</span>
-															</span>
-															<span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Riwayat Penggajian</span>
-														</a>
-													</li>
-													<!--end::Item-->
-													<!--begin::Item-->
-												
-												</ul>
-												<!--end::Nav Tabs-->
-												<!--begin::Nav Content-->
-												<div class="tab-content m-0 p-0">
-												</div>
-												<!--end::Nav Content-->
-											</div>
-											<!--end::Body-->
-										</div>
-                                        
-										<!--begin::Nav Panel Widget 1-->
-									</div>
-                                    
-								</div>
-                                <div class="tab-content">
-                                    <div class="card card-custom tab-pane show active" id="forms_widget_tab_1" role="tabpanel">
 											<!--begin::Header-->
 											<div class="card-header flex-wrap border-0 pt-6 pb-0">
 												<h3 class="card-title align-items-start flex-column">
-													<span class="card-label font-weight-bolder text-dark" >Ambil Gaji Bulanan</span>
-													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Management Jabatan {{ data.nama_perusahaan }}</span>
+													<span class="card-label font-weight-bolder text-dark" >Pengambilan Gaji</span>
+													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Data Pengambilan Gaji di {{ data.nama_perusahaan }}</span>
 												</h3>
 											</div>
 											<!--end::Header-->
@@ -145,139 +76,34 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Periode/Tanggal</th>
-                                                            <th>Gaji Pokok</th>
                                                             <th>Jabatan</th>
-															<th>Detail Gaji</th>
-                                                            <th style="text-align: center;">Konfirmasi</th>
-                                                        </tr>
-                                                        </thead>
-                                                         <tbody>
-                                                            <tr v-for="(data,index) in jabatan" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
-                                                                    <td>{{index+1}} </td>
-                                                                    <td>{{ data.tanggal }}</td>
-                                                                    <td>{{convertToRupiah (data.gaji) }}</td>
-                                                                     <td style="text-align: center;">
-                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" >
-                                                                          </a>
-                                                                       
-                                                                    </td>
-                                                                    <td style="text-align: center;">
-                                                                         <span class="badge badge-success" style="cursor:pointer" >Ambil</span>
-                                                                    </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-
-                                                </div>
-												<!--end::Datatable-->
-											</div>
-											<!--end::Body-->
-										</div>
-                                         <div class="card card-custom tab-pane" id="forms_widget_tab_2" role="tabpanel">
-											<!--begin::Header-->
-											<div class="card-header flex-wrap border-0 pt-6 pb-0">
-												<h3 class="card-title align-items-start flex-column">
-													<span class="card-label font-weight-bolder text-dark">Riwayat Penggajian</span>
-													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Data Approvement Kenaikan Jabatan {{ data.nama_perusahaan }}</span>
-												</h3>
-												
-											</div>
-											<!--end::Header-->
-											<!--begin::Body-->
-											<div class="card-body">
-												<!--begin::Search Form-->
-												<!--begin::Search Form-->
-												<div class="mb-10">
-													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
-															<div class="row align-items-center">
-																<div class="col-md-4 my-2 my-md-0">
-																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
-																		<span>
-																			<i class="flaticon2-search-1 text-muted"></i>
-																		</span>
-																	</div>
-																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
-																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
-														</div>
-													</div>
-												</div>
-												<!--end::Search Form-->
-												<!--end: Search Form-->
-												<!--begin::Datatable-->
-												<div class="table-responsive">
-													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
-                                                        <thead class="" >
-                                                        <tr>
-                                                            <th>&nbsp;</th>
-                                                            <th>No</th>
-                                                            <th>Pegawai</th>
-                                                            <th>Nama Pegawai</th>
-                                                            <th>No Pegawai</th>
-                                                            <th>Jabatan</th>
-                                                            <th>Ajuan</th>
+                                                            <th>Total Gaji</th>
+															<th style="text-align: center;">Detail Gaji</th>
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
                                                         </thead>
                                                          <tbody>
-                                                            <tr v-for="(data,index) in absensipegawai" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
+                                                            <tr v-for="(data,index) in gajipeg" :key="data.id">
                                                                     <td>{{index+1}} </td>
-                                                                     <td>
-                                                                        <div class="ms-3">
-                                                                            <p class="fw-bold mb-1">{{ data.name }}</p>
-                                                                            <p class="text-muted mb-0">{{ data.email }}</p>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>{{ data.nama_lengkap }}</td>
                                                                     <td>{{ data.tanggal }}</td>
-                                                                    <td>{{ data.jam_masuk }}</td>
-                                                                    <td>{{ data.jam_pulang }}</td>
-                                                                    <td>{{ data.jam_kerja }}</td>
-                                                                     <td>
-                                                                        <span class="badge badge-success" v-if="data.keterangan == 'On Time'" >{{data.keterangan}}</span>
-                                                                        <span class="badge badge-danger" v-else-if="data.keterangan == 'Terlambat'" >{{data.keterangan}}</span>
+                                                                    <td>
+																		  <span v-for="jab in data.jabat" :key="jab.id">
+                                                                            <a>{{jab}}</a>
+                                                                        </span>
+																	</td>
+																	 <td>
+																		  <span v-for="has in data.akhir" :key="has.id">
+                                                                            <a>{{convertToRupiah(has)}}</a>
+                                                                        </span>
+																	</td>
+                                                                     <td style="text-align: center;">
+                                                                         <span @click.prevent="detGaji(data.id)" class="badge badge-primary" style="cursor:pointer" >Detail</span>
                                                                     </td>
-                                                                    <td>{{ data.lokasi }}</td>
-                                                                   
                                                                     <td style="text-align: center;">
-                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="showModalEdit(data)">
-                                                                          </a>
-                                                                       
+                                                                         <span v-if="data.status == 'Belum Diambil'" @click.prevent="modalconfirm(data)" class="badge badge-warning" style="cursor:pointer; color:white" >Ambil</span>
+																		  <span v-else-if="data.status == 'Sudah Diambil'" @click.prevent="showinvoice(data.id)" class="badge badge-success" style="cursor:pointer" >Cetak</span>
                                                                     </td>
                                                             </tr>
                                                         </tbody>
@@ -296,13 +122,335 @@
 												<!--end::Datatable-->
 											</div>
 											<!--end::Body-->
+
+							<div id="printThis">
+								<div class="modal fade" id="invoicegaji" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+                                                                        <h5 class="modal-title" id="invoicegaji">Invoice</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" class="ki ki-close" @click="closeinvoice()"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body" >
+																	<div class="card-body p-0">
+										<!-- begin: Invoice-->
+										<!-- begin: Invoice header-->
+										<div class="row justify-content-center py-8 px-8">
+											<div class="col-md-9">
+												<div class="d-flex justify-content-between pb-10 pb-md-20 flex-column flex-md-row">
+													<h1 class="display-4 font-weight-boldest mb-10">SLIP GAJI</h1>
+													<div class="d-flex flex-column align-items-md-end px-0" v-for="(data) in infopt" :key="data.id">
+														<!--begin::Logo-->
+														<h3 style="font-weight:bolder" href="#" class="mb-5" >
+															{{data.nama_perusahaan}}
+														</h3>
+														<!--end::Logo-->
+														<span class="text-right">
+															<span>{{data.det_alamat}}</span>
+														</span>
+													</div>
+												</div>
+												<div class="border-bottom w-100"></div>
+												<div class="d-flex justify-content-between pt-6" v-for="(data) in pegawais" :key="data.id">
+													<div class="d-flex flex-column flex-root">
+														<span class="font-weight-bolder mb-2">PEGAWAI</span>
+														<span class="opacity-70">{{data.nama_lengkap}}</span>
+													</div>
+													<div class="d-flex flex-column flex-root"  v-for="(data) in invgaji" :key="data.id">
+														<span class="font-weight-bolder mb-2">PERIODE GAJI</span>
+														<span class="opacity-70">{{data.tanggal}}</span>
+													</div>
+													<div class="d-flex flex-column flex-root">
+														<span class="font-weight-bolder mb-2 text-right">ALAMAT PEGAWAI</span>
+														<span class="opacity-70 text-right">{{data.alamat}}</span>
+													</div>
+												</div>
+											</div>
 										</div>
-										<!--end::Card-->
+										<!-- end: Invoice header-->
+										<!-- begin: Invoice body-->
+										<div class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
+											<div class="col-md-9">
+												<div class="table-responsive">
+													<table class="table"  v-for="(data) in invgaji" :key="data.id">
+                                                        <thead class="">
+                                                        <tr>
+                                                            <th>Tunjangan</th>
+                                                            <th>Nominal</th>
+                                                            <th class="text-right">Total</th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                     <span v-for="tundet in data.dettun" :key="tundet.id">
+                                                                            <li style="list-style:none;">{{tundet}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="nomtun in data.nomdettun" :key="nomtun.id">
+                                                                            <li style="list-style:none">{{convertToRupiah(nomtun)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td class="text-right">
+                                                                     <span v-for="totun in data.totun" :key="totun.id">
+                                                                            <a>{{convertToRupiah(totun)}}</a>
+                                                                        </span>
+                                                                </td> 
+                                                            </tr>
+                                                        </tbody>
+                                                        <thead class="">
+                                                        <tr>
+                                                            <th>Bonus</th>
+                                                            <th>Nominal</th>
+                                                            <th class="text-right">Total</th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody>
+                                                             <tr>
+                                                                <td>
+                                                                     <span v-for="bondet in data.detbon" :key="bondet.id">
+                                                                            <li style="list-style:none;">{{bondet}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="nomibon in data.nombon" :key="nomibon.id">
+                                                                            <li style="list-style:none">{{convertToRupiah(nomibon)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td class="text-right">
+                                                                     <span v-for="totabon in data.totbon" :key="totabon.id">
+                                                                            <a>{{convertToRupiah(totabon)}}</a>
+                                                                        </span>
+                                                                </td> 
+                                                            </tr>
+                                                        </tbody>
+                                                         <thead class="">
+                                                        <tr>
+                                                            <th>Potongan</th>
+                                                            <th>Nominal</th>
+                                                            <th class="text-right">Total</th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody>
+                                                             <tr>
+                                                                <td>
+                                                                     <span v-for="potdet in data.detpot" :key="potdet.id">
+                                                                            <li style="list-style:none;">{{potdet}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="nomipot in data.nompot" :key="nomipot.id">
+                                                                            <li style="list-style:none">{{convertToRupiah(nomipot)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td class="text-right">
+                                                                     <span v-for="totapot in data.totpot" :key="totapot.id">
+                                                                            <a>{{convertToRupiah(totapot)}}</a>
+                                                                        </span>
+                                                                </td> 
+                                                            </tr>
+                                                        </tbody>
+                                                        <thead class="">
+                                                         <tr>
+                                                            <th></th>
+                                                            <th>Gaji Pokok</th>
+                                                             <th v-for="jabgaji in data.totjab" :key="jabgaji.id" class="text-right">{{convertToRupiah(jabgaji)}}</th>
+                                                        </tr>
+                                                        </thead>
+                                                    </table>
+												</div>
+											</div>
+										</div>
+										<!-- end: Invoice body-->
+										<!-- begin: Invoice footer-->
+										<div class="row justify-content-center bg-gray-100 py-8 px-8 py-md-10 px-md-0">
+											<div class="col-md-9">
+												<div class="table-responsive">
+													<table class="table" v-for="(data) in invgaji" :key="data.id">
+														<thead>
+															<tr>
+																<th class="font-weight-bold text-muted text-uppercase"></th>
+																<th class="font-weight-bold text-muted text-uppercase"></th>
+																<th class="font-weight-bold text-muted text-uppercase"></th>
+																<th class="font-weight-bold text-muted text-uppercase text-right">TOTAL GAJI</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr class="font-weight-bolder" >
+																<td></td>
+																<td></td>
+																<td></td>
+																<td class="text-danger font-size-h3 font-weight-boldest text-right" v-for="totagaj in data.totalgaji" :key="totagaj.id">{{convertToRupiah(totagaj)}}</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+										<!-- end: Invoice footer-->
+										<!-- begin: Invoice action-->
+										<div class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
+											<div class="col-md-9">
+												<div class="d-flex justify-content-between">
+													<button type="button" id="btnPrint" class="btn btn-light-primary font-weight-bold">Cetak Slip Gaji</button>
+												</div>
+											</div>
+										</div>
+										<!-- end: Invoice action-->
+										<!-- end: Invoice-->
 									</div>
-									<!--end::Content-->
-								</div>
-								<!--end::Teachers-->
+																	</div>
+																	<div class="modal-footer">
+                                                                        <button type="button"  data-dismiss="modal" @click="closeinvoice()" class="btn btn-primary font-weight-bold">Tutup</button>
+																	</div>
+																</div>
+															</div>
+														</div>       				
 							</div>
+			
+<div class="modal fade" id="detailgajipegawai" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+                                                                        <h5 class="modal-title" id="detailgajipegawai">Detail Gaji Pegawai</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" class="ki ki-close" @click="closedet()"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+                                                                        <h5 class="modal-title" id="detailgaji" v-for="(data) in detailgajipeg" :key="data.id">Detail Penggajian Periode <a style="font-weight:bolder">{{data.tanggal}}</a></h5>
+                                                                        <br>
+																		<div class="table-responsive">
+													<table class="table table-bordered"  v-for="(data) in detailgajipeg" :key="data.id">
+                                                        <thead class="">
+                                                        <tr>
+                                                            <th>Tunjangan</th>
+                                                            <th>Nominal</th>
+                                                            <th>Total</th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                     <span v-for="tundet in data.dettun" :key="tundet.id">
+                                                                            <li style="list-style:none;">{{tundet}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="nomtun in data.nomdettun" :key="nomtun.id">
+                                                                            <li style="list-style:none">{{convertToRupiah(nomtun)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="totun in data.totun" :key="totun.id">
+                                                                            <a>{{convertToRupiah(totun)}}</a>
+                                                                        </span>
+                                                                </td> 
+                                                            </tr>
+                                                        </tbody>
+                                                        <thead class="">
+                                                        <tr>
+                                                            <th>Bonus</th>
+                                                            <th>Nominal</th>
+                                                            <th>Total</th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody>
+                                                             <tr>
+                                                                <td>
+                                                                     <span v-for="bondet in data.detbon" :key="bondet.id">
+                                                                            <li style="list-style:none;">{{bondet}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="nomibon in data.nombon" :key="nomibon.id">
+                                                                            <li style="list-style:none">{{convertToRupiah(nomibon)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="totabon in data.totbon" :key="totabon.id">
+                                                                            <a>{{convertToRupiah(totabon)}}</a>
+                                                                        </span>
+                                                                </td> 
+                                                            </tr>
+                                                        </tbody>
+                                                         <thead class="">
+                                                        <tr>
+                                                            <th>Potongan</th>
+                                                            <th>Nominal</th>
+                                                            <th>Total</th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody>
+                                                             <tr>
+                                                                <td>
+                                                                     <span v-for="potdet in data.detpot" :key="potdet.id">
+                                                                            <li style="list-style:none;">{{potdet}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="nomipot in data.nompot" :key="nomipot.id">
+                                                                            <li style="list-style:none">{{convertToRupiah(nomipot)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="totapot in data.totpot" :key="totapot.id">
+                                                                            <a>{{convertToRupiah(totapot)}}</a>
+                                                                        </span>
+                                                                </td> 
+                                                            </tr>
+                                                        </tbody>
+                                                        <thead class="">
+                                                         <tr>
+                                                            <th></th>
+                                                            <th>Gaji Pokok</th>
+                                                             <th v-for="jabgaji in data.totjab" :key="jabgaji.id">{{convertToRupiah(jabgaji)}}</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Total Gaji</th>
+                                                            <th v-for="totagaj in data.totalgaji" :key="totagaj.id">
+                                                                <a>{{convertToRupiah(totagaj)}}</a>
+                                                            </th>
+                                                        </tr>
+                                                       
+                                                        </thead>
+                                                    </table>
+
+                                                </div>
+																	</div>
+																	<div class="modal-footer">
+                                                                        <button type="button"  data-dismiss="modal" @click="closedet()" class="btn btn-primary font-weight-bold">Tutup</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md" role="document">
+																<div class="modal-content text-center">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="editPegawai">Ambil Gaji</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" class="ki ki-close" @click="closeconfirm()"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<div style="padding:22px" >
+																			<h3>Apakah Anda Ingin Ambil Gaji Sekarang ?</h3> 
+																			<span style="color:red">Pastikan Detail Gaji Sudah Sesuai !</span>
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+																		
+																		<button type="submit" @click="ambil()"  class="btn btn-primary font-weight-bold">Ambil Sekarang</button>
+                                                                        <button type="button"  data-dismiss="modal" @click="closeconfirm()" class="btn btn-danger font-weight-bold">Nanti</button>
+																	</div>
+																</div>
+															</div>
+														</div>    							
 
 
 </template>
@@ -314,10 +462,335 @@ export default {
     name: "Penggajian",
     data() {
         return {
+			form: new Form ({
+				id: "",
+                status : ""
+            }),
+			jabat: [],
+			invgaji: [],
+			totjab: [],
+            totalgaji: [],
+            detpot: [],
+            nompot: [],
+            totpot: [],
+            detbon: [],
+            nombon: [],
+            totbon: [],
+            dettun : [],
+            totun : [],
+            nomdettun : [],
+            akhir: [],
+            nilai:[],
+            bon: [],
+            potong: [],
+			gajipeg: [],
+			detailgajipeg: [],
+			infopt: [],
+			jabatan: [],
+			akunpegawai: [],
+			pegawais: [],
             token: localStorage.getItem("token"),
             role: localStorage.getItem('role'),
         }
     },
+	methods: {
+		convertToRupiah(value) {
+            // value = value.toString()
+            value = parseFloat(value)
+            let rupiah = ''
+            let valueRev = value.toString().split('').reverse().join('')
+            for (let i = 0; i < valueRev.length; i++) {
+                if (i % 3 === 0) rupiah += `${valueRev.substr(i, 3)}.`
+            }
+
+            const rp = rupiah
+                .split('', rupiah.length - 1)
+                .reverse()
+                .join('')
+            // console.log('rupiah', isNaN(rp), rupiah.length, rp, rupiah)
+            if (rupiah === 'NaN.' || rupiah === 'NaN') {
+                return '...'
+            }
+            return `Rp ${rp}`
+        },
+		 getprofile(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/getprofile',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.pegawais = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
+		closeconfirm() {
+            this.form.reset();
+            $("#confirm").modal("hide");
+        },
+        modalconfirm(data) {
+            // this.form.reset()
+            $("#confirm").modal("show")
+            this.form.fill({
+                id: data.id,
+                status: data.status,
+            })
+        },
+        getakun(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/getakun',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.akunpegawai = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
+        getJabatan(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/jabatanpegawai',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.jabatan = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
+		ambil(){
+			  axios.post('/api/ambilgaji',
+                {
+                    id: this.form.id,
+                    status: "Sudah Diambil"
+                },
+                {
+                    headers: { Authorization: "Bearer " + this.token }
+                }).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Gaji Berhasil Diambil !",
+                        showConfirmButton: false,
+                        timer: 2000,
+                    }),
+					$("#confirm").modal("hide");
+                    this.getgaji();
+                }
+            })
+            	
+        },
+		getpt(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/infopt',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.infopt = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
+		getgaji(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/gajipegawai',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.gajipeg = response.data.data;
+					this.nilai = response.data.tunjangan;
+                    this.bon = response.data.bonus;
+                    this.potong = response.data.potongan;
+                    this.akhir = response.data.hasil;
+					this.jabat = response.data.jabatan;
+
+                    for (let i = 0; i < this.nilai.length; i++) {
+                        Object.assign(this.gajipeg[i], { nilai: this.nilai[i] })
+                    }
+                    for (let i = 0; i < this.bon.length; i++) {
+                        Object.assign(this.gajipeg[i], { bon: this.bon[i] })
+                    }
+                    for (let i = 0; i < this.potong.length; i++) {
+                        Object.assign(this.gajipeg[i], { potong: this.potong[i] })
+                    }
+                    for (let i = 0; i < this.akhir.length; i++) {
+                        Object.assign(this.gajipeg[i], { akhir: this.akhir[i] })
+                    }
+					for (let i = 0; i < this.jabat.length; i++) {
+                        Object.assign(this.gajipeg[i], { jabat: this.jabat[i] })
+                    }
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
+		closedet(){
+            $("#detailgajipegawai").modal("hide");
+		},
+		showinvoice(id){
+            $("#invoicegaji").modal("show");
+			axios.get('/api/detgajipeg/'+id,{
+                headers: { Authorization: "Bearer " + this.token }
+            }).then((response) => {
+                this.invgaji = response.data.data
+                //TUNJANGAN
+                this.dettun = response.data.tunjangan;
+                this.nomdettun = response.data.nominal;
+                this.totun = response.data.arrtun;
+                //BONUS
+                this.detbon = response.data.bonus;
+                this.nombon = response.data.nominal_bonus;
+                this.totbon = response.data.arrbon;
+                //POTONGAN
+                this.detpot = response.data.potongan;
+                this.nompot = response.data.nominal_potongan;
+                this.totpot = response.data.arrpot;
+                //TOTAL GAJI
+                this.totalgaji = response.data.hasil;
+                this.totjab = response.data.arrjab;
+                //TUNJANGAN
+                for (let i = 0; i < this.dettun.length; i++) {
+                        Object.assign(this.invgaji[i], { dettun: this.dettun[i] })
+                    }
+                for (let i = 0; i < this.nomdettun.length; i++) {
+                        Object.assign(this.invgaji[i], { nomdettun: this.nomdettun[i] })
+                    }
+                for (let i = 0; i < this.totun.length; i++) {
+                        Object.assign(this.invgaji[i], { totun: this.totun[i] })
+                    }    
+                //BONUS
+                for (let i = 0; i < this.detbon.length; i++) {
+                        Object.assign(this.invgaji[i], { detbon: this.detbon[i] })
+                    }
+                for (let i = 0; i < this.nombon.length; i++) {
+                        Object.assign(this.invgaji[i], { nombon: this.nombon[i] })
+                    }
+                for (let i = 0; i < this.totbon.length; i++) {
+                        Object.assign(this.invgaji[i], { totbon: this.totbon[i] })
+                    }    
+                //POTONGAN
+                for (let i = 0; i < this.detpot.length; i++) {
+                        Object.assign(this.invgaji[i], { detpot: this.detpot[i] })
+                    }
+                for (let i = 0; i < this.nompot.length; i++) {
+                        Object.assign(this.invgaji[i], { nompot: this.nompot[i] })
+                    }
+                for (let i = 0; i < this.totpot.length; i++) {
+                        Object.assign(this.invgaji[i], { totpot: this.totpot[i] })
+                    }
+                //TOTAL GAJI
+                for (let i = 0; i < this.totalgaji.length; i++) {
+                        Object.assign(this.invgaji[i], { totalgaji: this.totalgaji[i] })
+                    }
+                for (let i = 0; i < this.totjab.length; i++) {
+                        Object.assign(this.invgaji[i], { totjab: this.totjab[i] })
+                    }
+    
+
+            })
+		},
+		closeinvoice(){
+            $("#invoicegaji").modal("hide");
+		},
+		detGaji(id){
+            $('#detailgajipegawai').modal('show')
+            axios.get('/api/detgajipeg/'+id,{
+                headers: { Authorization: "Bearer " + this.token }
+            }).then((response) => {
+                this.detailgajipeg = response.data.data
+                //TUNJANGAN
+                this.dettun = response.data.tunjangan;
+                this.nomdettun = response.data.nominal;
+                this.totun = response.data.arrtun;
+                //BONUS
+                this.detbon = response.data.bonus;
+                this.nombon = response.data.nominal_bonus;
+                this.totbon = response.data.arrbon;
+                //POTONGAN
+                this.detpot = response.data.potongan;
+                this.nompot = response.data.nominal_potongan;
+                this.totpot = response.data.arrpot;
+                //TOTAL GAJI
+                this.totalgaji = response.data.hasil;
+                this.totjab = response.data.arrjab;
+                //TUNJANGAN
+                for (let i = 0; i < this.dettun.length; i++) {
+                        Object.assign(this.detailgajipeg[i], { dettun: this.dettun[i] })
+                    }
+                for (let i = 0; i < this.nomdettun.length; i++) {
+                        Object.assign(this.detailgajipeg[i], { nomdettun: this.nomdettun[i] })
+                    }
+                for (let i = 0; i < this.totun.length; i++) {
+                        Object.assign(this.detailgajipeg[i], { totun: this.totun[i] })
+                    }    
+                //BONUS
+                for (let i = 0; i < this.detbon.length; i++) {
+                        Object.assign(this.detailgajipeg[i], { detbon: this.detbon[i] })
+                    }
+                for (let i = 0; i < this.nombon.length; i++) {
+                        Object.assign(this.detailgajipeg[i], { nombon: this.nombon[i] })
+                    }
+                for (let i = 0; i < this.totbon.length; i++) {
+                        Object.assign(this.detailgajipeg[i], { totbon: this.totbon[i] })
+                    }    
+                //POTONGAN
+                for (let i = 0; i < this.detpot.length; i++) {
+                        Object.assign(this.detailgajipeg[i], { detpot: this.detpot[i] })
+                    }
+                for (let i = 0; i < this.nompot.length; i++) {
+                        Object.assign(this.detailgajipeg[i], { nompot: this.nompot[i] })
+                    }
+                for (let i = 0; i < this.totpot.length; i++) {
+                        Object.assign(this.detailgajipeg[i], { totpot: this.totpot[i] })
+                    }
+                //TOTAL GAJI
+                for (let i = 0; i < this.totalgaji.length; i++) {
+                        Object.assign(this.detailgajipeg[i], { totalgaji: this.totalgaji[i] })
+                    }
+                for (let i = 0; i < this.totjab.length; i++) {
+                        Object.assign(this.detailgajipeg[i], { totjab: this.totjab[i] })
+                    }
+    
+
+            })
+        },
+	},
+	mounted() {
+		this.getpt();
+		this.getgaji();
+		this.getJabatan();
+		this.getakun();
+		this.getprofile();
+		document.getElementById("btnPrint").onclick = function () {
+			printElement(document.getElementById("printThis"));
+		}
+
+		function printElement(elem) {
+			var domClone = elem.cloneNode(true);
+			
+			var $printSection = document.getElementById("printSection");
+			
+			if (!$printSection) {
+				var $printSection = document.createElement("div");
+				$printSection.id = "printSection";
+				document.body.appendChild($printSection);
+			}
+			
+			$printSection.innerHTML = "";
+			$printSection.appendChild(domClone);
+			window.print();
+		}
+	},
     
 
 
@@ -325,5 +798,23 @@ export default {
 
 
 </script>
+<style>
+@media screen {
+  #printSection {
+      display: none;
+  }
+}
 
-
+@media print {
+  body * {
+    visibility:hidden;
+  }
+  #printSection, #printSection * {
+    visibility:visible;
+  }
+  #printSection {
+    left:0;
+    top:0;
+  }
+}
+</style>

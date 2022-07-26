@@ -76,7 +76,6 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Akun Pegawai</th>
                                                             <th>Nama Pegawai</th>
@@ -90,12 +89,6 @@
                                                         </thead>
                                                          <tbody>
                                                             <tr v-for="(data,index) in pegawai" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
                                                                     <td>{{index+1}} </td>
                                                                     <td>
                                                                         <div class="ms-3">

@@ -60,6 +60,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('sudahisi',[DataGajiController::class, 'sudahisi'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('detailgaji/{id}',[DataGajiController::class, 'detailgaji'])->middleware('role:Manager,Admin,Pegawai');
 
+    Route::post('ambilgaji',[DataGajiController::class, 'ambilgaji'])->middleware('role:Manager,Admin,Pegawai');
+    Route::post('updategaji',[DataGajiController::class, 'updategaji'])->middleware('role:Manager,Admin,Pegawai');
+
+    Route::get('gajipegawai',[DataGajiController::class, 'gajipegawai'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('detgajipeg/{id}',[DataGajiController::class, 'detgajipeg'])->middleware('role:Manager,Admin,Pegawai');
+    Route::delete('hapusgaji/{id}',[DataGajiController::class, 'hapusgaji'])->middleware('role:Manager,Admin,Pegawai');
+
     Route::post('tambahtunjangan', [GajiController::class, 'tambahtunjangan'])->middleware('role:Manager,Admin');
     Route::post('updatetunjangan',[GajiController::class, 'updatetunjangan'])->middleware('role:Manager,Admin');
     Route::delete('hapustunjangan/{id}', [GajiController::class, 'hapustunjangan'])->middleware('role:Manager,Admin');

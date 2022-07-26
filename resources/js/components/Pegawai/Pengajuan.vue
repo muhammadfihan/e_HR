@@ -115,24 +115,6 @@
 															<span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Request Attendance</span>
 														</a>
 													</li>
-															<li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
-														<a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#forms_widget_tab_4">
-															<span class="nav-icon py-2 w-auto">
-																<span class="svg-icon svg-icon-3x">
-																	<!--begin::Svg Icon | path:assets/media/svg/icons/General/Shield-check.svg-->
-																	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																		<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																		<rect x="0" y="0" width="24" height="24"/>
-																		<path d="M5,19 L20,19 C20.5522847,19 21,19.4477153 21,20 C21,20.5522847 20.5522847,21 20,21 L4,21 C3.44771525,21 3,20.5522847 3,20 L3,4 C3,3.44771525 3.44771525,3 4,3 C4.55228475,3 5,3.44771525 5,4 L5,19 Z" fill="#000000" fill-rule="nonzero"/>
-																		<path d="M8.7295372,14.6839411 C8.35180695,15.0868534 7.71897114,15.1072675 7.31605887,14.7295372 C6.9131466,14.3518069 6.89273254,13.7189711 7.2704628,13.3160589 L11.0204628,9.31605887 C11.3857725,8.92639521 11.9928179,8.89260288 12.3991193,9.23931335 L15.358855,11.7649545 L19.2151172,6.88035571 C19.5573373,6.44687693 20.1861655,6.37289714 20.6196443,6.71511723 C21.0531231,7.05733733 21.1271029,7.68616551 20.7848828,8.11964429 L16.2848828,13.8196443 C15.9333973,14.2648593 15.2823707,14.3288915 14.8508807,13.9606866 L11.8268294,11.3801628 L8.7295372,14.6839411 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
-																	</g>
-																	</svg>
-																	<!--end::Svg Icon-->
-																</span>
-															</span>
-															<span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Kenaikan Jabatan </span>
-														</a>
-													</li>
 													
 													<!--end::Item-->
 												</ul>
@@ -227,7 +209,6 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
 														<thead>
 															<tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Tanggal</th>
                                                             <th>Jenis Izin</th>
@@ -238,12 +219,6 @@
 														</thead>
 														<tbody>
                                                             <tr v-for="(data,index) in allizin.data" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
                                                                     <td>{{index+1}} </td>
                                                                     <td>{{ data.tanggal }}</td>
                                                                     <td>{{ data.jenis_izin }}</td>
@@ -354,7 +329,6 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Tanggal</th>
                                                             <th>No Pegawai</th>
@@ -367,12 +341,6 @@
                                                         </thead>
                                                          <tbody>
                                                             <tr v-for="(data,index) in alllembur" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
                                                                     <td>{{index+1}} </td>
 																	<td>{{ data.tanggal_lembur}}</td> 
 																	<td>{{ data.no_pegawai }}</td>
@@ -532,122 +500,6 @@
 											</div>
 											<!--end::Body-->
 										</div>
-									<!-- Tabel Kenaikan Jabatan 	 -->
-                                          <div class="card card-custom tab-pane" id="forms_widget_tab_4" role="tabpanel">
-											<!--begin::Header-->
-											<div class="card-header flex-wrap border-0 pt-6 pb-0">
-												<h3 class="card-title align-items-start flex-column">
-													<span class="card-label font-weight-bolder text-dark" >Kenaikan Jabatan</span>
-													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Pengajuan Kenaikan jabatan di {{ data.nama_perusahaan }}</span>
-												</h3>
-                                                 <div class="card-toolbar">
-													<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
-														<!--begin::Trigger Modal-->
-														<a href="#" class="btn btn-success font-weight-bolder font-size-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal">Buat Pengajuan</a>
-                                                    </div>
-                                                </div>
-												
-											</div>
-											<!--end::Header-->
-											<!--begin::Body-->
-											<div class="card-body">
-												<!--begin::Search Form-->
-												<!--begin::Search Form-->
-												<div class="mb-10">
-													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
-															<div class="row align-items-center">
-																<div class="col-md-4 my-2 my-md-0">
-																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
-																		<span>
-																			<i class="flaticon2-search-1 text-muted"></i>
-																		</span>
-																	</div>
-																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
-																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
-														</div>
-													</div>
-												</div>
-												<!--end::Search Form-->
-												<!--end: Search Form-->
-												<!--begin::Datatable-->
-												<div class="table-responsive">
-													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
-                                                        <thead class="" >
-                                                        <tr>
-                                                            <th>&nbsp;</th>
-                                                            <th>No</th>
-                                                            <th>Pegawai</th>
-                                                            <th>Nama Pegawai</th>
-                                                            <th>Tanggal</th>
-                                                            <th>Jam Masuk</th>
-                                                            <th>Jam Pulang</th>
-                                                            <th>Jam Kerja</th>
-                                                            <th>Keterangan</th> 
-                                                            <th>Lokasi</th>
-                                                            <th style="text-align: center;">Action</th>
-                                                        </tr>
-                                                        </thead>
-                                                         <tbody>
-                                                            <tr v-for="(data,index) in absensipegawai" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
-                                                                    <td>{{index+1}} </td>
-                                                                     <td>
-                                                                        <div class="ms-3">
-                                                                            <p class="fw-bold mb-1">{{ data.name }}</p>
-                                                                            <p class="text-muted mb-0">{{ data.email }}</p>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>{{ data.nama_lengkap }}</td>
-                                                                    <td>{{ data.tanggal }}</td>
-                                                                    <td>{{ data.jam_masuk }}</td>
-                                                                    <td>{{ data.jam_pulang }}</td>
-                                                                    <td>{{ data.jam_kerja }}</td>
-                                                                     <td>
-                                                                        <span class="badge badge-success" v-if="data.keterangan == 'On Time'" >{{data.keterangan}}</span>
-                                                                        <span class="badge badge-danger" v-else-if="data.keterangan == 'Terlambat'" >{{data.keterangan}}</span>
-                                                                    </td>
-                                                                    <td>{{ data.lokasi }}</td>
-                                                                   
-                                                                    <td style="text-align: center;">
-                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="showModalEdit(data)">
-                                                                          </a>
-                                                                       
-                                                                    </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-
-                                                </div>
-												<!--end::Datatable-->
-											</div>
-											<!--end::Body-->
-										</div>
 									<!-- Tabel Pengajuan Cuti	 -->
 										  <div class="card card-custom tab-pane" id="forms_widget_tab_5" role="tabpanel">
 											<!--begin::Header-->
@@ -711,7 +563,6 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Tanggal</th>
                                                             <th>No Pegawai</th> 
@@ -725,18 +576,12 @@
                                                         </thead>
                                                          <tbody>
                                                             <tr v-for="(data,index) in allcuti" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
                                                                     <td>{{index+1}} </td>
                                                                      <td>{{ data.tanggal_cuti}}</td>
 																	<td>{{ data.no_pegawai }}</td>
                                                                     <td>{{ data.tanggal_mulai }}</td>
                                                                     <td>{{ data.tanggal_akhir }}</td>
-																	<td>{{ data.jumlah_hari}}</td>
+																	<td>{{ data.jumlah_hari}} Hari</td>
                                                                     <td>
 																		  <span class="badge badge-warning">
 																			<a style="cursor:pointer;color:white" :href="`files/${data.bukti_cuti}`"  target="_blank">File Bukti</a></span>

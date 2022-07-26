@@ -209,10 +209,9 @@
 												<!--end: Search Form-->
 												<!--begin::Datatable-->
 												<div class="table-responsive">
-													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
+													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1 w-200">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Email</th>
                                                             <th>Periode</th>
@@ -221,18 +220,12 @@
                                                             <th>Bonus</th>
                                                             <th>Potongan</th>
                                                             <th>Total Gaji</th>
-                                                            <th>Status</th>
+                                                            <th style="text-align: center;">Status</th>
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
                                                         </thead>
                                                          <tbody>
                                                             <tr v-for="(data,index) in datagajipeg" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
                                                                     <td>{{ index+1}} </td>
                                                                     <td>{{ data.email }}</td>
                                                                     <td>
@@ -244,20 +237,20 @@
                                                                     </td>
                                                                     <td> 
                                                                         <span v-for="tun in data.nilai" :key="tun.id">
-                                                                            <li>{{tun}}</li>
+                                                                            <li style="list-style: none;">- {{tun}}</li>
                                                                         </span>
                                                                     </td>
                                                                     <!-- <td>{{ data.id_tunjangan }}</td> -->
                                                                     <td> 
                                                                         
                                                                         <span v-for="bonu in data.bon" :key="bonu.id">
-                                                                            <li>{{bonu}}</li>
+                                                                            <li style="list-style: none;">- {{bonu}}</li>
                                                                         </span>
                                                                         
                                                                     </td>
                                                                     <td>
                                                                          <span v-for="pot in data.potong" :key="pot.id">
-                                                                            <li>{{pot}}</li>
+                                                                            <li style="list-style: none;">- {{pot}}</li>
                                                                         </span>
                                                                     </td>
                                                                      <td>
@@ -265,20 +258,25 @@
                                                                             <a>{{convertToRupiah(tes)}}</a>
                                                                         </span>
                                                                     </td>
-                                                                     <td>
-                                                                         <span class="badge badge-primary">
-																			<a style="color:white">{{data.status}}</a></span>
+                                                                    <td style="text-align: center;">
+                                                                         <span v-if="data.status == 'Belum Diambil'" class="badge badge-warning" style="color:white" >Belum Diambil</span>
+																		  <span v-else-if="data.status == 'Sudah Diambil'" class="badge badge-success" >Sudah Diambil</span>
+                                                                          
                                                                     </td>
-                                                                    <td>
-                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal">
+                                                                    <td style="text-align: center;">
+                                                                        <a v-if="data.status == 'Sudah Diambil'" @click.prevent="detailGaji(data.id)" class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" >
                                                                           </a>
+                                                                        
+                                                                        <div v-if="data.status == 'Belum Diambil'">
+                                                                             <a @click.prevent="detailGaji(data.id)" class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" >
+                                                                          </a>
+                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="modaledit(data)">
+                                                                          </a>
+                                                                           <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-trash-alt" @click.prevent="hapusgaji(data.id)">
+                                                                          </a>
+                                                                        </div>
+                                                                         
                                                                     </td>
-                                                                    <!-- <td>{{ (data.jam_kerja) }}</td> -->
-                                                                    <!-- <td style="text-align: center;">
-                                                                          <a  class="btn btn-sm btn-default btn-success btn-hover-success" data-toggle="modal" @click="buatgaji(data, data.id)">Buat Gaji
-                                                                          </a>
-                                                                       
-                                                                    </td> -->
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -350,7 +348,6 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Jenis Tunjangan</th>
                                                             <th>Nominal</th>
@@ -359,12 +356,6 @@
                                                         </thead>
                                                          <tbody>
                                                              <tr v-for="(data,index) in tunjangan" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
                                                                     <td>{{index+1}} </td>
                                                                     <td>{{ data.jenis_tunjangan }}</td>
                                                                     <td>{{convertToRupiah (data.nominal) }}</td>
@@ -446,7 +437,6 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Jenis Bonus</th>
                                                             <th>Nominal</th>
@@ -455,12 +445,6 @@
                                                         </thead>
                                                          <tbody>
                                                              <tr v-for="(data,index) in bonus" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
                                                                     <td>{{index+1}} </td>
                                                                     <td>{{ data.jenis_bonus }}</td>
                                                                     <td>{{convertToRupiah (data.nominal) }}</td>
@@ -542,7 +526,6 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Golongan</th>
                                                             <th>Pendidikan</th>
@@ -552,12 +535,6 @@
                                                         </thead>
                                                          <tbody>
                                                             <tr v-for="(data,index) in golongan" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
                                                                     <td>{{index+1}} </td>
                                                                     <td>{{ data.golongan }}</td>
                                                                     <td>{{ data.pendidikan }}</td>
@@ -641,7 +618,6 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Potongan</th>
                                                             <th>Nominal Potongan</th>
@@ -650,12 +626,6 @@
                                                         </thead>
                                                          <tbody>
                                                              <tr v-for="(data,index) in potongan" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
                                                                     <td>{{index+1}} </td>
                                                                     <td>{{ data.jenis_potongan }}</td>
                                                                     <td>{{convertToRupiah (data.nominal) }}</td>
@@ -702,50 +672,6 @@
 																		</button>
 																	</div>
 																	<div class="modal-body ">
-                                                                        <!-- <form class="form pt-9">
-                                                                                <div class="row">
-																					<div class="col-lg-9 col-xl-6 offset-xl-3">
-																						<h3 class="font-size-h6 mb-5">Input Pegawai</h3>
-																					</div>
-																				</div>
-																				<div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Username</label>
-																					<div class="col-lg-9 col-xl-6">
-																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.nama_lengkap}}</div>
-																					</div>
-																				</div>
-																				<div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Email</label>
-																					<div class="col-lg-9 col-xl-6">
-																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.email}}</div>
-																					</div>
-																				</div>
-                                                                                <div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">No Pegawai</label>
-																					<div class="col-lg-9 col-xl-6">
-																						<div class="form-control form-control-lg form-control-solid" type="text">{{data.no_pegawai}}</div>
-																					</div>
-																				</div>
-                                                                                <div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Golongan</label>
-																					<div class="col-lg-9 col-xl-6">
-																						<div class="form-control form-control-lg form-control-solid" type="text">
-                                                                                            <span v-for="gol in golongan" :key="gol.id">
-                                                                            <a v-if="data.id_golongan == gol.id">{{gol.golongan}}</a>
-                                                                        </span>
-                                                                                        </div>
-																					</div>
-																				</div>
-                                                                                 <div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Gaji Jabatan</label>
-																					<div class="col-lg-9 col-xl-6">
-																						<div class="form-control form-control-lg form-control-solid" type="text"><span v-for="jab in detjabatan" :key="jab.id">
-                                                                            <a v-if="data.id_jabatan == jab.id">{{jab.jabatan}} : {{convertToRupiah (jab.gaji) }} </a>
-                                                                        </span></div>
-																					</div>
-																				</div>
-                                                                                	<div class="separator separator-dashed my-10"></div>
-                                                                         </form>        -->
                                                                         <form @submit="submitgaji()">
                                                                         <div class="form-group row">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Email Pegawai</label>
@@ -764,84 +690,52 @@
 																					</div>
 																				</div>
                                                                                 <div class="separator separator-dashed my-10"></div>
-                                                                        <div class="row">
-																					<div class="col-lg-9 col-xl-6 offset-xl-3">
-																						<h3 class="font-size-h6 mb-5">Tambah Tunjangan Pegawai</h3>
-																					</div>
-																				</div>
-                                                                    <div class="form-group row">
-                                                                        <label class="col-xl-3 col-lg-3 text-right col-form-label"></label>
-                                                                            <div class="col-9 col-form-label">
-                                                                                <div class="checkbox-list">
-                                                                                    <label class="checkbox" v-for="data in tunjangan" :key="data.id">
-                                                                                        <input type="checkbox" v-model="gajiMultiple" :value="data.id" @click="select" @change="select"/>
+                                                        <div class="form-group row">
+														<label class="col-xl-3 col-lg-3 text-right col-form-label">Tambah Tunjangan Pegawai</label>
+														<div class="col-9 col-form-label">
+															<div class="checkbox-list">
+																<label class="checkbox" v-for="data in tunjangan" :key="data.id">
+																<input type="checkbox" v-model="gajiMultiple" :value="data.id" @click="select" @change="select"/>
                                                                                         <span value={{form.id_tunjangan}}></span>
-                                                                                        {{data.jenis_tunjangan}} : {{convertToRupiah (data.nominal) }}
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div>
+                                                                                        {{data.jenis_tunjangan}} : {{convertToRupiah (data.nominal) }}</label>
+																
+																
+															</div>
+														</div>
+													</div>
+                                                     <span class="col-xl-3 col-lg-3 text-right text-primary">*Jika Pegawai Tidak Memiliki Tunjangan Harap Membuat Tunjangan Dengan Nominal Rp 0</span>
+                                                     
                                                                         
-
-																						<!-- <select class="form-control form-control-lg form-control-solid" v-model="form.id_tunjangan">
-                                                                                        <option disabled selected>Tambah Tunjangan</option>
-                                                                                        <option v-for="data in tunjangan" :key="data.id"
-                                                                                        :selected="data.tunjangan == form.id_tunjangan ? selected : null"
-                                                                                                :value="data.id">
-                                                                                                    {{data.jenis_tunjangan}} : {{convertToRupiah (data.nominal) }}
-                                                                                        </option>
-                                                                                    </select> -->
-																			</div>
                                                                             <div class="separator separator-dashed my-10"></div>
-                                                                            <div class="row">
-																					<div class="col-lg-9 col-xl-6 offset-xl-3">
-																						<h3 class="font-size-h6 mb-5">Tambah Bonus Pegawai</h3>
-																					</div>
-																				</div>
-                                                                            <div class="form-group row">
-                                                                                 <label class="col-xl-3 col-lg-3 text-right col-form-label"></label>
-                                                                            <div class="col-9 col-form-label">
-                                                                                <div class="checkbox-list">
-                                                                                    <label class="checkbox" v-for="data in bonus" :key="data.id">
-                                                                                        <!-- <input type="checkbox" name="Checkboxes4"/> -->
-                                                                                        <input type="checkbox" v-model="bonusMultiple" :value="data.id" @click="select" @change="select"/>
+                                                        <div class="form-group row">
+														<label class="col-xl-3 col-lg-3 text-right col-form-label">Tambah Bonus Pegawai</label>
+														<div class="col-9 col-form-label">
+															<div class="checkbox-list">
+																<label class="checkbox" v-for="data in bonus" :key="data.id">
+																<input type="checkbox" v-model="bonusMultiple" :value="data.id" @click="select" @change="select"/>
                                                                                         <span></span>
-                                                                                        {{data.jenis_bonus}} : {{convertToRupiah (data.nominal) }}
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div> 
-                                                                            </div>
+                                                                                        {{data.jenis_bonus}} : {{convertToRupiah (data.nominal) }}</label>
+																
+																
+															</div>
+														</div>
+													</div>
+                                                    <span class="col-xl-3 col-lg-3 text-right text-primary">*Jika Pegawai Tidak Memiliki Bonus Harap Membuat Bonus Dengan Nominal Rp 0</span>
                                                                             <div class="separator separator-dashed my-10"></div>
-                                                                            <div class="row">
-																					<div class="col-lg-9 col-xl-6 offset-xl-3">
-																						<h3 class="font-size-h6 mb-5">Tambah Potongan Pegawai</h3>
-																					</div>
-																				</div>
-                                                                            <div class="form-group row">
-                                                                                 <label class="col-xl-3 col-lg-3 text-right col-form-label"></label>
-                                                                            <div class="col-9 col-form-label">
-                                                                                <div class="checkbox-list">
-                                                                                    <label class="checkbox" v-for="data in potongan" :key="data.id">
-                                                                                        <input type="checkbox" v-model="potonganMultiple" :value="data.id" @click="select" @change="select"/>
+                                                        <div class="form-group row">
+														<label class="col-xl-3 col-lg-3 text-right col-form-label">Tambah Potongan Pegawai</label>
+														<div class="col-9 col-form-label">
+															<div class="checkbox-list">
+																<label class="checkbox" v-for="data in potongan" :key="data.id">
+																 <input type="checkbox" v-model="potonganMultiple" :value="data.id" @click="select" @change="select"/>
                                                                                         <span></span>
-                                                                                        {{data.jenis_potongan}} : {{convertToRupiah (data.nominal) }}
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div> 
-                                                                            </div>
-                                                                          
-                                                                                 <!-- <div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Tambah Bonus</label>
-																					<div class="col-lg-9 col-xl-6">
-																						<select class="form-control form-control-lg form-control-solid" v-model="form.id_bonus">
-                                                                                        <option disabled selected>Tambah Tunjangan</option>
-                                                                                        <option v-for="data in bonus" :key="data.id"
-                                                                                        :selected="data.bonus == form.id_bonus ? selected : null"
-                                                                                                :value="data.id">
-                                                                                                    {{data.jenis_bonus}} : {{convertToRupiah (data.nominal) }}
-                                                                                        </option>
-                                                                                    </select>
-																					</div>
-																				</div> -->
+                                                                                        {{data.jenis_potongan}} : {{convertToRupiah (data.nominal) }}</label>
+																
+																
+															</div>
+														</div>
+													</div>
+                                                    <span class="col-xl-3 col-lg-3 text-right text-primary">*Jika Pegawai Tidak Memiliki Potongan Harap Membuat Potongan Dengan Nominal Rp 0</span>
 																	</form>
 																	</div>
 																	<div class="modal-footer">
@@ -851,6 +745,188 @@
 																</div>
 															</div>
 														</div>
+<div class="modal fade" id="editgaji" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+                                                                        <h5 class="modal-title" id="editgaji">Edit Gaji Pegawai</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" class="ki ki-close" @click="closegajiedit()"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body ">
+                                                                        <form @submit="submiteditgaji()">
+                                                        <div class="form-group row">
+														<label class="col-xl-3 col-lg-3 text-right col-form-label">Edit Tunjangan Pegawai</label>
+														<div class="col-9 col-form-label">
+															<div class="checkbox-list">
+																<label class="checkbox" v-for="data in tunjangan" :key="data.id">
+																<input type="checkbox" v-model="gajiMultiple" :value="data.id" @click="select" @change="select"/>
+                                                                                        <span value={{form.id_tunjangan}}></span>
+                                                                                        {{data.jenis_tunjangan}} : {{convertToRupiah (data.nominal) }}</label>
+																
+																
+															</div>
+														</div>
+													</div>
+                                                    <span class="col-xl-3 col-lg-3 text-right text-primary">*Jika Pegawai Tidak Memiliki Tunjangan Harap Membuat Tunjangan Dengan Nominal Rp 0</span>
+                                                                        
+                                                                            <div class="separator separator-dashed my-10"></div>
+                                                        <div class="form-group row">
+														<label class="col-xl-3 col-lg-3 text-right col-form-label">Edit Bonus Pegawai</label>
+														<div class="col-9 col-form-label">
+															<div class="checkbox-list">
+																<label class="checkbox" v-for="data in bonus" :key="data.id">
+																<input type="checkbox" v-model="bonusMultiple" :value="data.id" @click="select" @change="select"/>
+                                                                                        <span></span>
+                                                                                        {{data.jenis_bonus}} : {{convertToRupiah (data.nominal) }}</label>
+																
+																
+															</div>
+														</div>
+													</div>
+                                                    <span class="col-xl-3 col-lg-3 text-right text-primary">*Jika Pegawai Tidak Memiliki Bonus Harap Membuat Bonus Dengan Nominal Rp 0</span>
+                                                                            <div class="separator separator-dashed my-10"></div>
+                                                        <div class="form-group row">
+														<label class="col-xl-3 col-lg-3 text-right col-form-label">Edit Potongan Pegawai</label>
+														<div class="col-9 col-form-label">
+															<div class="checkbox-list">
+																<label class="checkbox" v-for="data in potongan" :key="data.id">
+																 <input type="checkbox" v-model="potonganMultiple" :value="data.id" @click="select" @change="select"/>
+                                                                                        <span></span>
+                                                                                        {{data.jenis_potongan}} : {{convertToRupiah (data.nominal) }}</label>
+																
+																
+															</div>
+														</div>
+													</div>
+                                                    <span class="col-xl-3 col-lg-3 text-right text-primary">*Jika Pegawai Tidak Memiliki Potongan Harap Membuat Potongan Dengan Nominal Rp 0</span>
+																	</form>
+																	</div>
+																	<div class="modal-footer">
+                                                                        <button type="submit"   @click="submiteditgaji()"  class="btn btn-primary font-weight-bold">Buat Gaji</button>
+                                                                        <button type="button"  data-dismiss="modal" @click="closegajiedit()" class="btn btn-primary font-weight-bold">Batal</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+<div class="modal fade" id="detailgaji" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+                                                                        <h5 class="modal-title" id="detailgaji">Detail Gaji Pegawai</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" class="ki ki-close" @click="closeDetGaji()"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+                                                                        <h5 class="modal-title" id="detailgaji" v-for="(data) in detgaji" :key="data.id">Detail Penggajian <a style="font-weight:bolder">{{data.email}}</a></h5>
+                                                                        <br>
+																		<div class="table-responsive">
+													<table class="table table-bordered"  v-for="(data) in detgaji" :key="data.id">
+                                                        <thead class="">
+                                                        <tr>
+                                                            <th>Tunjangan</th>
+                                                            <th>Nominal</th>
+                                                            <th>Total</th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                     <span v-for="tundet in data.dettun" :key="tundet.id">
+                                                                            <li style="list-style:none;">{{tundet}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="nomtun in data.nomdettun" :key="nomtun.id">
+                                                                            <li style="list-style:none">{{convertToRupiah(nomtun)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="totun in data.totun" :key="totun.id">
+                                                                            <a>{{convertToRupiah(totun)}}</a>
+                                                                        </span>
+                                                                </td> 
+                                                            </tr>
+                                                        </tbody>
+                                                        <thead class="">
+                                                        <tr>
+                                                            <th>Bonus</th>
+                                                            <th>Nominal</th>
+                                                            <th>Total</th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody>
+                                                             <tr>
+                                                                <td>
+                                                                     <span v-for="bondet in data.detbon" :key="bondet.id">
+                                                                            <li style="list-style:none;">{{bondet}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="nomibon in data.nombon" :key="nomibon.id">
+                                                                            <li style="list-style:none">{{convertToRupiah(nomibon)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="totabon in data.totbon" :key="totabon.id">
+                                                                            <a>{{convertToRupiah(totabon)}}</a>
+                                                                        </span>
+                                                                </td> 
+                                                            </tr>
+                                                        </tbody>
+                                                         <thead class="">
+                                                        <tr>
+                                                            <th>Potongan</th>
+                                                            <th>Nominal</th>
+                                                            <th>Total</th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody>
+                                                             <tr>
+                                                                <td>
+                                                                     <span v-for="potdet in data.detpot" :key="potdet.id">
+                                                                            <li style="list-style:none;">{{potdet}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="nomipot in data.nompot" :key="nomipot.id">
+                                                                            <li style="list-style:none">{{convertToRupiah(nomipot)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td>
+                                                                     <span v-for="totapot in data.totpot" :key="totapot.id">
+                                                                            <a>{{convertToRupiah(totapot)}}</a>
+                                                                        </span>
+                                                                </td> 
+                                                            </tr>
+                                                        </tbody>
+                                                        <thead class="">
+                                                         <tr>
+                                                            <th></th>
+                                                            <th>Gaji Pokok</th>
+                                                             <th v-for="jabgaji in data.totjab" :key="jabgaji.id">{{convertToRupiah(jabgaji)}}</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Total Gaji</th>
+                                                            <th v-for="totagaj in data.totalgaji" :key="totagaj.id">
+                                                                <a>{{convertToRupiah(totagaj)}}</a>
+                                                            </th>
+                                                        </tr>
+                                                       
+                                                        </thead>
+                                                    </table>
+
+                                                </div>
+																	</div>
+																	<div class="modal-footer">
+                                                                        <button type="button"  data-dismiss="modal" @click="closeDetGaji()" class="btn btn-primary font-weight-bold">Tutup</button>
+																	</div>
+																</div>
+															</div>
+														</div>                                                        
 
 <div class="modal fade" id="tambahtunjangan" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
 															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
@@ -1018,6 +1094,17 @@ export default {
     name: "Payroll",
     data() {
         return {
+            totjab: [],
+            totalgaji: [],
+            detpot: [],
+            nompot: [],
+            totpot: [],
+            detbon: [],
+            nombon: [],
+            totbon: [],
+            dettun : [],
+            totun : [],
+            nomdettun : [],
             akhir: [],
             nilai:[],
             bon: [],
@@ -1032,6 +1119,7 @@ export default {
             potongan:[],
             golongan:[],
             datagaji:[],
+            detgaji: [],
             datagajipeg:[],
             detjabatan:[],
             infopt:[],
@@ -1058,23 +1146,6 @@ export default {
                 jenis_potongan : "",
                 nominal : "",
             }),
-            // form: new Form({
-            //     id : "",
-            //     jenis_bonus : "",
-            //     nominal : "",
-            // }),
-            //  form: new Form({
-            //     id : "",
-            //     jenis_potongan : "",
-            //     nominal : "",
-            // }),
-            //  form: new Form({
-            //     id : "",
-            //     golongan : "",
-            //     pendidikan : "",
-            //     nominal : "",
-            // }),
-
             token: localStorage.getItem("token"),
             role: localStorage.getItem('role'),
         }
@@ -1147,9 +1218,154 @@ export default {
                 });
         })
         },
+        modaledit(data, id) {
+           $("#editgaji").modal("show");
+           this.form.fill({
+                id: data.id,
+                id_tunjangan: this.gajiMultiple,
+                id_bonus: this.bonusMultiple,
+                id_potongan:this.potonganMultiple
+            })
+        },
+         closegajiedit() {
+            this.form.reset();
+            $("#editgaji").modal("hide");
+        },
         buatgaji(data, id) {
            $("#buatgaji").modal("show");
            this.form.fill(data)
+        },
+         closeDetGaji() {
+            this.form.reset();
+            $("#detailgaji").modal("hide");
+        },
+         submiteditgaji(){
+            axios.post('/api/updategaji',
+                {
+                    id: this.form.id,
+                    id_tunjangan: this.gajiMultiple,
+                    id_bonus: this.bonusMultiple,
+                    id_potongan:this.potonganMultiple
+                },
+                {
+                    headers: { Authorization: "Bearer " + this.token }
+                }).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Data Berhasil Diupdate",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    }),
+                     $("#editgaji").modal("hide");
+                    this.tampilgaji();
+                }else{
+                    Swal.fire({
+                        icon: "error",
+                        title: "Gagal",
+                        text: "Data Kurang Lengkap",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                }
+            })
+        },
+        hapusgaji(id){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            Swal.fire({
+            title: 'Hapus Gaji Pegawai ?',
+            text: "Anda tidak akan bisa mengembalikannya lagi!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1BC5BD',
+            cancelButtonColor: '',
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal',
+            }).then((result) => {
+                 if (result.isConfirmed) {
+                 axios.delete('/api/hapusgaji/'+id,  {
+                headers: { Authorization: "Bearer " + this.token },
+                },
+                )
+                  Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Menghapus Gaji Pegawai",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    };
+           
+                    this.tampilgaji()
+
+            },
+
+            )
+
+            })
+        },
+        detailGaji(id){
+            $('#detailgaji').modal('show')
+            axios.get('/api/detailgaji/'+id,{
+                headers: { Authorization: "Bearer " + this.token }
+            }).then((response) => {
+                this.detgaji = response.data.data
+                //TUNJANGAN
+                this.dettun = response.data.tunjangan;
+                this.nomdettun = response.data.nominal;
+                this.totun = response.data.arrtun;
+                //BONUS
+                this.detbon = response.data.bonus;
+                this.nombon = response.data.nominal_bonus;
+                this.totbon = response.data.arrbon;
+                //POTONGAN
+                this.detpot = response.data.potongan;
+                this.nompot = response.data.nominal_potongan;
+                this.totpot = response.data.arrpot;
+                //TOTAL GAJI
+                this.totalgaji = response.data.hasil;
+                this.totjab = response.data.arrjab;
+                //TUNJANGAN
+                for (let i = 0; i < this.dettun.length; i++) {
+                        Object.assign(this.detgaji[i], { dettun: this.dettun[i] })
+                    }
+                for (let i = 0; i < this.nomdettun.length; i++) {
+                        Object.assign(this.detgaji[i], { nomdettun: this.nomdettun[i] })
+                    }
+                for (let i = 0; i < this.totun.length; i++) {
+                        Object.assign(this.detgaji[i], { totun: this.totun[i] })
+                    }    
+                //BONUS
+                for (let i = 0; i < this.detbon.length; i++) {
+                        Object.assign(this.detgaji[i], { detbon: this.detbon[i] })
+                    }
+                for (let i = 0; i < this.nombon.length; i++) {
+                        Object.assign(this.detgaji[i], { nombon: this.nombon[i] })
+                    }
+                for (let i = 0; i < this.totbon.length; i++) {
+                        Object.assign(this.detgaji[i], { totbon: this.totbon[i] })
+                    }    
+                //POTONGAN
+                for (let i = 0; i < this.detpot.length; i++) {
+                        Object.assign(this.detgaji[i], { detpot: this.detpot[i] })
+                    }
+                for (let i = 0; i < this.nompot.length; i++) {
+                        Object.assign(this.detgaji[i], { nompot: this.nompot[i] })
+                    }
+                for (let i = 0; i < this.totpot.length; i++) {
+                        Object.assign(this.detgaji[i], { totpot: this.totpot[i] })
+                    }
+                //TOTAL GAJI
+                for (let i = 0; i < this.totalgaji.length; i++) {
+                        Object.assign(this.detgaji[i], { totalgaji: this.totalgaji[i] })
+                    }
+                for (let i = 0; i < this.totjab.length; i++) {
+                        Object.assign(this.detgaji[i], { totjab: this.totjab[i] })
+                    }
+    
+
+            })
         },
         
         submitgaji(){
@@ -1176,6 +1392,14 @@ export default {
                     this.form.reset();
                     $("#buatgaji").modal("hide");
                     this.tampilgaji()
+                }else{
+                    Swal.fire({
+                        icon: "error",
+                        title: "Gagal",
+                        text: "Data Kurang Lengkap",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
                 }
             
 

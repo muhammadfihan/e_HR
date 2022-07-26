@@ -197,7 +197,6 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Pegawai</th>
                                                             <th>Nama Pegawai</th>
@@ -211,12 +210,6 @@
                                                         </thead>
                                                          <tbody>
                                                             <tr v-for="(data,index) in izin" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
                                                                     <td>{{index+1}} </td>
                                                                      <td>
                                                                         <div class="ms-3">
@@ -309,7 +302,6 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Tanggal</th>
 															<th>Nama Pegawai</th>
@@ -324,12 +316,6 @@
                                                         </thead>
                                                          <tbody>
                                                             <tr v-for="(data,index) in lembur" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
                                                                     <td>{{index+1}} </td>
 																	<td>{{ data.tanggal_lembur}}</td>
                                                                     <td>{{ data.nama_lengkap }}</td>
@@ -417,7 +403,6 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Pegawai</th>
                                                             <th>Nama Pegawai</th>
@@ -431,12 +416,6 @@
                                                         </thead>
                                                          <tbody>
                                                             <tr v-for="(data,index) in reqabsen" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
                                                                     <td>{{index+1}} </td>
                                                                      <td>
                                                                         <div class="ms-3">
@@ -526,7 +505,6 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Tanggal</th>
 															<th>Nama Pegawai</th>
@@ -542,19 +520,13 @@
                                                         </thead>
                                                          <tbody>
                                                             <tr v-for="(data,index) in cuti" :key="data.id">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
                                                                     <td>{{index+1}} </td>
 																	<td>{{ data.tanggal_cuti }}</td>
                                                                     <td>{{ data.nama_lengkap }}</td>
                                                                     <td>{{ data.no_pegawai}}</td>
                                                                     <td>{{ data.tanggal_mulai }}</td>
                                                                     <td>{{ data.tanggal_akhir }}</td>
-                                                                    <td>{{ data.jumlah_hari }}</td>
+                                                                    <td>{{ data.jumlah_hari }} Hari</td>
 																	<td>
 																		<span  @click.prevent="detailCuti(data.id)" style="cursor:pointer" class="badge badge-primary">Keterangan</span>
 																	</td>

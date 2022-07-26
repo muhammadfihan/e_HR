@@ -21,9 +21,9 @@ return new class extends Migration
             $table->foreign('id_jabatan')->references('id')->on('jabatan');
             $table->integer('id_golongan')->unsigned()->nullable();
             $table->foreign('id_golongan')->references('id')->on('golongan');
-            $table->string('id_tunjangan')->nullable();
-            $table->string('id_bonus')->nullable();
-            $table->string('id_potongan')->nullable();
+            $table->string('id_tunjangan')->default('-');
+            $table->string('id_bonus')->default('-');
+            $table->string('id_potongan')->default('-');
             $table->integer('total_tunjangan')->nullable();
             $table->integer('total_bonus')->nullable();
             $table->integer('total_potongan')->nullable();

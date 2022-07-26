@@ -83,7 +83,6 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                        <tr>
-                                                            <th>&nbsp;</th>
                                                             <th>No</th>
                                                             <th>Username</th>
                                                             <th>Email</th>
@@ -94,12 +93,6 @@
                                                         </thead>
                                                          <tbody>
                                                             <tr v-for="(data, index) in akunpegawai" :key="data.name">
-                                                                    <td>
-                                                                        <label class="checkbox-wrap checkbox-success">
-                                                                            <input type="checkbox">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
                                                                      <td>{{index+1}} </td>
                                                                     <td>{{ data.name }}</td>
                                                                     <td>{{ data.email }}</td>
@@ -150,23 +143,28 @@
 																	<div class="modal-body">
 																		<div >
 																			<form @submit.prevent="statusmodal ? editAkun() : addAkun()">
-																				<div class="form-group row">
+																				<div class="form-group row" :class="{ error: v$.form.name.$errors.length }">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Username</label>
 																					<div class="col-lg-9 col-xl-6">
-																						 <input v-model="form.name" type="name" class="form-control form-control-lg form-control-solid">
+																						 <input placeholder="Masukan Username Pegawai" v-model="v$.form.name.$model" type="name" class="form-control form-control-lg form-control-solid">
+                                                                                          <div class="input-errors" v-for="(error, index) of v$.form.name.$errors" :key="index">
+                                                                                            <span class="error-msg" style="color:red">Harap Masukan Username Pegawai</span>
+                                                                                        </div>
 																					</div>
 																				</div>
-																				<div class="form-group row">
+																				<div class="form-group row" :class="{ error: v$.form.email.$errors.length }">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Email</label>
 																					<div class="col-lg-9 col-xl-6">
-																						 <input v-model="form.email" type="name" class="form-control form-control-lg form-control-solid">
+																						 <input placeholder="Masukan Email Pegawai" v-model="v$.form.email.$model" type="name" class="form-control form-control-lg form-control-solid">
+                                                                                         <div class="input-errors" v-for="(error, index) of v$.form.email.$errors" :key="index">
+                                                                                            <span class="error-msg" style="color:red">Harap Masukan Email</span>
+                                                                                        </div>
 																					</div>
 																				</div>
                                                                                 <div class="form-group row">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Jabatan</label>
 																					<div class="col-lg-9 col-xl-6">
 																						 <select class="form-control form-control-lg form-control-solid" v-model="form.id_jabatan">
-                                                                                        <option disabled selected>Ubah Jabatan</option>
                                                                                         <option v-for="data in detjabatan" :key="data.id"
                                                                                                         :selected="data.jabatan == form.id_jabatan ? selected : null"
                                                                                                         :value="data.id">
@@ -188,18 +186,22 @@
                                                                                         </select>
 																					</div>
 																				</div>
-                                                                                <div class="form-group row">
+                                                                                <div class="form-group row" :class="{ error: v$.form.password.$errors.length }">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Password</label>
 																					<div class="col-lg-9 col-xl-6">
-																						 <input v-model="form.password" type="password" class="form-control form-control-lg form-control-solid">
+																						 <input placeholder="Masukan Password Min 8 Karakter" v-model="v$.form.password.$model" type="password" class="form-control form-control-lg form-control-solid">
+                                                                                         <div class="input-errors" v-for="(error, index) of v$.form.password.$errors" :key="index">
+                                                                                        <span class="error-msg" style="color:red">Minimal 8 Karakter</span>
+                                                                                    </div>
 																					</div>
+                                                                                     
 																				</div>
 																			</form>
 																		</div>
 																	</div>
 																	<div class="modal-footer">
 																		
-																		<button type="submit" v-show="!statusmodal"  @click="addAkun()"  class="btn btn-primary font-weight-bold">Tambah</button>
+																		<button :disabled="v$.form.$invalid" type="submit" v-show="!statusmodal"  @click="addAkun()"  class="btn btn-primary font-weight-bold">Tambah</button>
                                                                         <button type="submit" v-show="statusmodal"   @click="editAkun()"  class="btn btn-primary font-weight-bold">Update</button>
                                                                         <button type="button"  data-dismiss="modal" @click="closeModal()" class="btn btn-primary font-weight-bold">Batal</button>
 																	</div>
@@ -210,9 +212,14 @@
 
 
 <script>
-
+import useVuelidate from '@vuelidate/core'
+import { required, email, minLength } from '@vuelidate/validators'
 export default {
     name: "AkunPegawai",
+     setup () {
+        return { v$: useVuelidate() }
+    },
+    
     data() {
         return {
             infopt:[],
@@ -230,6 +237,22 @@ export default {
             }),
             token: localStorage.getItem("token"),
             role: localStorage.getItem('role'),
+        }
+    },
+    validations() {
+        return {
+        form: {
+            name: {
+            required, name
+            },
+            email: {
+            required, email 
+            },
+            password: {
+                required, 
+                min: minLength(8)
+            },
+        },
         }
     },
     created() {

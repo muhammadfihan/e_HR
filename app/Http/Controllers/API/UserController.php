@@ -259,6 +259,7 @@ class UserController extends Controller
         $pegawai = DB::table('akunpegawai')
         ->select('*')
         ->where('id_admin', Auth::user()->id)
+        ->latest()
         ->get();
 
         return response()->json([

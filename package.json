@@ -23,6 +23,8 @@
         "vue-loader": "^17.0.0"
     },
     "dependencies": {
+        "@vuelidate/core": "^2.0.0-alpha.43",
+        "@vuelidate/validators": "^2.0.0-alpha.31",
         "apexcharts": "^3.35.3",
         "bootstrap-table": "^1.20.0",
         "bootstrap-vue": "^2.22.0",
