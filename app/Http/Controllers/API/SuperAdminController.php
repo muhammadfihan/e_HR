@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\Auth;
 class SuperAdminController extends Controller
 {
     public function tampilsuperadmin(){
-        $pegawai = DB::table('perusahaan')
+        $pegawai = DB::table('users')
         ->select('*')
+        ->where('role', '=', 'Admin')
         ->get();
 
         return response()->json([

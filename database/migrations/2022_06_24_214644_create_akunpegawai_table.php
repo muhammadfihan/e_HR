@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreign('id_golongan')->references('id')->on('golongan');
             $table->enum('role', ['Manager', 'Admin', 'Pegawai'])->default('Pegawai');
             $table->string('email')->unique();
+            $table->string('status')->default('Aktif');
             $table->string('password');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

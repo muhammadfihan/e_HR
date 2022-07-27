@@ -1,6 +1,8 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Landing from '../components/Landing'
 import Login from '../components/Login'
+import LupaPassword from '../components/LupaPassword'
+import ResetPassword from '../components/ResetPassword'
 import LoginPegawai from '../components/LoginPegawai'
 import Register from '../components/Register'
 import TopBar from "../dashboard/TopBar";
@@ -64,11 +66,16 @@ export const routes = [{
         path: '/',
         component: Register
     },
-    // {
-    //     name: 'Pagination',
-    //     path: '/Pagination',
-    //     component: pagination
-    // },
+    {
+        name: 'LupaPassword',
+        path: '/LupaPassword',
+        component: LupaPassword
+    },
+    {
+        name: 'ResetPassword',
+        path: '/ResetPassword',
+        component: ResetPassword
+    },
     {
         name: 'AdminDashboard',
         path: '/AdminDashboard',

@@ -101,12 +101,12 @@
                                                                     </td>
                                                                     <td>{{index+1}} </td>
                                                                     <td>{{ data.nama_perusahaan }}</td>
-                                                                    <td>{{ data.email_perusahaan }}</td>
+                                                                    <td>{{ data.email }}</td>
                                                                     <td>{{ data.jumlah_karyawan }}</td>
                                                                     <td>{{ data.npwp }}</td>
                                                                     <td>{{ data.det_alamat }}</td>
                                                                     <td>
-                                                                        <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-trash-alt" @click.prevent="hapusAkun(data.id)">
+                                                                        <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-trash-alt" @click.prevent="hapusAdmin(data.id)">
                                                                           </a>
                                                                     </td>
                                                                       
@@ -157,6 +157,19 @@ export default {
         })
     },
     methods:{
+		getadmin(){
+			this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/tampilsuperadmin',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.superadmin = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+		},
          getpt(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/infopt',{
@@ -169,6 +182,40 @@ export default {
                     console.error(error);
                 });
         })
+        },
+		 hapusAdmin(id){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            Swal.fire({
+            title: 'Hapus Akun ?',
+            text: "Anda tidak akan bisa mengembalikannya lagi!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1BC5BD',
+            cancelButtonColor: '',
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal',
+            }).then((result) => {
+                 if (result.isConfirmed) {
+                 axios.delete('/api/hapusAdmin/'+id,  {
+                headers: { Authorization: "Bearer " + this.token },
+                },
+                )
+                  Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Berhasil Menghapus Akun Admin",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+                    };
+           
+                    this.getadmin()
+
+            },
+
+            )
+
+            })
         },
 
 

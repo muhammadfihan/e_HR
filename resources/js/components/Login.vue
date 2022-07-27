@@ -55,7 +55,7 @@
 								<div class="form-group">
 									<div class="d-flex justify-content-between mt-n5">
 										<label class="font-size-h6 font-weight-bolder text-dark pt-5">Password</label>
-										<a href="custom/pages/login/login-3/forgot.html" class="text-primary font-size-h6 font-weight-bolder text-hover-primary pt-5">Forgot Password ?</a>
+										<!-- <a @click.prevent="lupa()" style="cursor:pointer" class="text-primary font-size-h6 font-weight-bolder text-hover-primary pt-5">Forgot Password ?</a> -->
 									</div>
 									<input class="form-control h-auto py-7 px-6 rounded-lg border-0" type="password" autocomplete="off" v-model="password" />
 								</div>
@@ -102,6 +102,12 @@ export default {
         }
     },
     methods: {
+        lupa(){
+          this.$router.push("/LupaPassword");  
+        },
+        loginlagi(){
+          this.$router.push("/Login");  
+        },
         reset_admin() {
         document.getElementById("reset_admin").reset();
         localStorage.clear()

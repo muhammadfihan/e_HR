@@ -88,7 +88,7 @@
                                                             <th>Email</th>
                                                             <th>Jabatan</th>
                                                             <th>Golongan</th>
-                                                            <th style="text-align: center;">Action</th>
+                                                            <th>Status</th>
                                                         </tr>
                                                         </thead>
                                                          <tbody>
@@ -106,12 +106,9 @@
                                                                             <a v-if="data.id_golongan == gol.id">{{gol.golongan}}</a>
                                                                         </span>
                                                                     </td>
-                                                                    <td style="text-align: center;">
-                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="showModalEdit(data)">
-                                                                          </a>
-                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-trash-alt" @click.prevent="hapusAkun(data.id)">
-                                                                          </a>
-                                                                       
+                                                                      <td>
+                                                                        <span class="badge badge-success" v-if="data.status == 'Aktif'" >{{data.status}}</span>
+                                                                        <span class="badge badge-danger" v-if="data.status == 'Tidak Aktif'" >{{data.status}}</span>
                                                                     </td>
                                                             </tr>
                                                         </tbody>
@@ -186,16 +183,6 @@
                                                                                         </select>
 																					</div>
 																				</div>
-                                                                                <div class="form-group row" :class="{ error: v$.form.password.$errors.length }">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Password</label>
-																					<div class="col-lg-9 col-xl-6">
-																						 <input placeholder="Masukan Password Min 8 Karakter" v-model="v$.form.password.$model" type="password" class="form-control form-control-lg form-control-solid">
-                                                                                         <div class="input-errors" v-for="(error, index) of v$.form.password.$errors" :key="index">
-                                                                                        <span class="error-msg" style="color:red">Minimal 8 Karakter</span>
-                                                                                    </div>
-																					</div>
-                                                                                     
-																				</div>
 																			</form>
 																		</div>
 																	</div>
@@ -233,7 +220,6 @@ export default {
                 id_jabatan : "",
                 id_golongan : "",
                 email : "",
-                password : "",
             }),
             token: localStorage.getItem("token"),
             role: localStorage.getItem('role'),
@@ -247,10 +233,6 @@ export default {
             },
             email: {
             required, email 
-            },
-            password: {
-                required, 
-                min: minLength(8)
             },
         },
         }
@@ -305,7 +287,6 @@ export default {
                     id_jabatan: this.form.id_jabatan,
                     id_golongan: this.form.id_golongan,
                     email: this.form.email,
-                    password: this.form.password,
                 },
                 {
                     headers: { Authorization: "Bearer " + this.token }

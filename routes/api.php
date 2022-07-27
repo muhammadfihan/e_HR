@@ -14,6 +14,7 @@ use App\Http\Controllers\API\ReqAbsenController;
 use App\Http\Controllers\API\CutiController;
 use App\Http\Controllers\API\LemburController;
 use App\Http\Controllers\API\LaporanController;
+use App\Http\Controllers\API\ForgotPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,9 @@ Route::post('loginpegawai', [UserController::class, 'loginpegawai']);
 Route::post('register', [UserController::class, 'register']);
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 
+Route::post('lupa', [ForgotPasswordController::class, 'postEmail']);
+Route::post('submitlupa', [ForgotPasswordController::class, 'submitlupa']);
+
 Route::middleware(['auth:sanctum'])->group(function () {
    
     Route::post('addAkunPegawai', [UserController::class, 'addAkunPegawai'])->middleware('role:Manager,Admin');
@@ -40,6 +44,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('updateUser', [UserController::class, 'updateUser'])->middleware('role:Manager,Admin');
     Route::delete('hapusUser/{id}', [UserController::class, 'hapusUser'])->middleware('role:Manager,Admin');
     Route::get('getakun', [UserController::class, 'getakun'])->middleware('role:Admin,Pegawai');
+
+    Route::delete('hapusAdmin/{id}', [UserController::class, 'hapusAdmin'])->middleware('role:Manager,Admin');
 
     Route::get('tampilsuperadmin', [SuperAdminController::class, 'tampilsuperadmin'])->middleware('role:Manager');
 

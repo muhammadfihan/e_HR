@@ -114,8 +114,6 @@
                                                                           </a>
                                                                           <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="editModal(data)">
                                                                           </a>
-                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-trash-alt" @click.prevent="hapusPegawai(data.id)">
-                                                                          </a>
                                                                        
                                                                     </td>
                                                             </tr>

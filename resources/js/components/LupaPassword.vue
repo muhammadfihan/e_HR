@@ -1,5 +1,4 @@
 <template>
-<body>
      <div class="d-flex flex-column flex-root">
 			<!--begin::Login-->
 			<div class="login login-3 wizard d-flex flex-column flex-lg-row flex-column-fluid">
@@ -27,51 +26,37 @@
 				<div class="login-content flex-row-fluid d-flex flex-column p-10">
 					<!--begin::Top-->
 					<div class="text-right d-flex justify-content-center">
-						<div class="top-signin text-right d-flex justify-content-end pt-5 pb-lg-0 pb-10">
-							<span class="font-weight-bold text-muted font-size-h4">Having issues?</span>
-							<a href="javascript:;" class="font-weight-bold text-primary font-size-h4 ml-2" id="kt_login_signup">Get Help</a>
+						<div class="top-signin text-right d-flex justify-content-end pt-5 pb-lg-0 pb-10" @click="reload()">
 						</div>
 					</div>
 					<!--end::Top-->
 					<!--begin::Wrapper-->
 					<div class="d-flex flex-row-fluid flex-center">
-						<!--begin::Signin-->
+						<!--begin::Forgot-->
 						<div class="login-form">
 							<!--begin::Form-->
-							<form class="form" id="kt_login_singin_form" action="">
+							<form class="form" action="">
 								<!--begin::Title-->
 								<div class="pb-5 pb-lg-15">
-									<h3 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg">Login Pegawai</h3>
-									<div class="text-muted font-weight-bold font-size-h4">Anda akan login sebagai : 
-									<a href="custom/pages/login/login-3/signup.html" class="text-primary font-weight-bolder">Pegawai</a></div>
+									<h3 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg">Lupa Password ?</h3>
+									<p class="text-muted font-weight-bold font-size-h4">Masukan Email Untuk Membuat Password Baru</p>
 								</div>
-								<!--begin::Title-->
+								<!--end::Title-->
 								<!--begin::Form group-->
 								<div class="form-group">
-									<label class="font-size-h6 font-weight-bolder text-dark">Email</label>
-									<input class="form-control h-auto py-7 px-6 rounded-lg border-0" v-model="email" type="email" autocomplete="off" />
+									<input class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6" type="email" placeholder="Email" v-model="email" name="email" autocomplete="off" />
 								</div>
 								<!--end::Form group-->
 								<!--begin::Form group-->
-								<div class="form-group">
-									<div class="d-flex justify-content-between mt-n5">
-										<label class="font-size-h6 font-weight-bolder text-dark pt-5">Password</label>
-										<a @click.prevent="lupa()" style="cursor:pointer" class="text-primary font-size-h6 font-weight-bolder text-hover-primary pt-5">Forgot Password ?</a>
-									</div>
-									<input class="form-control h-auto py-7 px-6 rounded-lg border-0" type="password" autocomplete="off" v-model="password" />
+								<div class="form-group d-flex flex-wrap">
+									<button type="submit" id="kt_login_forgot_form_submit_button" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-4" @click.prevent="passwordlupa()">Submit</button>
+									<a @click.prevent="loginlagi()" id="kt_login_forgot_cancel" class="btn btn-light-primary font-weight-bolder font-size-h6 px-8 py-4 my-3">Cancel</a>
 								</div>
 								<!--end::Form group-->
-								<!--begin::Action-->
-								<div class="pb-lg-0 pb-5">
-									<button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3" @click="loginPegawai" >Login</button>
-                                    <button class="btn btn-outline-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3" @click="toAdmin()">Login Admin</button>
-									
-								</div>
-								<!--end::Action-->
 							</form>
 							<!--end::Form-->
 						</div>
-						<!--end::Signin-->
+						<!--end::Forgot-->
 					</div>
 					<!--end::Wrapper-->
 				</div>
@@ -79,11 +64,12 @@
 			</div>
 			<!--end::Login-->
 		</div>
-</body>
       
 </template>
 
 <script>
+
+
 import Dashboard from "./Dashboard";
 export default {
     components: {Dashboard},
@@ -110,53 +96,24 @@ export default {
         document.getElementById("reset_peg").reset();
         localStorage.clear();
         },
-
-        toAdmin(){
+         loginlagi(){
           this.$router.push("/Login");  
         },
-         
+
+        toPegawai(){
+          this.$router.push("/LoginPegawai");  
+        },
+         toRegister(){
+          this.$router.push("/");  
+        },
+        reload(){
+          location.reload()
+        },
 
         loginAdmin(e) {
             e.preventDefault()
-            if (this.password.length > 0) {
                 this.$axios.get('/sanctum/csrf-cookie').then(response => {
                     this.$axios.post('api/login', {
-                        email: this.email,
-                        password: this.password
-                    })
-                        .then(response => {
-                            console.log(response.data)
-                            if (response.data.success) {
-                                window.localStorage.setItem("loggedIn", true)
-                                window.localStorage.setItem("token", response.data.token)
-                                window.localStorage.setItem("role", response.data.user.role)
-                                window.localStorage.setItem("name", response.data.user.name)
-
-                                if (response.data.user.role == 'Manager') {
-                                    this.$router.push("/SuperAdminDashboard")
-                                } else if (response.data.user.role == 'Admin') {
-                                    this.$router.push("/AdminDashboard")
-                                } else if (response.data.user.role == 'Pegawai') {
-                                    this.$router.push("/PegawaiDashboard")
-                                }
-                                this.loggedIn = true;
-                            } else {
-                                this.error = response.data.message
-                            }
-                        })
-                        .catch(function (error) {
-                            console.error(error);
-                        });
-                })
-            }
-        },
-          lupa(){
-          this.$router.push("/LupaPassword");  
-        },
-        loginPegawai(e) {
-            e.preventDefault()
-                this.$axios.get('/sanctum/csrf-cookie').then(response => {
-                    this.$axios.post('api/loginpegawai', {
                         email: this.email,
                         password: this.password
                     }).then(response => {
@@ -203,8 +160,63 @@ export default {
                         });
                 })
         },
+        loginPegawai(e) {
+            e.preventDefault()
+            if (this.password.length > 0) {
+                this.$axios.get('/sanctum/csrf-cookie').then(response => {
+                    this.$axios.post('api/loginpegawai', {
+                        email: this.email,
+                        password: this.password
+                    })
+                        .then(response => {
+                            console.log(response.data)
+                            if (response.data.success) {
+                                window.localStorage.setItem("loggedIn", true)
+                                window.localStorage.setItem("token", response.data.token)
+                                window.localStorage.setItem("role", response.data.user.role)
+                                window.localStorage.setItem("name", response.data.user.name)
+
+                                if (response.data.user.role == 'Manager') {
+                                    this.$router.push("/SuperAdminDashboard")
+                                } else if (response.data.user.role == 'Admin') {
+                                    this.$router.push("/AdminDashboard")
+                                } else if (response.data.user.role == 'Pegawai') {
+                                    this.$router.push("/PegawaiDashboard")
+                                }
+                                this.loggedIn = true;
+                            } else {
+                                this.error = response.data.message
+                            }
+                        })
+                        .catch(function (error) {
+                            console.error(error);
+                        });
+                })
+            }
+        },
+        passwordlupa() {
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.post('/api/lupa', {
+                        email: this.email,
+
+                    }).then((response) => {
+                if (response.data.success){
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: "Email Telah Dikirim Silahkan Cek Email",
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
+                     this.$router.push("/LoginPegawai");  
+                }
+                    
+                    }
+                )
+                    })
+        },
     },
-   
+     
     beforeRouteEnter(to, from, next) {
         if (JSON.parse(window.localStorage.getItem("loggedIn"))) {
             if (window.localStorage.getItem("role") == 'Manager') {
@@ -221,3 +233,21 @@ export default {
 }
 </script>
 
+ <!-- console.log(response.data)
+                            if (response.data.success) {
+                                window.localStorage.setItem("loggedIn", true)
+                                window.localStorage.setItem("token", response.data.token)
+                                window.localStorage.setItem("role", response.data.user.role)
+                                window.localStorage.setItem("name", response.data.user.name)
+
+                                if (response.data.user.role == 'Manager') {
+                                    this.$router.push("/ManagerDashboard")
+                                } else if (response.data.user.role == 'Admin') {
+                                    this.$router.push("/AdminDashboard")
+                                } else if (response.data.user.role == 'Pegawai') {
+                                    this.$router.push("/PegawaiDashboard")
+                                }
+                                this.loggedIn = true;
+                            } else {
+                                this.error = response.data.message
+                            } -->

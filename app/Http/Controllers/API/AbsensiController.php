@@ -34,6 +34,7 @@ class AbsensiController extends Controller
             ->select('*')
             ->whereDate('tanggal', $tanggal)
             ->where('email', Auth::user()->email)
+            ->where('status_izin', '=', 'Diterima')
             ->first();
         if($izin){
             return response()->json([

@@ -94,6 +94,13 @@ class UserController extends Controller
                     'errors'    => true,
                 ];
                 return response($response, 201);
+             }
+             if ($user->status === 'Tidak Aktif') {
+                $response = [
+                    'success'   => false,
+                    'errors'    => true,
+                ];
+                return response($response, 201);
              }else{
                 $detail = DB::table('akunpegawai')
                 ->select('*')
@@ -201,7 +208,6 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'id_jabatan' => 'required',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
 
         ]);
         $success = false;
@@ -215,7 +221,9 @@ class UserController extends Controller
         //     'role' => $request->role,
         //     'email' => $request->email,
         //     'password' => Hash::make($request->password),
-        // ]);    
+        // ]);
+        $pass = "1234567890";
+        $random = strtoupper(substr(str_shuffle($pass), 0, 9));    
         $akunpegawai = AkunPegawai::create([
             'id' => $request->id,
             'id_admin' => Auth::user()->id,
@@ -223,7 +231,7 @@ class UserController extends Controller
             'id_jabatan' => $request->id_jabatan,
             'id_golongan' => $request->id_golongan,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => 'Password'.$random,
         ]);
         $akunpegawai->save();
         $huruf = "1234567890";
@@ -323,6 +331,15 @@ class UserController extends Controller
     public function hapusUser(Request $request, $id)
     {
         $data = AkunPegawai::findOrFail($id);
+        $data->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Hapus data berhasil'
+        ]);
+    }
+    public function hapusAdmin(Request $request, $id)
+    {
+        $data = User::findOrFail($id);
         $data->delete();
         return response()->json([
             'success' => true,

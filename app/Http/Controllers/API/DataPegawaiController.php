@@ -136,15 +136,17 @@ class DataPegawaiController extends Controller
                 DB::table('pegawais')->where('id', $request->id)->update([
                     'id_jabatan' => $request->id_jabatan,
                     'id_golongan' => $request->id_golongan,
-                    'status' => $request->status
+                    'status' => $request->status,
                 ]);
                 DB::table('akunpegawai')->where('id', $request->id)->update([
                     'id_jabatan' => $request->id_jabatan,
                     'id_golongan' => $request->id_golongan,
+                    'status' => $request->status,
                 ]);
                 DB::table('datagaji')->where('id', $request->id)->update([
                     'id_jabatan' => $request->id_jabatan,
                     'id_golongan' => $request->id_golongan,
+                    'status' => $request->status,
                 ]);
                 return response()->json([
                     'success' => true,
