@@ -192,9 +192,12 @@
 
                                 <!--begin::Toggle-->
                                 <div class="topbar-item">
-                                    <div class="dropdown dropdown-inline">
-                                        <a href="#" class="btn btn-light-primary font-weight-bold dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa fa-user"></i>{{name}}
+                                    <div  v-for="(data) in pegawais" :key="data.id" class="dropdown dropdown-inline">
+                                        <a href="#" v-if="data.nama_lengkap != null"  class="btn btn-light-primary font-weight-bold dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-user"></i>{{data.nama_lengkap}}
+                                        </a>
+                                         <a href="#" v-else-if="data.nama_lengkap == null"  class="btn btn-light-primary font-weight-bold dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-user"></i>Data Belum Lengkap
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-md py-5">
                                             <ul class="navi navi-hover">
@@ -267,6 +270,7 @@
 export default {
         data() {
             return {
+                pegawais: [],
                 loggedIn: localStorage.getItem("loggedIn"),
                 token: localStorage.getItem("token"),
                 name: localStorage.getItem("name"),
@@ -287,6 +291,19 @@ export default {
                     return this.$router.push({ name: "Login" });
                 })
             },
+             getprofile(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/getprofile',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.pegawais = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
             fixerror(){
                 location.reload();
             },
@@ -350,6 +367,7 @@ export default {
             if (!this.loggedIn) {
                 return this.$router.push({name: "Login"});
             }
+            this.getprofile();
         },
 
 }

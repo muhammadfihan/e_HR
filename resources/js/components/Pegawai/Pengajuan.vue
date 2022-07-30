@@ -1794,7 +1794,7 @@ export default {
 		},
          getpt(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/infopt',{
+            this.$axios.get('/api/infoptpeg',{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {

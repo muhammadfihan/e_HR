@@ -229,6 +229,10 @@ class DataGajiController extends Controller
         $akhir[$key] = array($totaltun[$key] + $nomjab[$key] +$totalbon[$key] - $totalpot[$key]);
         
     }
+    foreach (array_keys($totaltun + $totalbon + $nomjab) as $key) {
+        $subtotal[$key] = array($totaltun[$key] + $nomjab[$key] +$totalbon[$key]);
+        
+    }
    
     return response()->json([
         'data' => $detgaji,
@@ -248,6 +252,7 @@ class DataGajiController extends Controller
         'nominal_potongan' => $nomPot,
         'total_potongan' => $totalpot,
         'hasil' => $akhir,
+        'subtotal' => $subtotal,
         'message' => 'get data berhasil',
         'status' => true
     ]);
@@ -306,6 +311,10 @@ class DataGajiController extends Controller
                 $akhir[$key] = array($totaltun[$key] + $nomjab[$key] +$totalbon[$key] - $totalpot[$key]);
                 
             }
+            // foreach (array_keys($totaltun + $totalbon + $nomjab) as $key) {
+            //     $subtotal[$key] = array($totaltun[$key] + $nomjab[$key] +$totalbon[$key]);
+                
+            // }
            
         return response()->json([
             'data' => $gajipeg,
@@ -321,6 +330,7 @@ class DataGajiController extends Controller
             'nominal_potongan' => $nomPot,
             'total_potongan' => $totalpot,
             'hasil' => $akhir,
+            // 'subtotal' => $subtotal,
             'message' => 'get data berhasil',
             'status' => true
         ]);    
@@ -384,6 +394,11 @@ class DataGajiController extends Controller
          $akhir[$key] = array($totaltun[$key] + $nomjab[$key] +$totalbon[$key] - $totalpot[$key]);
          
      }
+     foreach (array_keys($totaltun + $totalbon + $nomjab) as $key) {
+        $subtotal[$key] = array($totaltun[$key] + $nomjab[$key] +$totalbon[$key]);
+        
+    }
+    
     
      return response()->json([
          'data' => $detgaji,
@@ -403,6 +418,7 @@ class DataGajiController extends Controller
          'nominal_potongan' => $nomPot,
          'total_potongan' => $totalpot,
          'hasil' => $akhir,
+         'subtotal' => $subtotal,
          'message' => 'get data berhasil',
          'status' => true
      ]);

@@ -404,6 +404,19 @@ class UserController extends Controller
             'data' => $pt
         ]);
     }
+    public function infoptpeg()
+    {
+        $pt = DB::table('users')
+        ->select('*')
+        ->where('id', Auth::user()->id_admin)
+        ->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Ambil data berhasil',
+            'data' => $pt
+        ]);
+    }
 
    
 }

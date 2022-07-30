@@ -811,7 +811,7 @@
 															</div>
 														</div>
 <div class="modal fade" id="detailgaji" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
-															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md" role="document">
 																<div class="modal-content">
 																	<div class="modal-header">
                                                                         <h5 class="modal-title" id="detailgaji">Detail Gaji Pegawai</h5>
@@ -824,7 +824,85 @@
                                                                         <br>
 																		<div class="table-responsive">
 													<table class="table table-bordered"  v-for="(data) in detgaji" :key="data.id">
-                                                        <thead class="">
+                                                        <thead class="" >
+                                                        
+                                                        <tr>
+                                                            <th>Jenis</th>
+                                                            <th class="text-right">Nominal</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tr>
+                                                            <td>Gaji Pokok</td>
+                                                             <td class="text-right" v-for="jabgaji in data.totjab" :key="jabgaji.id">{{convertToRupiah(jabgaji)}}</td>
+                                                        </tr>
+                                                         <tr>
+                                                           <td>
+                                                                     <span v-for="tundet in data.dettun" :key="tundet.id">
+                                                                            <li style="list-style:none;">{{tundet}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td class="text-right">
+                                                                     <span v-for="nomtun in data.nomdettun" :key="nomtun.id">
+                                                                            <li style="list-style:none">{{convertToRupiah(nomtun)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                        </tr>
+                                                        <tr>
+                                                             <td>
+                                                                     <span v-for="bondet in data.detbon" :key="bondet.id">
+                                                                            <li style="list-style:none;">{{bondet}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                        
+                                                                <td class="text-right">
+                                                                     <span v-for="nomibon in data.nombon" :key="nomibon.id">
+                                                                            <li style="list-style:none">{{convertToRupiah(nomibon)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                        </tr>
+                                                       
+                                                        <thead class="" >
+                                                        <tr>
+                                                            <th>Sub Total</th>
+                                                             <th class="text-right" v-for="sub in data.subtotal" :key="sub.id">{{convertToRupiah(sub)}}</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tr>
+                                                             <td>
+                                                                     <span v-for="potdet in data.detpot" :key="potdet.id">
+                                                                            <li style="list-style:none;">{{potdet}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td class="text-right">
+                                                                     <span v-for="nomipot in data.nompot" :key="nomipot.id">
+                                                                            <li style="list-style:none">{{convertToRupiah(nomipot)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                        </tr>
+                                                            
+                                                        
+                                                         <thead class="" >
+                                                        <tr>
+                                                            <th>Total Potongan</th>
+                                                            <th class="text-right">
+                                                                     <span v-for="totapot in data.totpot" :key="totapot.id">
+                                                                            <a>(-) {{convertToRupiah(totapot)}}</a>
+                                                                        </span>
+                                                            </th> 
+                                                        </tr>
+                                                        </thead>
+                                                         <thead class="" >
+                                                        <tr>
+                                                            <th>Penerima Bersih</th>
+                                                            <th class="text-right" v-for="totagaj in data.totalgaji" :key="totagaj.id">
+                                                                <a>{{convertToRupiah(totagaj)}}</a>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody>
+                                                        </tbody>
+                                                    
+                                                        <!-- <thead class="">
                                                         <tr>
                                                             <th>Tunjangan</th>
                                                             <th>Nominal</th>
@@ -876,7 +954,26 @@
                                                                 </td> 
                                                             </tr>
                                                         </tbody>
-                                                         <thead class="">
+                                                       
+                                                        <thead class="">
+                                                         <tr>
+                                                            <th></th>
+                                                            <th>Gaji Pokok</th>
+                                                             <th v-for="jabgaji in data.totjab" :key="jabgaji.id">{{convertToRupiah(jabgaji)}}</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Total Gaji</th>
+                                                            <th v-for="totagaj in data.totalgaji" :key="totagaj.id">
+                                                                <a>{{convertToRupiah(totagaj)}}</a>
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+
+                                                        </tr>
+                                                       
+                                                        </thead>
+                                                          <thead class="">
                                                         <tr>
                                                             <th>Potongan</th>
                                                             <th>Nominal</th>
@@ -901,22 +998,7 @@
                                                                         </span>
                                                                 </td> 
                                                             </tr>
-                                                        </tbody>
-                                                        <thead class="">
-                                                         <tr>
-                                                            <th></th>
-                                                            <th>Gaji Pokok</th>
-                                                             <th v-for="jabgaji in data.totjab" :key="jabgaji.id">{{convertToRupiah(jabgaji)}}</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th></th>
-                                                            <th>Total Gaji</th>
-                                                            <th v-for="totagaj in data.totalgaji" :key="totagaj.id">
-                                                                <a>{{convertToRupiah(totagaj)}}</a>
-                                                            </th>
-                                                        </tr>
-                                                       
-                                                        </thead>
+                                                        </tbody> -->
                                                     </table>
 
                                                 </div>
@@ -1094,6 +1176,7 @@ export default {
     name: "Payroll",
     data() {
         return {
+            subtotal: [],
             totjab: [],
             totalgaji: [],
             detpot: [],
@@ -1326,6 +1409,8 @@ export default {
                 //TOTAL GAJI
                 this.totalgaji = response.data.hasil;
                 this.totjab = response.data.arrjab;
+
+                this.subtotal = response.data.subtotal;
                 //TUNJANGAN
                 for (let i = 0; i < this.dettun.length; i++) {
                         Object.assign(this.detgaji[i], { dettun: this.dettun[i] })
@@ -1363,6 +1448,9 @@ export default {
                 for (let i = 0; i < this.totjab.length; i++) {
                         Object.assign(this.detgaji[i], { totjab: this.totjab[i] })
                     }
+                  for (let i = 0; i < this.subtotal.length; i++) {
+                        Object.assign(this.detgaji[i], { subtotal: this.subtotal[i] })
+                    }   
     
 
             })

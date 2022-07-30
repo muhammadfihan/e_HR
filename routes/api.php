@@ -50,6 +50,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('tampilsuperadmin', [SuperAdminController::class, 'tampilsuperadmin'])->middleware('role:Manager');
 
     Route::get('infopt', [UserController::class, 'infopt'])->middleware('role:Admin,Pegawai');
+    Route::get('infoptpeg', [UserController::class, 'infoptpeg'])->middleware('role:Admin,Pegawai');
     Route::get('getakunAdmin', [UserController::class, 'getakunAdmin'])->middleware('role:Admin,Pegawai');
 
     Route::get('jabatan',[JabatanController::class, 'jabatan'])->middleware('role:Manager,Admin,Pegawai');
