@@ -82,7 +82,7 @@
                                                             <th>Jabatan</th>
                                                             <th>No Pegawai</th>
                                                             <th>Status</th>
-                                                            <th>Total Jam Kerja</th>
+                                                            <th>Jumlah Kerja</th>
                                                             <th>Gender</th>
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
@@ -107,7 +107,7 @@
                                                                         <span class="badge badge-success" v-if="data.status == 'Aktif'" >{{data.status}}</span>
                                                                         <span class="badge badge-danger" v-else-if="data.status == 'Tidak Aktif'" >{{data.status}}</span>
                                                                     </td>
-                                                                    <td><a>{{ format(data.jam_kerja)}}</a></td>
+                                                                    <td><a>{{ data.jumlah_kerja}} Hari</a></td>
                                                                     <td>{{ data.gender }}</td>
                                                                     <td style="text-align: center;">
                                                                           <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" data-target="#detailmodal" @click.prevent="detailPegawai(data.id)">

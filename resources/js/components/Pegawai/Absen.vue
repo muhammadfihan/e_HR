@@ -186,8 +186,11 @@ export default {
         })
     },
     methods:{
-		format(time){
-        return time.replace(/(?:0)?(\d+):(?:0)?(\d+).*/,'$1 Jam');
+		  format(time){
+		if (time != null){
+			return time.replace(/(?:0)?(\d+):(?:0)?(\d+).*/,'$1 Jam');
+		}
+        
 		},
           close(){
              $('#detailmodal').modal('hide')

@@ -44,13 +44,8 @@ class CutiController extends Controller
 
         $datetime1 = strtotime($request->input('tanggal_mulai'));
         $datetime2 = strtotime($request->input('tanggal_akhir'));
-        // $datetime2 = new DateTime($awal);
-
-        // // dd($akhir);
-        // return $akhir;
         $interval = $datetime2 - $datetime1;
 
-        // return $interval/60/60/24;
 
         $user = DataPegawai::where('id', Auth::user()->id)->first();
         $cuti = Cuti::create([
