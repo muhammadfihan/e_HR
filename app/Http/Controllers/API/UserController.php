@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Jabatan;
 use App\Models\Pegawai;
+use DateTime;
+use DateTimeZone;
 use App\Models\Perusahaan;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -223,24 +225,52 @@ class UserController extends Controller
         //     'password' => Hash::make($request->password),
         // ]);
         $pass = "1234567890";
-        $random = strtoupper(substr(str_shuffle($pass), 0, 9));    
+        $random = strtoupper(substr(str_shuffle($pass), 0, 9));
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
+        
+        $datetime1 = strtotime($request->input('tanggal_masuk'));
+        $datetime2 = strtotime($tanggal);
+        // $datetime2 = new DateTime($awal);
+
+        // // dd($akhir);
+        // return $akhir;
+        $jumlahkerja = $datetime2 - $datetime1;
+
         $akunpegawai = AkunPegawai::create([
             'id' => $request->id,
             'id_admin' => Auth::user()->id,
             'name' => $request->name,
             'id_jabatan' => $request->id_jabatan,
             'id_golongan' => $request->id_golongan,
+            'tanggal_masuk' => $request->tanggal_masuk,
+            'jumlah_kerja' => $jumlahkerja/60/60/24,
             'email' => $request->email,
             'password' => 'Password'.$random,
         ]);
         $akunpegawai->save();
         $huruf = "1234567890";
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
+        
+        $datetime1 = strtotime($request->input('tanggal_masuk'));
+        $datetime2 = strtotime($tanggal);
+        // $datetime2 = new DateTime($awal);
+
+        // // dd($akhir);
+        // return $akhir;
+        $jumlahkerja = $datetime2 - $datetime1;
+
         $nopegawai = strtoupper(substr(str_shuffle($huruf), 0, 9));
         $pegawai = DataPegawai::create([
             'no_pegawai' => 'PN'.$nopegawai,
             'name' => $request->name,
             'email' => $request->email,
             'id' => $akunpegawai->id,
+            'tanggal_masuk' => $request->tanggal_masuk,
+            'jumlah_kerja' => $jumlahkerja/60/60/24,
             'id_golongan' => $request->id_golongan,
             'id_jabatan' => $request->id_jabatan,
             'id_admin' => Auth::user()->id,

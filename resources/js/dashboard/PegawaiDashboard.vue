@@ -893,10 +893,12 @@ export default {
                     })
                     
                 }
-                if (response.data.status == false){
+               
+				if (response.data.status == false){
                     Swal.fire({
                         icon: "error",
-                        title: "Harap Presensi Pulang Terlebih Dahulu",
+                        title: "Terjadi Kesalahan",
+						text: "Belum Presensi Masuk Atau Belum Saatnya Pulang",
                         showConfirmButton: false,
                         timer: 1600,
                     })

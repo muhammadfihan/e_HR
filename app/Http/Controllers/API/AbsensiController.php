@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use DateTime;
 use DateTimeZone;
 use App\Models\Absensi;
+use App\Models\JamAbsen;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -232,11 +233,23 @@ class AbsensiController extends Controller
         ->whereDate('tanggal', $tanggal)
         ->first();
 
+        $tes = JamAbsen::where('id_admin', Auth::user()->id_admin)
+        ->first();
+
+        // $hasilblm = strtotime($tes->jam_pulang);
+        // $hasiltgl = strtotime($tanggal);
+
         if ($presensi == null){
             return response()->json([
                 'sudahabsen' => $presensi,
                 'status' => false,
                 'message' => 'Harap Presensi Terlebih Dahulu',
+            ]);
+        }
+        elseif ($localtime < $tes->jam_pulang){
+            return response()->json([
+                'status' => false,
+                'message' => 'Tunggu Pulang',
             ]);
         }
 
@@ -261,8 +274,12 @@ class AbsensiController extends Controller
                 ->where('id', Auth::user()->id)
                 ->whereDate('tanggal', $tanggal)
                 ->first();
+            $jumlahkerja = DB::table('pegawais')
+                ->select('*')
+                ->where('id', Auth::user()->id)
+                ->first();    
             $total = date('H:i:s' , strtotime($totaljamkerja->jam_kerja) + strtotime($jamkerja->jam_kerja));
-            
+            $jmlh = $jumlahkerja->jumlah_kerja + 1 ;
             $hasil = DB::table('datagaji')
             ->where('id' , Auth::user()->id)
             ->update([
@@ -273,8 +290,14 @@ class AbsensiController extends Controller
             ->update([
                 'jam_kerja' => $total
             ]);
+            $hasilkerja = DB::table('pegawais')
+            ->where('id' , Auth::user()->id)
+            ->update([
+                'jumlah_kerja' => $jmlh
+            ]);
             return response()->json([
                 'data' => $dt,
+                'jumlah_kerja' => $hasilkerja,
                 'updategaji' => $hasil2,
                 'data_lagi' => $hasil,
                 'tanggal' => $tanggal,

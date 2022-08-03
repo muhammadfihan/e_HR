@@ -23,6 +23,8 @@ class AkunPegawai extends Authenticatable
         'id_admin',
         'id_jabatan',
         'id_golongan',
+        'tanggal_masuk',
+        'jumlah_kerja',
         'name',
         'email',
         'password',

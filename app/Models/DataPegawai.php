@@ -21,6 +21,8 @@ class DataPegawai extends Model
         'pendidikan',
         'id_jabatan',
         'jam_kerja',
+        'jumlah_kerja',
+        'tanggal_masuk',
         'no_ktp',
         'no_hp',
         'gender',

@@ -24,7 +24,7 @@
 											<div class="card-header border-0 py-5 " >
                                                 <a class="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 												</a>
-                                              <button type="submit" @click="showModal()" class="btn btn-white text-success font-weight-bolder">Atur Presensi</button>
+                                              <button type="submit" @click="showModal(data)" class="btn btn-white text-success font-weight-bolder">Atur Presensi</button>
 											</div>
 											<!--end::Header-->
 											<!--begin::Body-->
@@ -369,7 +369,7 @@
 																			<div class="form-group row">
 														<label for="example-time-input" class="col-2 col-form-label">Jam Masuk</label>
 														<div class="col-10">
-															<input v-model="form.jam_masuk" class="form-control" type="time" id="example-time-input" />
+															<input v-model="form.jam_masuk" class="form-control" type="time" />
 														</div>
 													</div>
 
