@@ -30,6 +30,7 @@ return new class extends Migration
             $table->bigInteger('no_hp')->nullable();
             $table->longText('alamat')->nullable();
             $table->integer('jumlah_kerja')->nullable();
+            $table->integer('jatah_cuti')->nullable();
             $table->date('tanggal_masuk');
             $table->enum('status', ['Aktif', 'Tidak Aktif'])->default('Aktif');
             $table->enum('gender',['Laki-Laki','Perempuan'])->nullable();

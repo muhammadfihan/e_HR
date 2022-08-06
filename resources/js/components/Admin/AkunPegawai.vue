@@ -183,6 +183,12 @@
                                                                                         </select>
 																					</div>
 																				</div>
+                                                                                <div class="form-group row">
+																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Tanggal Masuk pegawai</label>
+																					<div class="col-lg-9 col-xl-6">
+																						 <input v-model="form.tanggal_masuk" placeholder="Tanggal Pegawai Masuk Perusahaan" type="date" class="form-control form-control-lg form-control-solid">
+																					</div>
+																				</div>
 																			</form>
 																		</div>
 																	</div>
@@ -219,6 +225,7 @@ export default {
                 name : "",
                 id_jabatan : "",
                 id_golongan : "",
+                tanggal_masuk: "",
                 email : "",
             }),
             token: localStorage.getItem("token"),
@@ -287,6 +294,7 @@ export default {
                     id_jabatan: this.form.id_jabatan,
                     id_golongan: this.form.id_golongan,
                     email: this.form.email,
+                    tanggal_masuk: this.form.tanggal_masuk
                 },
                 {
                     headers: { Authorization: "Bearer " + this.token }

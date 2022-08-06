@@ -132,6 +132,24 @@
 															<span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Potongan</span>
 														</a>
 													</li>
+                                                    <li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
+														<a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#forms_widget_tab_5">
+															<span class="nav-icon py-2 w-auto">
+																<span class="svg-icon svg-icon-3x">
+																	<!--begin::Svg Icon | path:assets/media/svg/icons/General/Shield-check.svg-->
+																	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+																		<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																			<polygon points="0 0 24 0 24 24 0 24" />
+																			<path d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+																			<path d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z" fill="#000000" fill-rule="nonzero" />
+																		</g>
+																	</svg>
+																	<!--end::Svg Icon-->
+																</span>
+															</span>
+															<span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Riwayat Penggajian</span>
+														</a>
+													</li>
 													<!--end::Item-->
 													<!--begin::Item-->
 													<!--end::Item-->
@@ -154,8 +172,8 @@
 											<!--begin::Header-->
 											<div class="card-header flex-wrap border-0 pt-6 pb-0">
 												<h3 class="card-title align-items-start flex-column">
-													<span class="card-label font-weight-bolder text-dark" >Riwayat Gaji</span>
-                                                    <span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Data Riwayat Penggajian Karyawan di {{ data.nama_perusahaan }} </span>
+													<span class="card-label font-weight-bolder text-dark" >Buat Penggajian Pegawai</span>
+                                                    <span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Data Penggajian Karyawan di {{ data.nama_perusahaan }} </span>
 												</h3>
                                                  <div class="card-toolbar">
 													<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
@@ -216,56 +234,39 @@
                                                             <th>Email</th>
                                                             <th>Periode</th>
                                                             <th>Jabatan</th>
-                                                            <th>Tunjangan</th>
-                                                            <th>Bonus</th>
-                                                            <th>Potongan</th>
                                                             <th>Total Gaji</th>
                                                             <th style="text-align: center;">Status</th>
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
                                                         </thead>
-                                                         <tbody>
-                                                            <tr v-for="(data,index) in datagajipeg" :key="data.id">
+                                                         <tbody v-for="(data,index) in datagajipeg" :key="data.id">
+                                                            <tr v-if="data.status == 'Belum Diambil'">
                                                                     <td>{{ index+1}} </td>
                                                                     <td>{{ data.email }}</td>
                                                                     <td>
-                                                                        {{data.tanggal}}
+                                                                        {{ data.tanggal}}
                                                                     </td>
                                                                     <td> <span v-for="jab in detjabatan" :key="jab.id">
                                                                             <a v-if="data.id_jabatan == jab.id">{{jab.jabatan}}</a>
                                                                         </span>
                                                                     </td>
-                                                                    <td> 
-                                                                        <span v-for="tun in data.nilai" :key="tun.id">
-                                                                            <li style="list-style: none;">- {{tun}}</li>
-                                                                        </span>
-                                                                    </td>
-                                                                    <!-- <td>{{ data.id_tunjangan }}</td> -->
-                                                                    <td> 
-                                                                        
-                                                                        <span v-for="bonu in data.bon" :key="bonu.id">
-                                                                            <li style="list-style: none;">- {{bonu}}</li>
-                                                                        </span>
-                                                                        
-                                                                    </td>
-                                                                    <td>
-                                                                         <span v-for="pot in data.potong" :key="pot.id">
-                                                                            <li style="list-style: none;">- {{pot}}</li>
-                                                                        </span>
-                                                                    </td>
                                                                      <td>
-                                                                       <span v-for="tes in data.akhir" :key="tes.id">
-                                                                            <a>{{convertToRupiah(tes)}}</a>
+                                                                        <span v-if="data.status == 'Belum Diambil'">
+                                                                            <a v-for="tes in data.akhir" :key="tes.id">{{convertToRupiah(tes)}}</a>
                                                                         </span>
                                                                     </td>
-                                                                    <td style="text-align: center;">
+                                                                    <td  style="text-align: center;">
                                                                          <span v-if="data.status == 'Belum Diambil'" class="badge badge-warning" style="color:white" >Belum Diambil</span>
-																		  <span v-else-if="data.status == 'Sudah Diambil'" class="badge badge-success" >Sudah Diambil</span>
+																		 
                                                                           
                                                                     </td>
                                                                     <td style="text-align: center;">
-                                                                        <a v-if="data.status == 'Sudah Diambil'" @click.prevent="detailGaji(data.id)" class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" >
+                                                                        <span v-if="data.status == 'Sudah Diambil'">
+                                                                          <a  @click.prevent="detailGaji(data.id)" class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" >
                                                                           </a>
+                                                                              <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-trash-alt" @click.prevent="hapusgaji(data.id)">
+                                                                          </a></span>
+                                                                      
                                                                         
                                                                         <div v-if="data.status == 'Belum Diambil'">
                                                                              <a @click.prevent="detailGaji(data.id)" class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" >
@@ -646,6 +647,103 @@
 											</div>
 											<!--end::Body-->
 										</div>
+                                           <div class="card card-custom tab-pane show" id="forms_widget_tab_5" role="tabpanel">
+											<!--begin::Header-->
+											<div class="card-header flex-wrap border-0 pt-6 pb-0">
+												<h3 class="card-title align-items-start flex-column">
+													<span class="card-label font-weight-bolder text-dark" >Riwayat Penggajian Pegawai</span>
+                                                    <span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Data Riwayat Penggajian Karyawan di {{ data.nama_perusahaan }} </span>
+												</h3>
+												
+											</div>
+											<!--end::Header-->
+											<!--begin::Body-->
+											<div class="card-body">
+												<!--begin::Search Form-->
+												<!--begin::Search Form-->
+												<div class="mb-10">
+													<div class="row align-items-center">
+														<div class="col-lg-9 col-xl-8">
+															<div class="row align-items-center">
+																<div class="col-md-4 my-2 my-md-0">
+																	<div class="input-icon">
+																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<span>
+																			<i class="flaticon2-search-1 text-muted"></i>
+																		</span>
+																	</div>
+																</div>
+																<div class="col-md-4 my-2 my-md-0">
+																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
+																		<option value="">Status</option>
+																		<option value="1">Pending</option>
+																		<option value="2">Delivered</option>
+																		<option value="3">Canceled</option>
+																	</select>
+																</div>
+																<div class="col-md-4 my-2 my-md-0">
+																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
+																		<option value="">Type</option>
+																		<option value="4">Success</option>
+																		<option value="5">Info</option>
+																		<option value="6">Danger</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
+															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														</div>
+													</div>
+												</div>
+												<!--end::Search Form-->
+												<!--end: Search Form-->
+												<!--begin::Datatable-->
+												<div class="table-responsive">
+													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1 w-200">
+                                                        <thead class="" >
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Email</th>
+                                                            <th>Periode</th>
+                                                            <th>Jabatan</th>
+                                                            <th>Total Gaji</th>
+                                                            <th style="text-align: center;">Status</th>
+                                                            <th style="text-align: center;">Action</th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody v-for="(data,index) in riwayatgaji" :key="data.id">
+                                                            <tr v-if="data.status == 'Sudah Diambil'">
+                                                                    <td>{{ index+1}} </td>
+                                                                    <td>{{ data.email }}</td>
+                                                                    <td>
+                                                                        {{ data.tanggal_ambil}}
+                                                                    </td>
+                                                                    <td> <span v-for="jab in detjabatan" :key="jab.id">
+                                                                            <a v-if="data.id_jabatan == jab.id">{{jab.jabatan}}</a>
+                                                                        </span>
+                                                                    </td>
+                                                                     <td>
+                                                                        {{convertToRupiah(data.gaji_bersih)}}
+                                                                    </td>
+                                                                    <td  style="text-align: center;">
+                                                                         <span class="badge badge-success" >Sudah Diambil</span>
+                                                                    </td>
+                                                                    <td style="text-align: center;">
+                                                                        <span>
+                                                                          <a  @click.prevent="getriwayatdetail(data.id)" class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" >
+                                                                          </a></span>
+                                                                         
+                                                                    </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+												<!--end::Datatable-->
+											</div>
+											<!--end::Body-->
+										</div>
                                 </div>
                                 
 							</div>
@@ -901,110 +999,113 @@
                                                         </thead>
                                                          <tbody>
                                                         </tbody>
-                                                    
-                                                        <!-- <thead class="">
-                                                        <tr>
-                                                            <th>Tunjangan</th>
-                                                            <th>Nominal</th>
-                                                            <th>Total</th>
-                                                        </tr>
-                                                        </thead>
-                                                         <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                     <span v-for="tundet in data.dettun" :key="tundet.id">
-                                                                            <li style="list-style:none;">{{tundet}}</li>
-                                                                        </span>
-                                                                </td> 
-                                                                <td>
-                                                                     <span v-for="nomtun in data.nomdettun" :key="nomtun.id">
-                                                                            <li style="list-style:none">{{convertToRupiah(nomtun)}}</li>
-                                                                        </span>
-                                                                </td> 
-                                                                <td>
-                                                                     <span v-for="totun in data.totun" :key="totun.id">
-                                                                            <a>{{convertToRupiah(totun)}}</a>
-                                                                        </span>
-                                                                </td> 
-                                                            </tr>
-                                                        </tbody>
-                                                        <thead class="">
-                                                        <tr>
-                                                            <th>Bonus</th>
-                                                            <th>Nominal</th>
-                                                            <th>Total</th>
-                                                        </tr>
-                                                        </thead>
-                                                         <tbody>
-                                                             <tr>
-                                                                <td>
-                                                                     <span v-for="bondet in data.detbon" :key="bondet.id">
-                                                                            <li style="list-style:none;">{{bondet}}</li>
-                                                                        </span>
-                                                                </td> 
-                                                                <td>
-                                                                     <span v-for="nomibon in data.nombon" :key="nomibon.id">
-                                                                            <li style="list-style:none">{{convertToRupiah(nomibon)}}</li>
-                                                                        </span>
-                                                                </td> 
-                                                                <td>
-                                                                     <span v-for="totabon in data.totbon" :key="totabon.id">
-                                                                            <a>{{convertToRupiah(totabon)}}</a>
-                                                                        </span>
-                                                                </td> 
-                                                            </tr>
-                                                        </tbody>
-                                                       
-                                                        <thead class="">
-                                                         <tr>
-                                                            <th></th>
-                                                            <th>Gaji Pokok</th>
-                                                             <th v-for="jabgaji in data.totjab" :key="jabgaji.id">{{convertToRupiah(jabgaji)}}</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th></th>
-                                                            <th>Total Gaji</th>
-                                                            <th v-for="totagaj in data.totalgaji" :key="totagaj.id">
-                                                                <a>{{convertToRupiah(totagaj)}}</a>
-                                                            </th>
-                                                        </tr>
-                                                        <tr>
-
-                                                        </tr>
-                                                       
-                                                        </thead>
-                                                          <thead class="">
-                                                        <tr>
-                                                            <th>Potongan</th>
-                                                            <th>Nominal</th>
-                                                            <th>Total</th>
-                                                        </tr>
-                                                        </thead>
-                                                         <tbody>
-                                                             <tr>
-                                                                <td>
-                                                                     <span v-for="potdet in data.detpot" :key="potdet.id">
-                                                                            <li style="list-style:none;">{{potdet}}</li>
-                                                                        </span>
-                                                                </td> 
-                                                                <td>
-                                                                     <span v-for="nomipot in data.nompot" :key="nomipot.id">
-                                                                            <li style="list-style:none">{{convertToRupiah(nomipot)}}</li>
-                                                                        </span>
-                                                                </td> 
-                                                                <td>
-                                                                     <span v-for="totapot in data.totpot" :key="totapot.id">
-                                                                            <a>{{convertToRupiah(totapot)}}</a>
-                                                                        </span>
-                                                                </td> 
-                                                            </tr>
-                                                        </tbody> -->
                                                     </table>
 
                                                 </div>
 																	</div>
 																	<div class="modal-footer">
                                                                         <button type="button"  data-dismiss="modal" @click="closeDetGaji()" class="btn btn-primary font-weight-bold">Tutup</button>
+																	</div>
+																</div>
+															</div>
+														</div>   
+<div class="modal fade" id="detriwayat" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+                                                                        <h5 class="modal-title" id="detriwayat">Detail Gaji Pegawai</h5>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<i aria-hidden="true" class="ki ki-close" @click="closeriwayat()"></i>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+                                                                        <h5 class="modal-title" id="detriwayat" v-for="(data) in detriwayat" :key="data.id">Detail Penggajian <a style="font-weight:bolder">{{data.email}}</a></h5>
+                                                                        <br>
+																		<div class="table-responsive">
+													<table class="table table-bordered"  v-for="(data) in detriwayat" :key="data.id">
+                                                        <thead class="" >
+                                                        
+                                                        <tr>
+                                                            <th>Jenis</th>
+                                                            <th class="text-right">Nominal</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tr>
+                                                            <td>Gaji Pokok</td>
+                                                             <td class="text-right">{{convertToRupiah(data.gaji_pokok)}}</td>
+                                                        </tr>
+                                                         <tr>
+                                                           <td>
+                                                                     <span v-for="x in data.detritun" :key="x.id">
+                                                                            <li style="list-style:none;">{{x}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td class="text-right">
+                                                                 <span v-for="x in data.detrinomtun" :key="x.id">
+                                                                            <li style="list-style:none;">{{convertToRupiah(x)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                        </tr>
+                                                        <tr>
+                                                             <td>
+                                                                     <span v-for="x in data.detribon" :key="x.id">
+                                                                            <li style="list-style:none;">{{x}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                        
+                                                                <td class="text-right">
+                                                                      <span v-for="x in data.detrinombon" :key="x.id">
+                                                                            <li style="list-style:none;">{{convertToRupiah(x)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                        </tr>
+                                                       
+                                                        <thead class="" >
+                                                        <tr>
+                                                            <th>Sub Total</th>
+                                                             <th class="text-right">{{convertToRupiah(data.gaji_kotor)}}</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tr>
+                                                             <td>
+                                                                     <span v-for="x in data.detripot" :key="x.id">
+                                                                            <li style="list-style:none;">{{x}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                                <td class="text-right">
+                                                                      <span v-for="x in data.detrinompot" :key="x.id">
+                                                                            <li style="list-style:none;">{{convertToRupiah(x)}}</li>
+                                                                        </span>
+                                                                </td> 
+                                                        </tr>
+                                                            
+                                                        
+                                                         <thead class="" >
+                                                        <tr>
+                                                            <th>Total Potongan</th>
+                                                            <th class="text-right">
+                                                                     <span>
+                                                                            <a>(-) {{convertToRupiah(data.total_potongan)}}</a>
+                                                                        </span>
+                                                            </th> 
+                                                        </tr>
+                                                        </thead>
+                                                         <thead class="" >
+                                                        <tr>
+                                                            <th>Penerima Bersih</th>
+                                                            <th class="text-right">
+                                                                <a>{{convertToRupiah(data.gaji_bersih)}}</a>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                         <tbody>
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+																	</div>
+																	<div class="modal-footer">
+                                                                        <button type="button"  data-dismiss="modal" @click="closeriwayat()" class="btn btn-primary font-weight-bold">Tutup</button>
 																	</div>
 																</div>
 															</div>
@@ -1176,6 +1277,14 @@ export default {
     name: "Payroll",
     data() {
         return {
+            detritun: [],
+            detrinomtun: [],
+            detribon: [],
+            detrinombon: [],
+            detripot: [],
+            detrinompot: [],
+            detriwayat:[],
+            riwayatgaji: [],
             subtotal: [],
             totjab: [],
             totalgaji: [],
@@ -1264,6 +1373,19 @@ export default {
             return sum;
         },
         //GAJI
+          riwayat(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/riwayatgaji',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.riwayatgaji = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
          tampilgaji(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/allgaji',{
@@ -1313,6 +1435,10 @@ export default {
          closegajiedit() {
             this.form.reset();
             $("#editgaji").modal("hide");
+        },
+        closeriwayat() {
+            this.form.reset();
+            $("#detriwayat").modal("hide");
         },
         buatgaji(data, id) {
            $("#buatgaji").modal("show");
@@ -1455,7 +1581,41 @@ export default {
 
             })
         },
-        
+          //Detail Riwayat
+         getriwayatdetail(id){
+            $('#detriwayat').modal('show')
+            axios.get('/api/detriwayatgaji/'+id,{
+                headers: { Authorization: "Bearer " + this.token }
+            }).then((response) => {
+                this.detriwayat = response.data.data
+                //ssds
+                this.detritun = response.data.tunjangan
+                this.detrinomtun = response.data.nomtun
+                this.detribon = response.data.bonus
+                this.detrinombon = response.data.nombon
+                this.detripot = response.data.potongan
+                this.detrinompot = response.data.nompot
+
+                    for (let i = 0; i < this.detritun.length; i++) {
+                        Object.assign(this.detriwayat[i], { detritun: this.detritun[i] })
+                    }   
+                    for (let i = 0; i < this.detrinomtun.length; i++) {
+                        Object.assign(this.detriwayat[i], { detrinomtun: this.detrinomtun[i] })
+                    }
+                    for (let i = 0; i < this.detribon.length; i++) {
+                        Object.assign(this.detriwayat[i], { detribon: this.detribon[i] })
+                    }   
+                    for (let i = 0; i < this.detrinombon.length; i++) {
+                        Object.assign(this.detriwayat[i], { detrinombon: this.detrinombon[i] })
+                    }    
+                    for (let i = 0; i < this.detripot.length; i++) {
+                        Object.assign(this.detriwayat[i], { detripot: this.detripot[i] })
+                    }   
+                    for (let i = 0; i < this.detrinompot.length; i++) {
+                        Object.assign(this.detriwayat[i], { detrinompot: this.detrinompot[i] })
+                    }        
+            })
+        },
         submitgaji(){
              axios.post('/api/buatgaji',
                 {
@@ -1605,6 +1765,7 @@ export default {
                 });
         })
         },
+      
         //TUNJANGAN
         edittunjangan(){
         
@@ -2022,6 +2183,7 @@ export default {
     },
 
     mounted () {
+            this.riwayat();
             this.alltunjangan();
             this.allgolongan();
             this.allpotongan();

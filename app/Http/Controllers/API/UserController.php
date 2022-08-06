@@ -19,6 +19,7 @@ use phpDocumentor\Reflection\Element;
 use App\Models\AkunPegawai;
 use App\Models\DataPegawai;
 use App\Models\JamAbsen;
+use Illuminate\Support\Carbon;
 
 class UserController extends Controller
 {
@@ -262,6 +263,38 @@ class UserController extends Controller
         // // dd($akhir);
         // return $akhir;
         $jumlahkerja = $datetime2 - $datetime1;
+        // $cuti = $request->input('jatah_cuti');
+
+        if($akunpegawai->jumlah_kerja >= 365){
+            $nopegawai = strtoupper(substr(str_shuffle($huruf), 0, 9));
+            $pegawai = DataPegawai::create([
+                'no_pegawai' => 'PN'.$nopegawai,
+                'name' => $request->name,
+                'email' => $request->email,
+                'id' => $akunpegawai->id,
+                'tanggal_masuk' => $request->tanggal_masuk,
+                'jumlah_kerja' => $jumlahkerja/60/60/24,
+                'id_golongan' => $request->id_golongan,
+                'id_jabatan' => $request->id_jabatan,
+                'id_admin' => Auth::user()->id,
+                'jatah_cuti' => 12
+    
+            ]);
+            $pegawai->save();
+            
+            $success = true;
+            $message = 'User register successfully';
+            $token = $akunpegawai->createToken('auth_token')->plainTextToken;
+            return response()
+                ->json([
+                    'data' => $pegawai,
+                    'akunpegawai' => $akunpegawai,
+                    'access_token' => $token,
+                    'token_type' => 'Bearer',
+                    'success' => $success,
+                    'message' => $message,
+                ]);
+        }
 
         $nopegawai = strtoupper(substr(str_shuffle($huruf), 0, 9));
         $pegawai = DataPegawai::create([
@@ -300,10 +333,15 @@ class UserController extends Controller
         ->latest()
         ->get();
 
+        // $timezone = 'Asia/Jakarta'; 
+        // $date = new DateTime('now', new DateTimeZone($timezone)); 
+        // $tanggal = $date->format('l');
+
         return response()->json([
             'status' => true,
             'message' => 'Ambil data berhasil',
-            'data' => $pegawai
+            'data' => $pegawai,
+            // 'tanggal' => $tanggal,
         ]);
     }
     public function editUser($id)

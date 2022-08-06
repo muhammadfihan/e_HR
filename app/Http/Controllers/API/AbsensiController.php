@@ -295,8 +295,16 @@ class AbsensiController extends Controller
             ->update([
                 'jumlah_kerja' => $jmlh
             ]);
+            if($hasilkerja = 365){
+                $jatahcuti = DB::table('pegawais')
+                ->where('id' , Auth::user()->id)
+                ->update([
+                    'jatah_cuti' => 12
+                ]);   
+            }
             return response()->json([
                 'data' => $dt,
+                'jatah_cuti' => $jatahcuti,
                 'jumlah_kerja' => $hasilkerja,
                 'updategaji' => $hasil2,
                 'data_lagi' => $hasil,

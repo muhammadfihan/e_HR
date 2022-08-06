@@ -107,7 +107,7 @@
                                                                         <span class="badge badge-success" v-if="data.status == 'Aktif'" >{{data.status}}</span>
                                                                         <span class="badge badge-danger" v-else-if="data.status == 'Tidak Aktif'" >{{data.status}}</span>
                                                                     </td>
-                                                                    <td><a>{{ data.jumlah_kerja}} Hari</a></td>
+                                                                    <td><a>{{ getFormatedStringFromDays(data.jumlah_kerja)}}</a></td>
                                                                     <td>{{ data.gender }}</td>
                                                                     <td style="text-align: center;">
                                                                           <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" data-target="#detailmodal" @click.prevent="detailPegawai(data.id)">
@@ -334,6 +334,16 @@ export default {
     created() {
     },
     methods:{
+        getFormatedStringFromDays(numberOfDays) {
+            var years = Math.floor(numberOfDays / 365);
+            var months = Math.floor(numberOfDays % 365 / 30);
+            var days = Math.floor(numberOfDays % 365 % 30);
+
+            return [years,'Tahun', months,'Bulan', days, 'Hari'].join(' ');
+
+        },
+
+
        format(time){
 		if (time != null){
 			return time.replace(/(?:0)?(\d+):(?:0)?(\d+).*/,'$1 Jam');

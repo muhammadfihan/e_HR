@@ -54,7 +54,21 @@
 													<div class="form-group row">
 														<label class="col-xl-3 col-lg-3 col-form-label">Status</label>
 														<div class="col-lg-9 col-xl-6">
-															<div class="form-control form-control-lg form-control-solid" type="text">{{data.status}}</div>
+															 <div class="form-control form-control-lg form-control-solid" type="text"><span class="badge badge-success" v-if="data.status == 'Aktif'" >{{data.status}}</span>
+                                                                                        <span class="badge badge-danger" v-else-if="data.status == 'Tidak Aktif'" >{{data.status}}</span></div>
+														</div>
+													</div>
+                                                    <div class="form-group row" v-for="(data) in datpeg" :key="data.id">
+														<label class="col-xl-3 col-lg-3 col-form-label">Jumlah Kerja</label>
+														<div class="col-lg-9 col-xl-6">
+															<div class="form-control form-control-lg form-control-solid" type="text"><span class="badge badge-primary" >{{getFormatedStringFromDays(data.jumlah_kerja)}}</span></div>
+														</div>
+													</div>
+                                                     <div class="form-group row" v-for="(data) in datpeg" :key="data.id">
+														<label class="col-xl-3 col-lg-3 col-form-label">Jatah Cuti Tahunan</label>
+														<div class="col-lg-9 col-xl-6">
+															<div v-if="data.jatah_cuti == null" class="form-control form-control-lg form-control-solid" type="text"><span class="badge badge-warning" style="color:white" >Anda Belum Bekerja Selama 1 Tahun</span></div>
+                                                            <div v-else-if="data.jatah_cuti <= 12" class="form-control form-control-lg form-control-solid" type="text"><span class="badge badge-primary" >{{data.jatah_cuti}}</span></div>
 														</div>
 													</div>
 													<div class="row">
@@ -213,6 +227,7 @@ export default {
             golongan:[],
             jabatan:[],
             golongan:[],
+            datpeg: [],
              form : new Form({
                 id : "",
                 nama_lengkap : "",
@@ -228,6 +243,15 @@ export default {
     },
 
     methods:{
+         getFormatedStringFromDays(numberOfDays) {
+            var years = Math.floor(numberOfDays / 365);
+            var months = Math.floor(numberOfDays % 365 / 30);
+            var days = Math.floor(numberOfDays % 365 % 30);
+
+            return [years,'Tahun', months,'Bulan', days, 'Hari'].join(' ');
+
+        },
+
          allgolongan(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/golonganpegawai',{
@@ -342,6 +366,19 @@ export default {
                 });
         })
         },
+        getdatpeg(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/datpeg',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.datpeg = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
         getakun(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/getakun',{
@@ -394,6 +431,7 @@ export default {
         this.getJabatan();
         this.getakun();
         this.allgolongan();
+        this.getdatpeg();
     }
     
 

@@ -84,6 +84,19 @@ class DataPegawaiController extends Controller
        ]);
 
     }
+    public function datpeg()
+    {
+       $datapegawai = DB::table('pegawais')
+           ->select('*')
+           ->where('email', Auth::user()->email)
+           ->get();
+       return response([
+           'data' => $datapegawai,
+           'message' => 'get data berhasil',
+           'status' => true
+       ]);
+
+    }
     public function detailpegawai($id)
     {
        $datapegawai = DB::table('pegawais')

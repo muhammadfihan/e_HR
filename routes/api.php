@@ -65,7 +65,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('allgaji',[DataGajiController::class, 'allgaji'])->middleware('role:Manager,Admin,Pegawai');
     Route::post('buatgaji',[DataGajiController::class, 'buatgaji'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('sudahisi',[DataGajiController::class, 'sudahisi'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('riwayatgaji',[DataGajiController::class, 'riwayatgaji'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('detailgaji/{id}',[DataGajiController::class, 'detailgaji'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('detriwayatgaji/{id}',[DataGajiController::class, 'detriwayatgaji'])->middleware('role:Manager,Admin,Pegawai');
 
     Route::post('ambilgaji',[DataGajiController::class, 'ambilgaji'])->middleware('role:Manager,Admin,Pegawai');
     Route::post('updategaji',[DataGajiController::class, 'updategaji'])->middleware('role:Manager,Admin,Pegawai');
@@ -98,7 +100,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('getprofile', [DataPegawaiController::class, 'getprofile'])->middleware('role:Pegawai');
     Route::post('updatedata', [DataPegawaiController::class, 'updatedata'])->middleware('role:Pegawai');
 
-    Route::get('datapegawai', [DataPegawaiController::class, 'datapegawai'])->middleware('role:Manager,Admin');
+    Route::get('datapegawai', [DataPegawaiController::class, 'datapegawai'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('datpeg', [DataPegawaiController::class, 'datpeg'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('detailpegawai/{id}', [DataPegawaiController::class, 'detailpegawai'])->middleware('role:Manager,Admin');
     Route::get('editpegawai/{id}', [DataPegawaiController::class, 'editpegawai'])->middleware('role:Admin, Pegawai');
     Route::post('updatepegawai', [DataPegawaiController::class, 'updatepegawai'])->middleware('role:Admin,Pegawai');

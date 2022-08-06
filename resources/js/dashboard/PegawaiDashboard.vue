@@ -27,7 +27,7 @@
                                               <button type="submit" @click="history()" class="btn btn-success font-weight-bolder">History</button>
 											</div>
                                             <div class="d-flex flex-center mb-10" >
-                                                <div role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="--value:75;"></div>
+                                                <div role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="--value:70;"></div>
                                             </div>
 								       
                                         <div class="font-size-h4 font-weight-bolder text-center text-success">Statistik Presensi Bulanan</div>

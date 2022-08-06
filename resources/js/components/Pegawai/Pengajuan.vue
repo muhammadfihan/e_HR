@@ -508,10 +508,11 @@
 													<span class="card-label font-weight-bolder text-dark" >Pengajuan Cuti</span>
 													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Pengajuan Cuti di {{ data.nama_perusahaan }}</span>
 												</h3>
-                                                 <div class="card-toolbar">
+                                                 <div class="card-toolbar" v-for="(data) in datpeg" :key="data.id">
 													<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
 														<!--begin::Trigger Modal-->
-														<a href="#" class="btn btn-success font-weight-bolder font-size-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" @click.prevent="cutiModal()">Buat Pengajuan</a>
+														<a v-if="data.jumlah_kerja >= 365" href="#" class="btn btn-success font-weight-bolder font-size-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" @click.prevent="cutiModal()">Buat Pengajuan</a>
+														<button v-else-if="data.jumlah_kerja < 365" disabled class="btn btn-sm btn-light-danger  font-weight-bolder">Belum Bisa Cuti, Harus 1 Tahun Bekerja</button>
                                                     </div>
                                                 </div>
 												
@@ -1187,6 +1188,7 @@ export default {
     },
     data() {
         return {
+			datpeg: [],
 			allizin:{},
             infopt:[],
 			preview: null,
@@ -1428,6 +1430,20 @@ export default {
             })	
 
 		},
+		//Get Data Pegawai
+		 getdatpeg(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/datpeg',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.datpeg = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
 		//METHOD PENGAJUAN REQUEST ATTENDANCE
 		updateReq(){
 			const formData = new FormData()
@@ -1814,6 +1830,7 @@ export default {
 		   this.allReqPegawai();
 		   this.tampillemburPegawai();
 		   this.tampilcutiPegawai();
+		   this.getdatpeg();
     }
 
 }

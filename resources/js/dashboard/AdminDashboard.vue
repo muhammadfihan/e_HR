@@ -91,7 +91,14 @@
 													<span class="card-label font-weight-bolder text-dark">Pegawai Hari ini </span>
 													<span class="text-muted mt-3 font-weight-bold font-size-sm">{{data.nama_perusahaan}}</span>
 												</h3>
+												  <div class="card-toolbar" style="margin-top:-13px">
+													<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
+														<!--begin::Trigger Modal-->
+														<a href="#" class="btn btn-success font-weight-bolder font-size-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" @click="showModal()">Atur Hari Kerja</a>
+                                                    </div>
+                                                </div>
 											</div>
+											
 											<!--end::Header-->
 											<!--begin::Body-->
 											<div class="card-body py-0">
