@@ -160,14 +160,33 @@ export default {
                         email: this.email,
                         password: this.password
                     }).then(response => {
+                         if (response.data.success == false) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Login Gagal',
+                            text: 'Terjadi Kesalahan',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        }
+                         if (response.data.success == null) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Login Gagal',
+                            text: 'Akun Dinonaktifkan',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        }
+
                         if (response.data.success) {
-              Swal.fire({
-                icon: 'success',
-                title: 'Login Berhasil',
-                text: 'Anda berhasil masuk',
-                showConfirmButton: false,
-                timer: 1500
-              })
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Login Berhasil',
+                            text: 'Anda berhasil masuk',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
                             if (response.data.success) {
                                 window.localStorage.setItem("loggedIn", true)
                                 window.localStorage.setItem("token", response.data.token)
@@ -186,16 +205,7 @@ export default {
                                 this.error = response.data.message
                             }
 
-            }
-            else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Login Gagal!!',
-                    text: 'Terjadi Kesalahan',
-                    showConfirmButton: false,
-                    timer: 1800
-                })
-            }  
+                            }
                       
                         })
                         .catch(function (error) {

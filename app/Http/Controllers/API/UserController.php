@@ -100,7 +100,7 @@ class UserController extends Controller
              }
              if ($user->status === 'Tidak Aktif') {
                 $response = [
-                    'success'   => false,
+                    'success'   => null,
                     'errors'    => true,
                 ];
                 return response($response, 201);

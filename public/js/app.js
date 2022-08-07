@@ -28052,6 +28052,26 @@ __webpack_require__.r(__webpack_exports__);
           email: _this2.email,
           password: _this2.password
         }).then(function (response) {
+          if (response.data.success == false) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Login Gagal',
+              text: 'Terjadi Kesalahan',
+              showConfirmButton: false,
+              timer: 1500
+            });
+          }
+
+          if (response.data.success == null) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Login Gagal',
+              text: 'Akun Dinonaktifkan',
+              showConfirmButton: false,
+              timer: 1500
+            });
+          }
+
           if (response.data.success) {
             Swal.fire({
               icon: 'success',
@@ -28079,14 +28099,6 @@ __webpack_require__.r(__webpack_exports__);
             } else {
               _this2.error = response.data.message;
             }
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Login Gagal!!',
-              text: 'Terjadi Kesalahan',
-              showConfirmButton: false,
-              timer: 1800
-            });
           }
         })["catch"](function (error) {
           console.error(error);
