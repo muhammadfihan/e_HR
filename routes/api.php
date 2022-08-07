@@ -66,6 +66,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('buatgaji',[DataGajiController::class, 'buatgaji'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('sudahisi',[DataGajiController::class, 'sudahisi'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('riwayatgaji',[DataGajiController::class, 'riwayatgaji'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('riwayatgajipeg',[DataGajiController::class, 'riwayatgajipeg'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('detailgaji/{id}',[DataGajiController::class, 'detailgaji'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('detriwayatgaji/{id}',[DataGajiController::class, 'detriwayatgaji'])->middleware('role:Manager,Admin,Pegawai');
 

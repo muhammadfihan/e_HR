@@ -76,15 +76,15 @@ class CutiController extends Controller
                 'keterangan' => $request->keterangan,
                 'bukti_cuti' => $filename,
             ]);
-            $jumlah_hari = $cuti->jumlah_hari;
+            // $jumlah_hari = $cuti->jumlah_hari;
            
-            $total = $jatah->jatah_cuti - $jumlah_hari;
-            $hasil = DB::table('pegawais')->where('email', Auth::user()->email)->update([
-                'jatah_cuti' => $total,
-            ]);
+            // $total = $jatah->jatah_cuti - $jumlah_hari;
+            // $hasil = DB::table('pegawais')->where('email', Auth::user()->email)->update([
+            //     'jatah_cuti' => $total,
+            // ]);
             return response()->json([
                 'data' => $cuti,
-                'jatah' => $hasil,
+                // 'jatah' => $hasil,
                 'message' =>'Jabatan successfully added',
                 'success' => true
     
@@ -107,12 +107,32 @@ class CutiController extends Controller
             $status =  DB::table('cuti')->where('id', $request->id)->update([
                 'status_cuti' => $request->status_cuti,
             ]);
-
-            return response()->json([
-                'data' => $status,
-                'success' => true,
-                'message' => 'Update Status Berhasil!',
-            ]);
+            $status2 =  DB::table('cuti')->where('id', $request->id)->first();
+            if($status2->status_cuti == "Diterima" ){
+                $tes = $status2->email;
+                $hari = $status2->jumlah_hari;
+                $update = DB::table('pegawais')->where('email','=', $tes)->first();
+                $jatah = $update->jatah_cuti;
+                $hasil = $jatah - $hari;
+                
+                $update2 = DB::table('pegawais')->where('email','=', $tes)->update([
+                    'jatah_cuti' => $hasil
+                ]);
+                return response()->json([
+                    'hasil' => $hasil,
+                    'hasil2' => $update2,
+                    'data' => $status,
+                    'success' => true,
+                    'message' => 'Update Status Berhasil!',
+                ]);
+            }else{
+                return response()->json([
+                    'data' => $status,
+                    'success' => true,
+                    'message' => 'Ditolak!',
+                ]);
+            }
+           
         }
     }
     public function updatecuti(Request $request){

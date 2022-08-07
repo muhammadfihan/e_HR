@@ -796,7 +796,7 @@ export default {
         },
          riwayat(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/riwayatgaji',{
+            this.$axios.get('/api/riwayatgajipeg',{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {

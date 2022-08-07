@@ -33,6 +33,15 @@ class DataGajiController extends Controller
             ]);
        
     }
+    public function riwayatgajipeg(Request $request){
+        $riwayat = RiwayatGaji::where('email' ,Auth::user()->email)->latest()->get();
+            return response([
+                'data' => $riwayat,
+                'message' => 'get data berhasil',
+                'status' => true,
+            ]);
+       
+    }
     public function allgaji(Request $request){
         $tunjangan = DB::table('penggajian')
         ->select('*')

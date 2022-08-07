@@ -29425,7 +29425,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.$axios.get('/sanctum/csrf-cookie').then(function (response) {
-        _this2.$axios.get('/api/riwayatgaji', {
+        _this2.$axios.get('/api/riwayatgajipeg', {
           headers: {
             Authorization: "Bearer " + _this2.token
           }
