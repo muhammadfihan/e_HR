@@ -1009,12 +1009,6 @@
 																		<div >
 																			<form  class="form pt-9">
 																				<div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Tanggal </label>
-																					<div class="col-lg-9 col-xl-6">
-																						 <input v-model="form.tanggal_cuti" placeholder="Tanggal Hari Ini" type="date" class="form-control form-control-lg form-control-solid">
-																					</div>
-																				</div>
-																				<div class="form-group row">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Awal Tanggal Cuti</label>
 																					<div class="col-lg-9 col-xl-6">
 																						 <input v-model="form.tanggal_mulai" placeholder="Jam Mulai Lembur" type="date" class="form-control form-control-lg form-control-solid">
@@ -1069,12 +1063,6 @@
 																	<div class="modal-body">
 																		<div >
 																			<form  class="form pt-9">
-                                                                                   <div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Tanggal </label>
-																					<div class="col-lg-9 col-xl-6">
-																						 <input v-model="form.tanggal_cuti" placeholder="Tanggal Hari Ini" type="date" class="form-control form-control-lg form-control-solid">
-																					</div>
-																				</div>
 																				<div class="form-group row">
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Awal Tanggal Cuti</label>
 																					<div class="col-lg-9 col-xl-6">
@@ -1686,6 +1674,24 @@ export default {
                 headers : { Authorization: "Bearer " + this.token },
             },formData,
 			).then((response) => {
+				if(response.data.success == false){
+					 Swal.fire({
+                        icon: "error",
+                        title: "Gagal Mengajukan",
+                        text: "Jatah Cuti Tahunan Anda Telah Habis",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+				}
+				if(response.data.success == null){
+					Swal.fire({
+                        icon: "error",
+                        title: "Gagal Mengajukan",
+                        text: "Jumlah Hari Lebih Dari Jatah Cuti",
+                        showConfirmButton: false,
+                        timer: 1600,
+                    })
+				}
                 if (response.data.success){
                     Swal.fire({
                         icon: "success",
