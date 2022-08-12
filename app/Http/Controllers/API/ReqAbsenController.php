@@ -18,12 +18,28 @@ class ReqAbsenController extends Controller
         ->select('*')
         ->where('id_admin', Auth::user()->id)
         ->latest()
-        ->get();
+        ->paginate(10);
     return response([
         'data' => $reqabsen,
         'message' => 'get data berhasil',
         'status' => true
     ]);
+    }
+    public function searchreqabsen($key)
+    {
+            $result = DB::table('reqabsen')
+                ->select('*')
+                ->where('name', 'like', '%' . $key . '%')
+                ->orWhere('name', 'like', '%' . $key . '%')
+                ->orWhere('nama_lengkap', 'like', '%' . $key . '%')
+                ->orWhere('email', 'like', '%' . $key . '%')
+                ->orWhere('no_pegawai', 'like', '%' . $key . '%')
+                ->orWhere('status_req', 'like', '%' . $key . '%')
+                ->orWhere('tanggal_req', 'like', '%' . $key . '%')
+                ->paginate(10);
+
+            return $result;
+
     }
 
     public function allreqpegawai(){

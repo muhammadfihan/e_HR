@@ -20,12 +20,6 @@ class AbsensiController extends Controller
         $date = new DateTime('now', new DateTimeZone($timezone)); 
         $tanggal = $date->format('Y-m-d');
         $localtime = $date->format('H:i:s');
-
-        // $presensi = Absensi::where([
-        //     ['id','=', Auth::user()->id],
-        //     ['email','=', Auth::user()->email],
-        //     ['tanggal','=',$tanggal],
-        // ]);
         $presensi = DB::table('absensipegawai')
             ->select('*')
             ->whereDate('tanggal', $tanggal)
@@ -73,6 +67,7 @@ class AbsensiController extends Controller
             $lokasi = geoip()->getLocation($ip)->city;
             $kodepos = geoip()->getLocation($ip)->postal_code;
             $loc = geoip()->getLocation($ip)->lat;
+            $loc2 = geoip()->getLocation($ip)->lon;
             $absen = Absensi::create([
                 'id' => Auth::user()->id,
                 'email' => Auth::user()->email,
@@ -82,7 +77,7 @@ class AbsensiController extends Controller
                 'selfie_masuk' => $filename,
                 'tanggal' => $tanggal,
                 'jam_masuk' => $localtime,
-                'lokasi' => implode("   " , array( $lokasi,$kodepos,$loc))
+                'lokasi' => implode("," , array($loc,$loc2))
             ]);
             if ($absen->jam_masuk <= $masuk){
                 $ket = [
@@ -133,19 +128,55 @@ class AbsensiController extends Controller
                 ->select('*')
                 ->where('id_admin', Auth::user()->id)
                 ->latest()
-                ->get();
+                ->paginate(10);
             return response()->json([
                 'data' => $data,
                 'message' => 'get data berhasil',
                 'status' => true
             ]);
     }
+    public function searchabsen($key)
+    {
+            $result = DB::table('absensipegawai')
+                ->select('*')
+                ->where('absensipegawai.id_admin', Auth::user()->id)
+                ->where('email', 'like', '%' . $key . '%')
+                ->orWhere('name', 'like', '%' . $key . '%')
+                ->orWhere('nama_lengkap', 'like', '%' . $key . '%')
+                ->orWhere('lokasi', 'like', '%' . $key . '%')
+                ->orWhere('keterangan', 'like', '%' . $key . '%')
+                ->orWhere('tanggal', 'like', '%' . $key . '%')
+                ->orWhere('jam_masuk', 'like', '%' . $key . '%')
+                ->orWhere('jam_pulang', 'like', '%' . $key . '%')
+                ->where('absensipegawai.id_admin', Auth::user()->id)
+                ->paginate(10);
+
+            return $result;
+
+    }
+    public function searchabsenpeg($key)
+    {
+            $result = DB::table('absensipegawai')
+                ->select('*')
+                ->where('absensipegawai.id_admin', Auth::user()->id)
+                ->where('email', 'like', '%' . $key . '%')
+                ->orWhere('name', 'like', '%' . $key . '%')
+                ->orWhere('keterangan', 'like', '%' . $key . '%')
+                ->orWhere('nama_lengkap', 'like', '%' . $key . '%')
+                ->orWhere('lokasi', 'like', '%' . $key . '%')
+                ->orWhere('tanggal_mulai', 'like', '%' . $key . '%')
+                ->where('absensipegawai.id_admin', Auth::user()->id)
+                ->paginate(10);
+
+            return $result;
+
+    }
     public function tampilpegawai(){
         $data = DB::table('absensipegawai')
             ->select('*')
             ->where('id', Auth::user()->id)
             ->latest()
-            ->get();
+            ->paginate(10);
         return response()->json([
             'data' => $data,
             'message' => 'get data berhasil',
@@ -349,8 +380,6 @@ class AbsensiController extends Controller
 
         return response()->json([
             'data' => $presensi,
-            // 'total_jamkerja' => $total,
-            // 'hasil' => $hasil,
             'message' => 'presensi pulang berhasil',
             'success' => true
         ]);

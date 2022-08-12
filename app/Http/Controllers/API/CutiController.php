@@ -19,24 +19,64 @@ class CutiController extends Controller
         $cuti = DB::table('cuti')
             ->select('*')
             ->where('id_admin', Auth::user()->id)
-            ->get();
+            ->latest()
+            ->paginate(10);
         return response()->json([
             'status' => true,
             'message' => 'Get data berhasil',
             'data' => $cuti
         ]);
-        }
+    }
+    public function searchcuti($key)
+    {
+            $result = DB::table('cuti')
+                ->select('*')
+                ->where('cuti.id_admin', Auth::user()->id)
+                ->where('email', 'like', '%' . $key . '%')
+                ->orWhere('no_pegawai', 'like', '%' . $key . '%')
+                ->orWhere('nama_lengkap', 'like', '%' . $key . '%')
+                ->orWhere('tanggal_mulai', 'like', '%' . $key . '%')
+                ->orWhere('tanggal_akhir', 'like', '%' . $key . '%')
+                ->orWhere('tanggal_cuti', 'like', '%' . $key . '%')
+                ->orWhere('jenis_cuti', 'like', '%' . $key . '%')
+                ->orWhere('status_cuti', 'like', '%' . $key . '%')
+                ->where('cuti.id_admin', Auth::user()->id)
+                ->paginate(10);
+
+            return $result;
+
+    }
     public function tampilcutip(){
         $cuti = DB::table('cuti')
             ->select('*')
             ->where('email', Auth::user()->email)
+            ->latest()
             ->get();
         return response()->json([
             'status' => true,
             'message' => 'Get data berhasil',
             'data' => $cuti
             ]);
-            }
+    }
+    public function searchcutipeg($key)
+    {
+            $result = DB::table('cuti')
+                ->select('*')
+                ->where('cuti.email', Auth::user()->email)
+                ->where('email', 'like', '%' . $key . '%')
+                ->orWhere('no_pegawai', 'like', '%' . $key . '%')
+                ->orWhere('nama_lengkap', 'like', '%' . $key . '%')
+                ->orWhere('tanggal_mulai', 'like', '%' . $key . '%')
+                ->orWhere('tanggal_akhir', 'like', '%' . $key . '%')
+                ->orWhere('tanggal_cuti', 'like', '%' . $key . '%')
+                ->orWhere('jenis_cuti', 'like', '%' . $key . '%')
+                ->orWhere('status_cuti', 'like', '%' . $key . '%')
+                ->where('cuti.email', Auth::user()->email)
+                ->paginate(10);
+
+            return $result;
+
+    }
     public function tambahcuti(Request $request){
         // return $request->all();
      if($request->hasfile('bukti_cuti')){

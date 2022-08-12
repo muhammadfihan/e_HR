@@ -331,18 +331,27 @@ class UserController extends Controller
         ->select('*')
         ->where('id_admin', Auth::user()->id)
         ->latest()
-        ->get();
-
-        // $timezone = 'Asia/Jakarta'; 
-        // $date = new DateTime('now', new DateTimeZone($timezone)); 
-        // $tanggal = $date->format('l');
-
+        ->paginate(10);
         return response()->json([
             'status' => true,
             'message' => 'Ambil data berhasil',
             'data' => $pegawai,
-            // 'tanggal' => $tanggal,
         ]);
+    }
+    public function searchuser($key)
+    {
+            $result = DB::table('akunpegawai')
+                ->select('*')
+                ->where('akunpegawai.id_admin', Auth::user()->id)
+                ->where('email', 'like', '%' . $key . '%')
+                ->orWhere('name', 'like', '%' . $key . '%')
+                ->orWhere('tanggal_masuk', 'like', '%' . $key . '%')
+                ->orWhere('status', 'like', '%' . $key . '%')
+                ->where('akunpegawai.id_admin', Auth::user()->id)
+                ->paginate(10);
+
+            return $result;
+
     }
     public function editUser($id)
     {

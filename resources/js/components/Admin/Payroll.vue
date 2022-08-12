@@ -190,36 +190,24 @@
 												<!--begin::Search Form-->
 												<div class="mb-10">
 													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
+														<div class="col-lg-12 col-xl-8">
+															 <form>
 															<div class="row align-items-center">
 																<div class="col-md-4 my-2 my-md-0">
 																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<input v-model="search2" type="text" class="form-control form-control-solid" placeholder="Search..."  />
 																		<span>
 																			<i class="flaticon2-search-1 text-muted"></i>
 																		</span>
 																	</div>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
+																<div>
+																	<div>
+																	<a class="btn btn-light-primary px-6 font-weight-bold">Search</a>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
 																</div>
 															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														  </form>
 														</div>
 													</div>
 												</div>
@@ -230,7 +218,6 @@
 													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1 w-200">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>No</th>
                                                             <th>Email</th>
                                                             <th>Periode</th>
                                                             <th>Jabatan</th>
@@ -239,9 +226,8 @@
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
                                                         </thead>
-                                                         <tbody v-for="(data,index) in datagajipeg" :key="data.id">
-                                                            <tr v-if="data.status == 'Belum Diambil'">
-                                                                    <td>{{ index+1}} </td>
+                                                         <tbody v-for="data in datagajipeg" :key="data.id">
+                                                            <tr  v-if="data.status == 'Belum Diambil'">
                                                                     <td>{{ data.email }}</td>
                                                                     <td>
                                                                         {{ data.tanggal}}
@@ -257,8 +243,6 @@
                                                                     </td>
                                                                     <td  style="text-align: center;">
                                                                          <span v-if="data.status == 'Belum Diambil'" class="badge badge-warning" style="color:white" >Belum Diambil</span>
-																		 
-                                                                          
                                                                     </td>
                                                                     <td style="text-align: center;">
                                                                         <span v-if="data.status == 'Sudah Diambil'">
@@ -266,8 +250,6 @@
                                                                           </a>
                                                                               <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-trash-alt" @click.prevent="hapusgaji(data.id)">
                                                                           </a></span>
-                                                                      
-                                                                        
                                                                         <div v-if="data.status == 'Belum Diambil'">
                                                                              <a @click.prevent="detailGaji(data.id)" class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" >
                                                                           </a>
@@ -276,7 +258,6 @@
                                                                            <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-trash-alt" @click.prevent="hapusgaji(data.id)">
                                                                           </a>
                                                                         </div>
-                                                                         
                                                                     </td>
                                                             </tr>
                                                         </tbody>
@@ -663,36 +644,24 @@
 												<!--begin::Search Form-->
 												<div class="mb-10">
 													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
+														<div class="col-lg-12 col-xl-8">
+															 <form>
 															<div class="row align-items-center">
 																<div class="col-md-4 my-2 my-md-0">
 																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<input v-model="search" type="text" class="form-control form-control-solid" placeholder="Search..."  />
 																		<span>
 																			<i class="flaticon2-search-1 text-muted"></i>
 																		</span>
 																	</div>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
+																<div>
+																	<div>
+																	<a class="btn btn-light-primary px-6 font-weight-bold">Search</a>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
 																</div>
 															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														  </form>
 														</div>
 													</div>
 												</div>
@@ -700,10 +669,9 @@
 												<!--end: Search Form-->
 												<!--begin::Datatable-->
 												<div class="table-responsive">
-													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1 w-200">
+													<table class="table table-head-custom table-vertical-center" id="kt_advance_table_widget_1">
                                                         <thead class="" >
                                                         <tr>
-                                                            <th>No</th>
                                                             <th>Email</th>
                                                             <th>Periode</th>
                                                             <th>Jabatan</th>
@@ -712,9 +680,8 @@
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
                                                         </thead>
-                                                         <tbody v-for="(data,index) in riwayatgaji" :key="data.id">
+                                                         <tbody v-for="(data) in riwayatgaji" :key="data.id">
                                                             <tr v-if="data.status == 'Sudah Diambil'">
-                                                                    <td>{{ index+1}} </td>
                                                                     <td>{{ data.email }}</td>
                                                                     <td>
                                                                         {{ data.tanggal_ambil}}
@@ -775,7 +742,7 @@
 																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Email Pegawai</label>
 																					<div class="col-lg-9 col-xl-6">
 																						  <select class="form-control form-control-lg form-control-solid" v-model="form.email">
-                                                                                        <option v-for="data in datapegawai" :key="data.email" :selected="data.email == form.email ? selected : null" :value="data.email">{{data.email}}</option>
+                                                                                        <option v-for="data in filteremail" :key="data.email" :selected="data.email == form.email ? selected : null" :value="data.email">{{data.email}}</option>
                                                                                     </select>
 																					</div>
 																				</div>
@@ -1277,6 +1244,8 @@ export default {
     name: "Payroll",
     data() {
         return {
+            search2: '', 
+            search: '',
             detritun: [],
             detrinomtun: [],
             detribon: [],
@@ -1342,6 +1311,22 @@ export default {
             role: localStorage.getItem('role'),
         }
     },
+    computed: {
+    filteremail() {
+        return this.datapegawai.filter(data => data.status == 'Aktif');
+    },
+    },
+     watch: {
+        search: function ()
+            {
+                this.searchriwayat(this.search)
+                 this.searchgaji(this.search2)
+            },
+        search2: function ()
+            {
+                this.searchgaji(this.search2)
+            },
+        },
     methods:{
         select() {
             console.log(this.gajiMultiple)
@@ -1373,6 +1358,52 @@ export default {
             return sum;
         },
         //GAJI
+         searchriwayat(val) {
+            if (val == "")
+            {
+                this.riwayat()
+            }else {
+                axios
+                    .get('/api/searchriwayat/'+ val , {
+                        headers: {Authorization: "Bearer " + this.token},
+                    })
+                    .then((response) => {
+                        this.riwayatgaji = response.data;
+                    });
+            }
+        },
+        searchgaji(val) {
+            if (val == "")
+            {
+                this.tampilgaji()
+            }else {
+                axios
+                    .get('/api/searchgaji/'+ val , {
+                        headers: {Authorization: "Bearer " + this.token},
+                    })
+                    .then((response) => {
+                    this.datagajipeg = response.data.data;
+                    // this.nilai = response.data.nominal;
+                    this.nilai = response.data.tunjangan;
+                    this.bon = response.data.bonus;
+                    this.potong = response.data.potongan;
+                    this.akhir = response.data.hasil;
+
+                    for (let i = 0; i < this.nilai.length; i++) {
+                        Object.assign(this.datagajipeg[i], { nilai: this.nilai[i] })
+                    }
+                    for (let i = 0; i < this.bon.length; i++) {
+                        Object.assign(this.datagajipeg[i], { bon: this.bon[i] })
+                    }
+                    for (let i = 0; i < this.potong.length; i++) {
+                        Object.assign(this.datagajipeg[i], { potong: this.potong[i] })
+                    }
+                    for (let i = 0; i < this.akhir.length; i++) {
+                        Object.assign(this.datagajipeg[i], { akhir: this.akhir[i] })
+                    }
+                    });
+            }
+        },
           riwayat(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/riwayatgaji',{
@@ -1393,7 +1424,6 @@ export default {
             })
                 .then(response => {
                     this.datagajipeg = response.data.data;
-                    // this.nilai = response.data.nominal;
                     this.nilai = response.data.tunjangan;
                     this.bon = response.data.bonus;
                     this.potong = response.data.potongan;
@@ -1401,8 +1431,6 @@ export default {
 
                     for (let i = 0; i < this.nilai.length; i++) {
                         Object.assign(this.datagajipeg[i], { nilai: this.nilai[i] })
-                        // Object.assign(this.datagajipeg[i], { jenis_bonus: response.data.bonus[i].jenis_bonus, nominal_bonus: response.data.bonus[i].nominal })
-                        // Object.assign(this.datagajipeg[i], { jenis_potongan: response.data.potongan[i].jenis_potongan, nominal_potongan: response.data.potongan[i].nominal })
                     }
                     for (let i = 0; i < this.bon.length; i++) {
                         Object.assign(this.datagajipeg[i], { bon: this.bon[i] })

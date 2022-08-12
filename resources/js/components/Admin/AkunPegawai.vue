@@ -43,36 +43,24 @@
 												<!--begin::Search Form-->
 												<div class="mb-10">
 													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
+														<div class="col-lg-12 col-xl-8">
+															 <form>
 															<div class="row align-items-center">
 																<div class="col-md-4 my-2 my-md-0">
 																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<input v-model="search" type="text" class="form-control form-control-solid" placeholder="Cari Berdasarkan Username dan Email"  />
 																		<span>
 																			<i class="flaticon2-search-1 text-muted"></i>
 																		</span>
 																	</div>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
+																<div>
+																	<div>
+																	<a class="btn btn-light-primary px-6 font-weight-bold">Search</a>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
 																</div>
 															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														  </form>
 														</div>
 													</div>
 												</div>
@@ -92,7 +80,7 @@
                                                         </tr>
                                                         </thead>
                                                          <tbody>
-                                                            <tr v-for="(data, index) in akunpegawai" :key="data.name">
+                                                            <tr v-for="(data, index) in akunpegawai.data" :key="data.name">
                                                                      <td>{{index+1}} </td>
                                                                     <td>{{ data.name }}</td>
                                                                     <td>{{ data.email }}</td>
@@ -115,6 +103,7 @@
                                                     </table>
 
                                                 </div>
+                                                 <Pagination align="right" :data="akunpegawai" @pagination-change-page="getUser" />
 												<!--end::Datatable-->
 											</div>
 											<!--end::Body-->
@@ -207,7 +196,11 @@
 <script>
 import useVuelidate from '@vuelidate/core'
 import { required, email, minLength } from '@vuelidate/validators'
+import LaravelVuePagination from 'laravel-vue-pagination';
 export default {
+    components: {
+        'Pagination': LaravelVuePagination
+    },
     name: "AkunPegawai",
      setup () {
         return { v$: useVuelidate() }
@@ -215,6 +208,10 @@ export default {
     
     data() {
         return {
+            LaravelVuePagination:{
+				 'current_page': 1
+			},
+            search: '',
             infopt:[],
             statusmodal: false,
             akunpegawai :[],
@@ -245,17 +242,17 @@ export default {
         }
     },
     created() {
-         this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/allUser',{
-                headers: {Authorization: "Bearer " + this.token},
-            })
-                .then(response => {
-                    this.akunpegawai = response.data.data;
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        })
+        //  this.$axios.get('/sanctum/csrf-cookie').then(response => {
+        //     this.$axios.get('/api/allUser',{
+        //         headers: {Authorization: "Bearer " + this.token},
+        //     })
+        //         .then(response => {
+        //             this.akunpegawai = response.data.data;
+        //         })
+        //         .catch(function (error) {
+        //             console.error(error);
+        //         });
+        // })
     },
     methods:{
          getpt(){
@@ -309,7 +306,7 @@ export default {
                     })
                     this.form.reset();
                     $("#tambahAkun").modal("hide");
-                    this.allUser()
+                    this.getUser()
                 }
             
             })
@@ -334,16 +331,30 @@ export default {
                     })
                     this.form.reset();
                     $('#tambahAkun').modal('hide')
-                    this.allUser()
+                    this.getUser()
                 }
             
             }
         )
             })
         },
-         allUser(){
-             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/allUser',{
+          searchuser(val) {
+            if (val == "")
+            {
+                this.getUser()
+            }else {
+                axios
+                    .get('/api/searchuser/'+ val , {
+                        headers: {Authorization: "Bearer " + this.token},
+                    })
+                    .then((response) => {
+                        this.akunpegawai = response.data;
+                    });
+            }
+        },
+        getUser(page = 1){
+			 this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/allUser?page=' + page, {
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
@@ -353,25 +364,8 @@ export default {
                     console.error(error);
                 });
         })
-        },
-        // editAkun(id) {
-        //      $("#editAkun").modal("show");
-        //       axios.post('/api/updateUser', +id).then((response) => {
-        //         if (response.data.success){
-        //             Swal.fire({
-        //                 icon: "success",
-        //                 title: "Berhasil",
-        //                 text: "Berhasil Update Akun Pegawai",
-        //                 showConfirmButton: false,
-        //                 timer: 1600,
-        //             })
-        //             this.form.reset();
-        //             $('#editAkun').modal('hide')
-        //             this.allUser()
-        //         }
-            
-        //     }
-        // )},
+
+		},
          allJabatan(){
              this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/alljabatan',{
@@ -425,7 +419,7 @@ export default {
                     })
                     };
            
-                    this.allUser()
+                    this.getUser()
 
             },
 
@@ -435,33 +429,18 @@ export default {
         },
 
     },
-
+    watch: {
+                search: function ()
+                {
+                    this.searchuser(this.search)
+                }
+        },
     mounted() {
         this.allJabatan();
         this.getpt();
         this.allgolongan();
-        // axios.get('/api/allUser',{
-        //         headers: {Authorization: "Bearer " + this.token},
-        //     })
-        //         .then(response => {
-        //             this.akunpegawai = response.data.data;
-        //         })
-        //         .catch(function (error) {
-        //             console.error(error);
-        //         });
+        this.getUser();
     },
-    // beforeRouteEnter(to, from, next) {
-    //     if (JSON.parse(window.localStorage.getItem("loggedIn"))) {
-    //         if(window.localStorage.getItem("role") == 'Manager'){
-    //             return next();
-    //         } else if (window.localStorage.getItem("role") == 'Admin') {
-    //             return next();
-    //         } else if (window.localStorage.getItem("role") == 'Pegawai') {
-    //             return next();
-    //         }
-    //     }
-    //     next();
-    // },
 
 
 }

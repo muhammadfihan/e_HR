@@ -148,6 +148,7 @@
                                                             <th>Periode/Tanggal</th>
                                                             <th>Jabatan</th>
                                                             <th>Total Gaji</th>
+                                                            <th style="text-align:center;">Status</th>
 															<th style="text-align: center;">Detail Gaji</th>
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
@@ -166,6 +167,10 @@
                                                                             <a>{{convertToRupiah(has)}}</a>
                                                                         </span>
 																	</td>
+                                                                    <td style="text-align:center">
+                                                                         <span v-if="data.status == 'Belum Diambil'" class="badge badge-warning" style="color:white" >Belum Diambil</span>
+                                                                         <span v-if="data.status == 'Sudah Diambil'" class="badge badge-success" style="color:white" >Sudah Diambil</span>
+                                                                    </td>
                                                                      <td style="text-align: center;">
                                                                          <span @click.prevent="detGaji(data.id)" class="badge badge-primary" style="cursor:pointer" >Detail</span>
                                                                     </td>
@@ -173,6 +178,32 @@
                                                                          <span v-if="data.status == 'Belum Diambil'" @click.prevent="modalconfirm(data)" class="badge badge-warning" style="cursor:pointer; color:white" >Ambil</span>
                                                                            <span v-else-if="data.status == 'Sudah Diambil'" class="badge badge-success">Sudah Diambil</span>
 																		  <!-- <span v-else-if="data.status == 'Sudah Diambil'" @click.prevent="showinvoice(data.id)" class="badge badge-success" style="cursor:pointer" >Cetak</span> -->
+                                                                    </td>
+                                                            </tr>
+                                                        </tbody>
+                                                         <tbody v-for="(data,index) in riwayatgaji" :key="data.id">
+                                                            <tr v-if="data.status == 'Sudah Diambil'">
+                                                                    <td>{{ index+1}} </td>
+                                                                    <td>
+                                                                        {{ data.tanggal_ambil}}
+                                                                    </td>
+                                                                    <td> <span v-for="jab in jabatan" :key="jab.id">
+                                                                            <a v-if="data.id_jabatan == jab.id">{{jab.jabatan}}</a>
+                                                                        </span>
+                                                                    </td>
+                                                                     <td>
+                                                                        {{convertToRupiah(data.gaji_bersih)}}
+                                                                    </td>
+                                                                     <td style="text-align:center">
+                                                                         <span v-if="data.status == 'Belum Diambil'" class="badge badge-warning" style="color:white" >Belum Diambil</span>
+                                                                         <span v-if="data.status == 'Sudah Diambil'" class="badge badge-success" style="color:white" >Sudah Diambil</span>
+                                                                    </td>
+                                                                   <td style="text-align: center;">
+                                                                           <span @click.prevent="getriwayatdetail(data.id)" class="badge badge-primary" style="cursor:pointer">Detail</span>
+                                                                    </td>
+                                                                    <td style="text-align: center;">
+                                                                            <span @click.prevent="showinvoice(data.id)" class="badge badge-info" style="cursor:pointer">Cetak</span>
+                                                                         
                                                                     </td>
                                                             </tr>
                                                         </tbody>
@@ -794,7 +825,7 @@ export default {
                 status: data.status,
             })
         },
-         riwayat(){
+        riwayat(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/riwayatgajipeg',{
                 headers: {Authorization: "Bearer " + this.token},
@@ -852,6 +883,7 @@ export default {
                     }),
 					$("#confirm").modal("hide");
                     this.getgaji();
+                    this.riwayat();
                 }
             })
             	

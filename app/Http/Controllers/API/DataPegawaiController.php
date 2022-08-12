@@ -76,12 +76,32 @@ class DataPegawaiController extends Controller
        $datapegawai = DB::table('pegawais')
            ->select('*')
            ->where('id_admin', Auth::user()->id)
-           ->get();
+           ->latest()
+           ->paginate(10);
        return response([
            'data' => $datapegawai,
            'message' => 'get data berhasil',
            'status' => true
        ]);
+
+    }
+    public function searchdata($key)
+    {
+            $result = DB::table('pegawais')
+                ->select('*')
+                ->where('pegawais.id_admin', Auth::user()->id)
+                ->where('email', 'like', '%' . $key . '%')
+                ->orWhere('no_pegawai', 'like', '%' . $key . '%')
+                ->orWhere('name', 'like', '%' . $key . '%')
+                ->orWhere('nama_lengkap', 'like', '%' . $key . '%')
+                ->orWhere('pendidikan', 'like', '%' . $key . '%')
+                ->orWhere('alamat', 'like', '%' . $key . '%')
+                ->orWhere('status', 'like', '%' . $key . '%')
+                ->orWhere('gender', 'like', '%' . $key . '%')
+                ->where('pegawais.id_admin', Auth::user()->id)
+                ->paginate(10);
+
+            return $result;
 
     }
     public function datpeg()
@@ -89,6 +109,7 @@ class DataPegawaiController extends Controller
        $datapegawai = DB::table('pegawais')
            ->select('*')
            ->where('email', Auth::user()->email)
+           ->latest()
            ->get();
        return response([
            'data' => $datapegawai,
@@ -97,6 +118,7 @@ class DataPegawaiController extends Controller
        ]);
 
     }
+
     public function detailpegawai($id)
     {
        $datapegawai = DB::table('pegawais')

@@ -25,6 +25,30 @@ class JabatanController extends Controller
             'status' => true
         ]);
     }
+    public function jabatanpaginate()
+    {
+        $jabatan = DB::table('jabatan')
+            ->select('*')
+            ->where('id_admin', Auth::user()->id)
+            ->paginate(10);
+        return response([
+            'data' => $jabatan,
+            'message' => 'get data berhasil',
+            'status' => true
+        ]);
+    }
+    public function searchjabatan($key)
+    {
+            $result = DB::table('jabatan')
+                ->select('*')
+                ->where('jabatan.id_admin', Auth::user()->id)
+                ->where('jabatan', 'like', '%' . $key . '%')
+                ->where('jabatan.id_admin', Auth::user()->id)
+                ->paginate(10);
+
+            return $result;
+
+    }
     public function jabatanpegawai()
     {
         $jabatan = DB::table('jabatan')

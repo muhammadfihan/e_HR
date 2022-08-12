@@ -36,36 +36,24 @@
 												<!--begin::Search Form-->
 												<div class="mb-10">
 													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
+														<div class="col-lg-12 col-xl-8">
+															 <form>
 															<div class="row align-items-center">
 																<div class="col-md-4 my-2 my-md-0">
 																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<input v-model="search" type="text" class="form-control form-control-solid" placeholder="Search..."  />
 																		<span>
 																			<i class="flaticon2-search-1 text-muted"></i>
 																		</span>
 																	</div>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
+																<div>
+																	<div>
+																	<a class="btn btn-light-primary px-6 font-weight-bold">Search</a>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
 																</div>
 															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														  </form>
 														</div>
 													</div>
 												</div>
@@ -88,7 +76,7 @@
                                                         </tr>
                                                         </thead>
                                                          <tbody>
-                                                            <tr v-for="(data,index) in pegawai" :key="data.id">
+                                                            <tr v-for="(data,index) in pegawai.data" :key="data.id">
                                                                     <td>{{index+1}} </td>
                                                                     <td>
                                                                         <div class="ms-3">
@@ -121,6 +109,7 @@
                                                     </table>
 
                                                 </div>
+                                                <Pagination align="right" :data="pegawai" @pagination-change-page="getdataPegawai" />
 												<!--end::Datatable-->
 											</div>
 											<!--end::Body-->
@@ -307,8 +296,11 @@
 
 
 <script>
-
+import LaravelVuePagination from 'laravel-vue-pagination';
 export default {
+    components: {
+        'Pagination': LaravelVuePagination
+    },
     name: "DataPegawai",
     data() {
         return {
@@ -316,6 +308,7 @@ export default {
             detpegawai: [],
             jabatan:[],
             golongan:[],
+            search: '',
             editpegawai:[],
             updatepegawai :[],
             delpegawai:[],
@@ -377,9 +370,25 @@ export default {
                 });
         })
         },
-        getdataPegawai(){
+        searchdatapeg(val) {
+            if (val == "")
+            {
+                this.getdataPegawai()
+            }else {
+                axios
+                    .get('/api/searchdata/'+ val , {
+                        headers: {Authorization: "Bearer " + this.token},
+                    })
+                    .then((response) => {
+                        this.pegawai = response.data;
+                        // this.LaravelVuePagination = response.data.pagination;
+                        // console.log(response)
+                    });
+            }
+        },
+        getdataPegawai(page = 1){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/datapegawai',{
+            this.$axios.get('/api/datapegawai?page=' + page,{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
@@ -412,30 +421,6 @@ export default {
             })
         },
 
-        // editPegawai(id){
-        //     $('#editPegawai').modal('show')
-        //     axios.get('/api/editpegawai/'+id,  {
-        //         headers: { Authorization: "Bearer " + this.token }
-        //     }).then((response) => {
-        //         this.editpegawai = response.data.data
-        //     })
-        // },
-
-        // updatePegawai(id){
-        //     axios.post('/api/updatepegawai/'+
-        //      {
-        //             id: this.form.id,
-        //             name: this.form.name,
-        //             jabatan: this.form.jabatan,
-        //             status: this.form.status                },
-        //          {
-        //         headers: { Authorization: "Bearer " + this.token }
-        //     }). then((response) => {
-        //         this.updatepegawai = response.data.data
-        //     })
-        //     // console.log("ubah Data")
-
-        // },
          updatePegawai(){
             axios.post('/api/updatepegawai',
                 {
@@ -507,6 +492,12 @@ export default {
         )}
     },
 
+    watch: {
+            search: function ()
+            {
+                this.searchdatapeg(this.search)
+            }
+        },
     mounted() {
         this.getJabatan();
         this.getdataPegawai();

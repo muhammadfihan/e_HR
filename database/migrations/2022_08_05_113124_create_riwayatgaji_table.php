@@ -18,7 +18,6 @@ return new class extends Migration
             $table->integer('id_admin');
             $table->string('email');
             $table->integer('id_jabatan')->unsigned();
-            $table->foreign('id_jabatan')->references('id')->on('jabatan');
             $table->integer('id_golongan')->unsigned()->nullable();
             $table->foreign('id_golongan')->references('id')->on('golongan');
             $table->string('tunjangan')->nullable();

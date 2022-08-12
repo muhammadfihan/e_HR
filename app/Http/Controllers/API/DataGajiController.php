@@ -33,6 +33,19 @@ class DataGajiController extends Controller
             ]);
        
     }
+    public function searchriwayat($key)
+    {
+            $result = DB::table('riwayatgaji')
+                ->select('*')
+                ->where('riwayatgaji.id_admin', Auth::user()->id)
+                ->where('email', 'like', '%' . $key . '%')
+                ->orWhere('tanggal_ambil', 'like', '%' . $key . '%')
+                ->where('riwayatgaji.id_admin', Auth::user()->id)
+                ->get();
+
+            return $result;
+
+    }
     public function riwayatgajipeg(Request $request){
         $riwayat = RiwayatGaji::where('email' ,Auth::user()->email)->latest()->get();
             return response([
@@ -41,6 +54,97 @@ class DataGajiController extends Controller
                 'status' => true,
             ]);
        
+    }
+    public function searchgaji($key)
+    {
+            $result = DB::table('penggajian')
+                ->select('*')
+                ->where('penggajian.id_admin', Auth::user()->id)
+                ->where('email', 'like', '%' . $key . '%')
+                ->orWhere('tanggal', 'like', '%' . $key . '%')
+                ->orWhere('status', 'like', '%' . $key . '%')
+                ->where('penggajian.id_admin', Auth::user()->id)
+                ->get()->toArray();
+
+                foreach($result as $i => $tes){
+                    $tun[$i] = explode(',', $tes->id_tunjangan);
+                    foreach($tun[$i] as $index => $row){ 
+                        $data[$i][$index] = DB::table('tunjangan')->where('id', $row)->first();
+                        $nominalALL[$i][$index] = $data[$i][$index]->nominal;
+                        $jenis[$i][$index] = $data[$i][$index]->jenis_tunjangan;
+                        $val[$i] = $jenis[$i];
+                        $nom[$i] = $nominalALL[$i];
+                        $totaltun[$i] = array_sum($nominalALL[$i]);
+                    }
+                }
+                foreach($result as $j => $tes2){
+                    $bon[$j] = explode(',', $tes2->id_bonus);
+                    foreach($bon[$j] as $nus => $coba){ 
+                        $databon[$j][$nus] = DB::table('bonus')->where('id', $coba)->first();
+                        $nominalBon[$j][$nus] = $databon[$j][$nus]->nominal;
+                        $jenisBon[$j][$nus] = $databon[$j][$nus]->jenis_bonus;
+                        $valBon[$j] = $jenisBon[$j];
+                        $nomBon[$j] = $nominalBon[$j];
+                        $totalbon[$j] = array_sum($nominalBon[$j]);
+                        
+                    }
+                }
+                foreach($result as $x => $tes3){
+                    $pot[$x] = explode(',', $tes3->id_potongan);
+                    foreach($pot[$x] as $tongan => $coba2){ 
+                        $datapot[$x][$tongan] = DB::table('potongan')->where('id', $coba2)->first();
+                        $nominalPot[$x][$tongan] = $datapot[$x][$tongan]->nominal;
+                        $jenisPot[$x][$tongan] = $datapot[$x][$tongan]->jenis_potongan;
+                        $valPot[$x] = $jenisPot[$x];
+                        $nomPot[$x] = $nominalPot[$x];
+                        $totalpot[$x] = array_sum($nominalPot[$x]);
+                        
+                    }
+                }
+                foreach($result as $a => $jab){
+                    $jabat[$a] = explode(',', $jab->id_jabatan);
+        
+                    foreach($jabat[$a] as $batan => $tan){ 
+                        $datajab[$a][$batan] = DB::table('jabatan')->where('id', $tan)->first();
+                        $jabgaji[$a][$batan] = $datajab[$a][$batan]->gaji;
+                        $jenisjab[$a][$batan] = $datajab[$a][$batan]->jabatan;
+                        $valjab[$a] = $jenisjab[$a];
+                        $nomjab[$a] = array_sum($jabgaji[$a]);
+                        
+                    }
+                }
+
+                if($result != null){
+                    foreach (array_keys($totaltun + $totalbon + $totalpot + $nomjab) as $key) {
+                        $akhir[$key] = array($totaltun[$key] + $nomjab[$key] +$totalbon[$key] - $totalpot[$key]);
+                        
+                    }
+                    return response()->json([
+                        'data' => $result,
+                        'tunjangan' => $val,
+                        'nominal' => $nom,
+                        'jabatan' => $valjab,
+                        'gaji' => $nomjab,
+                        'total_tunjangan' => $totaltun,
+                        'bonus' => $valBon,
+                        'nominal_bonus' => $nomBon,
+                        'total_bonus' => $totalbon,
+                        'potongan' => $valPot,
+                        'nominal_potongan' => $nomPot,
+                        'total_potongan' => $totalpot,
+                        'hasil' => $akhir,
+                        'message' => 'get data berhasil',
+                        'status' => true
+                    ]);
+                }else{
+                    return response()->json([
+                        'message' => 'tidak ada data',
+                        'status' => true
+                    ]);
+                }
+                
+                
+
     }
     public function allgaji(Request $request){
         $tunjangan = DB::table('penggajian')
@@ -96,28 +200,35 @@ class DataGajiController extends Controller
                 
             }
         }
-        foreach (array_keys($totaltun + $totalbon + $totalpot + $nomjab) as $key) {
-            $akhir[$key] = array($totaltun[$key] + $nomjab[$key] +$totalbon[$key] - $totalpot[$key]);
-            
-        }
-       
-    return response()->json([
-        'data' => $tunjangan,
-        'tunjangan' => $val,
-        'nominal' => $nom,
-        'jabatan' => $valjab,
-        'gaji' => $nomjab,
-        'total_tunjangan' => $totaltun,
-        'bonus' => $valBon,
-        'nominal_bonus' => $nomBon,
-        'total_bonus' => $totalbon,
-        'potongan' => $valPot,
-        'nominal_potongan' => $nomPot,
-        'total_potongan' => $totalpot,
-        'hasil' => $akhir,
-        'message' => 'get data berhasil',
-        'status' => true
-    ]);
+            if($tunjangan != null){
+                foreach (array_keys($totaltun + $totalbon + $totalpot + $nomjab) as $key) {
+                    $akhir[$key] = array($totaltun[$key] + $nomjab[$key] +$totalbon[$key] - $totalpot[$key]);
+                    
+                }
+               
+            return response()->json([
+                'data' => $tunjangan,
+                'tunjangan' => $val,
+                'nominal' => $nom,
+                'jabatan' => $valjab,
+                'gaji' => $nomjab,
+                'total_tunjangan' => $totaltun,
+                'bonus' => $valBon,
+                'nominal_bonus' => $nomBon,
+                'total_bonus' => $totalbon,
+                'potongan' => $valPot,
+                'nominal_potongan' => $nomPot,
+                'total_potongan' => $totalpot,
+                'hasil' => $akhir,
+                'message' => 'get data berhasil',
+                'status' => true
+            ]);
+            }else{
+                return response()->json([
+                    'message' => 'tidak ada data',
+                    'status' => true
+                ]);
+            }
     }
     public function buatgaji(Request $request)
     {   

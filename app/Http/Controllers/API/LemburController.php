@@ -23,6 +23,22 @@ class LemburController extends Controller
             'message' => 'Get data berhasil',
             'data' => $lembur
         ]);
+    }  
+    public function searchlembur($key)
+    {
+            $result = DB::table('lembur')
+                ->select('*')
+                ->where('lembur.id_admin', Auth::user()->id)
+                ->where('email', 'like', '%' . $key . '%')
+                ->orWhere('tanggal_lembur', 'like', '%' . $key . '%')
+                ->orWhere('nama_lengkap', 'like', '%' . $key . '%')
+                ->orWhere('no_pegawai', 'like', '%' . $key . '%')
+                ->orWhere('status_lembur', 'like', '%' . $key . '%')
+                ->where('lembur.id_admin', Auth::user()->id)
+                ->paginate(10);
+
+            return $result;
+
     }
     public function tampillemburpegawai()
     {

@@ -155,38 +155,27 @@
 											<div class="card-body">
 												<!--begin::Search Form-->
 												<!--begin::Search Form-->
-												<div class="mb-10">
+													<div class="mb-10">
 													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
+														<div class="col-lg-12 col-xl-8">
+														  <form>
 															<div class="row align-items-center">
 																<div class="col-md-4 my-2 my-md-0">
 																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<input v-model="search1" type="text" class="form-control form-control-solid" placeholder="Search..."  />
 																		<span>
 																			<i class="flaticon2-search-1 text-muted"></i>
 																		</span>
 																	</div>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
+																<div>
+																	<div>
+																	<a class="btn btn-light-primary px-6 font-weight-bold">Search</a>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
 																</div>
 															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														  </form>
+															
 														</div>
 													</div>
 												</div>
@@ -209,7 +198,7 @@
                                                         </tr>
                                                         </thead>
                                                          <tbody>
-                                                            <tr v-for="(data,index) in izin" :key="data.id">
+                                                            <tr v-for="(data,index) in izin.data" :key="data.id">
                                                                     <td>{{index+1}} </td>
                                                                      <td>
                                                                         <div class="ms-3">
@@ -242,6 +231,7 @@
                                                     </table>
 
                                                 </div>
+												<Pagination align="right" :data="izin" @pagination-change-page="allizin" />
 												<!--end::Datatable-->
 											</div>
 											<!--end::Body-->
@@ -260,38 +250,27 @@
 											<div class="card-body">
 												<!--begin::Search Form-->
 												<!--begin::Search Form-->
-												<div class="mb-10">
+													<div class="mb-10">
 													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
+														<div class="col-lg-12 col-xl-8">
+														  <form>
 															<div class="row align-items-center">
 																<div class="col-md-4 my-2 my-md-0">
 																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<input v-model="search2" type="text" class="form-control form-control-solid" placeholder="Search..."  />
 																		<span>
 																			<i class="flaticon2-search-1 text-muted"></i>
 																		</span>
 																	</div>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
+																<div>
+																	<div>
+																	<a class="btn btn-light-primary px-6 font-weight-bold">Search</a>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
 																</div>
 															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														  </form>
+															
 														</div>
 													</div>
 												</div>
@@ -315,7 +294,7 @@
                                                         </tr>
                                                         </thead>
                                                          <tbody>
-                                                            <tr v-for="(data,index) in lembur" :key="data.id">
+                                                            <tr v-for="(data,index) in lembur.data" :key="data.id">
                                                                     <td>{{index+1}} </td>
 																	<td>{{ data.tanggal_lembur}}</td>
                                                                     <td>{{ data.nama_lengkap }}</td>
@@ -344,6 +323,7 @@
                                                     </table>
 
                                                 </div>
+													<Pagination align="right" :data="lembur" @pagination-change-page="tampillembur" />
 												<!--end::Datatable-->
 											</div>
 											<!--end::Body-->
@@ -361,38 +341,27 @@
 											<div class="card-body">
 												<!--begin::Search Form-->
 												<!--begin::Search Form-->
-												<div class="mb-10">
+													<div class="mb-10">
 													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
+														<div class="col-lg-12 col-xl-8">
+														  <form>
 															<div class="row align-items-center">
 																<div class="col-md-4 my-2 my-md-0">
 																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<input v-model="search3" type="text" class="form-control form-control-solid" placeholder="Search..."  />
 																		<span>
 																			<i class="flaticon2-search-1 text-muted"></i>
 																		</span>
 																	</div>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
+																<div>
+																	<div>
+																	<a class="btn btn-light-primary px-6 font-weight-bold">Search</a>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
 																</div>
 															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														  </form>
+															
 														</div>
 													</div>
 												</div>
@@ -415,7 +384,7 @@
                                                         </tr>
                                                         </thead>
                                                          <tbody>
-                                                            <tr v-for="(data,index) in reqabsen" :key="data.id">
+                                                            <tr v-for="(data,index) in reqabsen.data" :key="data.id">
                                                                     <td>{{index+1}} </td>
                                                                      <td>
                                                                         <div class="ms-3">
@@ -446,6 +415,7 @@
                                                     </table>
 
                                                 </div>
+													<Pagination align="right" :data="reqabsen" @pagination-change-page="allreqabsen" />
 												<!--end::Datatable-->
 											</div>
 											<!--end::Body-->
@@ -465,36 +435,25 @@
 												<!--begin::Search Form-->
 												<div class="mb-10">
 													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
+														<div class="col-lg-12 col-xl-8">
+														  <form>
 															<div class="row align-items-center">
 																<div class="col-md-4 my-2 my-md-0">
 																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<input v-model="search" type="text" class="form-control form-control-solid" placeholder="Search..."  />
 																		<span>
 																			<i class="flaticon2-search-1 text-muted"></i>
 																		</span>
 																	</div>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
+																<div>
+																	<div>
+																	<a class="btn btn-light-primary px-6 font-weight-bold">Search</a>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
 																</div>
 															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														  </form>
+															
 														</div>
 													</div>
 												</div>
@@ -519,7 +478,7 @@
                                                         </tr>
                                                         </thead>
                                                          <tbody>
-                                                            <tr v-for="(data,index) in cuti" :key="data.id">
+                                                            <tr v-for="(data,index) in cuti.data" :key="data.id">
                                                                     <td>{{index+1}} </td>
 																	<td>{{ data.tanggal_cuti }}</td>
                                                                     <td>{{ data.nama_lengkap }}</td>
@@ -546,9 +505,11 @@
                                                                     </td>
                                                             </tr>
                                                         </tbody>
+														
                                                     </table>
 
                                                 </div>
+												<Pagination align="right" :data="cuti" @pagination-change-page="tampilcuti" />
 												<!--end::Datatable-->
 											</div>
 											<!--end::Body-->
@@ -762,11 +723,21 @@
 
 
 <script>
-
+import LaravelVuePagination from 'laravel-vue-pagination';
 export default {
+	components: {
+        'Pagination': LaravelVuePagination
+    },
     name: "Pengajuan",
     data() {
         return {
+			LaravelVuePagination:{
+				 'current_page': 1
+			},
+			search: '',
+			search1: '',
+			search2: '',
+			search3: '',
             infopt:[],
             reqabsen:[],
 			lembur:[],
@@ -781,16 +752,25 @@ export default {
 			   status_lembur: "",
 			   status_cuti: "",
             }),
-            //  form: new Form ({
-            //    id : "",
-            //    status_izin: ""
-            // }),
             izin:[],
             token: localStorage.getItem("token"),
             role: localStorage.getItem('role'),
         }
     },
     methods:{
+		// searchCuti(){
+		// 	 this.$axios.get('/sanctum/csrf-cookie').then(response => {
+        //     this.$axios.get('/api/searchcuti/'+this.search, {
+        //         headers: {Authorization: "Bearer " + this.token},
+        //     })
+        //         .then(response => {
+        //             this.cuti = response.data.data;
+        //         })
+        //         .catch(function (error) {
+        //             console.error(error);
+        //         });
+        // })
+		// },
          closeModal() {
             $("#reqabsen").modal("hide");
         },
@@ -844,9 +824,9 @@ export default {
                 });
         })
         },
-         allizin(){
+         allizin(page = 1){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/allizin',{
+            this.$axios.get('/api/allizin?page=' + page,{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
@@ -901,9 +881,9 @@ export default {
                 }
             })
         },
-         allreqabsen(){
+         allreqabsen(page = 1){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/allreq',{
+            this.$axios.get('/api/allreq?page=' + page,{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
@@ -914,9 +894,9 @@ export default {
                 });
         })
         },
-		tampillembur(){
+		tampillembur(page = 1){
 			 this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/tampillembur',{
+            this.$axios.get('/api/tampillembur?page=' + page,{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
@@ -963,9 +943,9 @@ export default {
             $("#detailLembur").modal("hide");
         },
 		// CUTI
-		tampilcuti(){
+		tampilcuti(page = 1){
 			 this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/tampilcuti',{
+            this.$axios.get('/api/tampilcuti?page=' + page, {
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
@@ -999,6 +979,62 @@ export default {
                 }
             })
         },
+		fetchcuti(val) {
+            if (val == "")
+            {
+                this.tampilcuti()
+            }else {
+                axios
+                    .get('/api/searchcuti/'+ val , {
+                        headers: {Authorization: "Bearer " + this.token},
+                    })
+                    .then((response) => {
+                        this.cuti = response.data;
+                    });
+            }
+        },
+		searchizin(val) {
+            if (val == "")
+            {
+                this.allizin()
+            }else {
+                axios
+                    .get('/api/searchizin/'+ val , {
+                        headers: {Authorization: "Bearer " + this.token},
+                    })
+                    .then((response) => {
+                        this.izin = response.data;
+                    });
+            }
+        },
+		searchreqabsen(val) {
+            if (val == "")
+            {
+                this.allreqabsen()
+            }else {
+                axios
+                    .get('/api/searchreqabsen/'+ val , {
+                        headers: {Authorization: "Bearer " + this.token},
+                    })
+                    .then((response) => {
+                        this.reqabsen = response.data;
+                    });
+            }
+        },
+		searchlembur(val) {
+            if (val == "")
+            {
+                this.tampillembur()
+            }else {
+                axios
+                    .get('/api/searchlembur/'+ val , {
+                        headers: {Authorization: "Bearer " + this.token},
+                    })
+                    .then((response) => {
+                        this.lembur = response.data;
+                    });
+            }
+        },
         detailCuti(id){
             $('#detailCuti').modal('show')
             axios.get('/api/detailcuti/'+id,{
@@ -1014,6 +1050,24 @@ export default {
         
         
         
+    },
+	watch: {
+        search: function ()
+        {
+            this.fetchcuti(this.search)
+        },
+		search1: function ()
+        {
+            this.searchizin(this.search1)
+        },
+	    search2: function ()
+        {
+            this.searchlembur(this.search2)
+        },
+		search3: function ()
+        {
+            this.searchreqabsen(this.search3)
+        }
     },
     
  mounted () {

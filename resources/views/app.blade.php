@@ -25,6 +25,9 @@
 		<script src="assets/plugins/global/plugins.bundle.js"></script>
 		<script src="assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
 		<script src="assets/js/scripts.bundle.js"></script>
+		<script async
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfyhAGqNFSYibjSiHBpE4QoCc09AeFByk&callback=initMap">
+		</script>
 		<!--end::Global Theme Bundle-->
 		<!--begin::Page Scripts(used by this page)-->
 		<script src="assets/js/pages/custom/login/login-4.js"></script>

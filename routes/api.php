@@ -15,6 +15,7 @@ use App\Http\Controllers\API\CutiController;
 use App\Http\Controllers\API\LemburController;
 use App\Http\Controllers\API\LaporanController;
 use App\Http\Controllers\API\ForgotPasswordController;
+use App\Models\ReqAbsen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -55,6 +56,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('jabatan',[JabatanController::class, 'jabatan'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('alljabatan',[JabatanController::class, 'alljabatan'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('jabatanpaginate',[JabatanController::class, 'jabatanpaginate'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('jabatanpegawai',[JabatanController::class, 'jabatanpegawai'])->middleware('role:Manager,Admin,Pegawai');
     Route::post('tambahjabatan', [JabatanController::class, 'tambahjabatan'])->middleware('role:Manager,Admin');
     Route::get('editjabatan/{id}',[JabatanController::class, 'editjabatan'])->middleware('role:Manager,Admin');
@@ -144,6 +146,19 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('confirmcuti',[CutiController::class, 'confirmcuti'])->middleware('role:Admin,Pegawai');
     Route::delete('hapuscuti/{id}',[CutiController::class, 'hapuscuti'])->middleware('role:Admin,Pegawai');
     Route::get('detailcuti/{id}',[CutiController::class, 'detailcuti'])->middleware('role:Admin,Pegawai');
+
+    //Search
+    Route::get('searchdata/{data}',[DataPegawaiController::class, 'searchdata'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchuser/{data}',[UserController::class, 'searchuser'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchabsen/{data}',[AbsensiController::class, 'searchabsen'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchabsenpeg/{data}',[AbsensiController::class, 'searchabsenpeg'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchcuti/{data}',[CutiController::class, 'searchcuti'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchjabatan/{data}',[JabatanController::class, 'searchjabatan'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchriwayat/{data}',[DataGajiController::class, 'searchriwayat'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchgaji/{data}',[DataGajiController::class, 'searchgaji'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchlembur/{data}',[LemburController::class, 'searchlembur'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchizin/{data}',[IzinController::class, 'searchizin'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchreqabsen/{data}',[ReqAbsenController::class, 'searchreqabsen'])->middleware('role:Manager,Admin,Pegawai');
     
     Route::get('tampillembur', [LemburController::class, 'tampillembur'])->middleware('role:Admin');
     Route::get('tampillemburpegawai', [LemburController::class, 'tampillemburpegawai'])->middleware('role:Admin,Pegawai');
