@@ -98,6 +98,11 @@
                                                 <span class="menu-text">Laporan</span>
                                             </a>
                                         </li>
+                                        <li class="menu-item menu-item-submenu" aria-haspopup="true" @click="cuti">
+                                            <a href="javascript:;" class="menu-link menu-toggle">
+                                                <span class="menu-text">Cuti</span>
+                                            </a>
+                                        </li>
                                         <li class="menu-item menu-item-submenu" aria-haspopup="true" @click="approvement">
                                             <a href="javascript:;" class="menu-link menu-toggle">
                                                 <span class="menu-text">Approvement</span>
@@ -359,6 +364,9 @@ export default {
             },
              kehadiran(){
                 this.$router.push("/Kehadiran");
+            },
+             cuti(){
+                this.$router.push("/Cuti");
             },
 
         },

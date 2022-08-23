@@ -144,6 +144,36 @@ class DataPegawaiController extends Controller
        ]);
     }
 
+    public function settingcuti(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'cuti' => 'required',
+         ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Update Data Gagal!',
+            ]);
+        } else {
+            $getCuti = DB::table('pegawais')->select('jatah_cuti')->where('id', $request->id)->get();
+            if ($getCuti == null || $getCuti == 0) {
+                DB::table('pegawais')->where('id', $request->id)->update([
+                    'jatah_cuti' => $request->cuti,
+                ]); 
+            } else {
+                DB::table('pegawais')->where('id', $request->id)->update([
+                    'jatah_cuti' => (int)$getCuti + $request->cuti,
+                ]); 
+            }
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Update Data Berhasil!',
+            ]);
+        }
+    }
+
     public function updatepegawai(Request $request)
     {
         

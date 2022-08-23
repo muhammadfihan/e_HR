@@ -116,12 +116,8 @@ class CutiController extends Controller
                 'keterangan' => $request->keterangan,
                 'bukti_cuti' => $filename,
             ]);
-            // $jumlah_hari = $cuti->jumlah_hari;
-           
-            // $total = $jatah->jatah_cuti - $jumlah_hari;
-            // $hasil = DB::table('pegawais')->where('email', Auth::user()->email)->update([
-            //     'jatah_cuti' => $total,
-            // ]);
+
+            
             return response()->json([
                 'data' => $cuti,
                 // 'jatah' => $hasil,

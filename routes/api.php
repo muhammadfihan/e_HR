@@ -14,7 +14,9 @@ use App\Http\Controllers\API\ReqAbsenController;
 use App\Http\Controllers\API\CutiController;
 use App\Http\Controllers\API\LemburController;
 use App\Http\Controllers\API\LaporanController;
+use App\Http\Controllers\API\CutiTahunanController;
 use App\Http\Controllers\API\ForgotPasswordController;
+use App\Http\Controllers\API\MasterCutiPerusahaanController;
 use App\Models\ReqAbsen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +40,11 @@ Route::post('lupa', [ForgotPasswordController::class, 'postEmail']);
 Route::post('submitlupa', [ForgotPasswordController::class, 'submitlupa']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
+
+    Route::post('mastercutiperusahaan/add', [MasterCutiPerusahaanController::class, 'TambahCutiPerusahaan'])->middleware('role:Admin');
+    Route::get('mastercutiperusahaan', [MasterCutiPerusahaanController::class, 'CutiPerusahan'])->middleware('role:Admin');
+    Route::get('mastercutitahunan',[CutiTahunanController::class,'CutiTahunanAll'])->middleware('role:Admin');
+    Route::get('mastercutipegawai',[CutiTahunanController::class,'CutiTahunanP'])->middleware('role:Pegawai');
    
     Route::post('addAkunPegawai', [UserController::class, 'addAkunPegawai'])->middleware('role:Manager,Admin');
     Route::get('allUser', [UserController::class, 'allUser'])->middleware('role:Manager,Admin');
@@ -146,6 +153,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('confirmcuti',[CutiController::class, 'confirmcuti'])->middleware('role:Admin,Pegawai');
     Route::delete('hapuscuti/{id}',[CutiController::class, 'hapuscuti'])->middleware('role:Admin,Pegawai');
     Route::get('detailcuti/{id}',[CutiController::class, 'detailcuti'])->middleware('role:Admin,Pegawai');
+
 
     //Search
     Route::get('searchdata/{data}',[DataPegawaiController::class, 'searchdata'])->middleware('role:Manager,Admin,Pegawai');

@@ -70,7 +70,7 @@
                                                             <th>Jabatan</th>
                                                             <th>No Pegawai</th>
                                                             <th>Status</th>
-                                                            <th>Jumlah Kerja</th>
+                                                            <th>Masa Kerja</th>
                                                             <th>Gender</th>
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>

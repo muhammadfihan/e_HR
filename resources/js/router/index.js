@@ -20,6 +20,7 @@ import Payroll from "../components/Admin/Payroll";
 import Laporan from "../components/Admin/Laporan";
 import Approvement from "../components/Admin/Approvement";
 import ProfileAdmin from "../components/Admin/ProfileAdmin";
+import Cuti from "../components/Admin/Cuti";
 
 //Pegawai Role
 import Absen from "../components/Pegawai/Absen";
@@ -145,6 +146,12 @@ export const routes = [{
         name: 'Approvement',
         path: '/Approvement',
         component: Approvement,
+        beforeEnter: admin,
+    },
+    {
+        name: 'Cuti',
+        path: '/Cuti',
+        component: Cuti,
         beforeEnter: admin,
     },
     {

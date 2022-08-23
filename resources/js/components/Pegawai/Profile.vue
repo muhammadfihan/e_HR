@@ -59,16 +59,28 @@
 														</div>
 													</div>
                                                     <div class="form-group row" v-for="(data) in datpeg" :key="data.id">
-														<label class="col-xl-3 col-lg-3 col-form-label">Jumlah Kerja</label>
+														<label class="col-xl-3 col-lg-3 col-form-label"> Masa Kerja</label>
 														<div class="col-lg-9 col-xl-6">
 															<div class="form-control form-control-lg form-control-solid" type="text"><span class="badge badge-primary" >{{getFormatedStringFromDays(data.jumlah_kerja)}}</span></div>
 														</div>
 													</div>
-                                                     <div class="form-group row" v-for="(data) in datpeg" :key="data.id">
-														<label class="col-xl-3 col-lg-3 col-form-label">Jatah Cuti Tahunan</label>
+                                                     <!-- <div class="form-group row" v-for="(data) in cutah" :key="data.id">
+														<label class="col-xl-3 col-lg-3 col-form-label">Jatah Cuti </label>
 														<div class="col-lg-9 col-xl-6">
-															<div v-if="data.jatah_cuti == null" class="form-control form-control-lg form-control-solid" type="text"><span class="badge badge-warning" style="color:white" >Anda Belum Bekerja Selama 1 Tahun</span></div>
-                                                            <div v-else-if="data.jatah_cuti <= 12" class="form-control form-control-lg form-control-solid" type="text"><span class="badge badge-primary" >{{data.jatah_cuti}}</span></div>
+															<div v-if="data.jumlah_cuti == null" class="form-control form-control-lg form-control-solid" type="text"><span class="badge badge-warning" style="color:white" >Anda Belum Bekerja Selama 1 Tahun</span></div>
+                                                            <div v-else-if="data.jumlah_cuti" class="form-control form-control-lg form-control-solid" type="text"><span class="badge badge-primary" >{{data.jumlah_cuti}}</span></div>
+														</div>
+													</div> -->
+                                                     <div class="form-group row" >
+														<label class="col-xl-3 col-lg-3 col-form-label">Jatah Cuti </label>
+														<div class="col-lg-9 col-xl-6">
+															<div  class="form-control form-control-lg form-control-solid" type="text"><span v-for="(tocu) in totalcutah" :key="tocu.id" class="badge badge-warning" style="color:white" >{{tocu.jumlah_cuti}}</span></div>
+														</div>
+													</div>
+                                                    <div class="form-group row" >
+														<label class="col-xl-3 col-lg-3 col-form-label">Sisa Cuti </label>
+														<div class="col-lg-9 col-xl-6">
+                                                            <div class="form-control form-control-lg form-control-solid" type="text"><span class="badge badge-primary" ></span></div>
 														</div>
 													</div>
 													<div class="row">
@@ -222,6 +234,7 @@ export default {
     name: "Profile",
     data() {
         return {
+            totalcutah:[],
             akunpegawai:[],
             pegawais:[],
             golongan:[],
@@ -405,6 +418,19 @@ export default {
                 });
         })
         },
+        getCutah(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/mastercutipegawai',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.totalcutah= response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
         convertToRupiah(value) {
             // value = value.toString()
             value = parseFloat(value)
@@ -432,6 +458,8 @@ export default {
         this.getakun();
         this.allgolongan();
         this.getdatpeg();
+        this.getCutah();
+
     }
     
 

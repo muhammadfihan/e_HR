@@ -253,7 +253,7 @@
                                                                         <div v-if="data.status == 'Belum Diambil'">
                                                                              <a @click.prevent="detailGaji(data.id)" class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 flaticon2-document" data-toggle="modal" >
                                                                           </a>
-                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="modaledit(data)">
+                                                                          <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-edit" data-toggle="modal" @click.prevent="modaledit(data, data.id)">
                                                                           </a>
                                                                            <a  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2 far fa-trash-alt" @click.prevent="hapusgaji(data.id)">
                                                                           </a>
@@ -826,7 +826,7 @@
 														<div class="col-9 col-form-label">
 															<div class="checkbox-list">
 																<label class="checkbox" v-for="data in tunjangan" :key="data.id">
-																<input type="checkbox" v-model="gajiMultiple" :value="data.id" @click="select" @change="select"/>
+																<input type="checkbox" v-model="gajiMultiple" :value="parseInt(data.id)" @click="select" @change="select"/>
                                                                                         <span value={{form.id_tunjangan}}></span>
                                                                                         {{data.jenis_tunjangan}} : {{convertToRupiah (data.nominal) }}</label>
 																
@@ -1275,6 +1275,7 @@ export default {
             gajiMultiple: [],
             bonusMultiple: [],
             potonganMultiple: [],
+            idEdit: null,
             tunjangan:[],
             bonus:[],
             potongan:[],
@@ -1453,12 +1454,32 @@ export default {
         },
         modaledit(data, id) {
            $("#editgaji").modal("show");
-           this.form.fill({
-                id: data.id,
-                id_tunjangan: this.gajiMultiple,
-                id_bonus: this.bonusMultiple,
-                id_potongan:this.potonganMultiple
-            })
+           this.idEdit = id
+           console.log(id)
+           if(data.id_tunjangan.toString().includes(",")) 
+           {
+                this.gajiMultiple = []
+                this.gajiMultiple = data.id_tunjangan.split(",")
+           } else {
+                this.gajiMultiple = []
+                this.gajiMultiple.push(parseInt(data.id_tunjangan))
+           }
+           if(data.id_bonus.toString().includes(",")) 
+           {
+                this.bonusMultiple = []
+                this.bonusMultiple = data.id_bonus.split(",")
+           } else {
+                this.bonusMultiple = []
+                this.bonusMultiple.push(parseInt(data.id_bonus))
+           }
+           if(data.id_potongan.toString().includes(",")) 
+           {
+                this.potonganMultiple = []
+                this.potonganMultiple = data.id_potongan.split(",")
+           } else {
+                this.potonganMultiple = []
+                this.potonganMultiple.push(parseInt(data.id_potongan))
+           }
         },
          closegajiedit() {
             this.form.reset();
@@ -1479,7 +1500,7 @@ export default {
          submiteditgaji(){
             axios.post('/api/updategaji',
                 {
-                    id: this.form.id,
+                    id: parseInt(this.idEdit),
                     id_tunjangan: this.gajiMultiple,
                     id_bonus: this.bonusMultiple,
                     id_potongan:this.potonganMultiple

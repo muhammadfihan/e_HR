@@ -277,10 +277,28 @@ class UserController extends Controller
                 'id_golongan' => $request->id_golongan,
                 'id_jabatan' => $request->id_jabatan,
                 'id_admin' => Auth::user()->id,
-                'jatah_cuti' => 12
-    
+                // 'jatah_cuti' => 12
             ]);
             $pegawai->save();
+
+            $getDataCuti = DB::table('master_cuti_perusahaan')
+                ->select('*')
+                ->where('id_admin', Auth::user()->id)
+                ->where('tahun', Carbon::now()->format('Y'))
+                ->get()
+                ->toArray();
+
+            DB::table('table_master_cuti_tahunan')->insert([
+                'id_admin' => Auth::user()->id,
+                'email' => $request->email,
+                'no_pegawai' => 'PN'.$nopegawai,
+                'nama_lengkap' => $request->name,
+                'id_cuti' => $getDataCuti[0]->id,
+                'jumlah_cuti' => $getDataCuti[0]->jumlah_cuti,
+                'cuti_terpakai' => 0,
+                'sisa_cuti' => $getDataCuti[0]->jumlah_cuti,
+                'tahun' => $getDataCuti[0]->tahun
+            ]);
             
             $success = true;
             $message = 'User register successfully';
