@@ -16,8 +16,7 @@ return new class extends Migration
         //
         Schema::create('master_cuti_perusahaan', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_admin')->unsigned();
-            $table->foreign('id_admin')->references('id_admin')->on('akunpegawai');
+            $table->integer('id_admin');
             $table->integer('jumlah_cuti');
             $table->string('tahun');
             $table->timestamps();

@@ -76,7 +76,6 @@ class MasterCutiPerusahaanController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'Error!! Duplicate Data',
-                    // 'data' => $cuti
                 ]);
             }
         }
