@@ -23,9 +23,21 @@ class MasterCutiPerusahaanController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Get data berhasil',
+                'message' => 'Get data berhasil TESS',
                 'data' => $cuti
             ]);
+    }
+    public function CutiPerusahanPeg(){
+        $datapegawai = DB::table('table_master_cuti_tahunan')
+           ->where('email', Auth::user()->email)
+           ->latest()
+           ->get();
+       return response([
+           'data' => $datapegawai,
+           'message' => 'get data berhasil',
+           'status' => true
+       ]);
+
     }
 
     public function TambahCutiPerusahaan(Request $request)
@@ -64,7 +76,7 @@ class MasterCutiPerusahaanController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'Error!! Duplicate Data',
-                    'data' => $cuti
+                    // 'data' => $cuti
                 ]);
             }
         }

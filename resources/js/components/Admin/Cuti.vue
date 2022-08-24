@@ -97,7 +97,7 @@
 											<!--begin::Header-->
 											<div class="card-header flex-wrap border-0 pt-6 pb-0">
 												<h3 class="card-title align-items-start flex-column">
-													<span class="card-label font-weight-bolder text-dark" >Managament Cuti</span>
+													<span class="card-label font-weight-bolder text-dark" >Management Cuti</span>
 													<span class="text-muted mt-1 font-weight-bold font-size-sm" v-for="(data) in infopt" :key="data.id">Management Cuti {{ data.nama_perusahaan }}</span>
 												</h3>
                                                 <div class="card-toolbar">
@@ -284,7 +284,7 @@
 																	</div>
 																	<div class="modal-footer">
 																		
-																		<button type="submit"  @click="showModal()"  class="btn btn-primary font-weight-bold">Tambah</button>
+																		<button type="submit"  @click="addJatahcuti()"  class="btn btn-primary font-weight-bold">Tambah</button>
                                                                         <button type="button"  @click="closeModal()" class="btn btn-primary font-weight-bold">Batal</button>
 																	</div>
 																</div>
@@ -352,7 +352,7 @@ export default {
         },
         addJatahcuti() {
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.form.post('/api/mastercutiperusahaan', {
+            this.form.post('/api/mastercutiperusahaan/add', {
                 headers : { Authorization: "Bearer " + this.token },
             }).then((response) => {
                 if (response.data.success){

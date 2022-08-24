@@ -265,7 +265,7 @@
 												</div>
 												<!--end::Item-->
 												<!--begin::Item-->
-												<div class="mb-6">
+												<div class="mb-6" >
 													<!--begin::Content-->
 													<div class="d-flex align-items-center flex-grow-1">
 														<!--begin::Checkbox-->
@@ -753,6 +753,7 @@ export default {
     name: "PegawaiDashboard",
     data() {
             return {
+				map : '',
                 absensimasuk:[],
                 pegawais:[],
                 jabatan:[],
@@ -770,6 +771,8 @@ export default {
                     jam_kerja : "",
                     keterangan : "",
                     lokasi : "",
+					latitude: "",
+					longitude:""
                     
                 }),
                 jamabsen: [],
@@ -782,8 +785,14 @@ export default {
         },
     
     methods: {
+		initMap() {
+		const map = new google.maps.Map(document.getElementById("map"), {
+			center: { lat: -34.397, lng: 150.644 },
+			zoom: 8,
+		});
+		},
     	history(){
-            this.$router.push("/Absen");
+		this.$router.push("/Absen");
         },
 		profile(){
             this.$router.push("/Profile");
@@ -816,16 +825,24 @@ export default {
         },
     
     ambil(){
-        var image = ''
+		 var image = ''
+	
         Webcam.snap( function(data_uri) {
                 image = data_uri
              } );
-            axios.post('/api/absenmasuk',  {
-                 selfie_masuk : image
+			  	 var tok = localStorage.getItem("token")
+				navigator.geolocation.getCurrentPosition(
+					function (position) {
+					 axios.post('/api/absenmasuk', 
+			{
+                 		selfie_masuk : image,
+						latitude : position.coords.latitude,
+						longitude : position.coords.longitude
+				 
              },
-             {
-                headers : { Authorization: "Bearer " + this.token },
-            }).then((response) => {
+			  {
+                headers : { Authorization: "Bearer " + tok },
+            },).then((response) => {
                 if (response.data.success){
                     Swal.fire({
                     title: 'Berhasil Presensi',
@@ -859,6 +876,16 @@ export default {
                     
                 }
             })
+					},
+					function (error) {
+						alert(error.message);
+					}, {
+						enableHighAccuracy: true
+						, timeout: 5000
+					}
+				);
+			
+           
        
     },
      ambilpulang(uid){
@@ -1040,6 +1067,7 @@ export default {
         geturl(){
             window.location.href;
         },
+		
     },
 
     mounted(){

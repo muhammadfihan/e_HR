@@ -43,6 +43,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('mastercutiperusahaan/add', [MasterCutiPerusahaanController::class, 'TambahCutiPerusahaan'])->middleware('role:Admin');
     Route::get('mastercutiperusahaan', [MasterCutiPerusahaanController::class, 'CutiPerusahan'])->middleware('role:Admin');
+    Route::get('mastercutiperusahaanpeg', [MasterCutiPerusahaanController::class, 'CutiPerusahanPeg'])->middleware('role:Pegawai');
     Route::get('mastercutitahunan',[CutiTahunanController::class,'CutiTahunanAll'])->middleware('role:Admin');
     Route::get('mastercutipegawai',[CutiTahunanController::class,'CutiTahunanP'])->middleware('role:Pegawai');
    

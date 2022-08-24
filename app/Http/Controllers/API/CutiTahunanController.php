@@ -19,7 +19,7 @@ class CutiTahunanController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Get data berhasil',
+                'message' => 'Get data berhasil TESSS',
                 'data' => $cuti
             ]);
     }
@@ -27,8 +27,7 @@ class CutiTahunanController extends Controller
         $cuti = DB::table('table_master_cuti_tahunan')
             ->select('*')
             ->where('email', Auth::user()->email)
-            ->latest()
-            ->paginate(10);
+            ->get();
 
             return response()->json([
                 'status' => true,
