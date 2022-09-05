@@ -43,6 +43,20 @@ class IzinController extends Controller
             return $result;
 
     }
+    public function searchizinpeg($key)
+    {
+            $result = DB::table('izin')
+                ->select('*')
+                ->where('izin.email', Auth::user()->email)
+                ->where('tanggal', 'like', '%' . $key . '%')
+                ->orWhere('jenis_izin', 'like', '%' . $key . '%')
+                ->orWhere('status_izin', 'like', '%' . $key . '%')
+                ->where('izin.email', Auth::user()->email)
+                ->paginate(10);
+
+            return $result;
+
+    }
 
     public function allizinpegawai(){
         $izin = DB::table('izin')->select('*')

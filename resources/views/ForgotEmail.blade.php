@@ -62,11 +62,11 @@
 										<tbody>
 											<tr>
 												<td style="padding: 30px">
-													Konfirmasi Kode Anda </br></br>
-													<p>Halo {{ $data['nama'] }}</p>
+													Anda Akan Mereset Password </br></br>
+													<p>Halo {{ $data['email'] }}</p>
 													
 													<h4>Silahkan Klik Tombol Berikut</h4>
-													<a href="http://127.0.0.1:8000/ResetPassword" style="padding: 10px; background-color: #7366ff; color: #fff; display: inline-block; border-radius: 4px; margin-bottom: 18px">Login</a>
+													<a href="http://127.0.0.1:8000/ResetPassword" style="padding: 10px; background-color: #7366ff; color: #fff; display: inline-block; border-radius: 4px; margin-bottom: 18px">Ubah Password</a>
 												</td>
 											</tr>
 										</tbody>

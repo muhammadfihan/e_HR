@@ -290,36 +290,24 @@
 												<!--begin::Search Form-->
 												<div class="mb-10">
 													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
+														<div class="col-lg-12 col-xl-8">
+															 <form>
 															<div class="row align-items-center">
 																<div class="col-md-4 my-2 my-md-0">
 																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<input v-model="searchtun" type="text" class="form-control form-control-solid" placeholder="Search..."  />
 																		<span>
 																			<i class="flaticon2-search-1 text-muted"></i>
 																		</span>
 																	</div>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
+																<div>
+																	<div>
+																	<a class="btn btn-light-primary px-6 font-weight-bold">Search</a>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
 																</div>
 															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														  </form>
 														</div>
 													</div>
 												</div>
@@ -379,36 +367,24 @@
 												<!--begin::Search Form-->
 												<div class="mb-10">
 													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
+														<div class="col-lg-12 col-xl-8">
+															 <form>
 															<div class="row align-items-center">
 																<div class="col-md-4 my-2 my-md-0">
 																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<input v-model="searchbon" type="text" class="form-control form-control-solid" placeholder="Search..."  />
 																		<span>
 																			<i class="flaticon2-search-1 text-muted"></i>
 																		</span>
 																	</div>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
+																<div>
+																	<div>
+																	<a class="btn btn-light-primary px-6 font-weight-bold">Search</a>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
 																</div>
 															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														  </form>
 														</div>
 													</div>
 												</div>
@@ -468,36 +444,24 @@
 												<!--begin::Search Form-->
 												<div class="mb-10">
 													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
+														<div class="col-lg-12 col-xl-8">
+															 <form>
 															<div class="row align-items-center">
 																<div class="col-md-4 my-2 my-md-0">
 																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<input v-model="searchgol" type="text" class="form-control form-control-solid" placeholder="Search..."  />
 																		<span>
 																			<i class="flaticon2-search-1 text-muted"></i>
 																		</span>
 																	</div>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
+																<div>
+																	<div>
+																	<a class="btn btn-light-primary px-6 font-weight-bold">Search</a>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
 																</div>
 															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														  </form>
 														</div>
 													</div>
 												</div>
@@ -560,36 +524,24 @@
 												<!--begin::Search Form-->
 												<div class="mb-10">
 													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
+														<div class="col-lg-12 col-xl-8">
+															 <form>
 															<div class="row align-items-center">
 																<div class="col-md-4 my-2 my-md-0">
 																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+																		<input v-model="searchpot" type="text" class="form-control form-control-solid" placeholder="Search..."  />
 																		<span>
 																			<i class="flaticon2-search-1 text-muted"></i>
 																		</span>
 																	</div>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
+																<div>
+																	<div>
+																	<a class="btn btn-light-primary px-6 font-weight-bold">Search</a>
 																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
 																</div>
 															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
+														  </form>
 														</div>
 													</div>
 												</div>
@@ -680,7 +632,7 @@
                                                             <th style="text-align: center;">Action</th>
                                                         </tr>
                                                         </thead>
-                                                         <tbody v-for="(data) in riwayatgaji" :key="data.id">
+                                                         <tbody v-for="(data) in riwayatgaji.data" :key="data.id">
                                                             <tr v-if="data.status == 'Sudah Diambil'">
                                                                     <td>{{ data.email }}</td>
                                                                     <td>
@@ -707,6 +659,7 @@
                                                     </table>
 
                                                 </div>
+                                                <Pagination align="right" :data="riwayatgaji" @pagination-change-page="riwayat" />
 												<!--end::Datatable-->
 											</div>
 											<!--end::Body-->
@@ -842,7 +795,7 @@
 														<div class="col-9 col-form-label">
 															<div class="checkbox-list">
 																<label class="checkbox" v-for="data in bonus" :key="data.id">
-																<input type="checkbox" v-model="bonusMultiple" :value="data.id" @click="select" @change="select"/>
+																<input type="checkbox" v-model="bonusMultiple" :value="parseInt(data.id)" @click="select" @change="select"/>
                                                                                         <span></span>
                                                                                         {{data.jenis_bonus}} : {{convertToRupiah (data.nominal) }}</label>
 																
@@ -857,7 +810,7 @@
 														<div class="col-9 col-form-label">
 															<div class="checkbox-list">
 																<label class="checkbox" v-for="data in potongan" :key="data.id">
-																 <input type="checkbox" v-model="potonganMultiple" :value="data.id" @click="select" @change="select"/>
+																 <input type="checkbox" v-model="potonganMultiple" :value="parseInt(data.id)" @click="select" @change="select"/>
                                                                                         <span></span>
                                                                                         {{data.jenis_potongan}} : {{convertToRupiah (data.nominal) }}</label>
 																
@@ -1244,6 +1197,10 @@ export default {
     name: "Payroll",
     data() {
         return {
+            searchpot: '',
+            searchtun: '',
+            searchbon: '',
+            searchgol: '',
             search2: '', 
             search: '',
             detritun: [],
@@ -1275,7 +1232,6 @@ export default {
             gajiMultiple: [],
             bonusMultiple: [],
             potonganMultiple: [],
-            idEdit: null,
             tunjangan:[],
             bonus:[],
             potongan:[],
@@ -1321,13 +1277,30 @@ export default {
         search: function ()
             {
                 this.searchriwayat(this.search)
-                 this.searchgaji(this.search2)
+                //  this.searchgaji(this.search2)
             },
         search2: function ()
             {
                 this.searchgaji(this.search2)
             },
+         searchtun: function ()
+            {
+                this.searchtunjangan(this.searchtun)
+            },
+         searchbon: function ()
+            {
+                this.searchgaji(this.searchbon)
+            },
+         searchgol: function ()
+            {
+                this.searchgolongan(this.searchgol)
+            },
+        searchpot: function ()
+            {
+                this.searchpotongan(this.searchpot)
+            },               
         },
+        
     methods:{
         select() {
             console.log(this.gajiMultiple)
@@ -1357,6 +1330,62 @@ export default {
                 sum = sum + elements;
             }
             return sum;
+        },
+         searchtunjangan(val) {
+            if (val == "")
+            {
+                this.alltunjangan()
+            }else {
+                axios
+                    .get('/api/searchtunjangan/'+ val , {
+                        headers: {Authorization: "Bearer " + this.token},
+                    })
+                    .then((response) => {
+                        this.tunjangan = response.data;
+                    });
+            }
+        },
+         searchbonus(val) {
+            if (val == "")
+            {
+                this.allbonus()
+            }else {
+                axios
+                    .get('/api/searchbonus/'+ val , {
+                        headers: {Authorization: "Bearer " + this.token},
+                    })
+                    .then((response) => {
+                        this.bonus = response.data;
+                    });
+            }
+        },
+         searchgolongan(val) {
+            if (val == "")
+            {
+                this.allgolongan()
+            }else {
+                axios
+                    .get('/api/searchgolongan/'+ val , {
+                        headers: {Authorization: "Bearer " + this.token},
+                    })
+                    .then((response) => {
+                        this.golongan = response.data;
+                    });
+            }
+        },
+         searchpotongan(val) {
+            if (val == "")
+            {
+                this.allpotongan()
+            }else {
+                axios
+                    .get('/api/searchpotongan/'+ val , {
+                        headers: {Authorization: "Bearer " + this.token},
+                    })
+                    .then((response) => {
+                        this.potongan = response.data;
+                    });
+            }
         },
         //GAJI
          searchriwayat(val) {
@@ -1405,9 +1434,9 @@ export default {
                     });
             }
         },
-          riwayat(){
+          riwayat(page = 1){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/riwayatgaji',{
+            this.$axios.get('/api/riwayatgaji?page=' + page,{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
@@ -1454,31 +1483,30 @@ export default {
         },
         modaledit(data, id) {
            $("#editgaji").modal("show");
-           this.idEdit = id
+           this.idModal = id
            console.log(id)
-           if(data.id_tunjangan.toString().includes(",")) 
-           {
-                this.gajiMultiple = []
-                this.gajiMultiple = data.id_tunjangan.split(",")
-           } else {
-                this.gajiMultiple = []
-                this.gajiMultiple.push(parseInt(data.id_tunjangan))
+           if(data.id_tunjangan.toString().includes(",")){
+            this.gajiMultiple = []
+            this.gajiMultiple = data.id_tunjangan.split(",")
+           }else{
+            this.gajiMultiple = []
+            this.gajiMultiple.push(parseInt(data.id_tunjangan))
            }
-           if(data.id_bonus.toString().includes(",")) 
-           {
-                this.bonusMultiple = []
-                this.bonusMultiple = data.id_bonus.split(",")
-           } else {
-                this.bonusMultiple = []
-                this.bonusMultiple.push(parseInt(data.id_bonus))
+
+            if(data.id_bonus.toString().includes(",")){
+            this.bonusMultiple = []
+            this.bonusMultiple = data.id_bonus.split(",")
+           }else{
+            this.bonusMultiple = []
+            this.bonusMultiple.push(parseInt(data.id_bonus))
            }
-           if(data.id_potongan.toString().includes(",")) 
-           {
-                this.potonganMultiple = []
-                this.potonganMultiple = data.id_potongan.split(",")
-           } else {
-                this.potonganMultiple = []
-                this.potonganMultiple.push(parseInt(data.id_potongan))
+
+            if(data.id_potongan.toString().includes(",")){
+            this.potonganMultiple = []
+            this.potonganMultiple = data.id_potongan.split(",")
+           }else{
+            this.potonganMultiple = []
+            this.potonganMultiple.push(parseInt(data.id_potongan))
            }
         },
          closegajiedit() {
@@ -1500,7 +1528,7 @@ export default {
          submiteditgaji(){
             axios.post('/api/updategaji',
                 {
-                    id: parseInt(this.idEdit),
+                    id: parseInt(this.idModal),
                     id_tunjangan: this.gajiMultiple,
                     id_bonus: this.bonusMultiple,
                     id_potongan:this.potonganMultiple

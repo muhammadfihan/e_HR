@@ -34,28 +34,22 @@ class ForgotPasswordController extends Controller
 
                     $imel = $forgot->email;
                     $token = $forgot->token;
-                    $dat = DB::table('akunpegawai')
-                        ->select('name')
-                        ->where('email', $imel)
-                        ->get()
-                        ->toArray();
-                    $objectToArray = (array)$dat;
-                    $name1 = $objectToArray[0];
-                    $name2 = (array)$name1;
-                    $nama = $name2['name'];
+                    $cek =  DB::table('akunpegawai')
+                    ->select('email')
+                    ->where('email', $imel)
+                    ->get()
+                    ->toArray();
                     $data = [
                         'judul' => "Halaman Ubah Password",
-                        'nama' => $nama,
                         'token' => $token,
                         'email' => $imel
                     ];
                     Mail::to($imel)->send(new ModelsForgotPassword($data));
                     return response()->json([
                         'success' => true,
+                        'tes' => $cek,
                         'message' => 'Check Email Success!',
                     ]);
-//                }
-//            }
         }
    
      }

@@ -40,6 +40,19 @@ class LemburController extends Controller
             return $result;
 
     }
+    public function searchlemburpeg($key)
+    {
+            $result = DB::table('lembur')
+                ->select('*')
+                ->where('lembur.email', Auth::user()->email)
+                ->orWhere('tanggal_lembur', 'like', '%' . $key . '%')
+                ->orWhere('status_lembur', 'like', '%' . $key . '%')
+                ->where('lembur.email', Auth::user()->email)
+                ->paginate(10);
+
+            return $result;
+
+    }
     public function tampillemburpegawai()
     {
         $lembur = DB::table('lembur')

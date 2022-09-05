@@ -25,7 +25,7 @@ class DataGajiController extends Controller
        
     }
     public function riwayatgaji(Request $request){
-        $riwayat = RiwayatGaji::where('id_admin' ,Auth::user()->id)->latest()->get();
+        $riwayat = RiwayatGaji::where('id_admin' ,Auth::user()->id)->latest()->paginate(10);
             return response([
                 'data' => $riwayat,
                 'message' => 'get data berhasil',
@@ -41,13 +41,24 @@ class DataGajiController extends Controller
                 ->where('email', 'like', '%' . $key . '%')
                 ->orWhere('tanggal_ambil', 'like', '%' . $key . '%')
                 ->where('riwayatgaji.id_admin', Auth::user()->id)
-                ->get();
+                ->paginate(10);
 
             return $result;
 
     }
+    public function searchriwayatpeg($key)
+    {
+            $result = DB::table('riwayatgaji')
+                ->select('*')
+                ->where('riwayatgaji.email', Auth::user()->email)
+                ->orWhere('tanggal_ambil', 'like', '%' . $key . '%')
+                ->where('riwayatgaji.email', Auth::user()->email)
+                ->paginate(10);
+            return $result;
+
+    }
     public function riwayatgajipeg(Request $request){
-        $riwayat = RiwayatGaji::where('email' ,Auth::user()->email)->latest()->get();
+        $riwayat = RiwayatGaji::where('email' ,Auth::user()->email)->latest()->paginate(10);
             return response([
                 'data' => $riwayat,
                 'message' => 'get data berhasil',
@@ -190,7 +201,6 @@ class DataGajiController extends Controller
         }
         foreach($tunjangan as $a => $jab){
             $jabat[$a] = explode(',', $jab->id_jabatan);
-
             foreach($jabat[$a] as $batan => $tan){ 
                 $datajab[$a][$batan] = DB::table('jabatan')->where('id', $tan)->first();
                 $jabgaji[$a][$batan] = $datajab[$a][$batan]->gaji;
@@ -449,10 +459,6 @@ class DataGajiController extends Controller
                 $akhir[$key] = array($totaltun[$key] + $nomjab[$key] +$totalbon[$key] - $totalpot[$key]);
                 
             }
-            // foreach (array_keys($totaltun + $totalbon + $nomjab) as $key) {
-            //     $subtotal[$key] = array($totaltun[$key] + $nomjab[$key] +$totalbon[$key]);
-                
-            // }
            
         return response()->json([
             'data' => $gajipeg,

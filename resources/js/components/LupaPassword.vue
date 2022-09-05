@@ -70,6 +70,7 @@
 <script>
 
 
+import stubFalse from "lodash/stubFalse";
 import Dashboard from "./Dashboard";
 export default {
     components: {Dashboard},
@@ -195,11 +196,21 @@ export default {
             }
         },
         passwordlupa() {
+            Swal.fire({
+                title: 'Mohon Tunggu Sebentar',
+                text: "Kami Sedang Mengirim Email",
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                timer: 8000,
+                onOpen: () => {
+                swal.showLoading();
+                }
+            })
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.post('/api/lupa', {
                         email: this.email,
-
-                    }).then((response) => {
+                    })
+                    .then((response) => {
                 if (response.data.success){
                     Swal.fire({
                         icon: "success",

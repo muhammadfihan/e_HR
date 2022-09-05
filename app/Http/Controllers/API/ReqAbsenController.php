@@ -41,6 +41,20 @@ class ReqAbsenController extends Controller
             return $result;
 
     }
+    public function searchreqabsenpeg($key)
+    {
+            $result = DB::table('reqabsen')
+                ->select('*')
+                ->where('reqabsen.email', Auth::user()->email)
+                ->orWhere('tanggal_req', 'like', '%' . $key . '%')
+                ->orWhere('alasan', 'like', '%' . $key . '%')
+                ->orWhere('status_req', 'like', '%' . $key . '%')
+                ->where('reqabsen.email', Auth::user()->email)
+                ->paginate(10);
+
+            return $result;
+
+    }
 
     public function allreqpegawai(){
         $reqabsen = DB::table('reqabsen')

@@ -17,6 +17,7 @@ use App\Http\Controllers\API\LaporanController;
 use App\Http\Controllers\API\CutiTahunanController;
 use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\API\MasterCutiPerusahaanController;
+use App\Http\Controllers\MailController;
 use App\Models\ReqAbsen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::post('login', [UserController::class, 'login']);
+Route::get('tesemail', [MailController::class, 'index']);
 Route::post('loginpegawai', [UserController::class, 'loginpegawai']);
 Route::post('register', [UserController::class, 'register']);
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
@@ -162,12 +164,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('searchabsen/{data}',[AbsensiController::class, 'searchabsen'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('searchabsenpeg/{data}',[AbsensiController::class, 'searchabsenpeg'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('searchcuti/{data}',[CutiController::class, 'searchcuti'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchcutipeg/{data}',[CutiController::class, 'searchcutipeg'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('searchjabatan/{data}',[JabatanController::class, 'searchjabatan'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('searchriwayat/{data}',[DataGajiController::class, 'searchriwayat'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchriwayatpeg/{data}',[DataGajiController::class, 'searchriwayatpeg'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('searchgaji/{data}',[DataGajiController::class, 'searchgaji'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('searchlembur/{data}',[LemburController::class, 'searchlembur'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchlemburpeg/{data}',[LemburController::class, 'searchlemburpeg'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('searchizin/{data}',[IzinController::class, 'searchizin'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchizinpeg/{data}',[IzinController::class, 'searchizinpeg'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('searchreqabsen/{data}',[ReqAbsenController::class, 'searchreqabsen'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchreqabsenpeg/{data}',[ReqAbsenController::class, 'searchreqabsenpeg'])->middleware('role:Manager,Admin,Pegawai');
     
     Route::get('tampillembur', [LemburController::class, 'tampillembur'])->middleware('role:Admin');
     Route::get('tampillemburpegawai', [LemburController::class, 'tampillemburpegawai'])->middleware('role:Admin,Pegawai');
@@ -179,6 +186,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('tampillaporan', [LaporanController::class, 'tampillaporan'])->middleware('role:Admin,Pegawai');
     Route::get('tampillaporanpegawai', [LaporanController::class, 'tampillaporanpegawai'])->middleware('role:Admin,Pegawai');
+    Route::get('searchlaporanpeg/{data}',[LaporanController::class, 'searchlaporanpeg'])->middleware('role:Manager,Admin,Pegawai'); 
+    Route::get('searchlaporan/{data}',[LaporanController::class, 'searchlaporan'])->middleware('role:Manager,Admin,Pegawai');  
     Route::post('tambahlaporan',[LaporanController::class, 'tambahlaporan'])->middleware('role:Admin,Pegawai');
     Route::post('updatelaporan',[LaporanController::class, 'updatelaporan'])->middleware('role:Admin,Pegawai');
     Route::post('confirmlaporan',[LaporanController::class, 'confirmlaporan'])->middleware('role:Admin,Pegawai');
