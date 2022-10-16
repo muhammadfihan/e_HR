@@ -16,6 +16,10 @@ use App\Http\Controllers\API\LemburController;
 use App\Http\Controllers\API\LaporanController;
 use App\Http\Controllers\API\CutiTahunanController;
 use App\Http\Controllers\API\ForgotPasswordController;
+use App\Http\Controllers\API\CodeCheckController;
+use App\Http\Controllers\API\DashboardController;
+use App\Http\Controllers\API\ResetPasswordController;
+use App\Http\Controllers\API\LupaPassword;
 use App\Http\Controllers\API\MasterCutiPerusahaanController;
 use App\Http\Controllers\MailController;
 use App\Models\ReqAbsen;
@@ -38,13 +42,24 @@ Route::post('loginpegawai', [UserController::class, 'loginpegawai']);
 Route::post('register', [UserController::class, 'register']);
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 
+Route::post('password/email',  [ForgotPasswordController::class, 'lupa']);
+Route::post('password/emailadmin',  [ForgotPasswordController::class, 'lupaadmin']);
+Route::post('password/code/check', [CodeCheckController::class, 'cek']);
+Route::post('password/reset', [ResetPasswordController::class, 'reset']);
+Route::post('password/resetadmin', [ResetPasswordController::class, 'resetadmin']);
+
 Route::post('lupa', [ForgotPasswordController::class, 'postEmail']);
 Route::post('submitlupa', [ForgotPasswordController::class, 'submitlupa']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('dashlaporan', [DashboardController::class, 'dashlaporan'])->middleware('role:Admin');
+    Route::get('dashakunpegawai', [DashboardController::class, 'dashakunpegawai'])->middleware('role:Admin');
+    Route::get('dashapprovement', [DashboardController::class, 'dashapprovement'])->middleware('role:Admin');
+    Route::get('dashgaji', [DashboardController::class, 'dashgaji'])->middleware('role:Admin');
 
     Route::post('mastercutiperusahaan/add', [MasterCutiPerusahaanController::class, 'TambahCutiPerusahaan'])->middleware('role:Admin');
     Route::get('mastercutiperusahaan', [MasterCutiPerusahaanController::class, 'CutiPerusahan'])->middleware('role:Admin');
+    Route::get('cekcuti', [MasterCutiPerusahaanController::class, 'cekcuti'])->middleware('role:Admin');
     Route::get('mastercutiperusahaanpeg', [MasterCutiPerusahaanController::class, 'CutiPerusahanPeg'])->middleware('role:Pegawai');
     Route::get('mastercutitahunan',[CutiTahunanController::class,'CutiTahunanAll'])->middleware('role:Admin');
     Route::get('mastercutipegawai',[CutiTahunanController::class,'CutiTahunanP'])->middleware('role:Pegawai');
@@ -55,10 +70,21 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('updateUser', [UserController::class, 'updateUser'])->middleware('role:Manager,Admin');
     Route::delete('hapusUser/{id}', [UserController::class, 'hapusUser'])->middleware('role:Manager,Admin');
     Route::get('getakun', [UserController::class, 'getakun'])->middleware('role:Admin,Pegawai');
+    Route::get('ceking', [UserController::class, 'ceking'])->middleware('role:Admin,Pegawai');
 
     Route::delete('hapusAdmin/{id}', [UserController::class, 'hapusAdmin'])->middleware('role:Manager,Admin');
 
-    Route::get('tampilsuperadmin', [SuperAdminController::class, 'tampilsuperadmin'])->middleware('role:Manager');
+    Route::get('tampilsuperadmin', [SuperAdminController::class, 'tampilsuperadmin'])->middleware
+    ('role:Manager');
+    Route::get('approvesuperadmin', [SuperAdminController::class, 'approvesuperadmin'])->middleware
+    ('role:Manager');
+    Route::get('superadmin', [SuperAdminController::class, 'superadmin'])->middleware('role:Manager');
+    Route::get('dashsuperadmin', [SuperAdminController::class, 'dashsuperadmin'])->middleware('role:Manager');
+    Route::post('approveakun', [SuperAdminController::class, 'approveakun'])->middleware('role:Manager');
+    Route::post('updateakun', [SuperAdminController::class, 'updateakun'])->middleware('role:Manager');
+    Route::post('aktifakun', [SuperAdminController::class, 'aktifakun'])->middleware('role:Manager');
+    Route::post('hapusakun/{id}', [SuperAdminController::class, 'hapusakun'])->middleware('role:Manager');
+    Route::get('pegperusahaan/{id}', [SuperAdminController::class, 'pegperusahaan'])->middleware('role:Manager');
 
     Route::get('infopt', [UserController::class, 'infopt'])->middleware('role:Admin,Pegawai');
     Route::get('infoptpeg', [UserController::class, 'infoptpeg'])->middleware('role:Admin,Pegawai');
@@ -66,6 +92,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('jabatan',[JabatanController::class, 'jabatan'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('alljabatan',[JabatanController::class, 'alljabatan'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('alljabatansuperadmin',[JabatanController::class, 'alljabatansuperadmin'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('jabatanpaginate',[JabatanController::class, 'jabatanpaginate'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('jabatanpegawai',[JabatanController::class, 'jabatanpegawai'])->middleware('role:Manager,Admin,Pegawai');
     Route::post('tambahjabatan', [JabatanController::class, 'tambahjabatan'])->middleware('role:Manager,Admin');
@@ -74,6 +101,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('hapusjabatan/{id}', [JabatanController::class, 'hapusjabatan'])->middleware('role:Manager,Admin');
 
     Route::get('alltunjangan',[GajiController::class, 'alltunjangan'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('alltunjangan2',[GajiController::class, 'alltunjangan2'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('allgaji',[DataGajiController::class, 'allgaji'])->middleware('role:Manager,Admin,Pegawai');
     Route::post('buatgaji',[DataGajiController::class, 'buatgaji'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('sudahisi',[DataGajiController::class, 'sudahisi'])->middleware('role:Manager,Admin,Pegawai');
@@ -94,11 +122,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('hapustunjangan/{id}', [GajiController::class, 'hapustunjangan'])->middleware('role:Manager,Admin');
     
     Route::get('allbonus',[GajiController::class, 'allbonus'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('allbonus2',[GajiController::class, 'allbonus2'])->middleware('role:Manager,Admin,Pegawai');
     Route::post('tambahbonus', [GajiController::class, 'tambahbonus'])->middleware('role:Manager,Admin');
     Route::post('updatebonus',[GajiController::class, 'updatebonus'])->middleware('role:Manager,Admin');
     Route::delete('hapusbonus/{id}', [GajiController::class, 'hapusbonus'])->middleware('role:Manager,Admin');
 
     Route::get('allpotongan',[GajiController::class, 'allpotongan'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('allpotongan2',[GajiController::class, 'allpotongan2'])->middleware('role:Manager,Admin,Pegawai');
     Route::post('tambahpotongan', [GajiController::class, 'tambahpotongan'])->middleware('role:Manager,Admin');
     Route::post('updatepotongan',[GajiController::class, 'updatepotongan'])->middleware('role:Manager,Admin');
     Route::delete('hapuspotongan/{id}', [GajiController::class, 'hapuspotongan'])->middleware('role:Manager,Admin');
@@ -176,6 +206,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('searchreqabsen/{data}',[ReqAbsenController::class, 'searchreqabsen'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('searchreqabsenpeg/{data}',[ReqAbsenController::class, 'searchreqabsenpeg'])->middleware('role:Manager,Admin,Pegawai');
     
+    Route::get('searchtunjangan/{data}',[GajiController::class, 'searchtunjangan'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchbonus/{data}',[GajiController::class, 'searchbonus'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchpotongan/{data}',[GajiController::class, 'searchpotongan'])->middleware('role:Manager,Admin,Pegawai');
+
     Route::get('tampillembur', [LemburController::class, 'tampillembur'])->middleware('role:Admin');
     Route::get('tampillemburpegawai', [LemburController::class, 'tampillemburpegawai'])->middleware('role:Admin,Pegawai');
     Route::post('tambahlembur', [LemburController::class, 'tambahlembur'])->middleware('role:Admin,Pegawai');

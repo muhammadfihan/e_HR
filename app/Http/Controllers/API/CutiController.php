@@ -42,6 +42,7 @@ class CutiController extends Controller
                 ->orWhere('jenis_cuti', 'like', '%' . $key . '%')
                 ->orWhere('status_cuti', 'like', '%' . $key . '%')
                 ->where('cuti.id_admin', Auth::user()->id)
+                ->latest()
                 ->paginate(10);
 
             return $result;
@@ -58,6 +59,7 @@ class CutiController extends Controller
                 ->orWhere('jenis_cuti', 'like', '%' . $key . '%')
                 ->orWhere('status_cuti', 'like', '%' . $key . '%')
                 ->where('cuti.email', Auth::user()->email)
+                ->latest()
                 ->paginate(10);
 
             return $result;
@@ -85,15 +87,15 @@ class CutiController extends Controller
         $datetime2 = strtotime($request->input('tanggal_akhir'));
         $interval = $datetime2 - $datetime1;
         
-        $jatah = DB::table('pegawais')->where('email', Auth::user()->email)->first();
-        if($jatah->jatah_cuti <= 0){
+        $jatah = DB::table('table_master_cuti_tahunan')->where('email', Auth::user()->email)->first();
+        if($jatah->jumlah_cuti <= 0){
             return response()->json([
                 'message' =>'Jatah Cuti Tahunan Telah Habis',
                 'success' => false
     
                 ]);    
         };
-        if($interval/60/60/24 > $jatah->jatah_cuti){
+        if($interval/60/60/24 > $jatah->jumlah_cuti){
             return response()->json([
                 'message' =>'Tidak Bisa Dikurangi',
                 'success' => null
@@ -149,12 +151,14 @@ class CutiController extends Controller
             if($status2->status_cuti == "Diterima" ){
                 $tes = $status2->email;
                 $hari = $status2->jumlah_hari;
-                $update = DB::table('pegawais')->where('email','=', $tes)->first();
-                $jatah = $update->jatah_cuti;
+                $update = DB::table('table_master_cuti_tahunan')->where('email','=', $tes)->first();
+                $jatah = $update->jumlah_cuti;
                 $hasil = $jatah - $hari;
-                
-                $update2 = DB::table('pegawais')->where('email','=', $tes)->update([
-                    'jatah_cuti' => $hasil
+                $cutiterpakai = $update->cuti_terpakai + $hari;
+                $sisacuti = $jatah- $cutiterpakai;
+                $update2 = DB::table('table_master_cuti_tahunan')->where('email','=', $tes)->update([
+                    'sisa_cuti' => $sisacuti,
+                    'cuti_terpakai' => $cutiterpakai
                 ]);
                 return response()->json([
                     'hasil' => $hasil,

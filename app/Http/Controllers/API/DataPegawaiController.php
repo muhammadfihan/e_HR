@@ -99,6 +99,7 @@ class DataPegawaiController extends Controller
                 ->orWhere('status', 'like', '%' . $key . '%')
                 ->orWhere('gender', 'like', '%' . $key . '%')
                 ->where('pegawais.id_admin', Auth::user()->id)
+                ->latest()
                 ->paginate(10);
 
             return $result;

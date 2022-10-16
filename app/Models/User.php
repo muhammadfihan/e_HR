@@ -28,13 +28,18 @@ class User extends Authenticatable
         'jumlah_karyawan',
         'bidang',
         'password',
+        'logo',
+        'gambar',
+        'status',
+        'moto',
+        'website_pt'
     ];
 
 
-    protected $hidden = [
+    protected $hidden = ([
         'password',
         'remember_token',
-    ];
+    ]);
 
     protected $casts = [
         'email_verified_at' => 'datetime',

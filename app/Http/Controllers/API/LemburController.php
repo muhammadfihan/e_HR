@@ -17,7 +17,8 @@ class LemburController extends Controller
         $lembur = DB::table('lembur')
             ->select('*')
             ->where('id_admin', Auth::user()->id)
-            ->get();
+            ->latest()
+            ->paginate(10);
         return response()->json([
             'status' => true,
             'message' => 'Get data berhasil',
@@ -35,6 +36,7 @@ class LemburController extends Controller
                 ->orWhere('no_pegawai', 'like', '%' . $key . '%')
                 ->orWhere('status_lembur', 'like', '%' . $key . '%')
                 ->where('lembur.id_admin', Auth::user()->id)
+                ->latest()
                 ->paginate(10);
 
             return $result;
@@ -48,6 +50,7 @@ class LemburController extends Controller
                 ->orWhere('tanggal_lembur', 'like', '%' . $key . '%')
                 ->orWhere('status_lembur', 'like', '%' . $key . '%')
                 ->where('lembur.email', Auth::user()->email)
+                ->latest()
                 ->paginate(10);
 
             return $result;
@@ -58,7 +61,8 @@ class LemburController extends Controller
         $lembur = DB::table('lembur')
             ->select('*')
             ->where('email', Auth::user()->email)
-            ->get();
+            ->latest()
+            ->paginate(10);
         return response()->json([
             'status' => true,
             'message' => 'Get data berhasil',
@@ -112,7 +116,7 @@ class LemburController extends Controller
                 $request->file('buktilembur')->move(public_path('files'), $filename);
 
                 $update = DB::table('lembur')->where('id', $request->id)->update([
-                    'tanggal_lembur' => $request->tanggal,
+                    'tanggal_lembur' => $request->tanggal_lembur,
                     'jammulai' => $request->jammulai,
                     'jamselesai' => $request->jamselesai,
                     'aktifitas' => $request->aktifitas,

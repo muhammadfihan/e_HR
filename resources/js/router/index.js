@@ -1,36 +1,38 @@
-import { createWebHistory, createRouter } from "vue-router";
-import Landing from '../components/Landing'
-import Login from '../components/Login'
-import LupaPassword from '../components/LupaPassword'
-import ResetPassword from '../components/ResetPassword'
-import LoginPegawai from '../components/LoginPegawai'
-import Register from '../components/Register'
-import TopBar from "../dashboard/TopBar";
-// import pagination from "../components/Pagination";
+import { createRouter, createWebHistory } from "vue-router";
+import Dashboard from "../views/Dashboard.vue";
+import DashboardSuperadmin from "../views/DashboardSuperadmin.vue";
+import AdminPegawai from "../views/AdminPegawai.vue";
+import AdminAkun from "../views/AdminAkun.vue";
+import AdminPayroll from "../views/AdminPayroll.vue";
+import AdminTunjangan from "../views/AdminTunjangan.vue";
+import AdminBonus from "../views/AdminBonus.vue";
+import AdminPotongan from "../views/AdminPotongan.vue";
+import AdminGolongan from "../views/AdminGolongan.vue";
+import AdminKehadiran from "../views/AdminKehadiran.vue";
+import AdminRiwayat from "../views/AdminRiwayat.vue";
+import AdminCuti from "../views/AdminCuti.vue";
+import AdminLaporan from "../views/AdminLaporan.vue";
+import AdminJabatan from "../views/AdminJabatan.vue";
+import ApproveCuti from "../views/ApproveCuti.vue";
+import ApproveLembur from "../views/ApproveLembur.vue";
+import ApproveReqabsen from "../views/ApproveReqabsen.vue";
+import ApproveIzin from "../views/ApproveIzin.vue";
+import AdminProfile from "../views/AdminProfile.vue";
+import Profile from "../views/Profile.vue";
+import Signup from "../views/Signup.vue";
+import Signin from "../views/Signin.vue";
+import LupaPassword from "../views/LupaPassword.vue";
+import ResetPassword from "../views/ResetPassword.vue";
+import LupaAdmin from "../views/LupaAdmin.vue";
+import ResetAdmin from "../views/ResetAdmin.vue";
+import SigninPegawai from "../views/SigninPegawai.vue";
+import Register from "../views/Register.vue";
 
-// Admin Role
-import AdminDashboard from "../dashboard/AdminDashboard";
-import SuperAdminDashboard from "../dashboard/SuperAdminDashboard";
-import PegawaiDashboard from "../dashboard/PegawaiDashboard";
-import DataPegawai from "../components/Admin/DataPegawai";
-import AkunPegawai from "../components/Admin/AkunPegawai";
-import Jabatan from "../components/Admin/Jabatan";
-import Kehadiran from "../components/Admin/Kehadiran";
-import Payroll from "../components/Admin/Payroll";
-import Laporan from "../components/Admin/Laporan";
-import Approvement from "../components/Admin/Approvement";
-import ProfileAdmin from "../components/Admin/ProfileAdmin";
-import Cuti from "../components/Admin/Cuti";
+import SuperadminApprove from "../views/SuperadminApr.vue";
+import SuperadminPt from "../views/SuperadminP.vue";
+import SuperadminHapuspeg from "../views/SuperadminHapus.vue";
+import SuperadminProfile from "../views/SuperadminProfile.vue";
 
-//Pegawai Role
-import Absen from "../components/Pegawai/Absen";
-import GajiPegawai from "../components/Pegawai/GajiPegawai";
-import LaporanHarian from "../components/Pegawai/LaporanHarian";
-import Pengajuan from "../components/Pegawai/Pengajuan";
-import Profile from "../components/Pegawai/Profile";
-import Penggajian from "../components/Pegawai/Penggajian";
-
-import { next } from "lodash/seq";
 
 function manager(to, from, next) {
     if (localStorage.getItem("loggedIn")) {
@@ -43,7 +45,7 @@ function admin(to, from, next) {
     if (localStorage.getItem("loggedIn")) {
         (localStorage.getItem("role") == 'Admin')
         next();
-    } else next({ name: 'Login' });
+    } else next({ name: '/' });
 }
 
 function pegawai(to, from, next) {
@@ -52,151 +54,187 @@ function pegawai(to, from, next) {
         next();
     } else next({ name: 'Login' });
 }
-export const routes = [{
-        name: 'Login',
-        path: '/Login',
-        component: Login
+
+const routes = [
+    // {
+    //     path: "/",
+    //     name: "/",
+    //     redirect: "/dashboard-default",
+    // },
+    {
+        path: "/superadminapprove",
+        name: "Management Akun",
+        component: SuperadminApprove
     },
     {
-        name: 'LoginPegawai',
-        path: '/LoginPegawai',
-        component: LoginPegawai
+        path: "/superadminhapuspeg",
+        name: "Superadmin Hapuspegawai",
+        component: SuperadminHapuspeg
     },
     {
-        name: 'Register',
-        path: '/',
-        component: Register
+        path: "/superadminpt",
+        name: "Superadmin Perusahaan",
+        component: SuperadminPt
     },
     {
-        name: 'LupaPassword',
-        path: '/LupaPassword',
-        component: LupaPassword
+        path: "/",
+        name: "/",
+        component: Signin,
     },
     {
-        name: 'ResetPassword',
-        path: '/ResetPassword',
-        component: ResetPassword
+        path: "/register",
+        name: "Register",
+        component: Register,
     },
     {
-        name: 'AdminDashboard',
-        path: '/AdminDashboard',
-        component: AdminDashboard,
+        path: "/adminprofile",
+        name: "Admin Profile",
+        component: AdminProfile
+    },
+    {
+        path: "/loginpegawai",
+        name: "/loginpegawai",
+        component: SigninPegawai,
+    },
+    {
+        path: "/lupapassword",
+        name: "/lupapassword",
+        component: LupaPassword,
+    },
+    {
+        path: "/resetpassword",
+        name: "/resetpassword",
+        component: ResetPassword,
+    },
+    {
+        path: "/lupaadmin",
+        name: "/lupaadmin",
+        component: LupaAdmin,
+    },
+    {
+        path: "/resetadmin",
+        name: "/resetadmin",
+        component: ResetAdmin,
+    },
+    {
+        path: "/dashboard-default",
+        name: "Dashboard",
+        component: Dashboard,
         beforeEnter: admin,
     },
     {
-        name: 'SuperAdminDashboard',
-        path: '/SuperAdminDashboard',
-        component: SuperAdminDashboard,
+        path: "/superadmindashboard",
+        name: "Dashboard Superadmin",
+        component: DashboardSuperadmin,
         beforeEnter: manager,
     },
     {
-        name: 'PegawaiDashboard',
-        path: '/PegawaiDashboard',
-        component: PegawaiDashboard,
-        beforeEnter: pegawai,
+        path: "/superadminprofile",
+        name: "Superadmin Profile",
+        component: SuperadminProfile,
     },
     {
-        name: 'TopBar',
-        path: '/TopBar',
-        component: TopBar
+        path: "/datapegawai",
+        name: "Data Pegawai",
+        component: AdminPegawai,
     },
     {
-        name: 'DataPegawai',
-        path: '/DataPegawai',
-        component: DataPegawai,
-        beforeEnter: admin,
+        path: "/datakehadiran",
+        name: "Data Kehadiran",
+        component: AdminKehadiran,
     },
     {
-        name: 'ProfileAdmin',
-        path: '/ProfileAdmin',
-        component: ProfileAdmin,
-        beforeEnter: admin,
+        path: "/akunpegawai",
+        name: "Akun Pegawai",
+        component: AdminAkun,
     },
     {
-        name: 'AkunPegawai',
-        path: '/AkunPegawai',
-        component: AkunPegawai,
-        beforeEnter: admin,
+        path: "/payroll",
+        name: "Payroll",
+        component: AdminPayroll,
     },
     {
-        name: 'Jabatan',
-        path: '/Jabatan',
-        component: Jabatan,
-        beforeEnter: admin,
+        path: "/tunjangan",
+        name: "Tunjangan",
+        component: AdminTunjangan,
     },
     {
-        name: 'Kehadiran',
-        path: '/Kehadiran',
-        component: Kehadiran,
-        beforeEnter: admin,
+        path: "/bonus",
+        name: "Bonus",
+        component: AdminBonus,
     },
     {
-        name: 'Payroll',
-        path: '/Payroll',
-        component: Payroll,
-        beforeEnter: admin,
+        path: "/potongan",
+        name: "Potongan",
+        component: AdminPotongan,
     },
     {
-        name: 'Laporan',
-        path: '/Laporan',
-        component: Laporan,
-        beforeEnter: admin,
+        path: "/golongan",
+        name: "Golongan",
+        component: AdminGolongan,
     },
     {
-        name: 'Approvement',
-        path: '/Approvement',
-        component: Approvement,
-        beforeEnter: admin,
+        path: "/riwayat",
+        name: "Riwayat Gaji",
+        component: AdminRiwayat,
     },
     {
-        name: 'Cuti',
-        path: '/Cuti',
-        component: Cuti,
-        beforeEnter: admin,
+        path: "/tunjangan",
+        name: "Tunjangan",
+        component: AdminTunjangan,
     },
     {
-        name: 'Absen',
-        path: '/Absen',
-        component: Absen,
-        beforeEnter: pegawai,
+        path: "/cuti",
+        name: "Cuti",
+        component: AdminCuti,
     },
     {
-        name: 'GajiPegawai',
-        path: '/GajiPegawai',
-        component: GajiPegawai,
-        beforeEnter: pegawai,
+        path: "/laporan",
+        name: "Laporan",
+        component: AdminLaporan,
     },
     {
-        name: 'LaporanHarian',
-        path: '/LaporanHarian',
-        component: LaporanHarian,
-        beforeEnter: pegawai,
+        path: "/jabatan",
+        name: "Jabatan",
+        component: AdminJabatan,
     },
     {
-        name: 'Pengajuan',
-        path: '/Pengajuan',
-        component: Pengajuan,
-        beforeEnter: pegawai,
+        path: "/approveizin",
+        name: "Approvement Izin",
+        component: ApproveIzin,
     },
     {
-        name: 'Profile',
-        path: '/Profile',
+        path: "/approvelembur",
+        name: "Approvement Lembur",
+        component: ApproveLembur,
+    },
+    {
+        path: "/approvecuti",
+        name: "Approvement Cuti",
+        component: ApproveCuti,
+    },
+    {
+        path: "/approvereqabsen",
+        name: "Approve Request Attendance",
+        component: ApproveReqabsen,
+    },
+    {
+        path: "/profile",
+        name: "Profile",
         component: Profile,
-        beforeEnter: pegawai,
     },
     {
-        name: 'Penggajian',
-        path: '/Penggajian',
-        component: Penggajian,
-        beforeEnter: pegawai,
+        path: "/signup",
+        name: "Signup",
+        component: Signup,
     },
-
 
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes: routes,
+    history: createWebHistory(process.env.BASE_URL),
+    routes,
+    linkActiveClass: "active",
 });
 
 export default router;

@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Bonus;
 use App\Models\Gaji;
 use App\Models\Potongan;
+use Illuminate\Support\Str;
 
 class GajiController extends Controller
 {
     public function tambahtunjangan(Request $request){
         $tunjangan = Tunjangan::create([
-            'id_admin' => Auth::user()->id,
+            'email_admin' => Auth::user()->email,
             'jenis_tunjangan' => $request->jenis_tunjangan,
             'nominal' => $request->nominal,
         ]);
@@ -68,17 +69,42 @@ class GajiController extends Controller
     public function hapustunjangan(Request $request, $id)
     {
         $data = Tunjangan::findOrFail($id);
-        $data->delete();
-        return response()->json([
-            'success' => true,
-            'message' => 'Hapus data berhasil'
-        ]);
+        $id = $data->id;
+        $convert = strval($id);
+        $update = DB::table('penggajian')->select('*')->where('id_admin', Auth::user()->id)->pluck('id_tunjangan')->toArray();
+        $string = implode(',',$update);
+        $cek = Str::contains($string, $convert);
+            if($cek){
+                return response()->json([
+                    'message' => 'Data sedang digunakan',
+                    'success' => false,
+                ]);
+            }else{
+                $data->delete();
+                return response()->json([
+                    'message' => "Berhasil hapus",
+                    'success' => true,
+                ]);
+            }
     }
 
     public function alltunjangan(){
         $tunjangan = DB::table('tunjangan')
         ->select('*')
-        ->where('id_admin', Auth::user()->id)
+        ->where('email_admin', Auth::user()->email)
+        ->latest()
+        ->get();
+    return response([
+        'data' => $tunjangan,
+        'message' => 'get data berhasil',
+        'status' => true
+    ]);
+    }
+    public function alltunjangan2(){
+        $tunjangan = DB::table('tunjangan')
+        ->select('*')
+        ->where('email_admin', Auth::user()->email)
+        ->where('jenis_tunjangan','!=','Tidak Ada Tunjangan')
         ->latest()
         ->get();
     return response([
@@ -89,11 +115,11 @@ class GajiController extends Controller
     }
     public function searchtunjangan($key)
     {
-            $result = DB::table('tunjangan')
+                $result = DB::table('tunjangan')
                 ->select('*')
-                ->where('tunjangan.id_admin', Auth::user()->id)
+                ->where('tunjangan.email_admin', Auth::user()->email)
                 ->where('jenis_tunjangan', 'like', '%' . $key . '%')
-                ->where('tunjangan.id_admin', Auth::user()->id)
+                ->where('tunjangan.email_admin', Auth::user()->email)
                 ->latest()
                 ->get();
             return $result;
@@ -103,7 +129,7 @@ class GajiController extends Controller
     //bonus
     public function tambahbonus(Request $request){
         $tunjangan = Bonus::create([
-            'id_admin' => Auth::user()->id,
+            'email_admin' => Auth::user()->email,
             'jenis_bonus' => $request->jenis_bonus,
             'nominal' => $request->nominal,
         ]);
@@ -143,17 +169,42 @@ class GajiController extends Controller
     public function hapusbonus(Request $request, $id)
     {
         $data = Bonus::findOrFail($id);
-        $data->delete();
-        return response()->json([
-            'success' => true,
-            'message' => 'Hapus data berhasil'
-        ]);
+        $id = $data->id;
+        $convert = strval($id);
+        $update = DB::table('penggajian')->select('*')->where('id_admin', Auth::user()->id)->pluck('id_bonus')->toArray();
+        $string = implode(',',$update);
+        $cek = Str::contains($string, $convert);
+            if($cek){
+                return response()->json([
+                    'message' => 'Data sedang digunakan',
+                    'success' => false,
+                ]);
+            }else{
+                $data->delete();
+                return response()->json([
+                    'message' => "Berhasil hapus",
+                    'success' => true,
+                ]);
+            }
     }
 
     public function allbonus(){
         $bonus = DB::table('bonus')
         ->select('*')
-        ->where('id_admin', Auth::user()->id)
+        ->where('email_admin', Auth::user()->email)
+        ->latest()
+        ->get();
+    return response([
+        'data' => $bonus,
+        'message' => 'get data berhasil',
+        'status' => true
+    ]);
+    }
+    public function allbonus2(){
+        $bonus = DB::table('bonus')
+        ->select('*')
+        ->where('email_admin', Auth::user()->email)
+        ->where('jenis_bonus','!=','Tidak Ada Bonus')
         ->latest()
         ->get();
     return response([
@@ -166,9 +217,9 @@ class GajiController extends Controller
     {
             $result = DB::table('bonus')
                 ->select('*')
-                ->where('bonus.id_admin', Auth::user()->id)
+                ->where('bonus.email_admin', Auth::user()->email)
                 ->where('jenis_bonus', 'like', '%' . $key . '%')
-                ->where('bonus.id_admin', Auth::user()->id)
+                ->where('bonus.email_admin', Auth::user()->email)
                 ->latest()
                 ->get();
             return $result;
@@ -177,7 +228,7 @@ class GajiController extends Controller
     
     public function tambahpotongan(Request $request){
         $potongan = Potongan::create([
-            'id_admin' => Auth::user()->id,
+            'email_admin' => Auth::user()->email,
             'jenis_potongan' => $request->jenis_potongan,
             'nominal' => $request->nominal,
         ]);
@@ -217,17 +268,42 @@ class GajiController extends Controller
     public function hapuspotongan(Request $request, $id)
     {
         $data = Potongan::findOrFail($id);
-        $data->delete();
-        return response()->json([
-            'success' => true,
-            'message' => 'Hapus data berhasil'
-        ]);
+        $id = $data->id;
+        $convert = strval($id);
+        $update = DB::table('penggajian')->select('*')->where('id_admin', Auth::user()->id)->pluck('id_potongan')->toArray();
+        $string = implode(',',$update);
+        $cek = Str::contains($string, $convert);
+            if($cek){
+                return response()->json([
+                    'message' => 'Data sedang digunakan',
+                    'success' => false,
+                ]);
+            }else{
+                $data->delete();
+                return response()->json([
+                    'message' => "Berhasil hapus",
+                    'success' => true,
+                ]);
+            }
     }
 
     public function allpotongan(){
         $bonus = DB::table('potongan')
         ->select('*')
-        ->where('id_admin', Auth::user()->id)
+        ->where('email_admin', Auth::user()->email)
+        ->latest()
+        ->get();
+    return response([
+        'data' => $bonus,
+        'message' => 'get data berhasil',
+        'status' => true
+    ]);
+    }
+    public function allpotongan2(){
+        $bonus = DB::table('potongan')
+        ->select('*')
+        ->where('email_admin', Auth::user()->email)
+        ->where('jenis_potongan','!=','Tidak Ada Potongan')
         ->latest()
         ->get();
     return response([
@@ -240,9 +316,9 @@ class GajiController extends Controller
     {
             $result = DB::table('potongan')
                 ->select('*')
-                ->where('potongan.id_admin', Auth::user()->id)
+                ->where('potongan.email_admin', Auth::user()->email)
                 ->where('jenis_potongan', 'like', '%' . $key . '%')
-                ->where('potongan.id_admin', Auth::user()->id)
+                ->where('potongan.email_admin', Auth::user()->email)
                 ->latest()
                 ->get();
             return $result;

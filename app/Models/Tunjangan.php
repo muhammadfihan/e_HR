@@ -10,7 +10,7 @@ class Tunjangan extends Model
     use HasFactory;
     protected $table = "tunjangan";
     protected $fillable = [
-        'id_admin',
+        'email_admin',
         'jenis_tunjangan',
         'nominal',
     ];

@@ -17,9 +17,12 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use phpDocumentor\Reflection\Element;
 use App\Models\AkunPegawai;
+use App\Models\Bonus;
 use App\Models\DataPegawai;
 use App\Models\JamAbsen;
+use App\Models\Tunjangan;
 use Illuminate\Support\Carbon;
+use App\Models\Potongan;
 
 class UserController extends Controller
 {
@@ -32,6 +35,7 @@ class UserController extends Controller
 
         if ($validate->fails()) {
             return response()->json([
+                'error' => true,
                 'success' => false,
                 'message' => 'Login Failed!',
             ]);
@@ -41,33 +45,45 @@ class UserController extends Controller
                 $response = [
                     'success'   => false,
                     'errors'    => true,
+                    'input'     => false
                 ];
                 return response($response, 201);
-             }else{
-                $detail = DB::table('users')
-                ->select('*')
+             }if($user->status == 'Pending'){
+                $response = [
+                    'success'   => null,
+                    'errors'    => true,
+                ];
+                return response($response, 201);
+             }if($user->status == 'Nonaktif'){
+                $response = [
+                    'success'   => false,
+                    'errors'    => true,
+                    'nonaktif' => true
+                ];
+                return response($response, 201);
+             }if($user->status == 'Diterima'){
+                $detail = User::select('*')
                 ->where('id', $user->id)
                 ->first();
              }
-           
-
             $data = [
                 'email'     => $request->input('email'),
                 'password'  => $request->input('password'),
             ];
             if (Auth::attempt($data)) {
-                $token = $user->createToken('auth_token')->plainTextToken;
-                $response = [
+                $token = $user->createToken('auth_token');
+                return response()->json([
                     'success'   => true,
-                    'user'      => $detail,
+                    'user'      => $detail->makeHidden('password'),
                     'errors'    => null,
-                    'token'     => $token,
-                ];
-                return response($response, 201);
+                    'token'     => $token->plainTextToken,
+                    'expired_at' => $token->accessToken->expired_at
+                ], 201);
             }
             
             else {
                 return response()->json([
+                    'akun' => false,
                     'success' => false,
                     'message' => 'Access Denied!',
                 ]);
@@ -105,8 +121,7 @@ class UserController extends Controller
                 ];
                 return response($response, 201);
              }else{
-                $detail = DB::table('akunpegawai')
-                ->select('*')
+                $detail = AkunPegawai::select('*')
                 ->where('id', $user->id)
                 ->first();
              }
@@ -120,7 +135,7 @@ class UserController extends Controller
                 $token = $user->createToken('auth_token')->plainTextToken;
                 $response = [
                     'success'   => true,
-                    'user'      => $detail,
+                    'user'      => $detail->makeHidden('password'),
                     'errors'    => null,
                     'token'     => $token,
                 ];
@@ -161,9 +176,12 @@ class UserController extends Controller
             return response()
                 ->json(['message' => 'Unauthorized', 'success'=>$success], 401);
         }
-
-        
-
+        if (User::where('email', '=', $request->input('email'))->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Email telah digunakan'
+            ]);  
+        }
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -175,6 +193,8 @@ class UserController extends Controller
             'npwp' => $request->npwp,
             'kode_pos' => $request->kode_pos,
             'det_alamat' => $request->det_alamat,
+            'moto' => $request->moto,
+            'website_pt' => $request->website_pt,
             'bidang' => $request->bidang,
             'password' => Hash::make($request->password),
 
@@ -192,11 +212,30 @@ class UserController extends Controller
          ])
 
         ]);
+        $tunjangan = Tunjangan::create([
+                    'email_admin' => $user->email,
+                    'jenis_tunjangan' => 'Tidak Ada Tunjangan',
+                    'nominal' => 0
+        ]);
+        $bonus = Bonus::create([
+            'email_admin' => $user->email,
+            'jenis_bonus' => 'Tidak Ada Bonus',
+            'nominal' => 0
+        ]);
+        $potongan = Potongan::create([
+            'email_admin' => $user->email,
+            'jenis_potongan' => 'Tidak Ada Potongan',
+            'nominal' => 0
+        ]);
+
 
         $success = true;
         $message = 'User register successfully';
         $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
+                'tunjangan' => $tunjangan,
+                'bonus' => $bonus,
+                'potongan' => $potongan,
                 'data' => $user,
                 'dat_perusahaan' => $pt,
                 'access_token' => $token,
@@ -214,17 +253,12 @@ class UserController extends Controller
 
         ]);
         $success = false;
-        if($validator->fails()){
-            return response()
-                ->json(['message' => 'Unauthorized', 'success'=>$success], 401);
+        if (AkunPegawai::where('email', '=', $request->input('email'))->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Email telah digunakan'
+            ]);  
         }
-        // $user = User::create([
-        //     'id' => $request->id,
-        //     'name' => $request->name,
-        //     'role' => $request->role,
-        //     'email' => $request->email,
-        //     'password' => Hash::make($request->password),
-        // ]);
         $pass = "1234567890";
         $random = strtoupper(substr(str_shuffle($pass), 0, 9));
         $timezone = 'Asia/Jakarta'; 
@@ -233,10 +267,7 @@ class UserController extends Controller
         
         $datetime1 = strtotime($request->input('tanggal_masuk'));
         $datetime2 = strtotime($tanggal);
-        // $datetime2 = new DateTime($awal);
-
-        // // dd($akhir);
-        // return $akhir;
+       
         $jumlahkerja = $datetime2 - $datetime1;
 
         $akunpegawai = AkunPegawai::create([
@@ -345,11 +376,14 @@ class UserController extends Controller
     }
     public function allUser()
     {
-        $pegawai = DB::table('akunpegawai')
-        ->select('*')
+        $pegawai = AkunPegawai::select('*')
         ->where('id_admin', Auth::user()->id)
         ->latest()
         ->paginate(10);
+
+        $data = $pegawai->makeHidden(['password']);
+        $pegawai->data = $data;
+
         return response()->json([
             'status' => true,
             'message' => 'Ambil data berhasil',
@@ -488,15 +522,14 @@ class UserController extends Controller
     }
     public function infopt()
     {
-        $pt = DB::table('users')
-        ->select('*')
+        $pt = User::select('*')
         ->where('id', Auth::user()->id)
         ->get();
-
+        
         return response()->json([
             'status' => true,
             'message' => 'Ambil data berhasil',
-            'data' => $pt
+            'data' => $pt->makeHidden('password')
         ]);
     }
     public function infoptpeg()
@@ -510,6 +543,13 @@ class UserController extends Controller
             'status' => true,
             'message' => 'Ambil data berhasil',
             'data' => $pt
+        ]);
+    }
+    public function ceking(){
+        $ceking = User::where('id', Auth::user()->id)->pluck('status');
+        return response()->json([
+            'data' => $ceking,
+            'success' => true
         ]);
     }
 

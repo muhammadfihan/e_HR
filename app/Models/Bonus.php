@@ -11,7 +11,7 @@ class Bonus extends Model
 
     protected $table = "bonus";
     protected $fillable = [
-        'id_admin',
+        'email_admin',
         'jenis_bonus',
         'nominal',
     ];

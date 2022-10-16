@@ -144,6 +144,7 @@ class AbsensiController extends Controller
                 ->orWhere('jam_masuk', 'like', '%' . $key . '%')
                 ->orWhere('jam_pulang', 'like', '%' . $key . '%')
                 ->where('absensipegawai.id_admin', Auth::user()->id)
+                ->latest()
                 ->paginate(10);
 
             return $result;
@@ -159,6 +160,7 @@ class AbsensiController extends Controller
                 ->orWhere('jam_pulang', 'like', '%' . $key . '%')
                 ->orWhere('tanggal', 'like', '%' . $key . '%')
                 ->where('absensipegawai.id_admin', Auth::user()->id)
+                ->latest()
                 ->paginate(10);
 
             return $result;

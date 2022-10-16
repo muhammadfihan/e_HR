@@ -24,8 +24,13 @@ class DataGajiController extends Controller
             ]);
        
     }
+    public function getEmail(Request $request)
+    {
+        $data = Gaji::where('id_admin', Auth::user()->id)->where('id_jabatan', $request->id_jabatan)->get();
+        return response()->json($data);
+    }
     public function riwayatgaji(Request $request){
-        $riwayat = RiwayatGaji::where('id_admin' ,Auth::user()->id)->latest()->paginate(10);
+        $riwayat = RiwayatGaji::where('id_admin' ,Auth::user()->id)->where('status','=',"Sudah Diambil")->latest()->paginate(8);
             return response([
                 'data' => $riwayat,
                 'message' => 'get data berhasil',
@@ -38,9 +43,11 @@ class DataGajiController extends Controller
             $result = DB::table('riwayatgaji')
                 ->select('*')
                 ->where('riwayatgaji.id_admin', Auth::user()->id)
+                ->where('status','=',"Sudah Diambil")
                 ->where('email', 'like', '%' . $key . '%')
                 ->orWhere('tanggal_ambil', 'like', '%' . $key . '%')
                 ->where('riwayatgaji.id_admin', Auth::user()->id)
+                ->latest()
                 ->paginate(10);
 
             return $result;
@@ -51,14 +58,15 @@ class DataGajiController extends Controller
             $result = DB::table('riwayatgaji')
                 ->select('*')
                 ->where('riwayatgaji.email', Auth::user()->email)
-                ->orWhere('tanggal_ambil', 'like', '%' . $key . '%')
+                ->where('tanggal_ambil', 'like', '%' . $key . '%')
                 ->where('riwayatgaji.email', Auth::user()->email)
-                ->paginate(10);
+                ->get();
+
             return $result;
 
     }
     public function riwayatgajipeg(Request $request){
-        $riwayat = RiwayatGaji::where('email' ,Auth::user()->email)->latest()->paginate(10);
+        $riwayat = RiwayatGaji::where('email' ,Auth::user()->email)->latest()->paginate(8);
             return response([
                 'data' => $riwayat,
                 'message' => 'get data berhasil',
@@ -75,6 +83,7 @@ class DataGajiController extends Controller
                 ->orWhere('tanggal', 'like', '%' . $key . '%')
                 ->orWhere('status', 'like', '%' . $key . '%')
                 ->where('penggajian.id_admin', Auth::user()->id)
+                ->latest()
                 ->get()->toArray();
 
                 foreach($result as $i => $tes){
@@ -245,7 +254,6 @@ class DataGajiController extends Controller
         $validate = Validator::make($request->all(), [
             'email' => 'required|email',
             'id_bonus' => 'required',
-            'id_jabatan' => 'required',
             'id_tunjangan' => 'required',
             'id_potongan' => 'required'
         ]);
@@ -259,20 +267,24 @@ class DataGajiController extends Controller
             $tunjanganArray = implode(",",$request->id_tunjangan);
             $bonusArray = implode(",",$request->id_bonus);
             $potonganArray = implode(",",$request->id_potongan);
+            $user = Gaji::where('email', $request->email)->first();
+            $jabat = $user->id_jabatan;
+
             $buatgaji =  Penggajian::create([
                 'id_admin' => Auth::user()->id,
                 'email' => $request->email,
-                'id_jabatan' => $request->id_jabatan,
+                'id_jabatan' => $jabat,
                 'id_golongan' => $request->id_golongan,
                 'tanggal' => Carbon::now(),
                 'id_tunjangan' => $tunjanganArray,
                 'id_bonus' => $bonusArray,
                 'id_potongan' =>  $potonganArray
             ]);
+            
             $buatgaji2 =  RiwayatGaji::create([
                 'id_admin' => Auth::user()->id,
                 'email' => $request->email,
-                'id_jabatan' => $request->id_jabatan,
+                'id_jabatan' => $jabat,
                 'tanggal_ambil' => Carbon::now(),
                 'id_golongan' => $request->id_golongan,
             ]);

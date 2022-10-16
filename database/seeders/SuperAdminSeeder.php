@@ -22,6 +22,7 @@ class SuperAdminSeeder extends Seeder
             'nama_perusahaan' => 'PT AMS Indonesia',
             'jumlah_karyawan' => '1000',
             'jabatan' => 'SuperAdmin',
+            'status' => 'Diterima',
             'role' => 'Manager',
             'provinsi' => 'Jawa Tengah',
             'kota' => 'Surakarta',

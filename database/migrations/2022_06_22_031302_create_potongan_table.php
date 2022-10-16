@@ -15,8 +15,7 @@ return new class extends Migration
     {
         Schema::create('potongan', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_admin')->unsigned();
-            $table->foreign('id_admin')->references('id')->on('users');
+            $table->string('email_admin');
             $table->string('jenis_potongan')->nullable();
             $table->integer('nominal')->nullable();
             $table->timestamps();

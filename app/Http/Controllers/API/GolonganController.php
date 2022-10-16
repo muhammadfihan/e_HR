@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 
 class GolonganController extends Controller
@@ -86,13 +87,25 @@ class GolonganController extends Controller
             ]);
         }
     }
-    public function hapusgolongan(Request $request, $id)
+    public function hapusgolongan($id)
     {
         $data = Golongan::findOrFail($id);
-        $data->delete();
-        return response()->json([
-            'success' => true,
-            'message' => 'Hapus data berhasil'
-        ]);
+        $id = $data->id;
+        $convert = strval($id);
+        $update = DB::table('akunpegawai')->select('*')->where('id_admin', Auth::user()->id)->pluck('id_golongan')->toArray();
+        $string = implode(',',$update);
+        $cek = Str::contains($string, $convert);
+            if($cek){
+                return response()->json([
+                    'message' => 'Data sedang digunakan',
+                    'success' => false,
+                ]);
+            }else{
+                $data->delete();
+                return response()->json([
+                    'message' => "Berhasil hapus",
+                    'success' => true,
+                ]);
+        }
     }
 }

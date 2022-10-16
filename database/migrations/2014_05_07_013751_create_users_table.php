@@ -26,6 +26,11 @@ return new class extends Migration
             $table->bigInteger('npwp')->nullable();
             $table->integer('kode_pos')->nullable();
             $table->string('bidang')->nullable();
+            $table->string('logo')->nullable();
+            $table->string('gambar')->nullable();
+            $table->string('status')->default('Pending');
+            $table->string('moto')->nullable();
+            $table->string('website_pt')->nullable();
             $table->integer('jumlah_karyawan')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

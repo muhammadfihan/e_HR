@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\AkunPegawai;
 use App\Models\Jabatan;
 use App\Models\Pegawai;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class JabatanController extends Controller
 {
@@ -25,12 +27,24 @@ class JabatanController extends Controller
             'status' => true
         ]);
     }
+    public function alljabatansuperadmin()
+    {
+        $jabatan = DB::table('jabatan')
+            ->select('*')
+            ->get();
+        return response([
+            'data' => $jabatan,
+            'message' => 'get data berhasil',
+            'status' => true
+        ]);
+    }
     public function jabatanpaginate()
     {
         $jabatan = DB::table('jabatan')
             ->select('*')
             ->where('id_admin', Auth::user()->id)
-            ->paginate(10);
+            ->latest()
+            ->paginate(8);
         return response([
             'data' => $jabatan,
             'message' => 'get data berhasil',
@@ -44,6 +58,7 @@ class JabatanController extends Controller
                 ->where('jabatan.id_admin', Auth::user()->id)
                 ->where('jabatan', 'like', '%' . $key . '%')
                 ->where('jabatan.id_admin', Auth::user()->id)
+                ->latest()
                 ->paginate(10);
 
             return $result;
@@ -114,10 +129,22 @@ class JabatanController extends Controller
     public function hapusjabatan(Request $request, $id)
     {
         $data = Jabatan::findOrFail($id);
-        $data->delete();
-        return response()->json([
-            'success' => true,
-            'message' => 'Hapus data berhasil'
-        ]);
+        $id = $data->id;
+        $convert = strval($id);
+        $update = DB::table('akunpegawai')->select('*')->where('id_admin', Auth::user()->id)->pluck('id_jabatan')->toArray();
+        $string = implode(',',$update);
+        $cek = Str::contains($string, $convert);
+            if($cek){
+                return response()->json([
+                    'message' => 'Data sedang digunakan',
+                    'success' => false,
+                ]);
+            }else{
+                $data->delete();
+                return response()->json([
+                    'message' => "Berhasil hapus",
+                    'success' => true,
+                ]);
+            }
     }
 }

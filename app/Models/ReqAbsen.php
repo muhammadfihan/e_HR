@@ -11,8 +11,6 @@ class ReqAbsen extends Model
     protected $table = "reqabsen";
     protected $fillable = [
         'id_admin',
-        'uid',
-        'id',
         'name',
         'email',
         'nama_lengkap',

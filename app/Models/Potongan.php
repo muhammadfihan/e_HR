@@ -11,7 +11,7 @@ class Potongan extends Model
 
     protected $table = "potongan";
     protected $fillable = [
-        'id_admin',
+        'email_admin',
         'jenis_potongan',
         'nominal',
     ];

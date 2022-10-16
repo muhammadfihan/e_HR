@@ -33,9 +33,11 @@ class ReqAbsenController extends Controller
                 ->orWhere('name', 'like', '%' . $key . '%')
                 ->orWhere('nama_lengkap', 'like', '%' . $key . '%')
                 ->orWhere('email', 'like', '%' . $key . '%')
+                ->orWhere('alasan', 'like', '%' . $key . '%')
                 ->orWhere('no_pegawai', 'like', '%' . $key . '%')
                 ->orWhere('status_req', 'like', '%' . $key . '%')
                 ->orWhere('tanggal_req', 'like', '%' . $key . '%')
+                ->latest()
                 ->paginate(10);
 
             return $result;
@@ -50,6 +52,7 @@ class ReqAbsenController extends Controller
                 ->orWhere('alasan', 'like', '%' . $key . '%')
                 ->orWhere('status_req', 'like', '%' . $key . '%')
                 ->where('reqabsen.email', Auth::user()->email)
+                ->latest()
                 ->paginate(10);
 
             return $result;
@@ -59,9 +62,9 @@ class ReqAbsenController extends Controller
     public function allreqpegawai(){
         $reqabsen = DB::table('reqabsen')
         ->select('*')
-        ->where('id_admin', Auth::user()->id_admin)
+        ->where('email', Auth::user()->email)
         ->latest()
-        ->get();
+        ->paginate(10);
     return response([
         'data' => $reqabsen,
         'message' => 'get data berhasil',
@@ -77,7 +80,6 @@ class ReqAbsenController extends Controller
 
             $user = DataPegawai::where('id', Auth::user()->id)->first();
             $reqabsen = ReqAbsen::create([
-                'id' => Auth::user()->id,
                 'id_admin' => Auth::user()->id_admin,
                 'email' => Auth::user()->email,
                 'name' => Auth::user()->name,
@@ -111,18 +113,16 @@ class ReqAbsenController extends Controller
             ]);
         } else {
             $jam = DB::table('jamabsen')->where('id_admin', Auth::user()->id)->first();
-            $status =  DB::table('reqabsen')->where('uid', $request->uid)->update([
+            $status =  DB::table('reqabsen')->where('id', $request->id)->update([
                 'status_req' => $request->status_req,
             ]);
-            $inputabsen = DB::table('reqabsen')->where('uid', $request->uid)->first();
-            if($inputabsen->status_req == "Ditolak"){
+            $inputabsen = DB::table('reqabsen')->where('id', $request->id)->first();
+            if($inputabsen == "Ditolak"){
                 return response()->json([
-
                     'success' => true,
                     'message' => 'Ditolak',
                 ]);
             }
-            
             $absen = Absensi::create([
                         'id' => $inputabsen->id,
                         'email' => $inputabsen->email,
@@ -138,36 +138,12 @@ class ReqAbsenController extends Controller
                         'lokasi' => 0
                     ]);
             return response()->json([
+                'tes' => $inputabsen,
                 'absen' => $absen,
                 'data' => $status,
                 'success' => true,
                 'message' => 'Update Status Berhasil!',
             ]);
-            // if($request->status == "Ditolak"){
-            //     return response()->json([
-            //         'data' => $status,
-            //         'success' => true,
-            //         'message' => 'Ditolak !',
-            //     ]);
-            // }
-            // if($request->status == "Diterima"){
-            //     $absen = Absensi::create([
-            //         'id' => null,
-            //         'email' => Auth::user()->email,
-            //         'id_admin' => Auth::user()->id_admin,
-            //         'name' => Auth::user()->name,
-            //         'nama_lengkap' => Auth::user()->name,
-            //         'selfie_masuk' => null,
-            //         'tanggal' => null,
-            //         'jam_masuk' => null,
-            //         'lokasi' => null
-            //     ]);
-            //     return response()->json([
-            //         'data' => $absen,
-            //         'success' => true,
-            //         'message' => 'Update Status Berhasil!',
-            //     ]);
-            // }
         }
     }
     public function updatereqabsen(Request $request){
@@ -187,7 +163,7 @@ class ReqAbsenController extends Controller
                 $filename = str_replace('','',$request->file('bukti_pendukung')->getClientOriginalName());
                 $request->file('bukti_pendukung')->move(public_path('files'), $filename);
 
-                $update = DB::table('reqabsen')->where('uid', $request->uid)->update([
+                $update = DB::table('reqabsen')->where('id', $request->id)->update([
                     'tanggal_req' => $request->tanggal_req,
                     'alasan' => $request->alasan,
                     'bukti_pendukung' => $filename

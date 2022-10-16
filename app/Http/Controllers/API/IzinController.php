@@ -38,6 +38,7 @@ class IzinController extends Controller
                 ->orWhere('status_izin', 'like', '%' . $key . '%')
                 ->orWhere('tanggal', 'like', '%' . $key . '%')
                 ->where('izin.id_admin', Auth::user()->id)
+                ->latest()
                 ->paginate(10);
 
             return $result;
@@ -52,6 +53,7 @@ class IzinController extends Controller
                 ->orWhere('jenis_izin', 'like', '%' . $key . '%')
                 ->orWhere('status_izin', 'like', '%' . $key . '%')
                 ->where('izin.email', Auth::user()->email)
+                ->latest()
                 ->paginate(10);
 
             return $result;

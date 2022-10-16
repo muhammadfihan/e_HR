@@ -19,13 +19,34 @@ class MasterCutiPerusahaanController extends Controller
             ->select('*')
             ->where('id_admin', Auth::user()->id)
             ->latest()
-            ->paginate(10);
+            ->paginate(8);
 
             return response()->json([
                 'status' => true,
-                'message' => 'Get data berhasil TESS',
+                'message' => 'Get data berhasil',
                 'data' => $cuti
             ]);
+    }
+    public function cekcuti(){
+        $cuti = DB::table('master_cuti_perusahaan')
+            ->select('*')
+            ->where('id_admin', Auth::user()->id)
+            ->first();
+
+            if($cuti == null){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Gaa ada data',
+                    'data' => $cuti
+                ]);
+            }else{
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Get data berhasil',
+                    'data' => $cuti
+                ]);
+            }
+            
     }
     public function CutiPerusahanPeg(){
         $datapegawai = DB::table('table_master_cuti_tahunan')
