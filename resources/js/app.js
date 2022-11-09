@@ -9,12 +9,14 @@ import "./assets/css/nucleo-svg.css";
 import ArgonDashboard from "./argon-dashboard";
 import { Form, HasError, AlertError } from 'vform'
 import "vue-toastification/dist/index.css";
+import VueLazyload from "vue-lazyload";
 window.Form = Form;
 
 const appInstance = createApp(App);
 appInstance.config.globalProperties.$axios = axios;
 appInstance.use(store);
 appInstance.use(router);
+appInstance.use(VueLazyload);
 appInstance.use(VueToastification, {
     transition: "Vue-Toastification__bounce",
     maxToasts: 20,

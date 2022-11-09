@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use DateTime;
 use DateTimeZone;
 use App\Models\Absensi;
+use App\Models\HariKerja;
 use App\Models\JamAbsen;
+use App\Models\Pemberitahuan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -15,6 +17,17 @@ use Illuminate\Support\Carbon;
 
 class AbsensiController extends Controller
 {
+    public function getabsen (){
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
+        $data = Absensi::where('email', Auth::user()->email)->where('tanggal', $tanggal)->get();
+        return response()->json([
+            'data' => $data,
+            'message' => 'Get Data Berhasil',
+            'success' => true
+        ]);
+    }
     public function absenmasuk(Request $request){
         $timezone = 'Asia/Jakarta'; 
         $date = new DateTime('now', new DateTimeZone($timezone)); 
@@ -31,6 +44,26 @@ class AbsensiController extends Controller
             ->where('email', Auth::user()->email)
             ->where('status_izin', '=', 'Diterima')
             ->first();
+        $cekjam = DB::table('harikerja')
+            ->where('id_admin', Auth::user()->id_admin)
+            ->pluck('jam_pulang')
+            ->first(); 
+        $buka = DB::table('harikerja')
+            ->where('id_admin', Auth::user()->id_admin)
+            ->pluck('buka_presensi')
+            ->first();  
+        if($localtime < $buka){
+                return response()->json([
+                    'status' => 2,
+                    'message' => 'Presensi Belum Dimulai !',
+                ]);
+        }  
+        if($localtime > $cekjam){
+            return response()->json([
+                'status' => 13,
+                'message' => 'Bukan Jam kerja !',
+            ]);
+        }
         if($izin){
             return response()->json([
                 'sudahizin' => $izin,
@@ -57,66 +90,93 @@ class AbsensiController extends Controller
             $file = $file_path . $filename; 
             file_put_contents($file, $image_base64);
 
-            $masuk = DB::table('jamabsen')
+            $masuk = DB::table('harikerja')
             ->select('*')
             ->where('id_admin', Auth::user()->id_admin)
             ->pluck('jam_masuk')
             ->first();
-
-            $absen = Absensi::create([
-                'id' => Auth::user()->id,
-                'email' => Auth::user()->email,
-                'id_admin' => Auth::user()->id_admin,
-                'name' => Auth::user()->name,
-                'nama_lengkap' => Auth::user()->name,
-                'selfie_masuk' => $filename,
-                'tanggal' => $tanggal,
-                'jam_masuk' => $localtime,
-                'latitude' => $request->latitude,
-                'longitude' => $request->longitude,
-            ]);
-            if ($absen->jam_masuk <= $masuk){
-                $ket = [
-                    'keterangan' => "On Time",
-                ];
-                $ontime = Absensi::where([
-                    ['id','=', Auth::user()->id],
-                    ['email','=', Auth::user()->email],
-                    ['tanggal','=',$tanggal],
-                ])->first();
-                $ontime->update($ket);
+            $lat = $request->input('latitude');
+            $img = $request->input('selfie_masuk');
+            if($lat == null){
                 return response()->json([
-                    'absensi' => $absen,
-                    'data' => $ket,
-                    'jam' => $masuk,
-                    'message' => 'on time',
-                    'success' => true
+                    'status' => 12,
+                    'message' => "Lokasi tidak diizinkan"
+                ]);
+            }if($img == null){
+                return response()->json([
+                    'status' => 11,
+                    'message' => "Kamera Tidak Diizinkan"
+                ]);
+            }else{
+                $absen = Absensi::create([
+                    'id' => Auth::user()->id,
+                    'email' => Auth::user()->email,
+                    'id_admin' => Auth::user()->id_admin,
+                    'name' => Auth::user()->name,
+                    'nama_lengkap' => Auth::user()->name,
+                    'selfie_masuk' => $filename,
+                    'tanggal' => $tanggal,
+                    'jam_masuk' => $localtime,
+                    'latitude' => $request->latitude,
+                    'longitude' => $request->longitude,
+                ]);
+                if ($absen->jam_masuk <= $masuk){
+                    $timezone = 'Asia/Jakarta'; 
+                    $date = new DateTime('now', new DateTimeZone($timezone)); 
+                    $tanggal = $date->format('Y-m-d');
+                    $localtime = $date->format('H:i:s');
+                    $ket = Absensi::where('tanggal',$tanggal)->update([
+                        'keterangan' => 'On Time'
+                    ]);
+                    Pemberitahuan::create([
+                        'id_admin' => Auth::user()->id_admin,
+                        'email' => Auth::user()->email,
+                        'judul' => 'Presensi Masuk',
+                        'jenis' => 'Presensi Masuk',
+                        'status' => 'On Time',
+                        'tanggal' => $tanggal,
+                        'jam' => $localtime
+                    ]);
+                    return response()->json([
+                        'absensi' => $absen,
+                        'data' => $ket,
+                        'jam' => $masuk,
+                        'message' => 'on time',
+                        'success' => true
+                    ]);
+                }
+                if ($absen->jam_masuk >= $masuk){
+                    $timezone = 'Asia/Jakarta'; 
+                    $date = new DateTime('now', new DateTimeZone($timezone)); 
+                    $tanggal = $date->format('Y-m-d');
+                    $localtime = $date->format('H:i:s');
+                    $ket = Absensi::where('tanggal',$tanggal)->update([
+                        'keterangan' => 'Terlambat'
+                    ]);
+                    Pemberitahuan::create([
+                        'id_admin' => Auth::user()->id_admin,
+                        'email' => Auth::user()->email,
+                        'judul' => 'Presensi Masuk',
+                        'jenis' => 'Presensi Masuk',
+                        'status' => 'Terlambat',
+                        'tanggal' => $tanggal,
+                        'jam' => $localtime
+                    ]);
+                    return response()->json([
+                        'absensi' => $absen,
+                        'data' => $ket,
+                        'jam' => $masuk,
+                        'message' => 'terlambat',
+                        'success' => true
+                    ]);
+                }
+    
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Berhasil Presensi',
+                    'absenmasuk' => $absen
                 ]);
             }
-            if ($absen->jam_masuk >= $masuk){
-                $ket = [
-                    'keterangan' => "Terlambat",
-                ];
-                $telat = Absensi::where([
-                    ['id','=', Auth::user()->id],
-                    ['email','=', Auth::user()->email],
-                    ['tanggal','=',$tanggal],
-                ])->first();
-                $telat->update($ket);
-                return response()->json([
-                    'absensi' => $absen,
-                    'data' => $ket,
-                    'jam' => $masuk,
-                    'message' => 'terlambat',
-                    'success' => true
-                ]);
-            }
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Berhasil Presensi',
-                'absenmasuk' => $absen
-            ]);
         }
     }
     public function tampilabsen(){
@@ -259,12 +319,21 @@ class AbsensiController extends Controller
         ->whereDate('tanggal', $tanggal)
         ->first();
 
-        $tes = JamAbsen::where('id_admin', Auth::user()->id_admin)
+        $tes = HariKerja::where('id_admin', Auth::user()->id_admin)
         ->first();
 
         // $hasilblm = strtotime($tes->jam_pulang);
         // $hasiltgl = strtotime($tanggal);
-
+        $tutup = DB::table('harikerja')
+        ->where('id_admin', Auth::user()->id_admin)
+        ->pluck('tutup_presensi')
+        ->first();
+        if($localtime > $tutup){
+            return response()->json([
+                'status' => 3,
+                'message' => 'Presensi Pulang Telah Di tutup'
+            ]);
+        }
         if ($presensi == null){
             return response()->json([
                 'sudahabsen' => $presensi,
@@ -328,6 +397,19 @@ class AbsensiController extends Controller
                     'jatah_cuti' => 12
                 ]);   
             }
+            $timezone = 'Asia/Jakarta'; 
+            $date = new DateTime('now', new DateTimeZone($timezone)); 
+            $tanggal = $date->format('Y-m-d');
+            $localtime = $date->format('H:i:s');
+            Pemberitahuan::create([
+                'id_admin' => Auth::user()->id_admin,
+                'email' => Auth::user()->email,
+                'judul' => 'Presensi Pulang',
+                'jenis' => 'Presensi Pulang',
+                'status' => 'Berhasil',
+                'tanggal' => $tanggal,
+                'jam' => $localtime
+            ]);
             return response()->json([
                 'data' => $dt,
                 'jatah_cuti' => $jatahcuti,
@@ -350,6 +432,19 @@ class AbsensiController extends Controller
     public function detailabsen($uid)
     {
        $detabsen = DB::table('absensipegawai')
+       ->where('uid' ,$uid)
+       ->get();
+       return response([
+           'data' => $detabsen,
+           'message' => 'get data berhasil',
+           'status' => true,
+       ]);
+
+    }
+    public function detailabsenpeg($uid)
+    {
+       $detabsen = DB::table('absensipegawai')
+       ->where('email', Auth::user()->email)
        ->where('uid' ,$uid)
        ->get();
        return response([

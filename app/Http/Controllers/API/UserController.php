@@ -19,6 +19,7 @@ use phpDocumentor\Reflection\Element;
 use App\Models\AkunPegawai;
 use App\Models\Bonus;
 use App\Models\DataPegawai;
+use App\Models\HariKerja;
 use App\Models\JamAbsen;
 use App\Models\Tunjangan;
 use Illuminate\Support\Carbon;
@@ -132,14 +133,16 @@ class UserController extends Controller
                 'password'  => $request->input('password'),
             ];
             if (Auth::guard('pegawai')->attempt($data)) {
-                $token = $user->createToken('auth_token')->plainTextToken;
-                $response = [
+                $namapt = User::where('id', $detail->id_admin)->pluck('nama_perusahaan');
+                $token = $user->createToken('auth_token');
+                return response()->json([
                     'success'   => true,
                     'user'      => $detail->makeHidden('password'),
+                    'namapt'    => $namapt,
                     'errors'    => null,
-                    'token'     => $token,
-                ];
-                return response($response, 201);
+                    'token'     => $token->plainTextToken,
+                    'expired_at' => $token->accessToken->expired_at
+                ], 201);
             }
             
             else {
@@ -227,7 +230,9 @@ class UserController extends Controller
             'jenis_potongan' => 'Tidak Ada Potongan',
             'nominal' => 0
         ]);
-
+        $harikerja = HariKerja::create([
+            'email_admin' => $user->email,
+        ]);
 
         $success = true;
         $message = 'User register successfully';
@@ -507,6 +512,38 @@ class UserController extends Controller
             'data' => $pegawai
         ]);
     }
+    public function getstatuspegawai()
+    {
+        $pegawai = DB::table('akunpegawai')
+        ->select('*')
+        ->where('id', Auth::user()->id)
+        ->first();
+
+        if($pegawai->status == "Tidak Aktif"){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unautorizhed',
+            ],401);
+        }
+        return response()->json([
+            'status' => true,
+            'message' => 'Ambil data berhasil',
+            'data' => $pegawai->status
+        ]);
+    }
+    public function getstatusadmin()
+    {
+        $admin = DB::table('users')
+        ->select('*')
+        ->where('id', Auth::user()->id)
+        ->first();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Ambil data berhasil',
+            'data' => $admin->status
+        ]);
+    }
     public function getakunAdmin()
     {
         $admin = DB::table('users')
@@ -537,7 +574,7 @@ class UserController extends Controller
         $pt = DB::table('users')
         ->select('*')
         ->where('id', Auth::user()->id_admin)
-        ->get();
+        ->pluck('nama_perusahaan');
 
         return response()->json([
             'status' => true,
@@ -550,6 +587,41 @@ class UserController extends Controller
         return response()->json([
             'data' => $ceking,
             'success' => true
+        ]);
+    }
+
+    public function profilepegawai(){
+        $profilecard = AkunPegawai::where('id', Auth::user()->id)->get();
+        $biodata = DB::table('pegawais')->where('email', Auth::user()->email)->get();
+        $jab = DB::table('pegawais')->where('email', Auth::user()->email)->pluck('id_jabatan');
+        $jabatan = DB::table('jabatan')->where('id',$jab)->pluck('jabatan')->toArray();
+        $gaji = DB::table('jabatan')->where('id',$jab)->pluck('gaji')->first();
+        $jabat = implode(',', $jabatan);
+        $cuti = DB::table('table_master_cuti_tahunan')->where('email', Auth::user()->email)->get();
+        return response()->json([
+            'success' => true,
+            'message' => 'Get data berhasil',
+            'profilecard' => $profilecard,
+            'jabatan' => $jabat,
+            'gaji' => $gaji,
+            'cuti' => $cuti,
+            'biodata' => $biodata
+        ]);
+    }
+    public function profileadmin(){
+        $main = User::where('id', Auth::user()->id)->get();
+        return response()->json([
+            'success' => true,
+            'message' => 'Get data berhasil',
+            'main'  => $main,
+        ]);
+    }
+    public function profilesuperadmin(){
+        $main = User::where('id', Auth::user()->id)->get();
+        return response()->json([
+            'success' => true,
+            'message' => 'Get data berhasil',
+            'main'  => $main,
         ]);
     }
 

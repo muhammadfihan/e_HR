@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Cuti;
 use App\Models\DataPegawai;
+use App\Models\Pemberitahuan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -122,10 +123,23 @@ class CutiController extends Controller
             // $hasil = DB::table('pegawais')->where('email', Auth::user()->email)->update([
             //     'jatah_cuti' => $total,
             // ]);
+            $timezone = 'Asia/Jakarta'; 
+            $date = new DateTime('now', new DateTimeZone($timezone)); 
+            $tanggal = $date->format('Y-m-d');
+            $localtime = $date->format('H:i:s');
+            Pemberitahuan::create([
+                'id_admin' => Auth::user()->id_admin,
+                'email' => Auth::user()->email,
+                'judul' => 'Pengajuan',
+                'jenis' => 'Pengajuan Cuti',
+                'status' => 'Menunggu Konfirmasi',
+                'tanggal' => $tanggal,
+                'jam' => $localtime
+            ]);
             return response()->json([
                 'data' => $cuti,
                 // 'jatah' => $hasil,
-                'message' =>'Jabatan successfully added',
+                'message' =>'Cuti successfully added',
                 'success' => true
     
                 ]);  
@@ -144,35 +158,178 @@ class CutiController extends Controller
                 'message' => 'Update Data Gagal!',
             ]);
         } else {
-            $status =  DB::table('cuti')->where('id', $request->id)->update([
-                'status_cuti' => $request->status_cuti,
-            ]);
+            // $status =  DB::table('cuti')->where('id', $request->id)->update([
+            //     'status_cuti' => $request->status_cuti,
+            // ]);
             $status2 =  DB::table('cuti')->where('id', $request->id)->first();
-            if($status2->status_cuti == "Diterima" ){
-                $tes = $status2->email;
-                $hari = $status2->jumlah_hari;
-                $update = DB::table('table_master_cuti_tahunan')->where('email','=', $tes)->first();
-                $jatah = $update->jumlah_cuti;
-                $hasil = $jatah - $hari;
-                $cutiterpakai = $update->cuti_terpakai + $hari;
-                $sisacuti = $jatah- $cutiterpakai;
-                $update2 = DB::table('table_master_cuti_tahunan')->where('email','=', $tes)->update([
+            if($status2->status_cuti == "Diproses" ){
+                $status =  DB::table('cuti')->where('id', $request->id)->update([
+                    'status_cuti' => $request->status_cuti,
+                ]);
+                if($request->status_cuti == "Diterima"){
+                    $tes = $status2->email;
+                    $hari = $status2->jumlah_hari;
+                    $update = DB::table('table_master_cuti_tahunan')->where('email','=', $tes)->first();
+                    $jatah = $update->jumlah_cuti;
+                    $hasil = $jatah - $hari;
+                    $cutiterpakai = $update->cuti_terpakai + $hari;
+                    $sisacuti = $jatah- $cutiterpakai;
+                    $update2 = DB::table('table_master_cuti_tahunan')->where('email','=', $tes)->update([
                     'sisa_cuti' => $sisacuti,
                     'cuti_terpakai' => $cutiterpakai
+                ]);
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $status2->email,
+                    'judul' => 'Approvement Cuti ',
+                    'jenis' => 'Approvement',
+                    'status' => 'Diterima',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
                 ]);
                 return response()->json([
                     'hasil' => $hasil,
                     'hasil2' => $update2,
                     'data' => $status,
+                    'datacuti' => $status2,
                     'success' => true,
-                    'message' => 'Update Status Berhasil!',
+                    'message' => 'Diterima masih pengajuan awal!',
                 ]);
-            }else{
+                }else{
+                    $timezone = 'Asia/Jakarta'; 
+                    $date = new DateTime('now', new DateTimeZone($timezone)); 
+                    $tanggal = $date->format('Y-m-d');
+                    $localtime = $date->format('H:i:s');
+                    Pemberitahuan::create([
+                        'id_admin' => Auth::user()->id,
+                        'email' => $status2->email,
+                        'judul' => 'Approvement Cuti ',
+                        'jenis' => 'Approvement',
+                        'status' => 'Ditolak',
+                        'tanggal' => $tanggal,
+                        'jam' => $localtime
+                    ]);
+                    return response()->json([
+                        'data' => $status,
+                        'success' => true,
+                        'message' => 'Ditolak pengajuan awal!',
+                    ]);
+                }
+            }
+            if($status2->status_cuti == "Ditolak" ){
+                $status =  DB::table('cuti')->where('id', $request->id)->update([
+                    'status_cuti' => $request->status_cuti,
+                ]);
+                if($request->status_cuti == "Diterima"){
+                    $tes = $status2->email;
+                    $hari = $status2->jumlah_hari;
+                    $update = DB::table('table_master_cuti_tahunan')->where('email','=', $tes)->first();
+                    $jatah = $update->jumlah_cuti;
+                    $hasil = $jatah - $hari;
+                    $cutiterpakai = $update->cuti_terpakai + $hari;
+                    $sisacuti = $jatah- $cutiterpakai;
+                    $update2 = DB::table('table_master_cuti_tahunan')->where('email','=', $tes)->update([
+                        'sisa_cuti' => $sisacuti,
+                        'cuti_terpakai' => $cutiterpakai
+                    ]);
+                    $timezone = 'Asia/Jakarta'; 
+                    $date = new DateTime('now', new DateTimeZone($timezone)); 
+                    $tanggal = $date->format('Y-m-d');
+                    $localtime = $date->format('H:i:s');
+                    Pemberitahuan::create([
+                        'id_admin' => Auth::user()->id,
+                        'email' => $status2->email,
+                        'judul' => 'Approvement Cuti ',
+                        'jenis' => 'Approvement',
+                        'status' => 'Diterima',
+                        'tanggal' => $tanggal,
+                        'jam' => $localtime
+                    ]);
+                    return response()->json([
+                        'hasil' => $hasil,
+                        'hasil2' => $update2,
+                        'data' => $status,
+                        'success' => true,
+                        'message' => 'Diterima Setelah Di Acc',
+                    ]);
+                }
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $status2->email,
+                    'judul' => 'Approvement Cuti ',
+                    'jenis' => 'Approvement',
+                    'status' => 'Ditolak',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
                 return response()->json([
                     'data' => $status,
                     'success' => true,
-                    'message' => 'Ditolak!',
+                    'message' => 'Ditolak setelah di acc',
                 ]);
+            }
+            if($status2->status_cuti == "Diterima" ){
+                $status =  DB::table('cuti')->where('id', $request->id)->update([
+                    'status_cuti' => $request->status_cuti,
+                ]);
+                if($request->status_cuti == "Ditolak"){
+                    $tes = $status2->email;
+                    $hari = $status2->jumlah_hari;
+                    $update = DB::table('table_master_cuti_tahunan')->where('email','=', $tes)->first();
+                    $jatah = $update->jumlah_cuti;
+                    $cutiterpakai = $update->cuti_terpakai - $hari;
+                    $sisacuti = $update->sisa_cuti + $hari;
+                    $update2 = DB::table('table_master_cuti_tahunan')->where('email','=', $tes)->update([
+                        'sisa_cuti' => $sisacuti,
+                        'cuti_terpakai' => $cutiterpakai
+                    ]);
+                    $timezone = 'Asia/Jakarta'; 
+                    $date = new DateTime('now', new DateTimeZone($timezone)); 
+                    $tanggal = $date->format('Y-m-d');
+                    $localtime = $date->format('H:i:s');
+                    Pemberitahuan::create([
+                        'id_admin' => Auth::user()->id,
+                        'email' => $status2->email,
+                        'judul' => 'Approvement Cuti ',
+                        'jenis' => 'Approvement',
+                        'status' => 'Ditolak',
+                        'tanggal' => $tanggal,
+                        'jam' => $localtime
+                    ]);
+                    return response()->json([
+                        'hasil2' => $update2,
+                        'data' => $status,
+                        'success' => true,
+                        'message' => 'Ditolak Setelah Diterima',
+                    ]);
+                }
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $status2->email,
+                    'judul' => 'Approvement Cuti ',
+                    'jenis' => 'Approvement',
+                    'status' => 'Diterima',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
+                return response()->json([
+                    'data' => $status,
+                    'success' => true,
+                    'message' => 'Diterima setelah diterima',
+                ]);
+               
             }
            
         }
@@ -208,7 +365,19 @@ class CutiController extends Controller
                     'keterangan' => $request->keterangan,
                     'bukti_cuti' => $filename
                 ]);
-    
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id_admin,
+                    'email' => Auth::user()->email,
+                    'judul' => 'Update Pengajuan Cuti ',
+                    'jenis' => 'Pengajuan Cuti',
+                    'status' => 'Berhasil',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
                 return response()->json([
                     'data' => $update,
                     'success' => true,
@@ -223,6 +392,19 @@ class CutiController extends Controller
     {
         $cuti = Cuti::findOrFail($id);
         $cuti->delete();
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
+        $localtime = $date->format('H:i:s');
+        Pemberitahuan::create([
+            'id_admin' => Auth::user()->id_admin,
+            'email' => Auth::user()->email,
+            'judul' => 'Hapus Pengajuan Cuti ',
+            'jenis' => 'Pengajuan Cuti',
+            'status' => 'Berhasil',
+            'tanggal' => $tanggal,
+            'jam' => $localtime
+        ]);
         return response()->json([
             'success' => true,
             'message' => 'Hapus data berhasil'

@@ -60,7 +60,7 @@
 									</table>
 									<table style="width: 650px; margin: 0 auto; background-color: #fff; border-radius: 8px">
 										<tbody>
-											<tr>
+											<tr style="text-align: center">
 												<td style="padding: 30px">
 													Anda Akan Mereset Password Admin</br></br>
 													<p>Halo {{ $data['email'] }}</p>

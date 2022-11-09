@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Pemberitahuan;
 use Carbon\Carbon;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Mail\SendGaji;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Penggajian;
 use App\Models\Gaji;
@@ -16,13 +21,77 @@ use App\Models\RiwayatGaji;
 class DataGajiController extends Controller
 {
     public function sudahisi(Request $request){
-        $sudah = Gaji::where('id_admin' ,Auth::user()->id)->get();
+        $sudah = Gaji::where('id_admin' ,Auth::user()->id)->get()->toArray();
+        $email = Gaji::where('id_admin' ,Auth::user()->id)->pluck('email');
+        $jabatan = Gaji::where('id_admin' ,Auth::user()->id)->pluck('id_jabatan');
             return response([
                 'data' => $sudah,
+                'email' => $email,
+                'jabatan' => $jabatan,
                 'message' => 'get data berhasil',
                 'status' => true,
             ]);
        
+    }
+    public function cairgaji(Request $request){
+        $validate = Validator::make($request->all(), [
+            'status' => 'required',
+         ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pencairan Gaji Gagal!',
+            ]);
+        } else {
+            $status =  DB::table('riwayatgaji')->where('id', $request->id)->update([
+                'status' => $request->status,
+            ]);
+            $hasil = DB::table('riwayatgaji')->where('id', $request->id)->first();
+            $akun = DB::table('pegawais')->where('email', $hasil->email)->first();
+            $infopt = DB::table('users')->where('id', $akun->id_admin)->first();
+
+            $data = [
+                'namapt' => $infopt->nama_perusahaan,
+                'kota' => $infopt->kota,
+                'detalamat' => $infopt->det_alamat,
+                'nama' => $akun->nama_lengkap,
+                'nopegawai' => $akun->no_pegawai,
+                'judul' => "Pencairan Gaji",
+                'email' => $hasil->email,
+                'gajibersih' => $hasil->gaji_bersih,
+                'gajipokok' => $hasil->gaji_pokok,
+                'gajikotor' => $hasil->gaji_kotor,
+                'bonus' => explode(',', $hasil->bonus),
+                'nombon' => explode(',', $hasil->nominal_bonus),
+                'tunjangan' => explode(',', $hasil->tunjangan),
+                'nomtun' => explode(',', $hasil->nominal_tunjangan),
+                'potongan' => explode(',', $hasil->potongan),
+                'nompot' => explode(',', $hasil->nominal_potongan),
+                'totalpotongan' => $hasil->total_potongan,
+                'tanggal' => $hasil->tanggal_ambil
+            ];
+            $timezone = 'Asia/Jakarta'; 
+            $date = new DateTime('now', new DateTimeZone($timezone)); 
+            $tanggal = $date->format('Y-m-d');
+            $localtime = $date->format('H:i:s');
+            Pemberitahuan::create([
+                'id_admin' => Auth::user()->id,
+                'email' => $akun->email,
+                'judul' => 'Pencairan Gaji ',
+                'jenis' => 'Penggajian',
+                'status' => 'Berhasil Cair',
+                'tanggal' => $tanggal,
+                'jam' => $localtime
+            ]);
+            Mail::to($hasil->email)->send(new SendGaji($data));
+            return response()->json([
+                'data' => $status,
+                'cair' => $hasil,
+                'success' => true,
+                'message' => 'Gaji Telah Cair!',
+            ]);
+        }
     }
     public function getEmail(Request $request)
     {
@@ -30,7 +99,7 @@ class DataGajiController extends Controller
         return response()->json($data);
     }
     public function riwayatgaji(Request $request){
-        $riwayat = RiwayatGaji::where('id_admin' ,Auth::user()->id)->where('status','=',"Sudah Diambil")->latest()->paginate(8);
+        $riwayat = RiwayatGaji::where('id_admin' ,Auth::user()->id)->where('status','=',"Belum Cair")->latest()->paginate(8);
             return response([
                 'data' => $riwayat,
                 'message' => 'get data berhasil',
@@ -66,7 +135,16 @@ class DataGajiController extends Controller
 
     }
     public function riwayatgajipeg(Request $request){
-        $riwayat = RiwayatGaji::where('email' ,Auth::user()->email)->latest()->paginate(8);
+        $riwayat = RiwayatGaji::where('email' ,Auth::user()->email)->where('status','!=','Belum Diambil')->latest()->paginate(8);
+            return response([
+                'data' => $riwayat,
+                'message' => 'get data berhasil',
+                'status' => true,
+            ]);
+       
+    }
+    public function riwayatfinal(Request $request){
+        $riwayat = RiwayatGaji::where('email' ,Auth::user()->email)->where('status','=','Cair')->latest()->paginate(8);
             return response([
                 'data' => $riwayat,
                 'message' => 'get data berhasil',
@@ -288,6 +366,19 @@ class DataGajiController extends Controller
                 'tanggal_ambil' => Carbon::now(),
                 'id_golongan' => $request->id_golongan,
             ]);
+            $timezone = 'Asia/Jakarta'; 
+            $date = new DateTime('now', new DateTimeZone($timezone)); 
+            $tanggal = $date->format('Y-m-d');
+            $localtime = $date->format('H:i:s');
+            Pemberitahuan::create([
+                'id_admin' => Auth::user()->id,
+                'email' => $buatgaji2->email,
+                'judul' => 'Gaji Anda Telah Dibuat',
+                'jenis' => 'Penggajian',
+                'status' => 'Belum Diambil',
+                'tanggal' => $tanggal,
+                'jam' => $localtime
+            ]);
                 return response()->json([
                     'data' => $buatgaji,
                     'riwayat' => $buatgaji2,
@@ -418,8 +509,17 @@ class DataGajiController extends Controller
     ]);
 
     }
+    public function countgaji(){
+        $gajipeg = Penggajian::where('email' ,Auth::user()->email)->where('status','=','Belum Diambil')->latest()->get();
+        $count = $gajipeg->count();
+        return response()->json([
+            'data' => $count
+        ]);
+    }
     public function gajipegawai(){
-        $gajipeg = Penggajian::where('email' ,Auth::user()->email)->latest()->get();
+        $gajipeg = Penggajian::where('email' ,Auth::user()->email)->where('status','=','Belum Diambil')->latest()->get();
+        $gajipeg2 = Penggajian::where('email' ,Auth::user()->email)->where('status','=','Belum Diambil')->latest()->get()->toArray();
+        if($gajipeg2 != null){
             foreach($gajipeg as $i => $tes){
                 $tun[$i] = explode(',', $tes->id_tunjangan);
                 foreach($tun[$i] as $index => $row){ 
@@ -490,6 +590,7 @@ class DataGajiController extends Controller
             'message' => 'get data berhasil',
             'status' => true
         ]);    
+        }
     }
     public function detgajipeg($id){
         $detgaji = DB::table('penggajian')
@@ -585,7 +686,7 @@ class DataGajiController extends Controller
            $confirm = DB::table('penggajian')->where('id', $request->id)->update([
                 'status' => $request->status,
             ]);
-            if($confirm = 'Sudah Diambil'){
+            if($confirm = 'Belum Cair'){
                 $detgaji = DB::table('penggajian')
                 ->where('id' ,$request->id)
                 ->get()->toArray();
@@ -667,11 +768,23 @@ class DataGajiController extends Controller
                     'gaji_kotor'=> implode(",", $subtotal[$key]),
                     'gaji_bersih' => implode(",", $akhir[$key]),
                     'gaji_pokok' => implode(",", $arrjab[$a]),
-                    'status' => 'Sudah Diambil'
+                    'status' => 'Belum Cair'
 
 
                 ]);
-
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id_admin,
+                    'email' => Auth::user()->email,
+                    'judul' => 'Pengajuan Pengambilan Gaji ',
+                    'jenis' => 'Penggajin',
+                    'status' => 'Menunggu Cair',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
                 return response()->json([
                     'data' => $confirm,
                     'riwayat' => $riwayat,

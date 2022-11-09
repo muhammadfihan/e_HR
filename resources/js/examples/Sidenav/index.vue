@@ -25,7 +25,7 @@
         aria-hidden="true"
         id="iconSidenav"
       ></i>
-      <a class="m-0 navbar-brand" v-for="data in infopt" :key="data.id" >
+      <a class="m-0 navbar-brand" >
         <img
           :src="
             this.$store.state.darkMode ||
@@ -36,16 +36,38 @@
           class="navbar-brand-img h-100"
           alt="main_logo"
         />
-        <span class="ms-2 font-weight-bold me-2" >{{data.nama_perusahaan}}</span>
+        <span class="ms-2 font-weight-bold me-2" >{{nama_perusahaan}}</span>
       </a>
     </div>
+
+    <div class="sidenav-header" v-if="role == 'Pegawai'">
+      <i
+        class="top-0 p-3 cursor-pointer fas fa-times text-secondary opacity-5 position-absolute end-0 d-none d-xl-none"
+        aria-hidden="true"
+        id="iconSidenav"
+      ></i>
+      <a class="m-0 navbar-brand">
+        <img
+          :src="
+            this.$store.state.darkMode ||
+            this.$store.state.sidebarType === 'bg-default'
+              ? logoWhite
+              : logo
+          "
+          class="navbar-brand-img h-100"
+          alt="main_logo"
+        />
+        <span class="ms-2 font-weight-bold me-2" >{{namapt}}</span>
+      </a>
+    </div>
+    
     <div class="sidenav-header" v-if="role == 'Manager'">
       <i
         class="top-0 p-3 cursor-pointer fas fa-times text-secondary opacity-5 position-absolute end-0 d-none d-xl-none"
         aria-hidden="true"
         id="iconSidenav"
       ></i>
-      <a class="m-0 navbar-brand" v-for="data in superadmindata" :key="data.id">
+      <a class="m-0 navbar-brand" >
         <img
           :src="
             this.$store.state.darkMode ||
@@ -56,7 +78,7 @@
           class="navbar-brand-img h-100"
           alt="main_logo"
         />
-        <span class="ms-2 font-weight-bold me-2" >{{data.nama_perusahaan}}</span>
+        <span class="ms-2 font-weight-bold me-2" >{{nama_perusahaan}}</span>
       </a>
     </div>
     <hr class="mt-0 horizontal dark" />
@@ -76,6 +98,7 @@ export default {
   data() {
     return {
       infopt:[],
+      infoptpeg:[],
       logo,
       superadmindata:[],
       logoWhite,
@@ -83,29 +106,18 @@ export default {
       loggedIn: localStorage.getItem("loggedIn"),
       token: localStorage.getItem("token"),
       name: localStorage.getItem("name"),
-      role: localStorage.getItem("role")
+      role: localStorage.getItem("role"),
+      nama_perusahaan: localStorage.getItem("nama_perusahaan"),
+      namapt: localStorage.getItem("namapt")
     };
   },
   created(){
 
   }, 
   methods:{
-    superadmin(){
+    ptinfopeg(){
       this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/superadmin',{
-                headers: {Authorization: "Bearer " + this.token},
-            })
-                .then(response => {
-                    this.superadmindata = response.data.data;
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        })
-    },
-    ptinfo(){
-      this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/infopt',{
+            this.$axios.get('/api/infoptpeg',{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
@@ -118,8 +130,9 @@ export default {
     }  
   },
   mounted(){
-    this.ptinfo()
-    this.superadmin()
+    // this.ptinfopeg()
+    // this.ptinfo()
+    // this.superadmin()
   },
   props: ["custom_class", "layout"],
 

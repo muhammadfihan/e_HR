@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pemberitahuan;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -91,6 +94,19 @@ class ReqAbsenController extends Controller
             ]);
             $reqabsen->save();
             $success = true;
+            $timezone = 'Asia/Jakarta'; 
+            $date = new DateTime('now', new DateTimeZone($timezone)); 
+            $tanggal = $date->format('Y-m-d');
+            $localtime = $date->format('H:i:s');
+            Pemberitahuan::create([
+                'id_admin' => Auth::user()->id_admin,
+                'email' => Auth::user()->email,
+                'judul' => 'Pengajuan Request Attendance',
+                'jenis' => 'Request Absensi',
+                'status' => 'Menunggu Dikonfirmasi',
+                'tanggal' => $tanggal,
+                'jam' => $localtime
+            ]);
             return response()->json([
                 'data' => $reqabsen,
                 'message' =>'Izin successfully added',
@@ -112,38 +128,135 @@ class ReqAbsenController extends Controller
                 'message' => 'Update Data Gagal!',
             ]);
         } else {
-            $jam = DB::table('jamabsen')->where('id_admin', Auth::user()->id)->first();
-            $status =  DB::table('reqabsen')->where('id', $request->id)->update([
-                'status_req' => $request->status_req,
-            ]);
-            $inputabsen = DB::table('reqabsen')->where('id', $request->id)->first();
-            if($inputabsen == "Ditolak"){
+            $status2 =  DB::table('reqabsen')->where('id', $request->id)->first();
+
+            if($status2->status_req == "Diproses"){
+                $status =  DB::table('reqabsen')->where('id', $request->id)->update([
+                    'status_req' => $request->status_req,
+                ]);
+                if($request->status_req == "Ditolak"){
+                    $timezone = 'Asia/Jakarta'; 
+                    $date = new DateTime('now', new DateTimeZone($timezone)); 
+                    $tanggal = $date->format('Y-m-d');
+                    $localtime = $date->format('H:i:s');
+                    Pemberitahuan::create([
+                        'id_admin' => Auth::user()->id,
+                        'email' => $status2->email,
+                        'judul' => 'Approvement Request Attendance',
+                        'jenis' => 'Request Absensi',
+                        'status' => 'Ditolak',
+                        'tanggal' => $tanggal,
+                        'jam' => $localtime
+                    ]);
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Ditolak pengajuan awal',
+                    ]);
+                }
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $status2->email,
+                    'judul' => 'Approvement Request Attendance',
+                    'jenis' => 'Request Absensi',
+                    'status' => 'Diterima',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
                 return response()->json([
+                    'data' => $status,
                     'success' => true,
-                    'message' => 'Ditolak',
+                    'message' => 'Update Diterima pengajuan awal!',
                 ]);
             }
-            $absen = Absensi::create([
-                        'id' => $inputabsen->id,
-                        'email' => $inputabsen->email,
-                        'id_admin' => $inputabsen->id_admin,
-                        'name' => $inputabsen->name,
-                        'nama_lengkap' => $inputabsen->name,
-                        'selfie_masuk' => 0,
-                        'tanggal' => $inputabsen->tanggal_req,
-                        'jam_masuk' => 0,
-                        'jam_pulang' => 0,
-                        'jam_kerja' => date('H:i:s', strtotime($jam->jam_pulang) - strtotime($jam->jam_masuk)),
-                        'keterangan' => 'Request Attendance',
-                        'lokasi' => 0
+            if($status2->status_req == "Diterima"){
+                $status =  DB::table('reqabsen')->where('id', $request->id)->update([
+                    'status_req' => $request->status_req,
+                ]);
+                if($request->status_req == "Ditolak"){
+                    $timezone = 'Asia/Jakarta'; 
+                    $date = new DateTime('now', new DateTimeZone($timezone)); 
+                    $tanggal = $date->format('Y-m-d');
+                    $localtime = $date->format('H:i:s');
+                    Pemberitahuan::create([
+                        'id_admin' => Auth::user()->id,
+                        'email' => $status2->email,
+                        'judul' => 'Approvement Request Attendance',
+                        'jenis' => 'Request Absensi',
+                        'status' => 'Ditolak',
+                        'tanggal' => $tanggal,
+                        'jam' => $localtime
                     ]);
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Ditolak setelah diterima',
+                    ]);
+                }
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $status2->email,
+                    'judul' => 'Approvement Request Attendance',
+                    'jenis' => 'Request Absensi',
+                    'status' => 'Diterima',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Diterima setelah diterima',
+                ]);
+            }
+            if($status2->status_req == "Ditolak"){
+                $status =  DB::table('reqabsen')->where('id', $request->id)->update([
+                    'status_req' => $request->status_req,
+                ]);
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $status2->email,
+                    'judul' => 'Approvement Request Attendance',
+                    'jenis' => 'Request Absensi',
+                    'status' => 'Diterima',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
+                if($request->status_req == "Diterima"){
+                        return response()->json([
+                            'data' => $status,
+                            'success' => true,
+                            'message' => 'Update Diterima Setelah Ditolak!',
+                        ]);
+                }
+            }
+            $timezone = 'Asia/Jakarta'; 
+            $date = new DateTime('now', new DateTimeZone($timezone)); 
+            $tanggal = $date->format('Y-m-d');
+            $localtime = $date->format('H:i:s');
+            Pemberitahuan::create([
+                'id_admin' => Auth::user()->id,
+                'email' => $status2->email,
+                'judul' => 'Approvement Request Attendance',
+                'jenis' => 'Request Absensi',
+                'status' => 'Ditolak',
+                'tanggal' => $tanggal,
+                'jam' => $localtime
+            ]);
             return response()->json([
-                'tes' => $inputabsen,
-                'absen' => $absen,
                 'data' => $status,
                 'success' => true,
-                'message' => 'Update Status Berhasil!',
+                'message' => 'Update Ditolak Setelah Ditolak!',
             ]);
+
         }
     }
     public function updatereqabsen(Request $request){
@@ -168,7 +281,19 @@ class ReqAbsenController extends Controller
                     'alasan' => $request->alasan,
                     'bukti_pendukung' => $filename
                 ]);
-    
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id_admin,
+                    'email' => Auth::user()->email,
+                    'judul' => 'Update Pengajuan Request Attendance',
+                    'jenis' => 'Request Absensi',
+                    'status' => 'Berhasil',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
                 return response()->json([
                     'data' => $update,
                     'success' => true,
@@ -182,9 +307,37 @@ class ReqAbsenController extends Controller
     public function hapusreqabsen($uid){
         $data = ReqAbsen::findOrFail($uid);
         $data->delete();
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
+        $localtime = $date->format('H:i:s');
+        Pemberitahuan::create([
+            'id_admin' => Auth::user()->id_admin,
+            'email' => Auth::user()->email,
+            'judul' => 'Update Pengajuan Request Attendance',
+            'jenis' => 'Request Absensi',
+            'status' => 'Berhasil',
+            'tanggal' => $tanggal,
+            'jam' => $localtime
+        ]);
         return response()->json([
             'success' => true,
             'message' => 'Hapus data berhasil'
+        ]);
+    }
+
+    public function listreq(){
+        $list = ReqAbsen::where('email', Auth::user()->email)
+                ->where('status_req', '=', 'Diterima')
+                ->get();
+        $list2 = ReqAbsen::where('email', Auth::user()->email)
+                ->where('status_req', '=', 'Diterima')
+                ->count();
+        return response()->json([
+            'data' => $list,
+            'jmlh' => $list2,
+            'success' => true,
+            'message' => 'Get Data Berhasil'
         ]);
     }
 }

@@ -27,6 +27,7 @@
             <a
               href="#"
               @click="toggleSidebar"
+              v-click-outside="navbarMinimize"
               class="p-0 nav-link text-white"
               id="iconNavbarSidenav"
             >
@@ -89,6 +90,36 @@
                 </a>
               </li>
             </ul>
+            <ul v-if="role == 'Pegawai'"
+              class="dropdown-menu dropdown-menu-end" style="margin-top:10px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);"
+              aria-labelledby="dropdownMenuButton"
+            >
+              <li class="mb-2" @click="pegawaiprofile">
+                <a class="dropdown-item border-radius-md">
+                  <div class="py-1 d-flex">
+                    <div class="d-flex flex-column justify-content-center" >
+                      <h6 class="mb-1 text-sm font-weight-normal">
+                        <span><i class="far fa-user text-warning"></i></span>
+                        <span @click="pegawaiprofile" style="margin-left:5px; cursor: pointer;" class="font-weight-bold">Informasi Akun</span>
+                      </h6>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li class="mb-2" @click="logout">
+                <a class="dropdown-item border-radius-md">
+                  <div class="py-1 d-flex">
+                    <div class="d-flex flex-column justify-content-center">
+                     
+                      <h6 class="mb-1 text-sm font-weight-normal">
+                        <span><i class="fas fa-sign-out-alt text-primary"></i></span>
+                        <span style="margin-left:5px; cursor:pointer" class="font-weight-bold">Logout</span>
+                      </h6>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            </ul>
             <ul v-if="role == 'Manager'"
               class="dropdown-menu dropdown-menu-end" style="margin-top:10px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);"
               aria-labelledby="dropdownMenuButton"
@@ -127,10 +158,14 @@
 import Breadcrumbs from "../Breadcrumbs.vue";
 import { mapMutations, mapActions } from "vuex";
 import ArgonButton from "../../components/ArgonButton.vue";
+import ClickOutside from 'vue-click-outside'
 
 export default {
   components: {
     ArgonButton,
+  },
+  directives: {
+    ClickOutside
   },
   name: "navbar",
   data() {
@@ -192,10 +227,16 @@ export default {
         })
     },  
     adminprofile(){
-      this.$router.push({name: "Admin Profile"})
+      this.$router.push({name: "Profil Admin"})
+    },
+    pegawaiprofile(){
+      this.$router.push({name: "Profil Pegawai"})
     },
     superadminprofile(){
-      this.$router.push({name: "Superadmin Profile"})
+      this.$router.push({name: "Profil Superadmin"})
+    },
+    pegawaiprofile(){
+      this.$router.push({name: "Profil Pegawai"})
     },
     logout() {
       this.$axios.post('/api/logout', {
@@ -207,14 +248,17 @@ export default {
                         }
                     }).then((response) => {
                     localStorage.clear()
-                    return this.$router.push({ name: "/" });
+                    return this.$router.push('/login')
                 })
         },
-    ...mapMutations(["navbarMinimize", "toggleConfigurator"]),
-    ...mapActions(["toggleSidebarColor"]),
+    ...mapMutations(["navbarMinimize"]),
+    // ...mapActions(["toggleSidebarColor"]),
 
     toggleSidebar() {
-      this.toggleSidebarColor("bg-white");
+      // this.toggleSidebarColor("bg-white");
+      this.navbarMinimize();
+    },
+    hide () {
       this.navbarMinimize();
     }
   },

@@ -28,6 +28,9 @@ class DataPegawai extends Model
         'no_hp',
         'gender',
         'alamat',
+        'jenis_rek',
+        'no_rek',
+        'ttl'
     ];
 
     public function jabatan()

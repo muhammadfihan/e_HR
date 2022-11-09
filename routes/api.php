@@ -52,10 +52,14 @@ Route::post('lupa', [ForgotPasswordController::class, 'postEmail']);
 Route::post('submitlupa', [ForgotPasswordController::class, 'submitlupa']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('grafikadmin', [DashboardController::class, 'grafikadmin'])->middleware('role:Admin');
     Route::get('dashlaporan', [DashboardController::class, 'dashlaporan'])->middleware('role:Admin');
-    Route::get('dashakunpegawai', [DashboardController::class, 'dashakunpegawai'])->middleware('role:Admin');
+    Route::get('dashakunpegawai', [DashboardController::class, 'dashakunpegawai'])->middleware('role:Admin,Pegawai');
     Route::get('dashapprovement', [DashboardController::class, 'dashapprovement'])->middleware('role:Admin');
     Route::get('dashgaji', [DashboardController::class, 'dashgaji'])->middleware('role:Admin');
+    Route::get('cekabsen', [DashboardController::class, 'cekabsen'])->middleware('role:Admin,Pegawai');
+
+    Route::get('pemberitahuan', [DashboardController::class, 'pemberitahuan'])->middleware('role:Pegawai');
 
     Route::post('mastercutiperusahaan/add', [MasterCutiPerusahaanController::class, 'TambahCutiPerusahaan'])->middleware('role:Admin');
     Route::get('mastercutiperusahaan', [MasterCutiPerusahaanController::class, 'CutiPerusahan'])->middleware('role:Admin');
@@ -71,6 +75,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('hapusUser/{id}', [UserController::class, 'hapusUser'])->middleware('role:Manager,Admin');
     Route::get('getakun', [UserController::class, 'getakun'])->middleware('role:Admin,Pegawai');
     Route::get('ceking', [UserController::class, 'ceking'])->middleware('role:Admin,Pegawai');
+    Route::get('getstatuspegawai', [UserController::class, 'getstatuspegawai'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('getstatusadmin', [UserController::class, 'getstatusadmin'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('profilepegawai', [UserController::class, 'profilepegawai'])->middleware('role:Pegawai');
+    Route::get('profileadmin', [UserController::class, 'profileadmin'])->middleware('role:Admin');
+
+    Route::get('profilesuperadmin', [UserController::class, 'profilesuperadmin'])->middleware('role:Manager');
 
     Route::delete('hapusAdmin/{id}', [UserController::class, 'hapusAdmin'])->middleware('role:Manager,Admin');
 
@@ -86,12 +96,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('hapusakun/{id}', [SuperAdminController::class, 'hapusakun'])->middleware('role:Manager');
     Route::get('pegperusahaan/{id}', [SuperAdminController::class, 'pegperusahaan'])->middleware('role:Manager');
 
-    Route::get('infopt', [UserController::class, 'infopt'])->middleware('role:Admin,Pegawai');
-    Route::get('infoptpeg', [UserController::class, 'infoptpeg'])->middleware('role:Admin,Pegawai');
+    Route::get('infopt', [UserController::class, 'infopt'])->middleware('role:Admin');
+    Route::get('infoptpeg', [UserController::class, 'infoptpeg'])->middleware('role:Pegawai');
     Route::get('getakunAdmin', [UserController::class, 'getakunAdmin'])->middleware('role:Admin,Pegawai');
 
     Route::get('jabatan',[JabatanController::class, 'jabatan'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('alljabatan',[JabatanController::class, 'alljabatan'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('alljabatan2',[JabatanController::class, 'alljabatan2'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('alljabatansuperadmin',[JabatanController::class, 'alljabatansuperadmin'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('jabatanpaginate',[JabatanController::class, 'jabatanpaginate'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('jabatanpegawai',[JabatanController::class, 'jabatanpegawai'])->middleware('role:Manager,Admin,Pegawai');
@@ -107,11 +118,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('sudahisi',[DataGajiController::class, 'sudahisi'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('riwayatgaji',[DataGajiController::class, 'riwayatgaji'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('riwayatgajipeg',[DataGajiController::class, 'riwayatgajipeg'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('riwayatfinal',[DataGajiController::class, 'riwayatfinal'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('detailgaji/{id}',[DataGajiController::class, 'detailgaji'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('detriwayatgaji/{id}',[DataGajiController::class, 'detriwayatgaji'])->middleware('role:Manager,Admin,Pegawai');
 
     Route::post('ambilgaji',[DataGajiController::class, 'ambilgaji'])->middleware('role:Manager,Admin,Pegawai');
     Route::post('updategaji',[DataGajiController::class, 'updategaji'])->middleware('role:Manager,Admin,Pegawai');
+
+    Route::post('cairgaji',[DataGajiController::class, 'cairgaji'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('countgaji',[DataGajiController::class, 'countgaji'])->middleware('role:Pegawai');
 
     Route::get('gajipegawai',[DataGajiController::class, 'gajipegawai'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('detgajipeg/{id}',[DataGajiController::class, 'detgajipeg'])->middleware('role:Manager,Admin,Pegawai');
@@ -155,9 +170,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('tampilabsen', [AbsensiController::class, 'tampilabsen'])->middleware('role:Admin');
     Route::get('tampilpegawai', [AbsensiController::class, 'tampilpegawai'])->middleware('role:Pegawai');
     Route::get('detailabsen/{uid}', [AbsensiController::class, 'detailabsen'])->middleware('role:Manager,Admin');
+    Route::get('detailabsenpeg/{uid}', [AbsensiController::class, 'detailabsenpeg'])->middleware('role:Pegawai');
+    Route::get('getabsen', [AbsensiController::class, 'getabsen'])->middleware('role:Pegawai');
 
     Route::post('aturjamabsen', [JamAbsenController::class, 'aturjamabsen'])->middleware('role:Admin');
     Route::post('updateabsen', [JamAbsenController::class, 'updateabsen'])->middleware('role:Admin');
+    Route::get('tampilhari', [JamAbsenController::class, 'tampilhari'])->middleware('role:Admin,Pegawai');
     Route::get('tampil', [JamAbsenController::class, 'tampil'])->middleware('role:Admin,Pegawai');
     Route::get('tampiljampeg', [JamAbsenController::class, 'tampiljampeg'])->middleware('role:Admin,Pegawai');
 
@@ -173,6 +191,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('hapusizin/{id}', [IzinController::class, 'hapusizin'])->middleware('role:Admin,Pegawai');
 
     Route::get('allreq', [ReqAbsenController::class, 'allreq'])->middleware('role:Admin');
+    Route::get('listreq', [ReqAbsenController::class, 'listreq'])->middleware('role:Pegawai,Admin');
     Route::get('allreqpegawai', [ReqAbsenController::class, 'allreqpegawai'])->middleware('role:Admin,Pegawai');
     Route::post('ajukanreqabsen', [ReqAbsenController::class, 'ajukanreqabsen'])->middleware('role:Admin,Pegawai');
     Route::post('approvereqabsen', [ReqAbsenController::class, 'approvereqabsen'])->middleware('role:Admin,Pegawai');

@@ -90,7 +90,7 @@
 													Informasi Terkait Akun Anda</br></br>
 													<p>Halo {{ $data['email'] }}</p>
                                                    Berdasarkan pertimbangan kami, akun perusahaan anda telah :</br></br>
-													<h1><b style="color: red">Di{{ $data['hasil'] }}</b></h1>
+													<h1><b style="color: red">{{ $data['hasil'] }}</b></h1>
 													<h4>Terimakasih Atas Kerja Samanya</h4>
 												</td>
 											</tr>

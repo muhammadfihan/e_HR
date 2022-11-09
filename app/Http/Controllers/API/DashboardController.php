@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Absensi;
 use Carbon\Carbon;
+use DateTime;
+use DateTimeZone;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -99,4 +102,61 @@ class DashboardController extends Controller
             'message' => 'Get Data'
         ]);
     }
+    public function pemberitahuan(){
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
+        $data = DB::table('pemberitahuan')->where('email',Auth::user()->email)
+                ->where('tanggal', $tanggal)
+                ->latest()
+                ->get();
+                return response()->json([
+                    'data' => $data,
+                    'success' => true
+                ]);
+    }
+    public function grafikadmin(){
+        $tanggal = Carbon::now()->format('Y-m-d');
+        $ontime = DB::table('absensipegawai')
+        ->select('*')
+        ->where('id_admin', Auth::user()->id)
+        ->where('tanggal', $tanggal)
+        ->where('keterangan','=', 'On Time')
+        ->count();
+        $terlambat = DB::table('absensipegawai')
+        ->select('*')
+        ->where('id_admin', Auth::user()->id)
+        ->where('tanggal', $tanggal)
+        ->where('keterangan','=', 'Terlambat')
+        ->count();
+        $izin = DB::table('izin')
+        ->select('*')
+        ->where('id_admin', Auth::user()->id)
+        ->where('tanggal', $tanggal)
+        ->where('status_izin', '=', 'Diterima')
+        ->count();
+        $hadir = DB::table('absensipegawai')
+        ->select('*')
+        ->where('id_admin', Auth::user()->id)
+        ->where('tanggal', $tanggal)
+        ->count();
+        $data5 = DB::table('akunpegawai')
+        ->select('*')
+        ->where('id_admin', Auth::user()->id)
+        ->where('status','Aktif')
+        ->count();
+        $tidakhadir = $data5 - $hadir;
+        $final = [$hadir, $tidakhadir, $ontime, $terlambat, $izin];
+        return response()->json($final);
+    }
+
+    public function cekabsen(){
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
+        $cek = Absensi::where('email', Auth::user()->email)->where('tanggal', $tanggal)->first();
+        return response()->json([
+            'data' => $cek
+        ]);
+    }   
 }

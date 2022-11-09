@@ -174,9 +174,6 @@ export default {
   data() {
     return {
       infopt:[],
-      // aktif : [],
-			// tidak : [],
-			// semua : [],
       stats: {
         money: {
           title: "Jumlah Perusahaan",

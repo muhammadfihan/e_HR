@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('nama_lengkap')->nullable();
             $table->string('email')->unique();
             $table->string('pendidikan')->nullable();
+            $table->string('jenis_rek')->nullable();
+            $table->bigInteger('no_rek')->nullable();
             $table->integer('id_golongan')->unsigned()->nullable();
             $table->foreign('id_golongan')->references('id')->on('golongan');
             $table->integer('id_jabatan')->unsigned();
@@ -32,6 +34,7 @@ return new class extends Migration
             $table->integer('jumlah_kerja')->nullable();
             $table->integer('jatah_cuti')->nullable();
             $table->date('tanggal_masuk');
+            $table->date('ttl')->nullable();
             $table->enum('status', ['Aktif', 'Tidak Aktif'])->default('Aktif');
             $table->enum('gender',['Laki-Laki','Perempuan'])->nullable();
             $table->timestamp('email_verified_at')->nullable();

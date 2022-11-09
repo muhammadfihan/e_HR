@@ -27,10 +27,24 @@ class JabatanController extends Controller
             'status' => true
         ]);
     }
+    public function alljabatan2()
+    {
+        $jabatan = DB::table('jabatan')
+            ->select('*')
+            ->where('id_admin', Auth::user()->id)
+            ->where('deleted_at',null)
+            ->get();
+        return response([
+            'data' => $jabatan,
+            'message' => 'get data berhasil',
+            'status' => true
+        ]);
+    }
     public function alljabatansuperadmin()
     {
         $jabatan = DB::table('jabatan')
             ->select('*')
+            ->where('deleted_at',null)
             ->get();
         return response([
             'data' => $jabatan,
@@ -43,6 +57,7 @@ class JabatanController extends Controller
         $jabatan = DB::table('jabatan')
             ->select('*')
             ->where('id_admin', Auth::user()->id)
+            ->where('deleted_at',null)
             ->latest()
             ->paginate(8);
         return response([
@@ -56,6 +71,7 @@ class JabatanController extends Controller
             $result = DB::table('jabatan')
                 ->select('*')
                 ->where('jabatan.id_admin', Auth::user()->id)
+                ->where('deleted_at',null)
                 ->where('jabatan', 'like', '%' . $key . '%')
                 ->where('jabatan.id_admin', Auth::user()->id)
                 ->latest()

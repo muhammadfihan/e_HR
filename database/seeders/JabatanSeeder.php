@@ -18,31 +18,31 @@ class JabatanSeeder extends Seeder
         $jabatan =  [
             [
                 'id' => '1',
-                'id_admin' => '1',
+                'id_admin' => '2',
                 'jabatan' => 'Manager',
                 'gaji' => '8000000'
             ],
             [
                 'id' => '2',
-                'id_admin' => '1',
+                'id_admin' => '2',
                 'jabatan' => 'Admin HRD',
                 'gaji' => '5000000'
             ],
             [
                 'id' => '3',
-                'id_admin' => '1',
+                'id_admin' => '2',
                 'jabatan' => 'HRD',
                 'gaji' => '5000000'
             ],
             [
                 'id' => '4',
-                'id_admin' => '1',
+                'id_admin' => '2',
                 'jabatan' => 'Staff HRD',
                 'gaji' => '4500000'
             ],
             [
                 'id' => '5',
-                'id_admin' => '1',
+                'id_admin' => '2',
                 'jabatan' => 'Programmer',
                 'gaji' => '10000000'
             ],

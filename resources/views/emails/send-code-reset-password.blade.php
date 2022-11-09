@@ -60,8 +60,8 @@
 									</table>
 									<table style="width: 650px; margin: 0 auto; background-color: #fff; border-radius: 8px">
 										<tbody>
-											<tr>
-												<td style="padding: 30px">
+											<tr style="text-align:center">
+												<td style="padding: 30px;">
 													Anda Akan Mereset Password </br></br>
 													<p>Halo {{ $data['email'] }}</p>
                                                    Code Anda Adalah : </br></br>

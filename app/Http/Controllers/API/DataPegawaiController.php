@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\DataPegawai;
 use App\Models\Gaji;
 use App\Models\Pegawai;
+use App\Models\Pemberitahuan;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +32,8 @@ class DataPegawaiController extends Controller
             'no_ktp' => 'required|bigInteger',
             'gender' => 'required|string',
             'alamat' => 'required|string',
+            'jenis_rek' => 'required|string',
+            'no_rek' => 'required|string',
         ];
 
         $huruf = "1234567890";
@@ -46,7 +51,9 @@ class DataPegawaiController extends Controller
             'gender' => $request->gender,
             'golongan' => $request->Auth::user()->golongan,
             'pendidikan' => $request->pendidikan,
-            'alamat' => $request->alamat
+            'alamat' => $request->alamat,
+            'jenis_rek' => $request->jenis_rek,
+            'no_rek' => $request->no_rek,
         ]);
         $datagaji = Gaji::create([
             'no_pegawai' => Auth::user()->no_pegawai,
@@ -231,6 +238,9 @@ class DataPegawaiController extends Controller
                 'no_ktp' => 'required',
                 'gender' => 'required',
                 'alamat' => 'required',
+                'jenis_rek' => 'required',
+                'no_rek' => 'required',
+                'ttl' => 'required'
              ]);
     
             if ($validate->fails()) {
@@ -246,6 +256,9 @@ class DataPegawaiController extends Controller
                     'no_ktp' => $request->no_ktp,
                     'gender' => $request->gender,
                     'alamat' => $request->alamat,
+                    'jenis_rek' => $request->jenis_rek,
+                    'no_rek' => $request->no_rek,
+                    'ttl' => $request->ttl,
                 ]);
                 $nopegawai  = DB::table('pegawais')->where('id', Auth::user()->id)
                 ->pluck('no_pegawai')
@@ -257,6 +270,9 @@ class DataPegawaiController extends Controller
                     'no_ktp' => $request->no_ktp,
                     'gender' => $request->gender,
                     'alamat' => $request->alamat,
+                    'jenis_rek' => $request->jenis_rek,
+                    'no_rek' => $request->no_rek,
+                    'ttl' => $request->ttl,
                 ]);
                 $jam_kerja  = DB::table('pegawais')->where('id', Auth::user()->id)
                 ->pluck('jam_kerja')
@@ -270,6 +286,8 @@ class DataPegawaiController extends Controller
                         'no_ktp' => $request->no_ktp,
                         'gender' => $request->gender,
                         'alamat' => $request->alamat,
+                        'jenis_rek' => $request->jenis_rek,
+                        'no_rek' => $request->no_rek,
                     ]);
                     DB::table('datagaji')->where('id', Auth::user()->id)->update([
                         'nama_lengkap' => $request->nama_lengkap,
@@ -288,6 +306,19 @@ class DataPegawaiController extends Controller
                     'id_golongan' => Auth::user()->id_golongan,
                 ]);
                 }
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id_admin,
+                    'email' => Auth::user()->email,
+                    'judul' => 'Update Profil ',
+                    'jenis' => 'Update Data',
+                    'status' => 'Berhasil',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
                 return response()->json([
                     'data' => $data,
                     'datagaji' => $gaji,

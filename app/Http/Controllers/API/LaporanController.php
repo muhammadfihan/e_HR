@@ -5,6 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Laporan;
 use App\Models\DataPegawai;
+use App\Models\Pemberitahuan;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -83,6 +86,19 @@ class LaporanController extends Controller
             'deskripsi' => $request->deskripsi,
             'lampiran' => $filename,
         ]);
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
+        $localtime = $date->format('H:i:s');
+        Pemberitahuan::create([
+            'id_admin' => Auth::user()->id_admin,
+            'email' => Auth::user()->email,
+            'judul' => 'Pengajuan laporan ',
+            'jenis' => 'Laporan',
+            'status' => 'Menunggu Konfirmasi',
+            'tanggal' => $tanggal,
+            'jam' => $localtime
+        ]);
         $laporan->save();
         $success = true;
         return response()->json([
@@ -107,7 +123,20 @@ class LaporanController extends Controller
             $status =  DB::table('laporan')->where('id', $request->id)->update([
                 'status_laporan' => $request->status_laporan,
             ]);
-
+            $email = DB::table('laporan')->where('id', $request->id)->first();
+            $timezone = 'Asia/Jakarta'; 
+            $date = new DateTime('now', new DateTimeZone($timezone)); 
+            $tanggal = $date->format('Y-m-d');
+            $localtime = $date->format('H:i:s');
+            Pemberitahuan::create([
+                'id_admin' => Auth::user()->id,
+                'email' => $email->email,
+                'judul' => 'Approvement Laporan',
+                'jenis' => 'Laporan',
+                'status' => $request->input('status_laporan'),
+                'tanggal' => $tanggal,
+                'jam' => $localtime
+            ]);
             return response()->json([
                 'data' => $status,
                 'success' => true,
@@ -137,11 +166,23 @@ class LaporanController extends Controller
                     'deskripsi' => $request->deskripsi,
                     'lampiran' => $filename
                 ]);
-    
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id_admin,
+                    'email' => Auth::user()->email,
+                    'judul' => 'Update Pengajuan Laporan',
+                    'jenis' => 'Laporan',
+                    'status' => 'Berhasil',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
                 return response()->json([
                     'data' => $update,
                     'success' => true,
-                    'message' => 'Update Cuti Berhasil!',
+                    'message' => 'Update Laporan Berhasil!',
                 ]);
             }
             
@@ -152,6 +193,19 @@ class LaporanController extends Controller
     {
         $laporan = Laporan::findOrFail($id);
         $laporan->delete();
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
+        $localtime = $date->format('H:i:s');
+        Pemberitahuan::create([
+            'id_admin' => Auth::user()->id_admin,
+            'email' => Auth::user()->email,
+            'judul' => 'Menghapus Laporan',
+            'jenis' => 'Laporan',
+            'status' => 'Berhasil',
+            'tanggal' => $tanggal,
+            'jam' => $localtime
+        ]);
         return response()->json([
             'success' => true,
             'message' => 'Hapus data berhasil'

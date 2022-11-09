@@ -43,7 +43,10 @@ export default {
         return {
             token: localStorage.getItem("token"),
             status: localStorage.getItem("status"),
+            role: localStorage.getItem("role"),
             exp: localStorage.getItem("expired_at"),
+            statuspegawai: [],
+            statusadmindat: [],
             loggedIn: null,
             statusPage: null
         };
@@ -54,16 +57,51 @@ export default {
     Navbar,
   },
   methods: {
+    getstatuspegawai(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/getstatuspegawai',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.statuspegawai = response.data.data;
+                    if(this.statuspegawai == "Tidak Aktif"){
+                      localStorage.removeItem("token")
+                    }
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+    },
+    getstatusadmin(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/getstatusadmin',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.statusadmindat = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+    },
+    statuspeg(){
+      if(this.loggedIn !== null && this.role == "Pegawai"){
+        this.getstatuspegawai()
+      }else{
+        return
+      }
+    },
+    statusadmin(){
+      if(this.loggedIn !== null && this.role == "Admin"){
+        this.getstatusadmin()
+      }else{
+        return
+      }
+    },
     getLoggedIn() {
             this.loggedIn = localStorage.getItem("token");
-            // if (window.localStorage.getItem("role") == 'Admin') {
-            //     return this.$router.push({ name: "Dashboard" });
-            // }if (window.localStorage.getItem("role") == 'Manager') {
-            //     return this.$router.push({ name: "DashboardSuperadmin" });
-            // }if (window.localStorage.getItem("role") == 'Pegawai') {
-            //     return this.$router.push({ name: "DashboardPegawai" });
-            // }
-
         },
       ceking(){
         
@@ -108,6 +146,8 @@ export default {
   mounted(){
     this.getLoggedIn()
     this.ceking()
+    this.statusadmin()
+    this.statuspeg()
   },
   created(){
     this.$axios.interceptors.response.use(function (response) {
@@ -119,10 +159,10 @@ export default {
     }
     return Promise.reject(error);
   });
-  
   },
   beforeMount() {
-    this.$store.state.isTransparent = "bg-transparent";
-  },
+        this.$store.state.isTransparent = "bg-transparent";
+
+    },
 };
 </script>

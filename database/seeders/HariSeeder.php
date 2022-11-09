@@ -18,31 +18,31 @@ class HariSeeder extends Seeder
         $hari =  [
             [
               'id' => '1',
-              'hari' => 'Sunday',
+              'hari' => 'Minggu',
             ],
             [
                 'id' => '2',
-                'hari' => 'Monday',
+                'hari' => 'Senin',
             ],
             [
                 'id' => '3',
-                'hari' => 'Tuesday',
+                'hari' => 'Selasa',
             ],
             [
                 'id' => '4',
-                'hari' => 'Wednesday',
+                'hari' => 'Rabu',
             ],
             [
                 'id' => '5',
-                'hari' => 'Thursday',
+                'hari' => 'Kamis',
             ],
             [
                 'id' => '6',
-                'hari' => 'Friday',
+                'hari' => 'Jumat',
             ],
             [
                 'id' => '7',
-                'hari' => 'Saturday',
+                'hari' => 'Sabtu',
             ],
 
           ];

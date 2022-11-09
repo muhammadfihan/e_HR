@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="row">
-          <div class="col-lg-3 col-md-6 col-12">
+          <div class="col-lg-4 col-md-6 col-12">
             <card
               :title="stats.money.title"
               :value="stats.money.value"
@@ -14,7 +14,7 @@
               directionReverse
             ></card>
           </div>
-          <div class="col-lg-3 col-md-6 col-12">
+          <div class="col-lg-4 col-md-6 col-12">
             <card
               :title="stats.users.title"
               :value="stats.users.value"
@@ -25,19 +25,7 @@
               directionReverse
             ></card>
           </div>
-          <div class="col-lg-3 col-md-6 col-12">
-            <card
-              :title="stats.clients.title"
-              :value="stats.clients.value"
-              :percentage="stats.clients.percentage"
-              :iconClass="stats.clients.iconClass"
-              :iconBackground="stats.clients.iconBackground"
-              :percentageColor="stats.clients.percentageColor"
-              :detail="stats.clients.detail"
-              directionReverse
-            ></card>
-          </div>
-          <div class="col-lg-3 col-md-6 col-12">
+          <div class="col-lg-4 col-md-12 col-12">
             <card
               :title="stats.sales.title"
               :value="stats.sales.value"
@@ -50,10 +38,10 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-7 mb-lg">
+          <div class="col-lg-7 mb-lg-0 mb-4">
             <!-- line chart -->
             <div class="card">
-              <gradient-line-chart />
+              <gradient-line-chart v-if="absensigrafik != null" :absensigrafik="absensigrafik" />
             </div>
           </div>
           <div class="col-lg-5">
@@ -173,7 +161,10 @@ export default {
   name: "dashboard-default",
   data() {
     return {
+      absensigrafik: null,
       infopt:[],
+      token: localStorage.getItem("token"),
+      role: localStorage.getItem('role'),
       // aktif : [],
 			// tidak : [],
 			// semua : [],
@@ -187,21 +178,12 @@ export default {
           iconBackground: "bg-gradient-primary",
         },
         users: {
-          title: "Hadir",
+          title: "Jabatan",
           value: "12",
           percentage: "",
           iconClass: "ni ni-single-02",
           iconBackground: "bg-gradient-success",
-          detail: "Pegawai hadir hari ini",
-        },
-        clients: {
-          title: "Tidak Hadir",
-          value: "2",
-          percentage: "",
-          iconClass: "ni ni-single-02",
-          percentageColor: "text-danger",
-          iconBackground: "bg-gradient-danger",
-          detail: "Pegawai tidak hadir",
+          detail: "Jumlah Jabatan",
         },
         sales: {
           title: "Akun Aktif",
@@ -279,9 +261,23 @@ export default {
                 });
         })
         },
+        loadgrafik(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/grafikadmin',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.absensigrafik = response.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
   },
   mounted(){
     this.dashakunpegawai()
+    this.loadgrafik()
   }
 };
 </script>
