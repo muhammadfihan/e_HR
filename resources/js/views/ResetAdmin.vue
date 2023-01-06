@@ -1,43 +1,48 @@
 <template>
-    <div class="container mt-8 mb-10">
-      <div class="row justify-content-center ">
-        <div class="col-lg-4 ">
-          <div class="card shadow border-0">
-            <div class="card-header bg-gradient-primary">
-              <div class="text-center text-muted mb-1">
-               <span><b class="text-white text-lg">Form Reset Password Admin</b></span>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="text-center text-muted mb-4">
-               <span><b class="text-primary">Enter OTP Code and New Password</b></span>
-              </div>
-              <form role="form">
-                <div class="d-flex justify-content-center align-items-center">
-                  <v-otp-input
-                  v-model="code"
-                  ref="otpInput"
-                  input-classes="otp-input"
-                  :num-inputs="6"
-                  :is-input-num="true"
-                  @on-change="handleOnChange"
-                />
+    <body class="bg-gray-200">
+  <main class="main-content  mt-0">
+    <div class="page-header align-items-start min-vh-100" style="background-color: #F5F5FC;">
+      <div class="container my-auto">
+        <div class="row">
+          <div class="col-lg-4 col-md-8 col-12 mx-auto">
+            <div class="card z-index-0 fadeIn3 fadeInBottom">
+              <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                <div class="bg-gradient-primary shadow-primary border-radius-lg py-5 pe-1">
+                  <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">Halaman Reset Password</h4>
                 </div>
-                <argon-input v-model="password" size="lg" placeholder="Password Baru" type="password"></argon-input>
-                <div class="custom-control custom-control-alternative custom-checkbox text-end">
-                  <label class="custom-control-label" for=" customCheckLogin"><span style="cursor:pointer; visibility:hidden" class="text-primary" @click="topegawai()">Back To Login ?</span></label>
-                </div>
-                <div class="text-center">
-                  <div class="my-4">
-                    <argon-button color="primary" @click.prevent="lupaadmin()" size="md" fullWidth variant="gradient">Reset Password</argon-button>
+              </div>
+              <div class="card-body">
+                <div class="text-center text-muted mb-4">
+               <span><b class="text-primary">Masukan Code OTP Dari Email dan Password Baru Anda</b></span>
+              </div>
+                <form role="form" class="text-start">
+                    <div class="form-group">
+                    <label for="exampleInputEmail1">Code OTP</label>
+                    <input v-model="code" type="number" class="form-control" aria-describedby="emailHelp" placeholder="Masukan Code OTP Anda">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password Baru</label>
+                        <input v-model="password" type="password" class="form-control" placeholder="Masukan Password Baru Anda">
+                    </div>
+                    <div class="col">
+                        <div class="custom-control custom-control-alternative text-end">
+                           <label class="label"><span style="cursor:pointer" class="text-primary" @click="toadmin()">Halaman Login</span></label>
+                        </div>
+                    </div>
+                  <div class="text-center my-4 mb-2">
+                    <argon-button color="warning" @click.prevent="lupaadmin()" size="md" fullWidth variant="">Buat Password Baru</argon-button>
                   </div>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </main>
+  <!--   Core JS Files   -->
+
+</body>
 </template>
 
 <script>
@@ -76,7 +81,7 @@ export default {
       this.code = value
     },
     toadmin(){
-      this.$router.push('/')
+      this.$router.push('/login')
     },  
     topegawai(){
       this.$router.push('/loginpegawai')
@@ -95,7 +100,7 @@ export default {
                       timeout: 2000,
                       icon: "fa-sharp fa-solid fa-thumbs-up"
                       })
-                     this.$router.push("/");  
+                     this.$router.push("/login");  
                 }
                 if (response.data.success == false){
                   const toast = useToast();

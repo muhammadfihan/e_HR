@@ -1,11 +1,10 @@
 <template>
   <div class="card">
     <div class="pb-0 card-header mb-0">
-      <h6>Grafik Absensi Pegawai</h6>
+      <h6>Grafik Absensi Pegawai Hari Ini</h6>
       <p class="text-sm">
         <i class="fa fa-arrow-up text-success"></i>
-        <span class="font-weight-bold ms-1">{{akun}} Pegawai Aktif</span>
-        Ditampilkan secara harian
+        <span class="font-weight-bold ms-1">{{akun}} Total Pegawai</span>
       </p>
     </div>
     <div class="p-3 card-body">
@@ -57,7 +56,6 @@ export default {
   
   data(){
     return{
-      akun:[],
       chartData: {
           labels: ["Hadir", "Tidak Hadir", "On Time", "Terlambat", "Izin"],
           datasets: [
@@ -145,17 +143,6 @@ export default {
     }
   },
   mounted(){
-    this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/dashakunpegawai',{
-                headers: {Authorization: "Bearer " + this.token},
-            })
-                .then(response => {
-                    this.akun = response.data.aktif;
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        })
   }
 };
 </script>

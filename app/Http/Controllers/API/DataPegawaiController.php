@@ -84,7 +84,7 @@ class DataPegawaiController extends Controller
            ->select('*')
            ->where('id_admin', Auth::user()->id)
            ->latest()
-           ->paginate(10);
+           ->paginate(8);
        return response([
            'data' => $datapegawai,
            'message' => 'get data berhasil',
@@ -98,16 +98,11 @@ class DataPegawaiController extends Controller
                 ->select('*')
                 ->where('pegawais.id_admin', Auth::user()->id)
                 ->where('email', 'like', '%' . $key . '%')
-                ->orWhere('no_pegawai', 'like', '%' . $key . '%')
-                ->orWhere('name', 'like', '%' . $key . '%')
                 ->orWhere('nama_lengkap', 'like', '%' . $key . '%')
-                ->orWhere('pendidikan', 'like', '%' . $key . '%')
-                ->orWhere('alamat', 'like', '%' . $key . '%')
-                ->orWhere('status', 'like', '%' . $key . '%')
-                ->orWhere('gender', 'like', '%' . $key . '%')
+                ->orWhere('no_pegawai', 'like', '%' . $key . '%')
                 ->where('pegawais.id_admin', Auth::user()->id)
                 ->latest()
-                ->paginate(10);
+                ->paginate(8);
 
             return $result;
 

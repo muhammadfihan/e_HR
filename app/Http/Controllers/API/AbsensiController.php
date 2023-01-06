@@ -7,16 +7,175 @@ use Illuminate\Http\Request;
 use DateTime;
 use DateTimeZone;
 use App\Models\Absensi;
+use App\Models\CutiTahunan;
 use App\Models\HariKerja;
 use App\Models\JamAbsen;
+use App\Models\LokasiPegawai;
 use App\Models\Pemberitahuan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
+use Psy\Util\Json;
+use Seld\PharUtils\Timestamps;
 
 class AbsensiController extends Controller
 {
+    public function cekbuka(){
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
+        $localtime = $date->format('H:i:s');
+        $cektanggal = DB::table('absensipegawai')->where('id_admin', Auth::user()->id)
+        ->where('tanggal',$tanggal)->where('keterangan','!=','Izin')->get()->toArray();
+        if($cektanggal == []){
+            return response()->json([
+                'success' => false,
+            ]);
+        }else{
+            $cekhari = DB::table('harikerja')->where('id_admin', Auth::user()->id)->first();
+            if($cekhari->buka_presensi < $localtime && $localtime < $cekhari->tutup_presensi){
+                return response()->json([
+                    'success' => 12,
+                    'data' => $cektanggal
+                ]);
+            }else{
+                return response()->json([
+                    'success' => null,
+                    'data' => $cektanggal
+                ]);
+            }
+        }
+        
+    }
+    public function bukapresensi(){
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
+        $localtime = $date->format('H:i:s');
+        $cekhari = DB::table('harikerja')->where('id_admin', Auth::user()->id)->first();
+        $hariIni = Carbon::now()->locale('id');
+        $hari = $hariIni->dayName;    
+        if(str_contains($cekhari->hari_kerja, $hari)){
+            if($localtime > $cekhari->buka_presensi){
+                $cektanggal = DB::table('absensipegawai')->where('id_admin', Auth::user()->id)
+                ->where('tanggal',$tanggal)->where('keterangan','!=', 'Izin')->get()->toArray();
+                if($cektanggal != []){
+                    return response()->json([
+                        'cek' => $cektanggal,
+                        'success' => false,
+                        'message' => 'Data telah ada'
+                    ]);
+                }
+               else{
+                $arraytanggal = explode(',', $tanggal);
+                $cuti = DB::table('cuti')->where('id_admin', Auth::user()->id)->where('status_cuti', 'Diterima')->whereJsonContains('list_tanggal',$arraytanggal)->get()->toArray();
+                    $bukacuti = [];
+                    for($i= 0; $i < count($cuti); $i++){
+                        $bukacuti[] = [
+                            'id' => $cuti[$i]->id_pegawai,
+                            'name' => $cuti[$i]->name,
+                            'id_admin' => $cuti[$i]->id_admin,
+                            'email' => $cuti[$i]->email,
+                            'nama_lengkap' => $cuti[$i]->nama_lengkap,
+                            'tanggal' => $tanggal,
+                            'keterangan' => "Cuti",
+                            'created_at' => $tanggal
+                        ];
+                    }
+                $finalcuti = DB::table('absensipegawai')
+                    ->insert($bukacuti);
+                $cekcuti = DB::table('cuti')
+                    ->where('id_admin', Auth::user()->id)
+                    ->where('status_cuti', 'Diterima')
+                    ->whereJsonContains('list_tanggal',$arraytanggal)
+                    ->pluck('email');
+                $izin = DB::table('absensipegawai')
+                    ->where('id_admin', Auth::user()->id)
+                    ->where('tanggal', $tanggal)
+                    ->where('keterangan','Izin')
+                    ->pluck('email');
+                $presensi = DB::table('pegawais')
+                    ->where('id_admin', Auth::user()->id)
+                    ->where('status','Aktif')->where('nama_lengkap','!=', null)
+                    ->whereNotIn('email',$izin)
+                    ->whereNotIn('email',$cekcuti)
+                    ->get()->toArray();
+                $bukapresensi = [];
+                for($i= 0; $i < count($presensi); $i++){
+                    $bukapresensi[] = [
+                        'id' => $presensi[$i]->id,
+                        'name' => $presensi[$i]->name,
+                        'id_admin' => $presensi[$i]->id_admin,
+                        'email' => $presensi[$i]->email,
+                        'nama_lengkap' => $presensi[$i]->nama_lengkap,
+                        'tanggal' => $tanggal,
+                        'keterangan' => "Tidak Hadir",
+                        'created_at' => $tanggal
+                    ];
+                }
+                $buat = DB::table('absensipegawai')->insert($bukapresensi);
+                $cek = DB::table('izin')->where('id_admin', Auth::user()->id)->where('tanggal', $tanggal)->where('status_izin', 'Diterima')->pluck('email');
+                $update = DB::table('absensipegawai')->where('id_admin', Auth::user()->id)->where('tanggal', $tanggal)->whereIn('email', $cek)->update([
+                    'keterangan' => 'Izin'
+                ]);
+                $updt = DB::table('pegawais')->where('id_admin', Auth::user()->id)->where('nama_lengkap', '!=', null)->pluck('email');
+                $jatahcuti = DB::table('akunpegawai')->where('id_admin', Auth::user()->id)->whereIn('email', $updt)->increment('jumlah_kerja');
+
+                $master = DB::table('table_master_cuti_tahunan')->where('id_admin', Auth::user()->id)
+                ->pluck('email');
+                $cekjatah = DB::table('akunpegawai')->where('id_admin', Auth::user()->id)->where('jumlah_kerja','>=',365)
+                ->whereNotIn('email',$master)->get()->toArray();
+                $getDataCuti = DB::table('master_cuti_perusahaan')
+                ->select('*')
+                ->where('id_admin', Auth::user()->id)
+                ->where('tahun', Carbon::now()->format('Y'))
+                ->get()
+                ->toArray();
+                $inputcuti = [];
+                for($i= 0; $i < count($cekjatah); $i++){
+                    $inputcuti[] = [
+                        'id_admin' => $cekjatah[$i]->id_admin,
+                        'email' => $cekjatah[$i]->email,
+                        'id_cuti' => $getDataCuti[0]->id,
+                        'jumlah_cuti' => $getDataCuti[0]->jumlah_cuti,
+                        'cuti_terpakai' => 0,
+                        'sisa_cuti' => $getDataCuti[0]->jumlah_cuti,
+                        'tahun' => $getDataCuti[0]->tahun
+                    ];
+                }
+                $hasil = DB::table('table_master_cuti_tahunan')->insert($inputcuti);
+                if($bukapresensi == null){
+                    return response()->json([
+                        'success' => 15,
+                        'message' => 'Izin Semua',
+                    ]);
+                }
+                return response()->json([
+                    'success' => true,
+                    'jatah' => $jatahcuti,
+                    'jatahcuti' => $hasil,
+                    'data' => $buat,
+                    'jatahcek' => $cekjatah,
+                    'buatcuti' => $finalcuti,
+                    'tes' => $update,
+                    'isi' => $bukapresensi
+                ]);
+               }
+            }else{
+                return response()->json([
+                    'success' => 12,
+                    'message' => 'Jam Masuk Belum Buka',
+                ]);
+            }
+        }else{
+            return response()->json([
+                'success' => null,
+                'message' => 'Bukan hari kerja',
+            ]);
+        }
+
+    }
     public function getabsen (){
         $timezone = 'Asia/Jakarta'; 
         $date = new DateTime('now', new DateTimeZone($timezone)); 
@@ -33,6 +192,7 @@ class AbsensiController extends Controller
         $date = new DateTime('now', new DateTimeZone($timezone)); 
         $tanggal = $date->format('Y-m-d');
         $localtime = $date->format('H:i:s');
+        $arraytanggal = explode(',', $tanggal);
         $presensi = DB::table('absensipegawai')
             ->select('*')
             ->whereDate('tanggal', $tanggal)
@@ -44,19 +204,34 @@ class AbsensiController extends Controller
             ->where('email', Auth::user()->email)
             ->where('status_izin', '=', 'Diterima')
             ->first();
+        $cuti = DB::table('cuti')
+            ->where('email', Auth::user()->email)
+            ->where('status_cuti', 'Diterima')
+            ->whereJsonContains('list_tanggal',$arraytanggal)
+            ->first();
         $cekjam = DB::table('harikerja')
             ->where('id_admin', Auth::user()->id_admin)
-            ->pluck('jam_pulang')
+            ->pluck('tutup_presensi')
             ->first(); 
         $buka = DB::table('harikerja')
             ->where('id_admin', Auth::user()->id_admin)
             ->pluck('buka_presensi')
-            ->first();  
+            ->first();
+        $ceklokasi = DB::table('lokasipegawai')
+            ->where('id_pegawai', Auth::user()->id)
+            ->pluck('expired_at')
+            ->first();
+        if($cuti != null){
+            return response()->json([
+                'status' => 25,
+                'message' => 'Anda Sedang Cuti !',
+            ]);
+        }           
         if($localtime < $buka){
-                return response()->json([
-                    'status' => 2,
-                    'message' => 'Presensi Belum Dimulai !',
-                ]);
+             return response()->json([
+                'status' => 2,
+                'message' => 'Presensi Belum Dimulai !',
+            ]);
         }  
         if($localtime > $cekjam){
             return response()->json([
@@ -67,12 +242,16 @@ class AbsensiController extends Controller
         if($izin){
             return response()->json([
                 'sudahizin' => $izin,
-                'success' => false,
-                'status' => false,
+                'status' => 20,
                 'message' => 'Anda Sedang izin !',
             ]);
+        }if(now('Asia/Jakarta')->toDateTimeString() > $ceklokasi){
+            return response()->json([
+                'status' => 15,
+                'message' => 'Lokasi Expired',
+            ]);
         }        
-        if ($presensi){
+        if (($presensi->jam_masuk != null) && ($izin == null)){
             return response()->json([
                 'sudahabsen' => $presensi,
                 'success' => false,
@@ -95,9 +274,9 @@ class AbsensiController extends Controller
             ->where('id_admin', Auth::user()->id_admin)
             ->pluck('jam_masuk')
             ->first();
-            $lat = $request->input('latitude');
+            $lat = $request->input('latmasuk');
             $img = $request->input('selfie_masuk');
-            if($lat == null){
+            if($lat == "null"){
                 return response()->json([
                     'status' => 12,
                     'message' => "Lokasi tidak diizinkan"
@@ -108,83 +287,86 @@ class AbsensiController extends Controller
                     'message' => "Kamera Tidak Diizinkan"
                 ]);
             }else{
-                $absen = Absensi::create([
-                    'id' => Auth::user()->id,
-                    'email' => Auth::user()->email,
-                    'id_admin' => Auth::user()->id_admin,
-                    'name' => Auth::user()->name,
-                    'nama_lengkap' => Auth::user()->name,
+                $absen = DB::table('absensipegawai')->where('id', Auth::user()->id)->where('tanggal', $tanggal)->update([
                     'selfie_masuk' => $filename,
                     'tanggal' => $tanggal,
                     'jam_masuk' => $localtime,
-                    'latitude' => $request->latitude,
-                    'longitude' => $request->longitude,
+                    'latmasuk' => $request->latmasuk,
+                    'lonmasuk' => $request->lonmasuk,
                 ]);
-                if ($absen->jam_masuk <= $masuk){
-                    $timezone = 'Asia/Jakarta'; 
-                    $date = new DateTime('now', new DateTimeZone($timezone)); 
-                    $tanggal = $date->format('Y-m-d');
-                    $localtime = $date->format('H:i:s');
-                    $ket = Absensi::where('tanggal',$tanggal)->update([
-                        'keterangan' => 'On Time'
-                    ]);
-                    Pemberitahuan::create([
-                        'id_admin' => Auth::user()->id_admin,
-                        'email' => Auth::user()->email,
-                        'judul' => 'Presensi Masuk',
-                        'jenis' => 'Presensi Masuk',
-                        'status' => 'On Time',
-                        'tanggal' => $tanggal,
-                        'jam' => $localtime
-                    ]);
+                if($absen){
+                    $get = DB::table('absensipegawai')->where('id', Auth::user()->id)->where('tanggal', $tanggal)->first();
+                    if ($get->jam_masuk <= $masuk){
+                        $timezone = 'Asia/Jakarta'; 
+                        $date = new DateTime('now', new DateTimeZone($timezone)); 
+                        $tanggal = $date->format('Y-m-d');
+                        $localtime = $date->format('H:i:s');
+                        $ket = Absensi::where('id', Auth::user()->id)->where('tanggal',$tanggal)->update([
+                            'keterangan' => 'On Time'
+                        ]);
+                        Pemberitahuan::create([
+                            'id_admin' => Auth::user()->id_admin,
+                            'email' => Auth::user()->email,
+                            'judul' => 'Presensi Masuk',
+                            'jenis' => 'Presensi Masuk',
+                            'status' => 'On Time',
+                            'tanggal' => $tanggal,
+                            'jam' => $localtime
+                        ]);
+                        return response()->json([
+                            'absensi' => $absen,
+                            'data' => $ket,
+                            'jam' => $masuk,
+                            'message' => 'on time',
+                            'success' => true
+                        ]);
+                    }
+                    if ($get->jam_masuk >= $masuk){
+                        $timezone = 'Asia/Jakarta'; 
+                        $date = new DateTime('now', new DateTimeZone($timezone)); 
+                        $tanggal = $date->format('Y-m-d');
+                        $localtime = $date->format('H:i:s');
+                        $ket = Absensi::where('id', Auth::user()->id)->where('tanggal',$tanggal)->update([
+                            'keterangan' => 'Terlambat'
+                        ]);
+                        Pemberitahuan::create([
+                            'id_admin' => Auth::user()->id_admin,
+                            'email' => Auth::user()->email,
+                            'judul' => 'Presensi Masuk',
+                            'jenis' => 'Presensi Masuk',
+                            'status' => 'Terlambat',
+                            'tanggal' => $tanggal,
+                            'jam' => $localtime
+                        ]);
+                        return response()->json([
+                            'absensi' => $absen,
+                            'data' => $ket,
+                            'jam' => $masuk,
+                            'message' => 'terlambat',
+                            'success' => true
+                        ]);
+                    }
+        
                     return response()->json([
-                        'absensi' => $absen,
-                        'data' => $ket,
-                        'jam' => $masuk,
-                        'message' => 'on time',
-                        'success' => true
+                        'success' => true,
+                        'message' => 'Berhasil Presensi',
+                        'absenmasuk' => $absen
                     ]);
-                }
-                if ($absen->jam_masuk >= $masuk){
-                    $timezone = 'Asia/Jakarta'; 
-                    $date = new DateTime('now', new DateTimeZone($timezone)); 
-                    $tanggal = $date->format('Y-m-d');
-                    $localtime = $date->format('H:i:s');
-                    $ket = Absensi::where('tanggal',$tanggal)->update([
-                        'keterangan' => 'Terlambat'
-                    ]);
-                    Pemberitahuan::create([
-                        'id_admin' => Auth::user()->id_admin,
-                        'email' => Auth::user()->email,
-                        'judul' => 'Presensi Masuk',
-                        'jenis' => 'Presensi Masuk',
-                        'status' => 'Terlambat',
-                        'tanggal' => $tanggal,
-                        'jam' => $localtime
-                    ]);
-                    return response()->json([
-                        'absensi' => $absen,
-                        'data' => $ket,
-                        'jam' => $masuk,
-                        'message' => 'terlambat',
-                        'success' => true
-                    ]);
-                }
     
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Berhasil Presensi',
-                    'absenmasuk' => $absen
-                ]);
+                }else{
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'gagal presensi'
+                    ]);
+                }
             }
         }
     }
     public function tampilabsen(){
-            $data = DB::table('absensipegawai')
-                ->select('*')
-                ->where('id_admin', Auth::user()->id)
+            $data = Absensi::
+                where('id_admin', Auth::user()->id)
                 ->latest()
-                ->paginate(10);
+                ->paginate(8);
             return response()->json([
                 'data' => $data,
                 'message' => 'get data berhasil',
@@ -205,7 +387,7 @@ class AbsensiController extends Controller
                 ->orWhere('jam_pulang', 'like', '%' . $key . '%')
                 ->where('absensipegawai.id_admin', Auth::user()->id)
                 ->latest()
-                ->paginate(10);
+                ->paginate(8);
 
             return $result;
 
@@ -221,7 +403,7 @@ class AbsensiController extends Controller
                 ->orWhere('tanggal', 'like', '%' . $key . '%')
                 ->where('absensipegawai.id_admin', Auth::user()->id)
                 ->latest()
-                ->paginate(10);
+                ->paginate(8);
 
             return $result;
 
@@ -231,7 +413,7 @@ class AbsensiController extends Controller
             ->select('*')
             ->where('id', Auth::user()->id)
             ->latest()
-            ->paginate(10);
+            ->paginate(8);
         return response()->json([
             'data' => $data,
             'message' => 'get data berhasil',
@@ -328,6 +510,10 @@ class AbsensiController extends Controller
         ->where('id_admin', Auth::user()->id_admin)
         ->pluck('tutup_presensi')
         ->first();
+        $ceklokasi = DB::table('lokasipegawai')
+        ->where('id_pegawai', Auth::user()->id)
+        ->pluck('expired_at')
+        ->first();   
         if($localtime > $tutup){
             return response()->json([
                 'status' => 3,
@@ -347,85 +533,105 @@ class AbsensiController extends Controller
                 'message' => 'Tunggu Pulang',
             ]);
         }
-
-        $dt=[
-            'jam_pulang' => $localtime,
-            'jam_kerja' => date('H:i:s', strtotime($localtime) - strtotime($presensi->jam_masuk)),
-            'selfie_pulang' => $filename,
-        ];   
-
-        if ($presensi->jam_pulang == ""){
-            $hasil = DB::table('absensipegawai')
-            ->where('id', Auth::user()->id)
-            ->whereDate('tanggal', $tanggal)
-            ->update($dt);
-
-            $totaljamkerja = DB::table('pegawais')
-                ->select('*')
-                ->where('id', Auth::user()->id)
-                ->first();
-            $jamkerja = DB::table('absensipegawai')
-                ->select('*')
-                ->where('id', Auth::user()->id)
-                ->whereDate('tanggal', $tanggal)
-                ->first();
-            $jumlahkerja = DB::table('pegawais')
-                ->select('*')
-                ->where('id', Auth::user()->id)
-                ->first();    
-            $total = date('H:i:s' , strtotime($totaljamkerja->jam_kerja) + strtotime($jamkerja->jam_kerja));
-            $jmlh = $jumlahkerja->jumlah_kerja + 1 ;
-            $hasil = DB::table('datagaji')
-            ->where('id' , Auth::user()->id)
-            ->update([
-                'jam_kerja' => $total
-            ]);
-            $hasil2 = DB::table('pegawais')
-            ->where('id' , Auth::user()->id)
-            ->update([
-                'jam_kerja' => $total
-            ]);
-            $hasilkerja = DB::table('pegawais')
-            ->where('id' , Auth::user()->id)
-            ->update([
-                'jumlah_kerja' => $jmlh
-            ]);
-            if($hasilkerja = 365){
-                $jatahcuti = DB::table('pegawais')
-                ->where('id' , Auth::user()->id)
-                ->update([
-                    'jatah_cuti' => 12
-                ]);   
-            }
-            $timezone = 'Asia/Jakarta'; 
-            $date = new DateTime('now', new DateTimeZone($timezone)); 
-            $tanggal = $date->format('Y-m-d');
-            $localtime = $date->format('H:i:s');
-            Pemberitahuan::create([
-                'id_admin' => Auth::user()->id_admin,
-                'email' => Auth::user()->email,
-                'judul' => 'Presensi Pulang',
-                'jenis' => 'Presensi Pulang',
-                'status' => 'Berhasil',
-                'tanggal' => $tanggal,
-                'jam' => $localtime
-            ]);
+        $lat = $request->input('latpulang');
+        $img = $request->input('selfie_pulang');
+        if($lat == "null"){
             return response()->json([
-                'data' => $dt,
-                'jatah_cuti' => $jatahcuti,
-                'jumlah_kerja' => $hasilkerja,
-                'updategaji' => $hasil2,
-                'data_lagi' => $hasil,
-                'tanggal' => $tanggal,
-                'total_jamkerja' => $total,
-                'message' => 'presensi pulang berhasil',
-                'success' => true
+                'status' => 12,
+                'message' => "Lokasi tidak diizinkan"
+            ]);
+        }if($img == null){
+            return response()->json([
+                'status' => 11,
+                'message' => "Kamera Tidak Diizinkan"
+            ]);
+        }if(now('Asia/Jakarta')->toDateTimeString() > $ceklokasi){
+            return response()->json([
+                'status' => 15,
+                'message' => "Lokasi Expired"
             ]);
         }else{
-            return response()->json([
-                'message' => 'Sudah presensi pulang',
-                'success' => false
-            ]);
+            $dt=[
+                'jam_pulang' => $localtime,
+                'jam_kerja' => date('H:i:s', strtotime($localtime) - strtotime($presensi->jam_masuk)),
+                'selfie_pulang' => $filename,
+                'latpulang' => $request->latpulang,
+                'lonpulang' => $request->lonpulang
+            ];   
+    
+            if ($presensi->jam_pulang == ""){
+                $hasil = DB::table('absensipegawai')
+                ->where('id', Auth::user()->id)
+                ->whereDate('tanggal', $tanggal)
+                ->update($dt);
+    
+                $totaljamkerja = DB::table('pegawais')
+                    ->select('*')
+                    ->where('id', Auth::user()->id)
+                    ->first();
+                $jamkerja = DB::table('absensipegawai')
+                    ->select('*')
+                    ->where('id', Auth::user()->id)
+                    ->whereDate('tanggal', $tanggal)
+                    ->first();
+                $jumlahkerja = DB::table('pegawais')
+                    ->select('*')
+                    ->where('id', Auth::user()->id)
+                    ->first();    
+                $total = date('H:i:s' , strtotime($totaljamkerja->jam_kerja) + strtotime($jamkerja->jam_kerja));
+                $jmlh = $jumlahkerja->jumlah_kerja + 1 ;
+                $hasil = DB::table('datagaji')
+                ->where('id' , Auth::user()->id)
+                ->update([
+                    'jam_kerja' => $total
+                ]);
+                $hasil2 = DB::table('pegawais')
+                ->where('id' , Auth::user()->id)
+                ->update([
+                    'jam_kerja' => $total
+                ]);
+                $hasilkerja = DB::table('pegawais')
+                ->where('id' , Auth::user()->id)
+                ->update([
+                    'jumlah_kerja' => $jmlh
+                ]);
+                // if($hasilkerja = 365){
+                //     $jatahcuti = DB::table('pegawais')
+                //     ->where('id' , Auth::user()->id)
+                //     ->update([
+                //         'jatah_cuti' => 12
+                //     ]);   
+                // }
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id_admin,
+                    'email' => Auth::user()->email,
+                    'judul' => 'Presensi Pulang',
+                    'jenis' => 'Presensi Pulang',
+                    'status' => 'Berhasil',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
+                return response()->json([
+                    'data' => $dt,
+                    // 'jatah_cuti' => $jatahcuti,
+                    'jumlah_kerja' => $hasilkerja,
+                    'updategaji' => $hasil2,
+                    'data_lagi' => $hasil,
+                    'tanggal' => $tanggal,
+                    'total_jamkerja' => $total,
+                    'message' => 'presensi pulang berhasil',
+                    'success' => true
+                ]);
+            }else{
+                return response()->json([
+                    'message' => 'Sudah presensi pulang',
+                    'success' => false
+                ]);
+            }
         }
     }
 
@@ -474,5 +680,111 @@ class AbsensiController extends Controller
             'success' => true
         ]);
 
+    }
+
+    public function lokasi(Request $request){
+        $ceklokasi = DB::table('lokasipegawai')->where('id_pegawai', Auth::user()->id)->first();
+        if($ceklokasi == null){
+            $lokasi = LokasiPegawai::create([
+                'id_admin' => Auth::user()->id_admin,
+                'id_pegawai' => Auth::user()->id,
+                'email' => Auth::user()->email,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'expired_at' => now('Asia/Jakarta')->addHour()
+            ]);
+            return response()->json([
+                'success' => true,
+                'latitude' => $lokasi->latitude,
+                'longitude' => $lokasi->longitude
+            ]);
+        }else{
+            $update = DB::table('lokasipegawai')->where('id_pegawai', Auth::user()->id)->update([
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'expired_at' => now('Asia/Jakarta')->addHour()
+            ]);
+            return response()->json([
+                'success' => true,
+                'data' => $update
+            ]);
+        }
+    }
+    public function getlokasi(){
+        $getlokasi = DB::table('lokasipegawai')->where('id_pegawai', Auth::user()->id)->get();
+        $lok = DB::table('lokasipegawai')->where('id_pegawai', Auth::user()->id)->first();
+        if($getlokasi && $lok == null){
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada Data'
+            ]);
+        }else{
+            $ceklok = DB::table('lokasipegawai')->where('id_pegawai', Auth::user()->id)->pluck('expired_at')->first();
+            if(now('Asia/Jakarta') > $ceklok){
+                return response()->json([
+                    'success' => null,
+                    'message' => 'Lokasi Expired'
+                ]);
+            }if($lok->latitude == null){
+                return response()->json([
+                    'success' => 12,
+                    'message' => 'Telah Logout'
+                ]);
+            }else{
+                return response()->json([
+                    'success' => true,
+                    'data' => $getlokasi,
+                    'latitude' => $lok->latitude,
+                    'longitude' => $lok->longitude
+                ]);
+            }
+        }
+    }
+
+    public function removelokasi(Request $request){
+        $ceklokasi = DB::table('lokasipegawai')->where('id_pegawai', Auth::user()->id)->first();
+        if($ceklokasi == null){
+            return response()->json([
+                'success' => true,
+                'messsage' => 'data kosong'
+            ]);
+        }if($ceklokasi !== null){
+            if ($ceklokasi->latitude == null) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'data telah dihapus'
+                ]);
+            }if($ceklokasi->latitude != null){
+                $removelokasi = DB::table('lokasipegawai')->where('id_pegawai', Auth::user()->id)->update([
+                    'latitude' => null,
+                    'longitude' => null
+                ]);
+                return response()->json([
+                    'success' => true,
+                    'date' => $removelokasi,
+                    'message' => 'Berhasil dihapus'
+                ]);
+            }
+        }
+    }
+
+    public function hapusabsen(){
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
+        $cek =  Absensi::where('id_admin', Auth::user()->id)->where('tanggal', $tanggal)->get()->toArray();
+        if($cek == null){
+            return response()->json([
+                'success' => false,
+                'message' => 'Hapus data tidak ada'
+            ]);
+        }else{
+            Absensi::where('id_admin', Auth::user()->id)->where('tanggal', $tanggal)->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Hapus data berhasil'
+            ]);
+        }
     }
 }

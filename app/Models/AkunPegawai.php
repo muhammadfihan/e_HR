@@ -24,7 +24,8 @@ class AkunPegawai extends Authenticatable
         'name',
         'email',
         'password',
-        'status'
+        'status',
+        'last_login'
     ];
     protected $hidden = [
         'password',

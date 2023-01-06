@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card h-1000" style="height:630px !important">
     <div class="card-header pb-0">
       <div class="row">
         <div class="col-6 d-flex align-items-center">
@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0">
+        <div v-if="this.riwayatgaji.data == ''" class="table-responsive p-0">
         <table class="table align-items-center mb-0">
           <thead>
               <th></th>
@@ -46,6 +46,32 @@
                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >Action</th>
           </thead>
+        </table>
+        <p class="text-center text-secondary text-xl font-weight-bold mt-9" style="font-size:23px">Data Kosong</p>
+      </div>
+      <div v-else-if="this.riwayatgaji.data != ''" class="table-responsive p-0">
+        <table class="table align-items-center mb-0">
+          <thead>
+              <th></th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Email</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Periode</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Jabatan</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Total Gaji</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Status</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Action</th>
+          </thead>
           <tbody >
             <tr v-for="data in riwayatgaji.data" :key="data.id">
               <td ></td>
@@ -66,15 +92,13 @@
                 </span>
               </td>
               <td class="align-middle text-center text-sm">
-                <span class="badge badge-sm bg-gradient-warning" v-if="data.status == 'Belum Cair'">Mengajukan</span>
-                <span class="badge badge-sm bg-gradient-success" v-if="data.status == 'Cair'">Dicairkan</span>
+                <span class="badge badge-sm bg-warning" v-if="data.status == 'Mengajukan'">{{data.status}}</span>
+                <span class="badge badge-sm bg-success" v-if="data.status == 'Cair'">Dicairkan</span>
               </td>
               <td class="align-middle text-sm text-center">
-                  <span v-if="data.status == 'Belum Cair'" @click.prevent="cairgaji(data.id)" style="cursor:pointer" class="badge badge-sm bg-info" data-toggle="modal" >Cairkan</span>
+                  <span  @click.prevent="getriwayatdetail(data.id)" style="cursor:pointer" class="badge badge-sm bg-primary me-2" data-toggle="modal" >Detail</span>
+                  <span v-if="data.status == 'Mengajukan'" @click.prevent="cairgaji(data.id)" style="cursor:pointer" class="badge badge-sm bg-success" data-toggle="modal" >Cairkan</span>
                   <span v-if="data.status == 'Cair'" style="cursor:not-allowed" class="badge badge-sm bg-secondary" data-toggle="modal" >Cairkan</span>
-              </td>
-              <td class="align-middle text-sm text-center">
-                  <span  @click.prevent="getriwayatdetail(data.id)" style="cursor:pointer" class="badge badge-sm bg-primary" data-toggle="modal" >Detail</span>
               </td>
             </tr>
           </tbody>

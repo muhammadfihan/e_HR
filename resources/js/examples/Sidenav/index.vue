@@ -46,7 +46,7 @@
         aria-hidden="true"
         id="iconSidenav"
       ></i>
-      <a class="m-0 navbar-brand">
+        <a class="m-0 navbar-brand">
         <img
           :src="
             this.$store.state.darkMode ||
@@ -57,7 +57,14 @@
           class="navbar-brand-img h-100"
           alt="main_logo"
         />
-        <span class="ms-2 font-weight-bold me-2" >{{namapt}}</span>
+        <span class="ms-2 font-weight-bold me-4" >{{namapt}}</span>
+        <!-- <img
+          :src="menu
+          "
+          class="navbar-brand-img h-100"
+          alt="main_logo"
+          style="cursor:pointer; width: 25px"
+        /> -->
       </a>
     </div>
     
@@ -89,7 +96,7 @@
 import SidenavList from "./SidenavList.vue";
 import logo from "../../assets/img/logo-ct-dark.png";
 import logoWhite from "../../assets/img/logo-ct.png";
-
+import menu from "../../assets/img/menu.png";
 export default {
   name: "index",
   components: {
@@ -102,6 +109,7 @@ export default {
       logo,
       superadmindata:[],
       logoWhite,
+      menu,
       pegawais: [],
       loggedIn: localStorage.getItem("loggedIn"),
       token: localStorage.getItem("token"),
@@ -138,3 +146,7 @@ export default {
 
 };
 </script>
+<style lang="scss" scoped>
+
+
+</style>

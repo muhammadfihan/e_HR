@@ -21,7 +21,7 @@
           </div>
       </div>
       <div class="card-body px-0 pt-0 pb-2 mb-3">
-        <div class="table-responsive p-0">
+        <div class="table-responsive p-0 border-bottom">
           <table class="table align-items-center mb-0">
             <thead>
                 <th></th>
@@ -98,9 +98,8 @@
               </tr>
             </tbody>
           </table>
-          <hr style="border-top: 1.5px solid #bbb;">
         </div>
-        <div class="mt-4 mb-2">
+        <div class="mt-4 mb-1">
           <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="riwayatgaji" @pagination-change-page="riwayat" />
         </div>
       </div>
@@ -871,7 +870,7 @@
           },
           allJabatan(){
                this.$axios.get('/sanctum/csrf-cookie').then(response => {
-              this.$axios.get('/api/alljabatan',{
+              this.$axios.get('/api/jabatanpegawai',{
                   headers: {Authorization: "Bearer " + this.token},
               })
                   .then(response => {

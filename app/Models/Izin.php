@@ -13,7 +13,7 @@ class Izin extends Model
 
     protected $fillable = [
         'id_admin',
-        'id',
+        'id_pegawai',
         'name',
         'nama_lengkap',
         'no_pegawai',

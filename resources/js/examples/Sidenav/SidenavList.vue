@@ -61,6 +61,19 @@
           </template>
         </sidenav-item>
       </li>
+      <!-- <li class="nav-item">
+        <sidenav-item
+          url="/shift"
+          :class="getRoute() === 'shift' ? 'active' : ''"
+          :navText="this.$store.state.isRTL ? 'الجداول' : 'Shift'"
+        >
+          <template v-slot:icon>
+            <i
+              class="ni ni-calendar-grid-58 text-danger text-sm opacity-10"
+            ></i>
+          </template>
+        </sidenav-item>
+      </li> -->
       <li class="nav-item">
         <sidenav-item
           url="/cuti"
@@ -87,8 +100,8 @@
       </li>
       <li class="nav-item">
         <sidenav-item
-          url="/uploadjob"
-          :class="getRoute() === 'uploadjob' ? 'active' : ''"
+          url="/datajob"
+          :class="getRoute() === 'datajob' ? 'active' : ''"
           :navText="this.$store.state.isRTL ? 'الجداول' : 'Job Pegawai'"
         >
           <template v-slot:icon>
@@ -134,6 +147,17 @@
         >
           <template v-slot:icon>
             <i class="ni ni-single-copy-04 text-success text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+      <li class="nav-item">
+        <sidenav-item
+          url="/rgaji"
+          :class="getRoute() === 'rgaji' ? 'active' : ''"
+          :navText="this.$store.state.isRTL ? 'تسجيل الدخول' : 'Riwayat Penggajian'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-single-copy-04 text-warning text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
@@ -270,9 +294,9 @@
       </li>
       <li class="nav-item">
         <sidenav-item
-          url="/job"
-          :class="getRoute() === 'job' ? 'active' : ''"
-          :navText="this.$store.state.isRTL ? 'الجداول' : 'Job'"
+          url="/jobpegawai"
+          :class="getRoute() === 'jobpegawai' ? 'active' : ''"
+          :navText="this.$store.state.isRTL ? 'الجداول' : 'Job/Task'"
         >
           <template v-slot:icon>
             <i class="fa-solid fa-list-check text-primary text-sm opacity-10"></i>
@@ -283,7 +307,7 @@
         <sidenav-item
           url="/kehadiran"
           :class="getRoute() === 'kehadiran' ? 'active' : ''"
-          :navText="this.$store.state.isRTL ? 'الجداول' : 'Kehadiran Pegawai'"
+          :navText="this.$store.state.isRTL ? 'الجداول' : 'Kehadiran'"
         >
           <template v-slot:icon>
             <i

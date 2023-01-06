@@ -14,8 +14,6 @@ class CutiTahunan extends Model
         'id',
         'id_admin',
         'id_cuti',
-        'nama_lengkap',
-        'no_pegawai',
         'email',
         'jumlah_cuti',
         'cuti_terpakai',

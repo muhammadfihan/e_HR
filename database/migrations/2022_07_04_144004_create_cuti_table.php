@@ -13,19 +13,24 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('table_master_cuti_tahunan', function (Blueprint $table) {
+        Schema::create('cuti', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_pegawai');
+            $table->string('name');
             $table->integer('id_admin')->unsigned();
             $table->foreign('id_admin')->references('id_admin')->on('akunpegawai');
             $table->string('email');
             $table->string('no_pegawai');
             $table->string('nama_lengkap');
-            $table->integer('id_cuti')->unsigned();
-            $table->foreign('id_cuti')->references('id')->on('master_cuti_perusahaan');
-            $table->integer('jumlah_cuti');
-            $table->integer('cuti_terpakai');
-            $table->integer('sisa_cuti');
-            $table->string('tahun');
+            $table->integer('jumlah_hari');
+            $table->date('tanggal_cuti');
+            $table->date('tanggal_mulai');
+            $table->date('tanggal_akhir');
+            $table->string('list_tanggal')->nullable();
+            $table->string('jenis_cuti');
+            $table->LongText('keterangan');
+            $table->string('bukti_cuti');
+            $table->enum('status_cuti', ['Diterima', 'Ditolak','Diproses'])->default('Diproses');
             $table->timestamps();
         });
     }
@@ -37,6 +42,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_master_cuti_tahunan');
+        Schema::dropIfExists('cuti');
     }
 };

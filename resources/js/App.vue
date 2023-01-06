@@ -1,19 +1,5 @@
-<!--
-=========================================================
-* Vue Argon Dashboard 2 - v3.0.0
-=========================================================
-
-* Product Page: https://creative-tim.com/product/vue-argon-dashboard
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <template>
-  <div v-if="loggedIn" class="container-fluid bg-gray-100" style="background-color: blue;z-index: 1 !important;width: 2000px !important; height: 35px !important; position: fixed;color: transparent;">Tes</div>
+   <div v-if="loggedIn" class="container-fluid bg-gray-100" style="background-color: blue;z-index: 1 !important;width: 2000px !important; height: 35px !important; position: fixed;color: transparent;">Tes</div>
   <div
     v-show="this.$store.state.layout === 'landing'"
     class="landing-bg h-100 bg-gradient-primary position-fixed w-100">
@@ -29,7 +15,10 @@ Coded by www.creative-tim.com
       :minNav="navbarMinimize"
       v-if="this.$store.state.showNavbar"
     />
-    <div  class="mt-3">
+    <div v-if="loggedIn" class="mt-3">
+     <router-view />
+    </div>
+    <div v-else-if="!loggedIn" class="">
      <router-view />
     </div>
   </main>
@@ -37,6 +26,7 @@ Coded by www.creative-tim.com
 <script>
 import Sidenav from "./examples/Sidenav/index.vue";
 import Navbar from "./examples/Navbars/Navbar.vue";
+import Tes from "./examples/Tes/Tes.vue"
 import { mapMutations } from "vuex";
 export default {
   data() {
@@ -54,6 +44,7 @@ export default {
   name: "App",
   components: {
     Sidenav,
+    Tes,
     Navbar,
   },
   methods: {
@@ -120,6 +111,17 @@ export default {
                     return this.$router.push({ name: "/" });
                 })
         },    
+        removelok(){
+      var token =  localStorage.getItem("token")
+              this.$axios.post('/api/lokasi', {
+                latitude: null,
+                longitude: null
+              },
+                {
+                  headers : { Authorization: "Bearer " + token },
+                },
+                )
+    }, 
     ...mapMutations(["toggleConfigurator", "navbarMinimize"])
   },
   computed: {
@@ -162,7 +164,7 @@ export default {
   },
   beforeMount() {
         this.$store.state.isTransparent = "bg-transparent";
-
     },
+
 };
 </script>

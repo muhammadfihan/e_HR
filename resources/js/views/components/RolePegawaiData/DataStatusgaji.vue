@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0">
+      <div class="table-responsive p-0 border-bottom">
         <table class="table align-items-center mb-0">
           <thead>
               <th></th>
@@ -78,7 +78,6 @@
             </tr>
           </tbody>
         </table>
-        <!-- <hr style="border-top: 1.5px solid #bbb;"> -->
       </div>
     </div>
   </div>

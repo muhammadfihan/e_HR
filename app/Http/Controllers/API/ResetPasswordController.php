@@ -24,18 +24,35 @@ class ResetPasswordController extends Controller
                     'message' => 'Code Expired',
                 ]);
             }
-            $user = AkunPegawai::where('email', $passwordReset->email)
-            ->update([
-               'password' => Hash::make($request->password)]);
-            $hapus = ResetCodePassword::select('*')->where('email', $passwordReset->email)->delete();
-            
-            return response()->json([
-                'success' => true,
-                'message' =>'Password Berhasil Direset',
-                'code' => $passwordReset,
-                'email' => $hapus,
-                'data' => $user
-            ]);
+            $admin = User::where('email', $passwordReset->email)->get()->toArray();
+            $pegawai = AkunPegawai::where('email', $passwordReset->email)->get()->toArray();
+            if($admin != null){
+                $updtadmin = AkunPegawai::where('email', $passwordReset->email)
+                ->update([
+                   'password' => Hash::make($request->password)]);
+                $adminreset = ResetCodePassword::select('*')->where('email', $passwordReset->email)->delete();
+                
+                return response()->json([
+                    'success' => true,
+                    'message' =>'Password Berhasil Direset',
+                    'code' => $passwordReset,
+                    'email' => $updtadmin,
+                    'data' => $adminreset
+                ]);
+            }if($pegawai != null){
+                $updtpegawai = AkunPegawai::where('email', $passwordReset->email)
+                ->update([
+                   'password' => Hash::make($request->password)]);
+                $pegawaireset = ResetCodePassword::select('*')->where('email', $passwordReset->email)->delete();
+                
+                return response()->json([
+                    'success' => true,
+                    'message' =>'Password Berhasil Direset',
+                    'code' => $passwordReset,
+                    'email' => $updtpegawai,
+                    'data' => $pegawaireset
+                ]);
+            }
         }else{
             return response()->json([
                 'success' => null,

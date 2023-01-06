@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('cuti', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_pegawai');
+            $table->string('name');
             $table->integer('id_admin')->unsigned();
             $table->foreign('id_admin')->references('id_admin')->on('akunpegawai');
             $table->string('email');
@@ -24,6 +26,7 @@ return new class extends Migration
             $table->date('tanggal_cuti');
             $table->date('tanggal_mulai');
             $table->date('tanggal_akhir');
+            $table->string('list_tanggal')->nullable();
             $table->string('jenis_cuti');
             $table->LongText('keterangan');
             $table->string('bukti_cuti');

@@ -33,6 +33,27 @@ class DataGajiController extends Controller
             ]);
        
     }
+    public function ajukancair(Request $request){
+        $validate = Validator::make($request->all(), [
+            'status' => 'required',
+         ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pencairan Gaji Gagal!',
+            ]);
+        } else {
+            $status =  DB::table('riwayatgaji')->where('id', $request->id)->update([
+                'status' => 'Mengajukan',
+            ]);
+            return response()->json([
+                'success' => true,
+                'data' => $status,
+                'message' => 'Pengajuan Cair Gaji!',
+            ]);
+        }
+    }
     public function cairgaji(Request $request){
         $validate = Validator::make($request->all(), [
             'status' => 'required',
@@ -99,7 +120,16 @@ class DataGajiController extends Controller
         return response()->json($data);
     }
     public function riwayatgaji(Request $request){
-        $riwayat = RiwayatGaji::where('id_admin' ,Auth::user()->id)->where('status','=',"Belum Cair")->latest()->paginate(8);
+        $riwayat = RiwayatGaji::where('id_admin' ,Auth::user()->id)->where('status','=',"Mengajukan")->latest()->paginate(8);
+            return response([
+                'data' => $riwayat,
+                'message' => 'get data berhasil',
+                'status' => true,
+            ]);
+       
+    }
+    public function riwayatpenggajian(Request $request){
+        $riwayat = RiwayatGaji::where('id_admin' ,Auth::user()->id)->where('status','=',"Cair")->latest()->paginate(8);
             return response([
                 'data' => $riwayat,
                 'message' => 'get data berhasil',
@@ -112,13 +142,13 @@ class DataGajiController extends Controller
             $result = DB::table('riwayatgaji')
                 ->select('*')
                 ->where('riwayatgaji.id_admin', Auth::user()->id)
-                ->where('status','=',"Sudah Diambil")
+                ->where('riwayatgaji.status', 'Cair')
                 ->where('email', 'like', '%' . $key . '%')
                 ->orWhere('tanggal_ambil', 'like', '%' . $key . '%')
+                ->where('riwayatgaji.status', 'Cair')
                 ->where('riwayatgaji.id_admin', Auth::user()->id)
                 ->latest()
-                ->paginate(10);
-
+                ->paginate(8);
             return $result;
 
     }
@@ -156,6 +186,7 @@ class DataGajiController extends Controller
     {
             $result = DB::table('penggajian')
                 ->select('*')
+                ->where('gaji_bersih', '!=', null)
                 ->where('penggajian.id_admin', Auth::user()->id)
                 ->where('email', 'like', '%' . $key . '%')
                 ->orWhere('tanggal', 'like', '%' . $key . '%')
@@ -250,6 +281,11 @@ class DataGajiController extends Controller
         ->where('id_admin', Auth::user()->id)
         ->latest()
         ->get()->toArray();
+        $status = DB::table('penggajian')
+        ->select('*')
+        ->where('id_admin', Auth::user()->id)
+        ->whereIn('status',['Belum Diambil'])
+        ->get();
 
         foreach($tunjangan as $i => $tes){
             $tun[$i] = explode(',', $tes->id_tunjangan);
@@ -305,6 +341,7 @@ class DataGajiController extends Controller
                
             return response()->json([
                 'data' => $tunjangan,
+                'cekstatus' => $status,
                 'tunjangan' => $val,
                 'nominal' => $nom,
                 'jabatan' => $valjab,

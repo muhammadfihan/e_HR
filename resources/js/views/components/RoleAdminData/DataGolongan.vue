@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card h-1000" style="height:630px !important">
     <div class="card-header pb-0">
       <div class="row">
         <div class="col-6 d-flex align-items-center">
@@ -19,7 +19,31 @@
       </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0">
+      <div v-if="this.golongan == ''" class="table-responsive p-0">
+        <table class="table align-items-center mb-0">
+          <thead>
+            <tr>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >No</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Golongan</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Pendidikan</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Nominal</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Action</th>
+            </tr>
+          </thead>
+        </table>
+        <p class="text-center text-secondary text-xl font-weight-bold mt-9" style="font-size:23px">Data Kosong</p>
+      </div>
+      <div v-else-if="this.golongan != ''" class="table-responsive p-0 border-bottom">
         <table class="table align-items-center mb-0">
           <thead>
             <tr>
@@ -57,14 +81,13 @@
               <td class="text-center text-sm align-middle" >
                 <span v-if="data.jenis_bonus == 'Tidak Ada Bonus'" class="badge badge-sm bg-secondary">Default</span>
                 <div v-if="data.jenis_bonus !== 'Tidak Ada Bonus'">
-                  <span style="margin-right:7px;cursor:pointer" @click.prevent="showModalEdit3(data)" class="badge badge-sm bg-warning">Edit</span>
-                  <span style="cursor:pointer" @click.prevent="hapusgolongan(data.id)" class="badge badge-sm bg-danger">Hapus</span>
+                  <span @click.prevent="showModalEdit3(data)" style="cursor:pointer; margin-right: 7px;" class="badge badge-sm bg-warning disabled"><i class="fas fa-edit"></i></span>
+                  <span @click.prevent="hapusgolongan(data.id)" style="cursor:pointer" class="badge badge-sm bg-danger"><i class="far fa-trash-alt"></i></span>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
-        <hr style="border-top: 1.5px solid #bbb;">
       </div>
     </div>
   </div>

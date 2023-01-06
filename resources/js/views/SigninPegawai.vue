@@ -1,21 +1,10 @@
 <template>
-    <body class="bg-default" style="margin-top:-20px">
-  <div class="main-content">
-    <!-- Navbar -->
-    <!-- Header -->
-    <div class="header bg-gradient-primary py-7 py-lg-8">
-      <div class="separator separator-bottom separator-skew zindex-100">
-        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
-          <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-        </svg>
-      </div>
-    </div>
-    <!-- Page content -->
-    <div class="container mt--8 pb-5">
+       <!-- Page content -->
+       <div class="container mx-auto mt-8">
       <!-- Table -->
       <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-8">
-          <div class="card bg-secondary shadow border-0">
+        <div class="col-lg-5">
+          <div class="card" style="background-color: #F5F5FC;box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;">
             <div class="card-header bg-transparent pb-4">
               <div class="text-muted text-center mt-2 mb-4">Login Sebagai</div>
               <div class="text-center">
@@ -23,15 +12,14 @@
                   <span class="mb-2"><i class="fa-solid fa-user-lock"></i></span>
                   <span class="btn-inner--text">Admin</span>
                 </a>
-                <a href="#" class="btn btn-neutral btn-icon mr-4" @click="topegawai()">
+                <a href="#" class="btn btn-primary text-white btn-icon mr-4" @click="topegawai()">
                   <span class="mb-2"><i class="fa-solid fa-user"></i></span>
                   <span class="btn-inner--text">Pegawai</span>
                 </a>
               </div>
             </div>
             <div class="card-body px-lg-5">
-              <div class="text-muted text-center mb-4">Anda Akan Login Sebagai Pegawai</div>
-
+                <div class="text-muted text-center mb-4">Anda Akan Login Sebagai <span class="text-primary fw-bolder">Pegawai</span></div>
               <form role="form">
                 <div class="form-group">
                   <div class="input-group input-group-alternative mb-3">
@@ -65,14 +53,6 @@
         </div>
       </div>
     </div>
-  </div>
-  <footer class="py-5">
-    <div class="container">
-      <div class="row align-items-center justify-content-xl-between">
-      </div>
-    </div>
-  </footer>
-</body>
 </template>
 
 <script>
@@ -143,15 +123,15 @@ export default {
                                 window.localStorage.setItem("name", response.data.user.name)
                                 window.localStorage.setItem("namapt", response.data.namapt)
                                 window.localStorage.setItem("status", response.data.user.status)
-                                navigator.geolocation.getCurrentPosition(
-                                function (position) {
-                                      window.localStorage.setItem("lat", position.coords.latitude)
-                                      window.localStorage.setItem("lon", position.coords.longitude)
-                                    },
-                                    error => {
-                                      console.log(error.message);
-                                    },
-                                )
+                                // navigator.geolocation.getCurrentPosition(
+                                // function (position) {
+                                //       window.localStorage.setItem("lat", position.coords.latitude)
+                                //       window.localStorage.setItem("lon", position.coords.longitude)
+                                //     },
+                                //     error => {
+                                //       console.log(error.message);
+                                //     },
+                                // )
 
                                 if (response.data.user.role == 'Manager') {
                                     this.$router.push("/superadmindashboard")

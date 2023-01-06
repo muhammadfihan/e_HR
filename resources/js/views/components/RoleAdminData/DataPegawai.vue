@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card h-1000" style="height:630px !important">
     <div class="card-header pb-0">
       <div class="row">
         <div class="col-6 d-flex align-items-center">
@@ -14,13 +14,13 @@
             <span class="input-group-text text-body bg-gray-100" style="outline-width: 2px; border:none">
               <i class="fas fa-search"></i>
             </span>
-            <input style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Cari Pegawai..." >
+            <input v-model="search" style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Cari Berdasarkan Pegawai..." >
           </div>
         </div>
       </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0">
+      <div v-if="this.pegawai.data == ''" class="table-responsive p-0">
         <table class="table align-items-center mb-0">
           <thead>
             <tr>
@@ -35,7 +35,38 @@
                 class=" ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >Golongan</th>
               <th
+                class=" ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >No Pegawai</th>
+              <th
                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Status</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Tanggal Masuk</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Action</th>
+            </tr>
+          </thead>
+        </table>
+        <p class="text-center text-secondary text-xl font-weight-bold mt-9" style="font-size:23px">Data Kosong</p>
+      </div>
+      <div v-else-if="this.pegawai.data != ''" class="table-responsive p-0 border-bottom">
+        <table class="table align-items-center mb-0">
+          <thead>
+            <tr>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >No</th>
+              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Pegawai</th>
+              <th
+                class=" ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Jabatan</th>
+              <th
+                class=" ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Golongan</th>
+              <th
+                class=" ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >No Pegawai</th>
               <th
                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
@@ -70,7 +101,7 @@
                   <span><a>-</a></span>
                 </span>
               </td>
-              <td class="align-middle text-center">
+              <td class="align-middle">
                 <span class="text-secondary text-xs font-weight-bold">{{data.no_pegawai}}</span>
               </td>
               <td class="align-middle text-center text-sm">
@@ -81,15 +112,14 @@
                 <span class="text-secondary text-xs font-weight-bold">{{data.tanggal_masuk}}</span>
               </td>
               <td class="align-middle text-center text-sm" >
-                <span style="margin-right:7px;cursor:pointer" class="badge badge-sm bg-primary" @click.prevent="detailPegawai(data.id)">Detail</span>
-                <span style="margin-right:7px;cursor:pointer" @click.prevent="editModal(data)" class="badge badge-sm bg-warning">Edit</span>
+                <span  @click.prevent="detailPegawai(data.id)" style="cursor:pointer;margin-right:7px" class="badge badge-sm bg-primary ms-0"><i class="far fa-eye"></i></span>
+                 <span @click.prevent="editModal(data)" style="cursor:pointer; margin-right: 7px;" class="badge badge-sm bg-warning disabled"><i class="fas fa-edit"></i></span>
               </td>
             </tr>
           </tbody>
         </table>
-        <hr style="border-top: 1.5px solid #bbb;">
       </div>
-      <div class="mt-4 mb-2">
+      <div class="mt-4 mb-1">
         <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="pegawai" @pagination-change-page="getdataPegawai" />
       </div>
     </div>

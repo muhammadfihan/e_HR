@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0">
+      <div class="table-responsive p-0 border-bottom">
         <table class="table align-items-center mb-0">
           <thead>
               <th></th>
@@ -38,9 +38,6 @@
               <th
                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >Status</th>
-              <th
-                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-              >Detail Gaji</th>
               <th
                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >Action</th>
@@ -62,20 +59,18 @@
                 </span>
               </td>
               <td  class="align-middle text-center text-sm">
-                <span class="badge badge-sm bg-gradient-warning" v-if="data.status == 'Belum Cair'">Belum Cair</span>
-                <span class="badge badge-sm bg-gradient-success" v-if="data.status == 'Cair'">Sudah Cair</span>
+                <span class="badge badge-sm bg-warning" v-if="data.status == 'Belum Cair'">Belum Cair</span>
+                <span class="badge badge-sm bg-success" v-if="data.status == 'Cair'">Sudah Cair</span>
+                <span class="badge badge-sm bg-warning" v-if="data.status == 'Mengajukan'">{{data.status}}</span>
               </td>
               <td  class="align-middle text-sm text-center">
-                  <span  @click.prevent="detailGaji(data.id)" style="cursor:pointer" class="badge badge-sm bg-primary" data-toggle="modal" >Detail</span>
-              </td>
-              <td  class="align-middle text-sm text-center">
-                  <span  @click.prevent="detailGaji(data.id)" style="cursor:pointer" class="badge badge-sm bg-info" data-toggle="modal" v-if="data.status == 'Belum Cair'">Cairkan</span>
-                  <span style="cursor:not-allowed" class="badge badge-sm bg-secondary" data-toggle="modal" v-if="data.status == 'Cair'">Cairkan</span>
+                  <span  @click.prevent="detailGaji(data.id)" style="cursor:pointer" class="badge badge-sm bg-primary me-2" data-toggle="modal" >Detail</span>
+                  <span  @click.prevent="cairgaji(data.id)" style="cursor:pointer" class="badge badge-sm bg-success" data-toggle="modal" v-if="data.status == 'Belum Cair'">Cairkan</span>
+                  <span style="cursor:not-allowed" class="badge badge-sm bg-secondary" data-toggle="modal" v-if="data.status == 'Cair' || data.status == 'Mengajukan'">Cairkan</span>
               </td>
             </tr>
           </tbody>
         </table>
-        <hr style="border-top: 1.5px solid #bbb;">
       </div>
       <div class="mt-4 mb-2">
         <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="riwayatgaji" @pagination-change-page="riwayat" />
@@ -308,6 +303,44 @@ export default {
         },
         
     methods:{
+        cairgaji(id){
+          const custom = Swal.mixin({
+            customClass: {
+              cancelButton: 'btn btn-secondary ms-2',
+              confirmButton: 'btn bg-gradient-success',
+              denyButton: 'btn bg-gradient-danger',
+            },
+            buttonsStyling: false
+          })  
+        custom.fire({
+            title: 'Pengajuan Pencairan Gaji ?',
+            icon: 'warning',
+            showCancelButton:true,
+            confirmButtonText: 'Ajukan',
+            cancelButtonText: 'Nanti'
+          }).then((result)=>{
+            if(result.isConfirmed){
+              this.$axios.post('/api/ajukancair',
+                 {
+                     id: id,
+                     status: "Mengajukan"
+                 },
+                 {
+                     headers: { Authorization: "Bearer " + this.token }
+                 }).then((response)=>{
+                    if(response.data.success){
+                      const toast = useToast();
+                      toast.success("Gaji Anda Sedang Diproses", {
+                      position: "top-center",
+                      timeout: 2000,
+                      icon: "fa-sharp fa-solid fa-thumbs-up"
+                      })
+                      this.riwayat()  
+                    }
+                 })
+            }
+          })
+        },
         getcount(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/countgaji',{

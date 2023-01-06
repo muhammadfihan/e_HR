@@ -27,6 +27,133 @@ use App\Models\Potongan;
 
 class UserController extends Controller
 {
+    public function teslogin(Request $request){
+        $validate = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'error' => true,
+                'success' => false,
+                'message' => 'Login Failed!',
+            ]);
+        }else{
+            $admin = User::where('email', $request->email)->first();
+            $pegawai = AkunPegawai::where('email', $request->email)->first();
+            if($admin == null && $pegawai == null){
+                return response()->json([
+                    'error' => true,
+                    'success' => false,
+                    'message' => 'Tidak ditemukan'
+                ]);
+            }else{
+                if($admin != null){
+                    $user = User::where('email', $request->email)->first();
+                    if ($user === null) {
+                        $response = [
+                            'success'   => false,
+                            'errors'    => true,
+                            'input'     => false
+                        ];
+                        return response($response, 201);
+                     }if($user->status == 'Pending'){
+                        $response = [
+                            'success'   => null,
+                            'errors'    => true,
+                        ];
+                        return response($response, 201);
+                     }if($user->status == 'Nonaktif'){
+                        $response = [
+                            'success'   => false,
+                            'errors'    => true,
+                            'nonaktif' => true
+                        ];
+                        return response($response, 201);
+                     }if($user->status == 'Diterima'){
+                        $detail = User::select('*')
+                        ->where('id', $user->id)
+                        ->first();
+                     }
+                    $data = [
+                        'email'     => $request->input('email'),
+                        'password'  => $request->input('password'),
+                    ];
+                    if (Auth::guard('admin')->attempt($data)) {
+                        $token = $user->createToken('auth_token');
+                        return response()->json([
+                            'success'   => true,
+                            'user'      => $detail->makeHidden('password'),
+                            'errors'    => null,
+                            'token'     => $token->plainTextToken,
+                            'expired_at' => $token->accessToken->expired_at
+                        ], 201);
+                    }
+                    
+                    else {
+                        return response()->json([
+                            'akun' => false,
+                            'success' => false,
+                            'message' => 'Access Denied!',
+                        ]);
+        
+                    }
+                }else{
+                    $userpegawai = AkunPegawai::where('email', $request->email)->first();
+                    if ($userpegawai === null) {
+                        $response = [
+                            'success'   => false,
+                            'errors'    => true,
+                        ];
+                        return response($response, 201);
+                     }
+                     if ($userpegawai->status === 'Tidak Aktif') {
+                        $response = [
+                            'success' => false,
+                            'errors' => true,
+                            'nonaktif' => true
+                        ];
+                        return response($response, 201);
+                     }else{
+                        $detail = AkunPegawai::select('*')
+                        ->where('id', $userpegawai->id)
+                        ->first();
+                     }
+                   
+        
+                    $data1 = [
+                        'email'     => $request->input('email'),
+                        'password'  => $request->input('password'),
+                    ];
+                    if (Auth::guard('pegawai')->attempt($data1)) {
+                        $namapt = User::where('id', $detail->id_admin)->pluck('nama_perusahaan');
+                        $token = $userpegawai->createToken('auth_token');
+                        $lastlogin = DB::table('akunpegawai')->where('email', $request->email)->update([
+                            'last_login' => Carbon::now('Asia/Jakarta')
+                        ]);
+                        return response()->json([
+                            'success'   => true,
+                            'last_login' => $lastlogin,
+                            'user'      => $detail->makeHidden('password'),
+                            'namapt'    => $namapt,
+                            'errors'    => null,
+                            'token'     => $token->plainTextToken,
+                            'expired_at' => $token->accessToken->expired_at
+                        ], 201);
+                    }
+                    else {
+                        return response()->json([
+                            'akun' => false,
+                            'success' => false,
+                            'message' => 'Access Denied!',
+                        ]);
+        
+                    }
+                }
+            }
+        }
+    }
     public function login(Request $request)
     {
         $validate = Validator::make($request->all(), [
@@ -159,27 +286,13 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'jabatan' => 'required|string|max:255',
-            'nama_perusahaan' => 'required|string|max:255',
-            'provinsi' => 'required|string|max:255',
-            'kota' => 'required|string|max:255',
-            'kode_pos' => 'required|string|max:255',
-            'npwp' => 'required|string|max:255',
-            'det_alamat' => 'required|string|max:255',
-            'bidang' => 'required|string|max:255',
-            'jumlah_karyawan' => 'required|integer',
-            'password' => 'required|string|min:8',
-
-        ]);
-        $success = false;
-        if($validator->fails()){
-            return response()
-                ->json(['message' => 'Unauthorized', 'success'=>$success], 401);
-        }
         if (User::where('email', '=', $request->input('email'))->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Email telah digunakan'
+            ]);  
+        }
+        if (AkunPegawai::where('email', '=', $request->input('email'))->exists()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Email telah digunakan'
@@ -230,10 +343,6 @@ class UserController extends Controller
             'jenis_potongan' => 'Tidak Ada Potongan',
             'nominal' => 0
         ]);
-        $harikerja = HariKerja::create([
-            'email_admin' => $user->email,
-        ]);
-
         $success = true;
         $message = 'User register successfully';
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -264,6 +373,12 @@ class UserController extends Controller
                 'message' => 'Email telah digunakan'
             ]);  
         }
+        if (User::where('email', '=', $request->input('email'))->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Email telah digunakan'
+            ]);  
+        }
         $pass = "1234567890";
         $random = strtoupper(substr(str_shuffle($pass), 0, 9));
         $timezone = 'Asia/Jakarta'; 
@@ -287,7 +402,7 @@ class UserController extends Controller
             'password' => 'Password'.$random,
         ]);
         $akunpegawai->save();
-        $huruf = "1234567890";
+        // $huruf = "1234567890";
         $timezone = 'Asia/Jakarta'; 
         $date = new DateTime('now', new DateTimeZone($timezone)); 
         $tanggal = $date->format('Y-m-d');
@@ -302,9 +417,9 @@ class UserController extends Controller
         // $cuti = $request->input('jatah_cuti');
 
         if($akunpegawai->jumlah_kerja >= 365){
-            $nopegawai = strtoupper(substr(str_shuffle($huruf), 0, 9));
+            // $nopegawai = strtoupper(substr(str_shuffle($huruf), 0, 9));
             $pegawai = DataPegawai::create([
-                'no_pegawai' => 'PN'.$nopegawai,
+                'no_pegawai' => $request->no_pegawai,
                 'name' => $request->name,
                 'email' => $request->email,
                 'id' => $akunpegawai->id,
@@ -327,8 +442,6 @@ class UserController extends Controller
             DB::table('table_master_cuti_tahunan')->insert([
                 'id_admin' => Auth::user()->id,
                 'email' => $request->email,
-                'no_pegawai' => 'PN'.$nopegawai,
-                'nama_lengkap' => $request->name,
                 'id_cuti' => $getDataCuti[0]->id,
                 'jumlah_cuti' => $getDataCuti[0]->jumlah_cuti,
                 'cuti_terpakai' => 0,
@@ -350,9 +463,9 @@ class UserController extends Controller
                 ]);
         }
 
-        $nopegawai = strtoupper(substr(str_shuffle($huruf), 0, 9));
+        // $nopegawai = strtoupper(substr(str_shuffle($huruf), 0, 9));
         $pegawai = DataPegawai::create([
-            'no_pegawai' => 'PN'.$nopegawai,
+            'no_pegawai' => $request->no_pegawai,
             'name' => $request->name,
             'email' => $request->email,
             'id' => $akunpegawai->id,
@@ -402,8 +515,6 @@ class UserController extends Controller
                 ->where('akunpegawai.id_admin', Auth::user()->id)
                 ->where('email', 'like', '%' . $key . '%')
                 ->orWhere('name', 'like', '%' . $key . '%')
-                ->orWhere('tanggal_masuk', 'like', '%' . $key . '%')
-                ->orWhere('status', 'like', '%' . $key . '%')
                 ->where('akunpegawai.id_admin', Auth::user()->id)
                 ->paginate(10);
 

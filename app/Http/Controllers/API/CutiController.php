@@ -79,6 +79,9 @@ class CutiController extends Controller
             ]);
     }
     public function tambahcuti(Request $request){
+        $timezone = 'Asia/Jakarta'; 
+        $date = new DateTime('now', new DateTimeZone($timezone)); 
+        $tanggal = $date->format('Y-m-d');
         // return $request->all();
      if($request->hasfile('bukti_cuti')){
         $filename = str_replace('','',$request->file('bukti_cuti')->getClientOriginalName());
@@ -95,7 +98,26 @@ class CutiController extends Controller
                 'success' => false
     
                 ]);    
-        };
+        }
+        $ct = DB::table('cuti')
+        ->where('email', Auth::user()->email)
+        ->where('status_cuti', 'Diproses')
+        ->first();
+        if($ct != null){
+                return response()->json([
+                    'success' => 15,
+                    'message' => 'Menunggu pengajuan selanjutnya'
+                ]);
+        }
+        $arraytanggal = explode(',', $tanggal);
+        $sedangcuti = DB::table('cuti')->where('id_pegawai', Auth::user()->id)->where('status_cuti', 'Diterima')->whereJsonContains('list_tanggal',$arraytanggal)->get()->toArray();
+        if($sedangcuti != null){
+            return response()->json([
+                'success' => 12,
+                'message' => 'Cuti Sedang Berlangsung'
+            ]);
+        }
+
         if($interval/60/60/24 > $jatah->jumlah_cuti){
             return response()->json([
                 'message' =>'Tidak Bisa Dikurangi',
@@ -104,8 +126,14 @@ class CutiController extends Controller
                 ]);    
         }else{
             $user = DataPegawai::where('id', Auth::user()->id)->first();
+            $listcuti = [];
+            for ( $i = strtotime($request->input('tanggal_mulai')); $i <= strtotime($request->input('tanggal_akhir')); $i = $i + 86400 ) {
+                $listcuti[] = date( 'Y-m-d', $i );
+            }
             $cuti = Cuti::create([
                 'id_admin' => Auth::user()->id_admin,
+                'id_pegawai' => Auth::user()->id,
+                'name' => Auth::user()->name,
                 'email' => Auth::user()->email,
                 'nama_lengkap' => $user->nama_lengkap,
                 'no_pegawai' => $user->no_pegawai,
@@ -113,6 +141,7 @@ class CutiController extends Controller
                 'tanggal_cuti' => Carbon::now(),
                 'tanggal_mulai' => $request->tanggal_mulai,
                 'tanggal_akhir' => $request->tanggal_akhir,
+                'list_tanggal' => json_encode($listcuti),
                 'jenis_cuti' => $request->jenis_cuti,
                 'keterangan' => $request->keterangan,
                 'bukti_cuti' => $filename,
@@ -130,7 +159,7 @@ class CutiController extends Controller
             Pemberitahuan::create([
                 'id_admin' => Auth::user()->id_admin,
                 'email' => Auth::user()->email,
-                'judul' => 'Pengajuan',
+                'judul' => 'Pengajuan Cuti',
                 'jenis' => 'Pengajuan Cuti',
                 'status' => 'Menunggu Konfirmasi',
                 'tanggal' => $tanggal,
@@ -138,10 +167,11 @@ class CutiController extends Controller
             ]);
             return response()->json([
                 'data' => $cuti,
-                // 'jatah' => $hasil,
-                'message' =>'Cuti successfully added',
-                'success' => true
-    
+                'tes'   => $listcuti,
+                'message' => 'Cuti successfully added',
+                'success' => true,
+                // 'cek' => explode(',', $hasilcuti),
+                'tanggal' => $tanggal
                 ]);  
         }
          
@@ -240,6 +270,13 @@ class CutiController extends Controller
                     $date = new DateTime('now', new DateTimeZone($timezone)); 
                     $tanggal = $date->format('Y-m-d');
                     $localtime = $date->format('H:i:s');
+
+                    $updatecuti = DB::table('absensipegawai')->where('id_admin', Auth::user()->id)
+                    ->where('email', $status2->email)
+                    ->where('tanggal', $tanggal)
+                    ->update([
+                        'keterangan' => 'Cuti'
+                    ]);
                     Pemberitahuan::create([
                         'id_admin' => Auth::user()->id,
                         'email' => $status2->email,
@@ -253,6 +290,7 @@ class CutiController extends Controller
                         'hasil' => $hasil,
                         'hasil2' => $update2,
                         'data' => $status,
+                        'updtecuti' => $updatecuti,
                         'success' => true,
                         'message' => 'Diterima Setelah Di Acc',
                     ]);
@@ -261,6 +299,15 @@ class CutiController extends Controller
                 $date = new DateTime('now', new DateTimeZone($timezone)); 
                 $tanggal = $date->format('Y-m-d');
                 $localtime = $date->format('H:i:s');
+
+                $updtcuti = DB::table('absensipegawai')->where('id_admin', Auth::user()->id)
+                    ->where('email', $status2->email)
+                    ->where('tanggal', $tanggal)
+                    ->where('keterangan', "Cuti")
+                    ->update([
+                        'keterangan' => 'Tidak Hadir'
+                ]);
+
                 Pemberitahuan::create([
                     'id_admin' => Auth::user()->id,
                     'email' => $status2->email,
@@ -273,6 +320,7 @@ class CutiController extends Controller
                 return response()->json([
                     'data' => $status,
                     'success' => true,
+                    'updatecuti' => $updtcuti,
                     'message' => 'Ditolak setelah di acc',
                 ]);
             }
@@ -295,6 +343,15 @@ class CutiController extends Controller
                     $date = new DateTime('now', new DateTimeZone($timezone)); 
                     $tanggal = $date->format('Y-m-d');
                     $localtime = $date->format('H:i:s');
+
+                    $updtcuti2 = DB::table('absensipegawai')->where('id_admin', Auth::user()->id)
+                    ->where('email', $status2->email)
+                    ->where('tanggal', $tanggal)
+                    ->where('keterangan', "Cuti")
+                    ->update([
+                        'keterangan' => 'Tidak Hadir'
+                    ]);
+
                     Pemberitahuan::create([
                         'id_admin' => Auth::user()->id,
                         'email' => $status2->email,
@@ -307,6 +364,7 @@ class CutiController extends Controller
                     return response()->json([
                         'hasil2' => $update2,
                         'data' => $status,
+                        'updatecuti' => $updtcuti2,
                         'success' => true,
                         'message' => 'Ditolak Setelah Diterima',
                     ]);
@@ -357,11 +415,15 @@ class CutiController extends Controller
                 $datetime2 = strtotime($request->input('tanggal_akhir'));
                 $interval = $datetime2 - $datetime1;
 
+                for ( $i = strtotime($request->input('tanggal_mulai')); $i <= strtotime($request->input('tanggal_akhir')); $i = $i + 86400 ) {
+                    $listcuti[] = date( 'Y-m-d', $i );
+                }
                 $update = DB::table('cuti')->where('id', $request->id)->update([
                     'jumlah_hari' => $interval/60/60/24,
                     'tanggal_mulai' => $request->tanggal_mulai,
                     'tanggal_akhir' => $request->tanggal_akhir,
                     'jenis_cuti' => $request->jenis_cuti,
+                    'list_tanggal' => json_encode($listcuti),
                     'keterangan' => $request->keterangan,
                     'bukti_cuti' => $filename
                 ]);

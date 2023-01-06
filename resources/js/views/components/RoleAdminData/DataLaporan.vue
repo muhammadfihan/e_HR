@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+   <div class="card h-1000" style="height:630px !important">
     <div class="card-header pb-0">
       <div class="row">
         <div class="col-6 d-flex align-items-center">
@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0">
+      <div v-if="this.laporan.data == ''" class="table-responsive p-0">
         <table class="table align-items-center mb-0">
           <thead>
             <tr>
@@ -52,6 +52,39 @@
               >Action</th>
             </tr>
           </thead>
+        </table>
+        <p class="text-center text-secondary text-xl font-weight-bold mt-9" style="font-size:23px">Data Kosong</p>
+      </div>
+      <div v-else-if="this.laporan.data != ''" class="table-responsive p-0 border-bottom">
+        <table class="table align-items-center mb-0">
+          <thead>
+            <tr>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >No</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Email Pegawai</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >No Pegawai</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Jabatan</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Lampiran</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Tanggal</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Status</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Action</th>
+            </tr>
+          </thead>
           <tbody>
             <tr v-for="(data,index) in laporan.data" :key="data.id">
               <td class="align-middle text-center">
@@ -77,20 +110,18 @@
               <td class="align-middle text-center text-sm">
                 <span class="badge badge-sm bg-success" v-if="data.status_laporan == 'Diterima'" >{{data.status_laporan}}</span>
                 <span class="badge badge-sm bg-danger" v-else-if="data.status_laporan == 'Ditolak'" >{{data.status_laporan}}</span>
-                <span class="badge badge-sm bg-info text-white" v-else-if="data.status_laporan == 'Diproses'" >Belum Disetujui</span>
-              </td>
-              <td class="align-middle text-center text-sm" >
-                <span @click.prevent="confirmlaporan(data.id)" style="cursor:pointer;margin-right:7px;" class="badge badge-sm bg-primary">Manage</span>
+                <span class="badge badge-sm bg-secondary text-white" v-else-if="data.status_laporan == 'Diproses'" >{{data.status_laporan}}</span>
               </td>
               <td class="align-middle text-center text-sm">
-                <span  @click.prevent="detaillaporan(data.id)" style="cursor:pointer;" class="badge badge-sm bg-warning"><i class="far fa-eye"></i></span>
+                <span @click.prevent="detaillaporan(data.id)" style="cursor:pointer;margin-right:7px" class="badge badge-sm bg-primary ms-0"><i class="far fa-eye"></i></span>
+                <span  @click.prevent="confirmlaporan(data.id)" style="cursor:pointer; margin-right: 7px;" class="badge badge-sm bg-warning disabled"><i class="fas fa-edit"></i></span>
+                <span style="cursor:pointer" class="badge badge-sm bg-danger"><i class="far fa-trash-alt"></i></span>
               </td>
             </tr>
           </tbody>
         </table>
-        <hr style="border-top: 1.5px solid #bbb;">
       </div>
-      <div class="mt-4 mb-2">
+      <div class="mt-4 mb-1">
         <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="laporan" @pagination-change-page="tampillaporan" />
       </div>
     </div>

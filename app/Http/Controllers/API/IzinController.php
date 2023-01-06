@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Absensi;
 use App\Models\DataPegawai;
 use App\Models\Izin;
 use App\Models\Pemberitahuan;
+use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Http\Request;
@@ -81,39 +83,49 @@ class IzinController extends Controller
             $file_path = "files/";
             $filename = str_replace('','',$request->file('bukti')->getClientOriginalName());
             $request->file('bukti')->move($file_path, $filename);
-
             $user = DataPegawai::where('id', Auth::user()->id)->first();
-            $ajukanizin = Izin::create([
-                'id_admin' => Auth::user()->id_admin,
-                'email' => Auth::user()->email,
-                'name' => Auth::user()->name,
-                'nama_lengkap' => $user->nama_lengkap,
-                'no_pegawai' => $user->no_pegawai,
-                'tanggal' => $request->tanggal,
-                'jenis_izin' => $request->jenis_izin,
-                'bukti' => $filename,
-            ]);
-            $timezone = 'Asia/Jakarta'; 
-            $date = new DateTime('now', new DateTimeZone($timezone)); 
-            $tanggal = $date->format('Y-m-d');
-            $localtime = $date->format('H:i:s');
-            Pemberitahuan::create([
-                'id_admin' => Auth::user()->id_admin,
-                'email' => Auth::user()->email,
-                'judul' => 'Pengajuan Izin ',
-                'jenis' => 'Pengajuan',
-                'status' => 'Belum Dikonfirmasi',
-                'tanggal' => $tanggal,
-                'jam' => $localtime
-            ]);
-            $ajukanizin->save();
-            $success = true;
-            return response()->json([
-                'data' => $ajukanizin,
-                'message' =>'Izin successfully added',
-                'success' => $success
-    
+            $cekhari = DB::table('harikerja')->where('id_admin', Auth::user()->id_admin)->first();
+            $cekizin = $request->input('tanggal');
+            $cek = Carbon::parse($cekizin)->locale('id')->dayName;
+            if(str_contains($cekhari->hari_kerja,$cek)){
+                $ajukanizin = Izin::create([
+                    'id_admin' => Auth::user()->id_admin,
+                    'id_pegawai' => Auth::user()->id,
+                    'email' => Auth::user()->email,
+                    'name' => Auth::user()->name,
+                    'nama_lengkap' => $user->nama_lengkap,
+                    'no_pegawai' => $user->no_pegawai,
+                    'tanggal' => $request->tanggal,
+                    'jenis_izin' => $request->jenis_izin,
+                    'bukti' => $filename,
                 ]);
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id_admin,
+                    'email' => Auth::user()->email,
+                    'judul' => 'Pengajuan Izin ',
+                    'jenis' => 'Pengajuan',
+                    'status' => 'Belum Dikonfirmasi',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
+                $ajukanizin->save();
+                $success = true;
+                return response()->json([
+                    'data' => $ajukanizin,
+                    'message' =>'Izin successfully added',
+                    'success' => $success
+        
+                    ]);   
+            }else{
+                return response()->json([
+                    'success' => false,
+                    'message' =>'Tanggal Tersebut bukan hari kerja',
+                    ]);   
+            }
         }
 
        
@@ -147,11 +159,75 @@ class IzinController extends Controller
                 'tanggal' => $tanggal,
                 'jam' => $localtime
             ]);
-            return response()->json([
-                'data' => $status,
-                'success' => true,
-                'message' => 'Update Status Berhasil!',
-            ]);
+            $pengecekan = DB::table('absensipegawai')->where('email', $user->email)->where('tanggal', $user->tanggal)->first();
+            if($pengecekan == null){
+                $buatizin = Absensi::create([
+                    'id' => $user->id_pegawai,
+                    'name' => $user->name,
+                    'id_admin' => $user->id_admin,
+                    'email' => $user->email,
+                    'nama_lengkap' => $user->nama_lengkap,
+                    'tanggal' => $user->tanggal,
+                    'keterangan' => "Izin",
+                    'created_at' => $tanggal
+                ]);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Buat Absen Izin',
+                    'data' => $buatizin
+                ]);
+            }else{
+                if($request->status_izin == 'Ditolak'){
+                    $cekizin = DB::table('absensipegawai')->where('email', $user->email)->where('tanggal', $user->tanggal)->first();
+                    $jamkerja = DB::table('harikerja')->where('id_admin',Auth::user()->id)->first();
+                    if($cekizin->jam_masuk != null){
+                        if($cekizin->jam_masuk > $jamkerja->jam_masuk){
+                            $update = DB::table('absensipegawai')->where('email', $user->email)->where('tanggal', $user->tanggal)
+                            ->update([
+                                'keterangan' => 'Terlambat'
+                            ]);
+                            return response()->json([
+                                'success' => true,
+                                'message' => 'Terlambat!',
+                            ]);
+                        }if($cekizin->jam_masuk < $jamkerja->jam_masuk){
+                            $update = DB::table('absensipegawai')->where('email', $user->email)->where('tanggal', $user->tanggal)
+                            ->update([
+                                'keterangan' => 'On Time'
+                            ]);
+                            return response()->json([
+                                'success' => true,
+                                'message' => 'On Time!',
+                            ]);
+                        }
+                    }
+                    $update1 = DB::table('absensipegawai')->where('email', $user->email)->where('tanggal', $user->tanggal)
+                    ->update([
+                        'keterangan' => 'Tidak Hadir'
+                    ]);
+                    return response()->json([
+                        'data' => $update1,
+                        'success' => true,
+                        'message' => 'Ditolak!',
+                    ]);
+                } if($request->status_izin == 'Diterima'){
+                    $update = DB::table('absensipegawai')->where('email', $user->email)->where('tanggal', $user->tanggal)
+                        ->update([
+                            'keterangan' => 'Izin'
+                        ]);
+                        return response()->json([
+                            'data' => $update,
+                            'success' => true,
+                            'message' => 'Diterima!',
+                        ]);
+                }
+                return response()->json([
+                    'data' => $status,
+                    'success' => true,
+                    'message' => 'Update Status Berhasil!',
+                ]);
+            }
+
         }
     }
 
@@ -171,30 +247,39 @@ class IzinController extends Controller
             if($request->hasfile('bukti')){
                 $filename = str_replace('','',$request->file('bukti')->getClientOriginalName());
                 $request->file('bukti')->move(public_path('files'), $filename);
-
-                $update = DB::table('izin')->where('id', $request->id)->update([
-                    'tanggal' => $request->tanggal,
-                    'jenis_izin' => $request->jenis_izin,
-                    'bukti' => $filename
-                ]);
-                $timezone = 'Asia/Jakarta'; 
-                $date = new DateTime('now', new DateTimeZone($timezone)); 
-                $tanggal = $date->format('Y-m-d');
-                $localtime = $date->format('H:i:s');
-                Pemberitahuan::create([
-                    'id_admin' => Auth::user()->id,
-                    'email' => Auth::user()->email,
-                    'judul' => 'Update Pengajuan Izin ',
-                    'jenis' => 'Pengajuan',
-                    'status' => 'Update Berhasil',
-                    'tanggal' => $tanggal,
-                    'jam' => $localtime
-                ]);
-                return response()->json([
-                    'data' => $update,
-                    'success' => true,
-                    'message' => 'Update Izin Berhasil!',
-                ]);
+                $cekhari = DB::table('harikerja')->where('id_admin', Auth::user()->id_admin)->first();
+                $cekizin = $request->input('tanggal');
+                $cek = Carbon::parse($cekizin)->locale('id')->dayName;
+                if (str_contains($cekhari->hari_kerja, $cek)) {
+                    $update = DB::table('izin')->where('id', $request->id)->update([
+                        'tanggal' => $request->tanggal,
+                        'jenis_izin' => $request->jenis_izin,
+                        'bukti' => $filename
+                    ]);
+                    $timezone = 'Asia/Jakarta'; 
+                    $date = new DateTime('now', new DateTimeZone($timezone)); 
+                    $tanggal = $date->format('Y-m-d');
+                    $localtime = $date->format('H:i:s');
+                    Pemberitahuan::create([
+                        'id_admin' => Auth::user()->id,
+                        'email' => Auth::user()->email,
+                        'judul' => 'Update Pengajuan Izin ',
+                        'jenis' => 'Pengajuan',
+                        'status' => 'Update Berhasil',
+                        'tanggal' => $tanggal,
+                        'jam' => $localtime
+                    ]);
+                    return response()->json([
+                        'data' => $update,
+                        'success' => true,
+                        'message' => 'Update Izin Berhasil!',
+                    ]);
+                }else{
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Bukan Hari Kerja ',
+                    ]);
+                }   
             }
             
         }

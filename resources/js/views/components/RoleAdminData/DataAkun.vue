@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card h-1000" style="height:630px !important">
     <div class="card-header pb-0">
       <div class="row">
         <div class="col-6 d-flex align-items-center">
@@ -16,13 +16,37 @@
             <span class="input-group-text text-body bg-gray-100" style="outline-width: 2px; border:none">
               <i class="fas fa-search"></i>
             </span>
-            <input style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Cari Cuti Pegawai..." >
+            <input style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" v-model="search" placeholder="Cari Berdasarkan Username/Email..." >
           </div>
         </div>
       </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0">
+      <div v-if="this.akunpegawai.data == ''" class="table-responsive p-0">
+        <table class="table align-items-center mb-0">
+          <thead>
+            <tr>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >No</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Username</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Email</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Jabatan</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Status</th>
+            </tr>
+          </thead>
+        </table>
+        <p class="text-center text-secondary text-xl font-weight-bold mt-9" style="font-size:23px">Data Kosong</p>
+      </div>
+      <div v-else-if="this.akunpegawai.data != ''" class="table-responsive p-0 border-bottom">
         <table class="table align-items-center mb-0">
           <thead>
             <tr>
@@ -66,9 +90,8 @@
             </tr>
           </tbody>
         </table>
-        <hr style="border-top: 1.5px solid #bbb;">
       </div>
-      <div class="mt-4 mb-2">
+      <div class="mt-4 mb-1">
         <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="akunpegawai" @pagination-change-page="getUser" />
       </div>
     </div>
@@ -88,6 +111,10 @@
                         <div class="input-errors" v-for="(error, index) of v$.form.name.$errors" :key="index">
                             <span class="error-msg text-xs" style="color:red">Harap Masukan Username Pegawai</span>
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">No Pegawai</label>
+                        <input type="text" v-model="form.no_pegawai" class="form-control form-control-md">
                     </div>
                     <div class="mb-3" :class="{ error: v$.form.email.$errors.length }">
                         <label class="form-label">Email</label>
@@ -157,6 +184,7 @@ export default {
             form : new Form({
                 id : "",
                 name : "",
+                no_pegawai : "",
                 id_jabatan : "",
                 id_golongan : "",
                 tanggal_masuk: "",
@@ -292,8 +320,7 @@ export default {
             {
                 this.getUser()
             }else {
-                axios
-                    .get('/api/searchuser/'+ val , {
+                this.$axios.get('/api/searchuser/'+ val , {
                         headers: {Authorization: "Bearer " + this.token},
                     })
                     .then((response) => {

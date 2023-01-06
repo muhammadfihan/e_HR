@@ -23,7 +23,7 @@
         >
         </div>
         <ul class="navbar-nav justify-content-end">
-          <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+          <li class="nav-item ps-3 d-flex align-items-center">
             <a
               href="#"
               @click="toggleSidebar"
@@ -238,7 +238,21 @@ export default {
     pegawaiprofile(){
       this.$router.push({name: "Profil Pegawai"})
     },
+    removelok(){
+      var token =  localStorage.getItem("token")
+              this.$axios.post('/api/lokasi', {
+                latitude: null,
+                longitude: null
+              },
+                {
+                  headers : { Authorization: "Bearer " + token },
+                },
+                )
+    },  
     logout() {
+      if(this.role == "Pegawai"){
+          this.removelok()
+       }
       this.$axios.post('/api/logout', {
                         tok: this.token
                     },
@@ -248,7 +262,9 @@ export default {
                         }
                     }).then((response) => {
                     localStorage.clear()
-                    return this.$router.push('/login')
+                    this.$router.push('/login')
+                    window.localStorage.removeItem("ceklat")
+                    window.localStorage.removeItem("ceklon")
                 })
         },
     ...mapMutations(["navbarMinimize"]),

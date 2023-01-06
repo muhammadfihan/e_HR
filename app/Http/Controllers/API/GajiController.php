@@ -117,6 +117,7 @@ class GajiController extends Controller
     {
                 $result = DB::table('tunjangan')
                 ->select('*')
+                ->where('jenis_tunjangan','!=','Tidak Ada Tunjangan')
                 ->where('tunjangan.email_admin', Auth::user()->email)
                 ->where('jenis_tunjangan', 'like', '%' . $key . '%')
                 ->where('tunjangan.email_admin', Auth::user()->email)
@@ -217,6 +218,7 @@ class GajiController extends Controller
     {
             $result = DB::table('bonus')
                 ->select('*')
+                ->where('jenis_bonus','!=','Tidak Ada Bonus')
                 ->where('bonus.email_admin', Auth::user()->email)
                 ->where('jenis_bonus', 'like', '%' . $key . '%')
                 ->where('bonus.email_admin', Auth::user()->email)
@@ -316,6 +318,7 @@ class GajiController extends Controller
     {
             $result = DB::table('potongan')
                 ->select('*')
+                ->where('jenis_potongan','!=', 'Tidak Ada Potongan')
                 ->where('potongan.email_admin', Auth::user()->email)
                 ->where('jenis_potongan', 'like', '%' . $key . '%')
                 ->where('potongan.email_admin', Auth::user()->email)

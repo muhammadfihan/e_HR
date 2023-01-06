@@ -62,26 +62,52 @@ class ForgotPasswordController extends Controller
             ->where('email', $imel)
             ->get()
             ->toArray();
-        if($dat == null){
+        $peg = DB::table('akunpegawai')
+        ->select('name')
+        ->where('email', $imel)
+        ->get()
+        ->toArray();
+        if($dat == null && $peg == null){
             return response()->json([
                 'success' => false,
                 'message' => 'Email Tidak Terdaftar'
             ]);
+        }else{
+            if($dat != null){
+                $objectToArray = (array)$dat;
+                $name1 = $objectToArray[0];
+                $name2 = (array)$name1;
+                $nama = $name2['name'];
+                $data = [
+                    'judul' => "Halaman Ubah Password Admin",
+                    'nama' => $nama,
+                    'token' => $token,
+                    'email' => $imel
+                ];
+                Mail::to($imel)->send(new SendCodeAdmin($data));
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Check Email Success!',
+                ]);
+            }if($peg != null){
+                $objectToArray = (array)$peg;
+                $name1 = $objectToArray[0];
+                $name2 = (array)$name1;
+                $nama = $name2['name'];
+                $data = [
+                    'judul' => "Halaman Ubah Password Admin",
+                    'nama' => $nama,
+                    'token' => $token,
+                    'email' => $imel
+                ];
+                Mail::to($imel)->send(new SendCodeAdmin($data));
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Check Email Success!',
+                ]);
+            }
+
         }
-        $objectToArray = (array)$dat;
-        $name1 = $objectToArray[0];
-        $name2 = (array)$name1;
-        $nama = $name2['name'];
-        $data = [
-            'judul' => "Halaman Ubah Password Admin",
-            'nama' => $nama,
-            'token' => $token,
-            'email' => $imel
-        ];
-        Mail::to($imel)->send(new SendCodeAdmin($data));
-        return response()->json([
-            'success' => true,
-            'message' => 'Check Email Success!',
-        ]);
+      
     }
 }

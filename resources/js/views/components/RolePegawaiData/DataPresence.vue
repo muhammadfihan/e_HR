@@ -5,12 +5,7 @@
         <div class="col-6 d-flex align-items-center">
           <h6 class="mb-0">Tabel Kehadiran Pegawai</h6>
         </div>
-        <div class="col-6 text-end">
-          <argon-button class="me-2" color="primary" size="sm" variant="gradient" @click.prevent="reqabsen()">List Request Absen<span class="badge badge-white text-primary ms-1">{{jmlh}}</span>
-          <span class="sr-only"></span></argon-button>
-        </div>
       </div>
-
         <div class="col-md-4 mt-2 mb-3">
           <div class="d-flex form-input input-group">
             <span class="input-group-text text-body bg-gray-100" style="outline-width: 2px; border:none">
@@ -21,7 +16,7 @@
         </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0">
+      <div class="table-responsive p-0 border-bottom">
         <table class="table align-items-center mb-0">
           <thead>
             <tr>
@@ -45,50 +40,49 @@
               >Keterangan</th>
               <th
                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-              >Detail Lokasi</th>
-              <th
-                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-              >Action</th>
+              >Detail Presensi</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(data,index) in absensipegawai.data" :key="data.id">
+            <tr v-for="(data,index) in absensipegawai.data" :key="data.uid">
               <td class="align-middle text-center">
                 <span class="text-secondary text-xs font-weight-bold">{{index+1}} </span>
               </td>
-              <td class="align-middle text-center">
-                <span class="text-secondary text-xs font-weight-bold">{{data.jam_masuk}}</span>
+              <td class="align-middle text-center text-sm">
+                <span class="text-secondary text-xs font-weight-bold" v-if="data.jam_masuk == null" >Null</span>
+                <span class="text-secondary text-xs font-weight-bold" v-else-if="data.jam_masuk != null" >{{data.jam_masuk}}</span>
               </td>
-              <td class="align-middle text-center text-xs ">
+              <td class="align-middle text-center text-sm">
                 <!-- <span class="text-secondary text-xs font-weight-bold">Tes</span> -->
-                <span class="badge badge-sm bg-gradient-warning" v-if="data.jam_pulang == null" >Belum Presensi</span>
+                <span class="text-secondary text-xs font-weight-bold" v-if="data.jam_pulang == null" >Null</span>
                 <span class="text-secondary text-xs font-weight-bold" v-else-if="data.jam_pulang != null" >{{data.jam_pulang}}</span>
               </td>
-              <td class="align-middle text-center text-xs">
+              <td class="align-middle text-center text-sm">
                 <span class="text-secondary text-xs font-weight-bold">{{ format(data.jam_kerja) }}</span>
-                <span class="badge badge-sm  bg-gradient-danger" v-if="data.jam_kerja == null" >Belum Presensi</span>
+                <span class="text-secondary text-xs font-weight-bold" v-if="data.jam_kerja == null" >Null</span>
               </td>
               <td class="align-middle">
                 <span class="text-secondary text-xs font-weight-bold">{{ data.tanggal }}</span>
               </td>
-              <td class="align-middle text-center text-sm">
-                <span class="badge badge-sm bg-gradient-success" v-if="data.keterangan == 'On Time'" >{{data.keterangan}}</span>
-                <span class="badge badge-sm bg-gradient-danger" v-else-if="data.keterangan == 'Terlambat'" >{{data.keterangan}}</span>
-                <span class="badge badge-sm bg-info" v-else-if="data.keterangan == 'Request Attendance'" >{{data.keterangan}}</span>
+              <td class="align-middle text-center text-xs">
+                <span class="text-success fw-bolder text-xs" v-if="data.keterangan == 'On Time'" >{{data.keterangan}}</span>
+                <span class="text-warning fw-bolder text-xs" v-else-if="data.keterangan == 'Terlambat'" >{{data.keterangan}}</span>
+                <span class="text-info fw-bolder text-xs" v-else-if="data.keterangan == 'Request Absen'" >{{data.keterangan}}</span>
+                <span class="text-primary fw-bolder text-xs" v-else-if="data.keterangan == 'Izin'" >{{data.keterangan}}</span>
+                <span class="text-dark fw-bolder text-xs" v-else-if="data.keterangan == 'Cuti'" >{{data.keterangan}}</span>
+                <span class="text-danger fw-bolder text-xs" v-else-if="data.keterangan == 'Tidak Hadir'" >{{data.keterangan}}</span>
                 <!-- <span class="badge badge-sm bg-gradient-danger" >{{data.status}}</span> -->
               </td>
-              <td class="align-middle text-center text-sm" >
-                <span style="margin-right:7px;cursor:pointer" class="badge badge-sm bg-primary" @click.prevent="modalmap(data.latitude, data.longitude)"><i class="fa-solid fa-location-dot me-0"></i> Maps</span>
-              </td>
-              <td class="align-middle text-center text-sm" >
-                <span style="cursor:pointer" class="badge badge-sm bg-primary" @click.prevent="detailabsen(data.uid)">detail</span>
+             <td class="align-middle text-center text-sm" >
+                <span style="margin-right:7px;cursor:pointer" class="badge badge-sm bg-success" @click.prevent="modalmap(data.latmasuk, data.lonmasuk)"><i class="fa-solid fa-location-dot me-0"></i></span>
+                <span style="margin-right:7px;cursor:pointer" class="badge badge-sm bg-danger" @click.prevent="modalmappulang(data.latpulang, data.lonpulang)"><i class="fa-solid fa-location-dot me-0"></i></span>
+                <span style="cursor:pointer" class="badge badge-sm bg-primary" @click.prevent="detailabsen(data.uid)"><i class="fa-solid fa-camera"></i></span>
               </td>
             </tr>
           </tbody>
         </table>
-        <hr style="border-top: 1.5px solid #bbb;">
       </div>
-      <div class="mt-4 mb-2">
+      <div class="mt-4 mb-1">
         <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="absensipegawai" @pagination-change-page="tampilabsen" />
       </div>
     </div>
@@ -153,11 +147,31 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="row">
-          <h5 class="modal-title" id="lokasiLabel">Lokasi Pegawai</h5>
+          <h5 class="modal-title" id="lokasiLabel">Lokasi Presensi Masuk Pegawai</h5>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="card-body" style="height: 500px !important"  id="map">
+        <div>
+          
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="modal fade" id="lokasi2" aria-labelledby="lokasiLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered-top modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="row">
+          <h5 class="modal-title" id="lokasiLabel">Lokasi Presensi Pulang Pegawai</h5>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="card-body" style="height: 500px !important"  id="mappulang">
         <div>
           
         </div>
@@ -183,13 +197,13 @@
                       <h6 class="form-control-label text-center" >Foto Presensi Masuk</h6>
                         <div v-if="data.selfie_masuk == null" class="mt-2 mb-2 card border-1 shadow-none text-center" style="height:360px !important"><p class="mt-9 text-muted">Belum Melakukan Presensi</p>
                         </div>
-                        <img v-if="data.selfie_masuk !== null" :src="`upload/${data.selfie_masuk}`" class="mt-2 mb-2 card border-1 shadow-none text-center" style="height:360px !important; width:360px !important">
+                        <img v-if="data.selfie_masuk !== null" :src="`upload/${data.selfie_masuk}`" class="mt-2 mb-2 card border-1 shadow-none text-center mx-auto" style="height:360px !important; width:360px !important">
                     </div>
                     <div class="col-lg-6">
                       <h6 class="form-control-label text-center" >Foto Presensi Pulang</h6>
                       <div v-if="data.selfie_pulang == null" class="mt-2 mb-2 card border-1 shadow-none text-center" style="height:360px !important"><p class="mt-9 text-muted">Belum Melakukan Presensi</p>
                       </div>
-                      <img v-if="data.selfie_pulang !== null" :src="`upload/${data.selfie_pulang}`" class="mt-2 mb-2 card border-1 shadow-none text-center" style="height:360px !important; width:360px !important">  
+                      <img v-if="data.selfie_pulang !== null" :src="`upload/${data.selfie_pulang}`" class="mt-2 mb-2 card border-1 shadow-none text-center mx-auto" style="height:360px !important; width:360px !important">  
                     </div>
                 </div>
       </div>
@@ -270,6 +284,26 @@ methods:{
             )   
              const lokasi = { lat: parseFloat(latitude), lng: parseFloat(longitude) };
               const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 16,
+            center: lokasi,
+            });
+            const marker = new google.maps.Marker({
+                position: lokasi,
+                map: map,
+            });
+         },  
+         modalmappulang(latitude, longitude){
+             $('#lokasi2').modal('show')
+             this.latt = latitude
+             this.long = longitude
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    var lat = position.coords.latitude
+                    var lon = position.coords.longitude    
+                },
+            )   
+             const lokasi = { lat: parseFloat(latitude), lng: parseFloat(longitude) };
+              const map = new google.maps.Map(document.getElementById("mappulang"), {
             zoom: 16,
             center: lokasi,
             });

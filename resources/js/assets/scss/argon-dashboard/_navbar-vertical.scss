@@ -240,8 +240,7 @@
     }
 }
 
-// Media fixes for iPhone 5 like resolutions
-@include media-breakpoint-down(xl) {
+@media screen and (max-width: 700px) {
     .g-sidenav-show {
         &.rtl {
             .sidenav {
@@ -261,6 +260,181 @@
         &.g-sidenav-pinned {
             .sidenav {
                 transform: translateX(0);
+            }
+        }
+    }
+}
+
+//phone
+// @include media-breakpoint-down(xl) {
+//     .g-sidenav-show {
+//         &.rtl {
+//             .sidenav {
+//                 transform: translateX($navbar-vertical-open-width + 1.5);
+//             }
+//         }
+//         &:not(.rtl) {
+//             .sidenav {
+//                 transform: translateX(-($navbar-vertical-open-width + 1.5));
+//             }
+//         }
+//         .sidenav {
+//             &.fixed-start+.main-content {
+//                 margin-left: 0 !important;
+//             }
+//         }
+//         &.g-sidenav-pinned {
+//             .sidenav {
+//                 transform: translateX(0);
+//             }
+//         }
+//     }
+// }
+// Media fixes for iPhone 5 like resolutions
+@include media-breakpoint-down(xl) {
+    .g-sidenav-show:not(.g-sidenav-hidden) {
+        &.rtl {
+            .sidenav {
+                transform: translateX($navbar-vertical-open-width + 1.5);
+            }
+        }
+        &:not(.rtl) {
+            .sidenav {
+                max-width: $navbar-vertical-hidden-width !important;
+                &.fixed-start+.main-content {
+                    margin-left: $navbar-vertical-hidden-width + 1.5;
+                }
+                .navbar-brand {
+                    img {
+                        width: auto !important;
+                    }
+                    span {
+                        opacity: 0;
+                    }
+                }
+                .nav-item {
+                    .nav-link {
+                        .icon {
+                            padding: 10px;
+                        }
+                        .nav-link-text,
+                        .sidenav-normal {
+                            opacity: 0;
+                            width: 0;
+                        }
+                        .sidenav-mini-icon {
+                            min-width: $navbar-icon-min-width;
+                            margin-left: $navbar-icon-margin-left;
+                            opacity: 1;
+                        }
+                        &[data-bs-toggle="collapse"]:after {
+                            content: "";
+                        }
+                    }
+                    .collapse {
+                        .nav {
+                            margin-left: 0 !important;
+                            padding-left: 0 !important;
+                            .nav-item {
+                                .nav-link {
+                                    margin-left: $navbar-vertical-nav-link-padding-x;
+                                    &:before {
+                                        content: none;
+                                    }
+                                    &[data-bs-toggle="collapse"]:after {
+                                        content: "\f107";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .card.card-background {
+                    .icon-shape {
+                        margin-bottom: 0 !important;
+                    }
+                    .docs-info {
+                        opacity: 0;
+                        width: 0;
+                        height: 0;
+                    }
+                }
+                // Hover style on sidenav minimized
+                &:hover {
+                    max-width: $navbar-vertical-open-width !important;
+                    &.fixed-start+.main-content {
+                        margin-left: $navbar-vertical-open-width + 1.5;
+                    }
+                    .navbar-brand {
+                        span {
+                            opacity: 1;
+                        }
+                    }
+                    .nav-item {
+                        .nav-link {
+                            .nav-link-text,
+                            .sidenav-normal {
+                                opacity: 1;
+                                width: auto;
+                            }
+                            .sidenav-mini-icon {
+                                opacity: 0;
+                                width: 0;
+                                min-width: 0;
+                            }
+                            &[data-bs-toggle="collapse"]:after {
+                                content: "\f107";
+                            }
+                        }
+                        .collapse {
+                            .nav {
+                                margin-left: 1.5rem !important;
+                                .nav-item {
+                                    .nav-link {
+                                        margin-left: $navbar-vertical-collapse-margin-left;
+                                        &:before {
+                                            content: "";
+                                        }
+                                    }
+                                    .collapse,
+                                    .collapsing {
+                                        .nav {
+                                            margin-left: 0 !important;
+                                            padding-left: 0 !important;
+                                            .nav-item {
+                                                .nav-link {
+                                                    &:before {
+                                                        content: none;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .card.card-background {
+                        .icon-shape {
+                            margin-bottom: 1rem !important;
+                        }
+                        .docs-info {
+                            opacity: 1;
+                            width: auto;
+                            height: auto;
+                        }
+                    }
+                }
+            }
+        }
+        .sidenav {
+            &.fixed-start+.main-content {
+                margin-left: $navbar-vertical-open-width + 1.5;
+            }
+        }
+        &.g-sidenav-pinned {
+            &.fixed-start+.main-content {
+                margin-left: $navbar-vertical-open-width + 1.5;
             }
         }
     }

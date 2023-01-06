@@ -3,10 +3,25 @@
     <div class="carousel slide h-100">
       <div class="carousel-inner border-radius-lg h-100 bg-white" >
         <div v-if="this.cekhari == true" style="overflow-y: scroll;overflow-x: hidden;max-height: 570px;">
-          <div class="card-header border-0 text-end bg-transparent " >
+          <div v-if="this.lonlat == false || this.lonlat == 12" class="card-header border-0 text-end bg-transparent" >
                   <a class="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
-                  <button type="submit" class="btn btn-outline-primary btn-sm text-primary font-weight-bolder me-2" @click="showDetail()">Detail Presensi</button>
+                  <button type="submit" class="btn btn-warning btn-sm font-weight-bolder me-2" @click="cekizin()">Izinkan Lokasi</button>
+                  <button type="submit" class="btn btn-primary btn-sm font-weight-bolder me-2" @click="showDetail()">Detail Presensi</button>
+          </div>
+          <div v-else-if="this.lonlat == null">
+            <div class="card-header border-0 text-end bg-transparent" >
+                  <a class="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                  <button type="submit" class="btn btn-danger btn-sm  font-weight-bolder me-2" @click="cekizin()">Perbarui Lokasi Lokasi</button>
+                  <button type="submit" class="btn btn-primary btn-sm font-weight-bolder me-2" @click="showDetail()">Detail Presensi</button>
            </div>
+          </div>
+          <div v-else-if="this.lonlat == true">
+            <div v-for="(data) in ceklok" :key="data.id" class="card-header border-0 text-end bg-transparent" >
+                  <a class="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                  <button type="submit" class="btn btn-success btn-sm font-weight-bolder me-2" @click.prevent="ceklokasi(data.latitude,data.longitude)">Lokasi Anda</button>
+                  <button type="submit" class="btn btn-primary btn-sm font-weight-bolder me-2" @click="showDetail()">Detail Presensi</button>
+           </div>
+          </div>
           <div class="card-body d-flex flex-column p-0 mt-3"  style="margin-top:-35px" v-if="cekpresensi == null">
 							<div class="card-body" style="text-align:center;">
                   <div class="date text-dark" style="font-size:32px;">
@@ -43,6 +58,9 @@
                     </div>
                   </div>
                 </div>
+                <div class="text-center mt-2">
+                      <button class=" btn bg-gradient-primary text-white mt-4 text-center font-weight-bolder">Presensi Belum Dibuka</button>
+                    </div>
               </div>
               <div class="card-body d-flex flex-column p-0 mt-3"  style="margin-top:-35px" v-else-if="cekpresensi !== null">
 							<div class="card-body" style="text-align:center;" v-if="cekpresensi.selfie_pulang == null">
@@ -123,14 +141,10 @@
                   <img src="../../../assets/img/pulang.svg" alt="Image placeholder" class="card-img-top" style="width: auto;height: 300px; margin-top: -200px">
                 </div>
               </div>
-              <div class="text-center mt-2" >
-                    <div v-if="cekpresensi == null">
-                      <button  @click="showModal()" data-toggle="modal" class=" btn bg-gradient-primary text-white mt-4 text-center font-weight-bolder"><i class="fa-solid fa-right-to-bracket me-1"></i> Presensi Masuk Disini</button>
-                    </div>
-                    <div v-else-if="cekpresensi !== null">
-                      <button v-if="cekpresensi.jam_masuk !== null && cekpresensi.jam_pulang == null" @click="pulangModal()" data-toggle="modal" class=" btn bg-gradient-primary text-white mt-4 text-center font-weight-bolder"><i class="fa-solid fa-right-to-bracket me-1"></i> Presensi Pulang Disini</button>
+              <div class="text-center mt-2" v-if="cekpresensi !== null">
+                      <button v-if="cekpresensi.jam_masuk == null" @click="showModal()" data-toggle="modal" class=" btn bg-gradient-primary text-white mt-4 text-center font-weight-bolder"><i class="fa-solid fa-right-to-bracket me-1"></i> Presensi Masuk Disini</button>
+                      <button v-else-if="cekpresensi.jam_masuk !== null && cekpresensi.jam_pulang == null" @click="pulangModal()" data-toggle="modal" class=" btn bg-gradient-primary text-white mt-4 text-center font-weight-bolder"><i class="fa-solid fa-right-to-bracket me-1"></i> Presensi Pulang Disini</button>
                       <h5 v-else-if="cekpresensi.selfie_pulang !== null" class="text-primary mt-3 text-center text-bold p-3 ">Selamat Beristirahat</h5>
-                    </div>
                 </div>
               </div>
         <div v-if="this.cekhari == false" style="overflow-y: hidden;max-height: 570px;">
@@ -181,24 +195,24 @@
           </div>
       </div>
       <div class="modal-body">
-        <div class="row p-4"  v-for="(data) in detabsen" :key="data.id">
+        <div class="row"  v-for="(data) in detabsen" :key="data.id">
                     <div class="col-lg-6">
                       <h6 class="form-control-label text-center" >Presensi Masuk</h6>
-                      <div v-if="data.selfie_masuk == null" class="mt-2 mb-2 card border-1 shadow text-center" style="height:23.5rem !important"><p class="mt-9 text-muted">Belum Melakukan Presensi</p>
+                      <div v-if="data.selfie_masuk == null" class="mt-2 mb-2 card border-1 mx-auto shadow text-center" style="height:23.5rem !important; width: 22rem;"><p class="mt-9 text-muted">Belum Melakukan Presensi</p>
                       </div>
-                        <div class="card border-0 shadow" style="width: 22rem;">
+                        <div class="card border-0 shadow text-center mx-auto" style="width: 22rem;">
                           <img class="card-img-top" v-if="data.selfie_masuk !== null" :src="`upload/${data.selfie_masuk}`">
-                          <div class="card-body">
-                            <h5 class="card-title text-center">Jam Masuk</h5>
+                          <div class="card-body"  v-if="data.selfie_masuk !== null">
+                            <h5 class="card-title text-center" >Jam Masuk</h5>
                             <p class="card-text text-center">{{data.jam_masuk}}</p>
                           </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                       <h6 class="form-control-label text-center" >Presensi Pulang</h6>
-                      <div v-if="data.selfie_pulang == null" class="mt-2 mb-2 card border-1 shadow text-center" style="height:23.5rem !important"><p class="mt-9 text-muted">Belum Melakukan Presensi</p>
+                      <div v-if="data.selfie_pulang == null"  class="mt-2 mb-2 card border-1 mx-auto shadow text-center" style="height:23.5rem !important; width: 22rem;"><p class="mt-9 text-muted">Belum Melakukan Presensi</p>
                       </div>
-                      <div class="card border-0 shadow" style="width: 22rem;" v-if="data.selfie_pulang !== null">
+                      <div class="card border-0 shadow text-center mx-auto" style="width: 22rem;" v-if="data.selfie_pulang !== null">
                           <img class="card-img-top"  :src="`upload/${data.selfie_pulang}`">
                           <div class="card-body">
                             <h5 class="card-title text-center">Jam Pulang</h5>
@@ -248,6 +262,26 @@
     </div>
   </div>
   </div>
+  <div class="modal fade" id="lokasi" aria-labelledby="lokasiLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered-top modal-xl  modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="row">
+          <h5 class="modal-title" id="lokasiLabel">Lokasi Anda Saat Ini</h5>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="card-body" style="height: 500px !important"  id="map">
+        <div>
+          
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+  </div>
 </template>
 
 <script>
@@ -277,9 +311,10 @@ export default {
 						jam_kerja : "",
 						keterangan : "",
 						lokasi : "",
-						latitude: "",
-						longitude:""
-						
+						latmasuk: "",
+						lonmasuk:"",
+            latpulang:"",
+            lonpulang:""
 					}),
           cek:[],
           cek2:[],
@@ -293,10 +328,93 @@ export default {
 					name: localStorage.getItem("name"),
 					role: localStorage.getItem("role"),
           lat : localStorage.getItem("lat"),
-          lon: localStorage.getItem("lon")
+          lon: localStorage.getItem("lon"),
+          ceklok: "",
+          lonlat:""
+
     }
   },
   methods:{
+    getlokasi(){
+      this.$axios.get('/api/getlokasi',{
+                headers: { Authorization: "Bearer " + this.token }
+            }).then((response) => {
+                this.ceklok = response.data.data
+                this.lonlat = response.data.success
+                window.localStorage.setItem("ceklat", response.data.latitude)
+                window.localStorage.setItem("ceklon", response.data.longitude)
+            })
+    },
+    ceklokasi(latitude, longitude){
+      $('#lokasi').modal('show')
+             this.latt = latitude
+             this.long = longitude
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    var lat = position.coords.latitude
+                    var lon = position.coords.longitude    
+                },
+            )   
+             const lokasi = { lat: parseFloat(latitude), lng: parseFloat(longitude) };
+              const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 16,
+            center: lokasi,
+            });
+            const marker = new google.maps.Marker({
+                position: lokasi,
+                map: map,
+            });
+    },
+    cekizin(){
+      let timerInterval
+              Swal.fire({
+              title: 'Harap Tunggu!',
+              text: 'Kami Sedang Memeriksa Lokasi Terbaru Anda',
+              timer: 4000,
+              timerProgressBar: true,
+              didOpen: () => {
+                    Swal.showLoading()
+                    timerInterval = setInterval(() => {
+                    }, 100)
+                   },
+                    willClose: () => {
+                    clearInterval(timerInterval)
+                   }
+                })
+      this.izin()
+      setTimeout(() => this.getlokasi(), 5000);
+    },
+    izin(){
+         navigator.geolocation.getCurrentPosition(
+           function (position) {
+            var token =  localStorage.getItem("token")
+              axios.post('/api/lokasi', {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+              },
+                {
+                  headers : { Authorization: "Bearer " + token },
+                },
+                ).then((response) => {
+                  if (response.data.success){
+                    const toast = useToast();
+                          toast.success("Berhasil Mendapatkan Izin Lokasi", {
+                          position: "top-center",
+                          timeout: 2000,
+                          icon: "fa-sharp fa-solid fa-thumbs-up"
+                          });
+                  }
+                 
+                    }
+                  )
+           },
+          //  this.getlokasi(),
+           error => {
+              console.log(error.message);
+           },
+        )
+       
+    },
     kehadiran(){
           this.$router.push({name: "Kehadiran Pegawai"})
     },
@@ -369,8 +487,8 @@ export default {
               
 				 {
 							 selfie_masuk : image,
-							 latitude : localStorage.getItem("lat"),
-							 longitude : localStorage.getItem("lon")
+							 latmasuk : localStorage.getItem("ceklat"),
+					     lonmasuk : localStorage.getItem("ceklon")
 					 
 				 },
 				  {
@@ -397,6 +515,24 @@ export default {
                   });
 						
 					}
+          if (response.data.status == 25){
+            const toast = useToast();
+                  toast.error("Anda Sedang Cuti", {
+                  position: "top-center",
+                  timeout: 2000,
+                  icon: "fa-sharp fa-solid fa-triangle-exclamation"
+                  });
+						
+					}
+          if (response.data.status == 15){
+            const toast = useToast();
+                  toast.error("Harap Perbarui Lokasi Terlebih Dahulu", {
+                  position: "top-center",
+                  timeout: 2000,
+                  icon: "fa-sharp fa-solid fa-triangle-exclamation"
+                  });
+						this.getlokasi()
+					}
 					if (response.data.success == false){
             const toast = useToast();
                   toast.error("Sudah Presensi Masuk", {
@@ -406,7 +542,7 @@ export default {
                   });
 						
 					}
-					if (response.data.status == false){
+					if (response.data.status == 20){
 						const toast = useToast();
                   toast.error("Maaf, Anda Sedang Izin", {
                   position: "top-center",
@@ -426,7 +562,7 @@ export default {
 					}
           if (response.data.status == 12){
 						const toast = useToast();
-                  toast.error("Presensi Gagal, Anda tidak mengizinkan lokasi, Harap logout kemudian login kembali kemudian periksa akses lokasi perangkat anda, Terimakasih", {
+                  toast.error("Presensi Gagal, Anda tidak mengizinkan lokasi, Harap Izinkan Lokasi Terlebih Dahulu, Terimakasih", {
                   position: "top-center",
                   timeout: 4000,
                   icon: "fa-sharp fa-solid fa-triangle-exclamation"
@@ -442,7 +578,9 @@ export default {
 					image = data_uri
 				 } );
 				this.$axios.post('/api/absenpulang/' +uid,  {
-					 selfie_pulang : image
+					 selfie_pulang : image,
+           latpulang : localStorage.getItem("ceklat"),
+					 lonpulang : localStorage.getItem("ceklon")
 				 },
 				 {
 					headers : { Authorization: "Bearer " + this.token },
@@ -468,11 +606,29 @@ export default {
                   });
 						
 					}
+          if (response.data.status == 15){
+            const toast = useToast();
+                  toast.error("Harap Perbarui Lokasi Terlebih Dahulu", {
+                  position: "top-center",
+                  timeout: 2000,
+                  icon: "fa-sharp fa-solid fa-triangle-exclamation"
+                  });
+						this.getlokasi()
+					}
           if (response.data.status == 3){
             const toast = useToast();
                   toast.error("Presensi Pulang Telah Ditutup", {
                   position: "top-center",
                   timeout: 2000,
+                  icon: "fa-sharp fa-solid fa-triangle-exclamation"
+                  });
+						
+					}
+          if (response.data.status == 12){
+						const toast = useToast();
+                  toast.error("Presensi Gagal, Anda tidak mengizinkan lokasi, Harap Izinkan Lokasi Terlebih Dahulu, Terimakasih", {
+                  position: "top-center",
+                  timeout: 4000,
                   icon: "fa-sharp fa-solid fa-triangle-exclamation"
                   });
 						
@@ -519,6 +675,7 @@ export default {
     this.tampilabsen()
     this.cekabsen()
     this.get()
+    this.getlokasi()
   },
   beforeMount() {
         this.timer =  setInterval(function(){

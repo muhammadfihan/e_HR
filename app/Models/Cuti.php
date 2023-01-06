@@ -12,7 +12,9 @@ class Cuti extends Model
     protected $table = "cuti";
     protected $fillable = [
         'id',
+        'id_pegawai',
         'id_admin',
+        'name',
         'nama_lengkap',
         'no_pegawai',
         'jumlah_hari',
@@ -20,6 +22,7 @@ class Cuti extends Model
         'tanggal_cuti',
         'tanggal_mulai',
         'tanggal_akhir',
+        'list_tanggal',
         'jenis_cuti',
         'keterangan',
         'bukti_cuti',

@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0">
+      <div class="table-responsive p-0 border-bottom">
         <table class="table align-items-center mb-0">
           <thead>
             <tr>
@@ -60,23 +60,23 @@
               <td class="align-middle text-center text-sm">
                 <span class="badge badge-sm bg-success" v-if="data.status_req == 'Diterima'" >{{data.status_req}}</span>
                 <span class="badge badge-sm bg-danger" v-else-if="data.status_req == 'Ditolak'" >{{data.status_req}}</span>
-                <span class="badge badge-sm bg-info text-white" v-else-if="data.status_req == 'Diproses'" >Belum Disetujui</span>
+                <span class="badge badge-sm bg-secondary text-white" v-else-if="data.status_req == 'Diproses'" >{{data.status_req}}</span>
               </td>
-              <td class="align-middle text-center">
+              <td class="align-middle text-center text-sm">
                 <div class="text-md" v-if="data.status_req == 'Diproses'">
-                  <span @click.prevent="showModalEdit(data)" style="cursor:pointer; margin-right: 7px;" class="badge badge-sm bg-gradient-success text-md"><i class="fas fa-edit"></i></span>
+                  <span @click.prevent="showModalEdit(data)" style="cursor:pointer; margin-right: 7px;" class="badge badge-sm bg-warning text-md"><i class="fas fa-edit"></i></span>
                    <span  @click.prevent="hapusreqabsen(data.id)" style="cursor:pointer" class="badge badge-sm bg-danger text-md"><i class="far fa-trash-alt"></i></span>
                 </div>
                 <div class="text-sm" v-if="data.status_req !== 'Diproses'">
-                  <span class="badge badge-sm bg-secondary">Confirmed</span>
+                  <span style="cursor:not-allowed; margin-right: 7px;" class="badge badge-sm bg-warning text-md"><i class="fas fa-edit"></i></span>
+                   <span style="cursor:not-allowed" class="badge badge-sm bg-danger text-md"><i class="far fa-trash-alt"></i></span>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
-        <hr style="border-top: 1.5px solid #bbb;">
       </div>
-      <div class="mt-4 mb-2">
+      <div class="mt-4 mb-1">
         <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="reqabsen" @pagination-change-page="tampilreqabsen" />
       </div>
     </div>
@@ -92,8 +92,13 @@
       <div class="modal-body">
                 <form @submit.prevent="statusmodal ? updatereq() : buatreq()">
                     <div class="mb-3">
-                        <label class="form-label">Tanggal</label>
-                        <input type="date" v-model="form.tanggal_req" placeholder="" class="form-control form-control-md">
+                        <label class="form-label">Pilih tanggal tidak presensi</label>
+                        <select class="form-select" v-model="form.tanggal_req">
+                          <option disabled selected>Pilih Tanggal</option>
+                          <option v-for="data in listreq" :key="data.id" :selected="null == form.tanggal_req ? selected : null" :value="data.tanggal">{{data.tanggal}}</option>
+                        </select>
+                        <!-- <label class="form-label">Tanggal</label>
+                        <input type="date" v-model="form.tanggal_req" placeholder="" class="form-control form-control-md"> -->
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Alasan</label>
@@ -113,7 +118,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
         <button v-show="statusmodal"  @click="updatereq()" class="btn btn-primary" type="submit" >Update</button>
-        <button v-show="!statusmodal"  @click="buatreq()" class="btn btn-primary" type="submit" >Buat Izin</button>
+        <button v-show="!statusmodal"  @click="buatreq()" class="btn btn-primary" type="submit" >Buat Pengajuan</button>
       </div>
     </div>
   </div>
@@ -141,6 +146,7 @@ export default {
             reqabsen:[],
             jabatan:[],
 			      search:'',
+            listreq:[],
             form: new Form ({
               id: "",
               alasan: "",
@@ -167,6 +173,19 @@ export default {
         closeModal() {
             this.form.reset();
             $("#reqabsen").modal("hide");
+        },
+        list(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/newreq',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.listreq = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
         },
         buatreq(){
 				 const formData = new FormData()
@@ -340,6 +359,7 @@ export default {
     this.getpt();
 	  this.tampilreqabsen();
     this.getJabatan();
+    this.list();
   }
 };
 </script>

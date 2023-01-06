@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0">
+      <div class="table-responsive p-0 border-bottom">
         <table class="table align-items-center mb-0">
           <thead>
             <tr>
@@ -60,23 +60,23 @@
               <td class="align-middle text-center text-sm">
                 <span class="badge badge-sm bg-success" v-if="data.status_izin == 'Diterima'" >{{data.status_izin}}</span>
                 <span class="badge badge-sm bg-danger" v-else-if="data.status_izin == 'Ditolak'" >{{data.status_izin}}</span>
-                <span class="badge badge-sm bg-info text-white" v-else-if="data.status_izin == 'Diproses'" >Belum Disetujui</span>
+                <span class="badge badge-sm bg-secondary text-white" v-else-if="data.status_izin == 'Diproses'" >{{data.status_izin}}</span>
               </td>
-              <td class="align-middle text-center">
+              <td class="align-middle text-center text-sm">
                 <div class="text-md" v-if="data.status_izin == 'Diproses'">
-                  <span @click.prevent="showModalEdit(data)" style="cursor:pointer; margin-right: 7px;" class="badge badge-sm bg-gradient-success text-md"><i class="fas fa-edit"></i></span>
+                  <span @click.prevent="showModalEdit(data)" style="cursor:pointer; margin-right: 7px;" class="badge badge-sm bg-warning text-md"><i class="fas fa-edit"></i></span>
                    <span  @click.prevent="hapusizin(data.id)" style="cursor:pointer" class="badge badge-sm bg-danger text-md"><i class="far fa-trash-alt"></i></span>
                 </div>
                 <div class="text-sm" v-if="data.status_izin !== 'Diproses'">
-                  <span class="badge badge-sm bg-secondary">Confirmed</span>
+                  <span style="cursor:not-allowed; margin-right: 7px;" class="badge badge-sm bg-warning text-md"><i class="fas fa-edit"></i></span>
+                   <span style="cursor:not-allowed" class="badge badge-sm bg-danger text-md"><i class="far fa-trash-alt"></i></span>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
-        <hr style="border-top: 1.5px solid #bbb;">
       </div>
-      <div class="mt-4 mb-2">
+      <div class="mt-4 mb-1">
         <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="izin" @pagination-change-page="allizin" />
       </div>
     </div>
@@ -176,7 +176,7 @@ export default {
 					headers : { Authorization: "Bearer " + this.token },
 				},formData,
 				).then((response) => {
-					if (response.data.success){
+					if (response.data.success == true){
 						const toast = useToast();
                   toast.success("Berhasil Mengajukan Izin", {
                   position: "top-center",
@@ -187,6 +187,14 @@ export default {
 						$('#izin').modal('hide')
 						this.allizin()
 					}
+          if(response.data.success == false){
+            const toast = useToast();
+                  toast.error("Maaf Tanggal Tersebut Bukan Hari Kerja", {
+                  position: "top-center",
+                  timeout: 2000,
+                  icon: "fa-sharp fa-solid fa-triangle-exclamation"
+                  });
+          }
 						
 						}
 					)
@@ -206,7 +214,7 @@ export default {
 					
 				},formData,
 				).then((response) => {
-					if (response.data.success){
+					if (response.data.success == true){
 						const toast = useToast();
                   toast.success("Berhasil Update Izin", {
                   position: "top-center",
@@ -217,6 +225,14 @@ export default {
 						$('#izin').modal('hide')
 						this.allizin()
 					}
+          if(response.data.success == false){
+            const toast = useToast();
+                  toast.error("Maaf Tanggal Tersebut Bukan Hari Kerja", {
+                  position: "top-center",
+                  timeout: 2000,
+                  icon: "fa-sharp fa-solid fa-triangle-exclamation"
+                  });
+          }
 						
 						}
 					)

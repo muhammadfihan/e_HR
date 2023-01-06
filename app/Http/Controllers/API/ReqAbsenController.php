@@ -166,8 +166,13 @@ class ReqAbsenController extends Controller
                     'tanggal' => $tanggal,
                     'jam' => $localtime
                 ]);
+                $diterima = DB::table('absensipegawai')->where('email', $status2->email)->where('tanggal', $status2->tanggal_req)->update([
+                    'keterangan' => 'Request Absen'
+                ]);
+
                 return response()->json([
                     'data' => $status,
+                    'update' => $diterima,
                     'success' => true,
                     'message' => 'Update Diterima pengajuan awal!',
                 ]);
@@ -190,8 +195,12 @@ class ReqAbsenController extends Controller
                         'tanggal' => $tanggal,
                         'jam' => $localtime
                     ]);
+                    $ditolak = DB::table('absensipegawai')->where('email', $status2->email)->where('tanggal', $status2->tanggal_req)->update([
+                        'keterangan' => 'Tidak Hadir'
+                    ]);
                     return response()->json([
                         'success' => true,
+                        'data' => $ditolak,
                         'message' => 'Ditolak setelah diterima',
                     ]);
                 }
@@ -231,8 +240,12 @@ class ReqAbsenController extends Controller
                     'jam' => $localtime
                 ]);
                 if($request->status_req == "Diterima"){
+                    $diterima2 = DB::table('absensipegawai')->where('email', $status2->email)->where('tanggal', $status2->tanggal_req)->update([
+                        'keterangan' => 'Request Absen'
+                    ]);
                         return response()->json([
                             'data' => $status,
+                            'data2' => $diterima2,
                             'success' => true,
                             'message' => 'Update Diterima Setelah Ditolak!',
                         ]);
@@ -314,7 +327,7 @@ class ReqAbsenController extends Controller
         Pemberitahuan::create([
             'id_admin' => Auth::user()->id_admin,
             'email' => Auth::user()->email,
-            'judul' => 'Update Pengajuan Request Attendance',
+            'judul' => 'Hapus Request Attendance',
             'jenis' => 'Request Absensi',
             'status' => 'Berhasil',
             'tanggal' => $tanggal,
@@ -336,6 +349,18 @@ class ReqAbsenController extends Controller
         return response()->json([
             'data' => $list,
             'jmlh' => $list2,
+            'success' => true,
+            'message' => 'Get Data Berhasil'
+        ]);
+    }
+
+    public function newreq(){
+        $list = Absensi::where('email', Auth::user()->email)
+                ->where('keterangan', 'Tidak Hadir')
+                ->get();
+
+        return response()->json([
+            'data' => $list,
             'success' => true,
             'message' => 'Get Data Berhasil'
         ]);

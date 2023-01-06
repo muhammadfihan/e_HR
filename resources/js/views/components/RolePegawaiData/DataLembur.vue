@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0">
+      <div class="table-responsive p-0 border-bottom">
         <table class="table align-items-center mb-0">
           <thead>
             <tr>
@@ -66,19 +66,25 @@
               <td class="align-middle text-center text-sm">
                 <span class="badge badge-sm bg-success" v-if="data.status_lembur == 'Diterima'" >{{data.status_lembur}}</span>
                 <span class="badge badge-sm bg-danger" v-else-if="data.status_lembur == 'Ditolak'" >{{data.status_lembur}}</span>
-                <span class="badge badge-sm bg-info text-white" v-else-if="data.status_lembur == 'Diproses'" >Belum Disetujui</span>
+                <span class="badge badge-sm bg-secondary text-white" v-else-if="data.status_lembur == 'Diproses'" >{{data.status_lembur}}</span>
               </td>
-              <td class="align-middle text-center text-md">
-                <span  @click.prevent="detaillembur(data.id)" style="cursor:pointer;margin-right:7px" class="badge badge-sm bg-primary ms-0"><i class="far fa-eye"></i></span>
-                <span v-if="data.status_lembur == 'Diproses'" @click.prevent="showModalEdit(data)" style="cursor:pointer; margin-right: 7px;" class="badge badge-sm bg-gradient-success disabled"><i class="fas fa-edit"></i></span>
-                <span v-if="data.status_lembur == 'Diproses'" @click.prevent="hapuslembur(data.id)" style="cursor:pointer" class="badge badge-sm bg-danger"><i class="far fa-trash-alt"></i></span>
+              <td class="align-middle text-center text-sm">
+                <span v-if="data.status_lembur == 'Diproses'">
+                  <span  @click.prevent="detaillembur(data.id)" style="cursor:pointer;margin-right:7px" class="badge badge-sm bg-primary ms-0"><i class="far fa-eye"></i></span>
+                  <span  @click.prevent="showModalEdit(data)" style="cursor:pointer; margin-right: 7px;" class="badge badge-sm bg-warning disabled"><i class="fas fa-edit"></i></span>
+                  <span  @click.prevent="hapuslembur(data.id)" style="cursor:pointer" class="badge badge-sm bg-danger"><i class="far fa-trash-alt"></i></span>
+                </span>
+                <span v-else-if="data.status_lembur != 'Diproses'">
+                  <span  @click.prevent="detaillembur(data.id)" style="cursor:pointer;margin-right:7px" class="badge badge-sm bg-primary ms-0"><i class="far fa-eye"></i></span>
+                  <span style="cursor:not-allowed; margin-right: 7px;" class="badge badge-sm bg-warning disabled"><i class="fas fa-edit"></i></span>
+                  <span style="cursor:not-allowed" class="badge badge-sm bg-danger disabled"><i class="far fa-trash-alt"></i></span>
+                </span>
               </td>
             </tr>
           </tbody>
         </table>
-        <hr style="border-top: 1.5px solid #bbb;">
       </div>
-      <div class="mt-4 mb-2">
+      <div class="mt-4 mb-1">
         <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="lembur" @pagination-change-page="tampillembur" />
       </div>
     </div>

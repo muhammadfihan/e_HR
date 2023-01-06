@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0">
+      <div class="table-responsive p-0 border-bottom">
         <table class="table align-items-center mb-0">
           <thead>
             <tr>
@@ -60,19 +60,25 @@
               <td class="align-middle text-center text-sm">
                 <span class="badge badge-sm bg-success" v-if="data.status_cuti == 'Diterima'" >{{data.status_cuti}}</span>
                 <span class="badge badge-sm bg-danger" v-else-if="data.status_cuti == 'Ditolak'" >{{data.status_cuti}}</span>
-                <span class="badge badge-sm bg-info text-white" v-else-if="data.status_cuti == 'Diproses'" >Belum Disetujui</span>
+                <span class="badge badge-sm bg-secondary text-white" v-else-if="data.status_cuti == 'Diproses'" >{{data.status_cuti}}</span>
               </td>
-              <td class="align-middle text-center text-md">
-                <span  @click.prevent="detailcuti(data.id)" style="cursor:pointer;margin-right:7px" class="badge badge-sm bg-primary ms-0"><i class="far fa-eye"></i></span>
-                <span v-if="data.status_cuti == 'Diproses'" @click.prevent="showModalEdit(data)" style="cursor:pointer; margin-right: 7px;" class="badge badge-sm bg-gradient-success disabled"><i class="fas fa-edit"></i></span>
-                <span v-if="data.status_cuti == 'Diproses'" @click.prevent="hapuscuti(data.id)" style="cursor:pointer" class="badge badge-sm bg-danger"><i class="far fa-trash-alt"></i></span>
+              <td class="align-middle text-center text-sm">
+                <span v-if="data.status_cuti == 'Diproses'">
+                  <span  @click.prevent="detailcuti(data.id)" style="cursor:pointer;margin-right:7px" class="badge badge-sm bg-primary ms-0"><i class="far fa-eye"></i></span>
+                  <span @click.prevent="showModalEdit(data)" style="cursor:pointer; margin-right: 7px;" class="badge badge-sm bg-warning disabled"><i class="fas fa-edit"></i></span>
+                  <span  @click.prevent="hapuscuti(data.id)" style="cursor:pointer" class="badge badge-sm bg-danger"><i class="far fa-trash-alt"></i></span>
+                </span>
+                <span v-else-if="data.status_cuti != 'Diproses'">
+                  <span  @click.prevent="detailcuti(data.id)" style="cursor:pointer;margin-right:7px" class="badge badge-sm bg-primary ms-0"><i class="far fa-eye"></i></span>
+                  <span style="cursor:not-allowed; margin-right: 7px;" class="badge badge-sm bg-warning disabled"><i class="fas fa-edit"></i></span>
+                  <span style="cursor:not-allowed" class="badge badge-sm bg-danger"><i class="far fa-trash-alt"></i></span>
+                </span>
               </td>
             </tr>
           </tbody>
         </table>
-        <hr style="border-top: 1.5px solid #bbb;">
       </div>
-      <div class="mt-4 mb-2">
+      <div class="mt-4 mb-1">
         <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="cuti" @pagination-change-page="tampilcuti" />
       </div>
     </div>
@@ -126,7 +132,7 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content ">
       <div class="modal-header">
-        <h5 class="modal-title" id="detailLabel">Detail Laporan</h5>
+        <h5 class="modal-title" id="detailLabel">Detail Pengajuan Cuti</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -161,7 +167,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Lampiran</label>
-                        <div class="form-control form-control-md"><a class="text-primary" :href="`files/${data.lampiran}`"  target="_blank"> {{data.bukti_cuti}}</a></div>
+                        <div class="form-control form-control-md"><a class="text-primary" :href="`files/${data.bukti_cuti}`"  target="_blank"> {{data.bukti_cuti}}</a></div>
                     </div>
                 </form>
       </div>
@@ -237,7 +243,7 @@ export default {
 					headers : { Authorization: "Bearer " + this.token },
 				},formData,
 				).then((response) => {
-					if (response.data.success){
+					if (response.data.success == true){
 						const toast = useToast();
                   toast.success("Berhasil Mengajukan Cuti", {
                   position: "top-center",
@@ -258,6 +264,24 @@ export default {
 						this.form.reset();
 						$('#cuti').modal('hide')
 						this.tampilcuti()
+					}
+          if (response.data.success == 15){
+            console.log(response.data.status)
+						const toast = useToast();
+                  toast.error("Belum Bisa Mengajukan, Menunggu Pengajuan Sebelumnya", {
+                  position: "top-center",
+                  timeout: 2000,
+                  icon: "fa-sharp fa-solid fa-triangle-exclamation"
+                  });
+					}
+          if (response.data.success == 12){
+            console.log(response.data.status)
+						const toast = useToast();
+                  toast.error("Tidak Bisa Mengajukan, Anda Memiliki Cuti Yang Sedang Berjalan", {
+                  position: "top-center",
+                  timeout: 2500,
+                  icon: "fa-sharp fa-solid fa-triangle-exclamation"
+                  });
 					}
           if (response.data.success == false){
 						const toast = useToast();

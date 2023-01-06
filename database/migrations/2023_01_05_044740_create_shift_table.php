@@ -13,17 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('izin', function (Blueprint $table) {
+        Schema::create('shift', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_admin');
-            $table->string('name');
-            $table->string('nama_lengkap');
-            $table->string('email');
-            $table->string('no_pegawai');
-            $table->string('jenis_izin');
-            $table->string('bukti');
-            $table->enum('status_izin', ['Diproses', 'Diterima', 'Ditolak'])->default('Diproses');
-            $table->date('tanggal');
+            $table->longText('email_pegawai')->nullable();
+            $table->string('id_shift')->nullable();
+            $table->string('hari')->nullable();
             $table->timestamps();
         });
     }
@@ -35,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('izin');
+        Schema::dropIfExists('shift');
     }
 };

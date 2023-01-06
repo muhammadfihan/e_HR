@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card h-1000" style="height:630px !important">
     <div class="card-header pb-0">
       <div class="row">
         <div class="col-6 d-flex align-items-center">
@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0">
+      <div class="table-responsive p-0" v-if="this.bonus == ''">
         <table class="table align-items-center mb-0">
           <thead>
             <tr>
@@ -37,6 +37,32 @@
               >Action</th>
             </tr>
           </thead>
+        </table>
+        <p class="text-center text-secondary text-xl font-weight-bold mt-9" style="font-size:23px">Data Kosong</p>
+      </div>
+      <div class="table-responsive p-0 border-bottom" v-else-if="this.bonus != ''">
+        <table class="table align-items-center mb-0">
+          <thead>
+            <tr>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >No</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Jenis Bonus</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Nominal</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Action</th>
+            </tr>
+          </thead>
+          <!-- <tbody v-if="this.bonus == ''">
+            <tr  class="text-center ms-10" style="height:339px !important">
+              td Kosong
+            </tr>
+          </tbody> -->
           <tbody>
             <tr v-for="(data,index) in bonus" :key="data.id">
               <td class="align-middle text-center">
@@ -49,13 +75,12 @@
                 <span class="text-secondary text-xs font-weight-bold">{{convertToRupiah (data.nominal) }}</span>
               </td>
               <td class="text-center text-sm align-middle" >
-                  <span style="margin-right:7px;cursor:pointer" @click.prevent="showModalEdit2(data)" class="badge badge-sm bg-warning">Edit</span>
-                  <span style="cursor:pointer" @click.prevent="hapusbonus(data.id)" class="badge badge-sm bg-danger">Hapus</span>
+                  <span @click.prevent="showModalEdit2(data)" style="cursor:pointer; margin-right: 7px;" class="badge badge-sm bg-warning disabled"><i class="fas fa-edit"></i></span>
+                  <span @click.prevent="hapusbonus(data.id)" style="cursor:pointer" class="badge badge-sm bg-danger"><i class="far fa-trash-alt"></i></span>
               </td>
             </tr>
           </tbody>
         </table>
-        <hr style="border-top: 1.5px solid #bbb;">
       </div>
     </div>
   </div>

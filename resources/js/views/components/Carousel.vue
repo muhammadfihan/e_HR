@@ -1,22 +1,20 @@
 <template>
   <div class="card card-carousel overflow-hidden h-100 p-0">
     <div class="carousel slide h-100">
-      <div class="carousel-inner border-radius-lg h-100 bg-gradient-primary" >
+      <div class="carousel-inner border-radius-lg h-100 bg-white" >
         <div class="card-header border-0 text-end bg-transparent " >
-                <a class="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  
-                </a>
-                  <button type="submit" class="btn btn-white text-primary font-weight-bolder" @click="showModal()">Atur Presensi</button>
+          <button type="submit" class="me-2 btn btn-xs btn-outline-danger text-danger font-weight-bolder" @click="hapuspresensi()">Hapus</button>
+            <button type="submit" class="btn btn-xs btn-outline-primary text-primary font-weight-bolder" @click="showModal()">Atur Presensi</button>
         </div>
         <div class="card-body d-flex flex-column p-0" style="margin-top:-35px">
 							<div class="card-body" style="text-align:center;">
-                  <div class="date text-white" style="font-size:28px;">
+                  <div class="date text-primary" style="font-size:28px;">
                       <span id="dayname">Day</span>,&nbsp;
                       <span id="daynum">00</span>&nbsp;
                       <span id="month">Month</span>&nbsp;
                       <span id="year">Year</span>
                   </div>
-                  <div class="time text-white" style="font-size:40px;font-weight: 600; color: #124EB2;">
+                  <div class="time text-primary" style="font-size:40px;font-weight: 600; color: #124EB2;">
                       <span id="hour">00</span>:
                       <span id="minutes">00</span>:
                       <span id="seconds">00</span>
@@ -26,15 +24,20 @@
 													<!--begin::Row-->
 													<div class="row m-0 text-center">
 														<div class="col">
-															<div class="font-size-lg text-white font-weight-bold" >Jam Masuk</div>
-															<div class="font-size-h4 text-white font-weight-bolder">{{this.masukpilih}}</div>
+															<div class="font-size-lg text-primary font-weight-bold" >Jam Masuk</div>
+															<div class="font-size-h4 text-primary font-weight-bolder">{{this.masukpilih}}</div>
 														</div>
 														<div class="col">
-															<div class="font-size-lg text-white font-weight-bold">Jam Pulang</div>
-															<div class="font-size-h4 text-white font-weight-bolder mb-4">{{this.pulangpilih}}</div>
+															<div class="font-size-lg text-primary font-weight-bold">Jam Pulang</div>
+															<div class="font-size-h4 text-primary font-weight-bolder mb-4">{{this.pulangpilih}}</div>
 														</div>
 													</div>
 												</div>
+              </div>
+              <div class="text-center mb-2">
+                <button v-if="this.bukapresencek == false" type="submit" class="btn btn-sm btn-white bg-warning text-white font-weight-bolder w-60" @click="bukapresensi()">Buka Presensi</button>
+                <button v-else-if="this.bukapresencek == 12" type="submit" class="btn btn-sm btn-white bg-success text-white font-weight-bolder w-60">Presensi Sedang Berjalan</button>
+                <button v-else-if="this.bukapresencek == null" type="submit" class="btn btn-sm btn-white bg-danger text-white font-weight-bolder w-60">Presensi Hari Ini Telah Berakhir</button>
               </div>
         <div>
         </div>
@@ -126,12 +129,77 @@ export default {
       bukapilih:[],
       tutuppilih:[],
       jamabsen:[],
+      absensigrafik:[],
       hariabsen:[],
+      bukapresencek:[],
       presensi:[],
       token: localStorage.getItem("token")
     }
   },  
   methods:{
+      bukapresensi(){
+        const custom = Swal.mixin({
+            customClass: {
+              confirmButton: 'btn bg-success me-2 text-white',
+              cancelButton: 'btn bg-warning text-white',
+            },
+            buttonsStyling: false
+          })
+        custom.fire({
+            title: 'Buka Presensi Untuk Hari Ini ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Buka',
+            cancelButtonText: 'Batal',
+          }).then((result) => {
+            if(result.isConfirmed){
+              this.$axios.post('/api/bukapresensi',
+               {
+                headers: { Authorization: "Bearer " + this.token }
+                }).then((response) => {
+          if (response.data.success == 15){
+                this.cekbuka()
+                const toast = useToast();
+                  toast.error("Maaf, Karyawan Anda Hari Ini Sedang Izin Semua", {
+                    position: "top-center",
+                    timeout: 2000,
+                    icon: "fa-solid fa-triangle-exclamation"
+                  });
+          }        
+          if (response.data.success == true){
+                this.cekbuka()
+                const toast = useToast();
+                  toast.success("Presensi Hari Ini Berhasil Dibuka", {
+                    position: "top-center",
+                    timeout: 2000,
+                    icon: "fa-sharp fa-solid fa-thumbs-up"
+                  });
+          }if (response.data.success == 12){
+                  const toast = useToast();
+                  toast.error("Jam Presensi Belum Buka", {
+                    position: "top-center",
+                    timeout: 2000,
+                    icon: "fa-solid fa-triangle-exclamation"
+                  });
+          }if (response.data.success == null){
+                  const toast = useToast();
+                  toast.error("Bukan Hari Kerja, Tidak Bisa Membuka Presensi", {
+                    position: "top-center",
+                    timeout: 2000,
+                    icon: "fa-solid fa-triangle-exclamation"
+                  });
+          }if (response.data.success == false){
+                   const toast = useToast();
+                   toast.error("Presensi Hari Ini Telah Dibuka", {
+                    position: "top-center",
+                    timeout: 2000,
+                    icon: "fa-solid fa-triangle-exclamation"
+                  });
+          }
+                })
+            }
+          })
+      },
       showModal() {
 				$("#presensi").modal("show");
         if(this.haripilih.includes(",")){
@@ -153,6 +221,19 @@ export default {
             })
                 .then(response => {
                     this.hariabsen = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+      },
+      cekbuka(){
+             this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/cekbuka',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.bukapresencek = response.data.success;
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -181,6 +262,7 @@ export default {
                       });
                     $("#presensi").modal("hide");
                     this.tampilabsen()
+                    this.cekbuka()
                 }if(response.data.status == 2){
                   const toast = useToast();
                       toast.error("Jam Buka Presensi Tidak Boleh Lebih Dari Jam Masuk", {
@@ -227,10 +309,71 @@ export default {
                 });
         })
         },
+        hapuspresensi(){
+          this.$axios.get('/sanctum/csrf-cookie').then(response => {
+          const custom = Swal.mixin({
+            customClass: {
+              confirmButton: 'btn bg-gradient-success',
+              cancelButton: 'btn bg-gradient-danger',
+            },
+            buttonsStyling: false
+          })
+            custom.fire({
+            title: 'Hapus Presensi Hari Ini ?',
+            text: "Anda Akan Menghapus Presensi Hari Ini",
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonColor: '',
+            showConfirmButton:true,
+            confirmButtonText:'Hapus',
+            cancelButtonText: 'Batal',
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                      this.$axios.delete('/api/hapusabsen', {headers: { Authorization: "Bearer " + this.token }})
+                      .then((response) => {
+                        if(response.data.success == 1){
+                          const toast = useToast();
+                          toast.success("Berhasil Menghapus Presensi Hari Ini", {
+                          position: "top-center",
+                          timeout: 2000,
+                          icon: "fa-sharp fa-solid fa-thumbs-up"
+                          })
+                          this.cekbuka()  
+                        };
+                        if(response.data.success == 0){
+                        const toast = useToast();
+                          toast.error("Tidak Ada Presensi Berjalan Hari Ini", {
+                          position: "top-center",
+                          timeout: 2000,
+                          icon: "fa-solid fa-triangle-exclamation"
+                          })
+                          this.cekbuka()
+                          this.loadgrafik()
+                        };
+                      })}
+                    
+                  }
+                )
+              })
+        },
+        loadgrafik(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/grafikadmin',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.absensigrafik = response.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },
   },
   mounted(){
     this.tampilhari()
     this.tampilabsen()
+    this.cekbuka()
   },
   beforeMount() {
      this.timer =  setInterval(function(){

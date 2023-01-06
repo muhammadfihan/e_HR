@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card h-1000" style="height:630px !important">
     <div class="card-header pb-0">
       <div class="row">
         <div class="col-6 d-flex align-items-center">
@@ -19,7 +19,33 @@
       </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0">
+        <div v-if="this.cekstatus == ''" class="table-responsive p-0">
+        <table class="table align-items-center mb-0">
+          <thead>
+              <th></th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Email</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Periode</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Jabatan</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Total Gaji</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Status</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Action</th>
+          </thead>
+        </table>
+        <p class="text-center text-secondary text-xl font-weight-bold mt-9" style="font-size:23px">Data Kosong</p>
+      </div>
+      <div v-else-if="this.cekstatus != ''" class="table-responsive p-0 border-bottom">
         <table class="table align-items-center mb-0">
           <thead>
               <th></th>
@@ -66,12 +92,12 @@
               </td>
               <td v-if="data.status == 'Belum Diambil'" class="align-middle text-sm text-center">
                 <span v-if="data.status == 'Belum Diambil'">
-                  <span  @click.prevent="detailGaji(data.id)" style="margin-right:7px;cursor:pointer" class="badge badge-sm bg-primary" data-toggle="modal" >Detail</span>
-                  <span  @click.prevent="modaledit(data, data.id)" style="margin-right:7px;cursor:pointer" class="badge badge-sm bg-danger" data-toggle="modal" >Edit</span>
-                  <span  @click.prevent="hapusgaji(data.id)" class="badge badge-sm bg-warning" style="cursor:pointer" data-toggle="modal" >Hapus</span>
+                  <span @click.prevent="detailGaji(data.id)" style="cursor:pointer;margin-right:7px" class="badge badge-sm bg-primary ms-0"><i class="far fa-eye"></i></span>
+                  <span  @click.prevent="modaledit(data, data.id)" style="cursor:pointer; margin-right: 7px;" class="badge badge-sm bg-warning disabled"><i class="fas fa-edit"></i></span>
+                  <span @click.prevent="hapusgaji(data.id)" style="cursor:pointer" class="badge badge-sm bg-danger"><i class="far fa-trash-alt"></i></span>
                 </span>
                 <div v-if="data.status == 'Sudah Diambil'">
-                  <span  @click.prevent="detailGaji(data.id)" style="margin-right:7px;cursor:pointer" class="badge badge-sm bg-primary" data-toggle="modal" >Detail</span>
+                 <span @click.prevent="detailGaji(data.id)" style="cursor:pointer;margin-right:7px" class="badge badge-sm bg-primary ms-0"><i class="far fa-eye"></i></span>
                 </div>
               </td>
             </tr>
@@ -296,6 +322,7 @@ export default {
   name: "data-payroll",
   data() {
         return {
+            cekstatus: '',
             searchpot: '',
             searchtun: '',
             searchbon: '',
@@ -565,6 +592,7 @@ export default {
             })
                 .then(response => {
                     this.datagajipeg = response.data.data;
+                    this.cekstatus = response.data.cekstatus
                     this.nilai = response.data.tunjangan;
                     this.bon = response.data.bonus;
                     this.potong = response.data.potongan;

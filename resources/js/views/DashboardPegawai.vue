@@ -28,7 +28,7 @@
           <div class="col-lg-4 col-md-12 col-12">
             <card
               :title="stats.sales.title"
-              :value="stats.sales.value"
+              :value="convertToRupiah(stats.sales.value)"
               :percentage="stats.sales.percentage"
               :iconClass="stats.sales.iconClass"
               :iconBackground="stats.sales.iconBackground"
@@ -40,12 +40,31 @@
         <div class="row">
           <div class="col-lg-7 mb-lg-0 mb-4">
             <!-- line chart -->
-            <div class="card">
-              <gradient-line-chart :absensigrafik="absensigrafik" />
+            <div class="card" style="height:415px !important; ">
+              <div class="p-3 pb-0 card-header">
+                <div class="d-flex justify-content-between">
+                  <h6 class="mb-2 ms-2">Job Performance</h6>
+                </div>
+              </div>
+              <div class="card-body ms-2 px-0 pt-0 pb-2 mb-3" style="overflow-y: scroll">
+                <div class="card-body ps-2 pe-3 pt-0" >
+                  <div class="table-responsive">
+                <table class="table align-items-center">
+                </table>
+              </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-lg-5">
-            <div class="card" style="height:415px !important; ">
+            <div class="card">
+              <gradient-line-chart v-if="absenpegawai != null" :absenpegawai="absenpegawai" />
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-lg-7 mb-lg-0 mb-4">
+            <div class="card"  style="height:350px !important; ">
               <div class="p-3 pb-0 card-header">
                 <div class="d-flex justify-content-between">
                   <h6 class="mb-2 ms-2">Aktivitas Terbaru</h6>
@@ -53,7 +72,6 @@
               </div>
               <div class="card-body ms-2 px-0 pt-0 pb-2 mb-3" style="overflow-y: scroll">
                 <div class="card-body ps-2 pe-3 pt-0" >
-                  <!-- <p class="text-center text-secondary text-xl font-weight-bold mt-7" style="font-size:18px">Tidak Ada Pemberitahuan</p> -->
                   <ul class="list-group p-2" style="overflow-y: auto;max-height: 260px;" v-for="(data) in notif" :key="data.id">
                   <li
                     class="list-group-item border-0 d-flex justify-content-between ps-0 mb-0 border-radius-md bg-white text-dark" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; cursor: pointer;"
@@ -73,103 +91,56 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="row mt-4">
-          <div class="col-lg-7 mb-lg-0 mb-4">
-            <div class="card">
-              <div class="p-3 pb-0 card-header">
-                <div class="d-flex justify-content-between">
-                  <h6 class="mb-2">Penugasan Untuk Anda</h6>
-                </div>
-              </div>
-              <div class="table-responsive">
-                <table class="table align-items-center">
-                  <tbody>
-                    <tr v-for="(sale, index) in sales" :key="index">
-                      <td class="w-30">
-                        <div class="px-2 py-1 d-flex align-items-center">
-                          <div>
-                            <img :src="sale.flag" alt="Country flag" />
-                          </div>
-                          <div class="ms-4">
-                            <p class="mb-0 text-xs font-weight-bold">Country:</p>
-                            <h6 class="mb-0 text-sm">{{ sale.country }}</h6>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="text-center">
-                          <p class="mb-0 text-xs font-weight-bold">Sales:</p>
-                          <h6 class="mb-0 text-sm">{{ sale.sales }}</h6>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="text-center">
-                          <p class="mb-0 text-xs font-weight-bold">Value:</p>
-                          <h6 class="mb-0 text-sm">{{ sale.value }}</h6>
-                        </div>
-                      </td>
-                      <td class="text-sm align-middle">
-                        <div class="text-center col">
-                          <p class="mb-0 text-xs font-weight-bold">Bounce:</p>
-                          <h6 class="mb-0 text-sm">{{ sale.bounce }}</h6>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
           <div class="col-lg-5">
-            <div class="card">
-              <div class="p-3 pb-0 card-header">
+            <div class="card" style="height:350px !important; ">
+              <div class="p-3 pb-0 card-header col-lg-12">
                 <div class="d-flex justify-content-between">
-                  <h6 class="mb-2">Pengumuman</h6>
+                  <h6 class="mb-2 ms-2">Berita Pengumuman</h6>
                 </div>
+               
               </div>
-              <div class="table-responsive">
-                <table class="table align-items-center">
-                  <tbody>
-                    <tr v-for="(sale, index) in sales" :key="index">
-                      <td class="w-30">
-                        <div class="px-2 py-1 d-flex align-items-center">
-                          <div>
-                            <img :src="sale.flag" alt="Country flag" />
-                          </div>
-                          <div class="ms-4">
-                            <p class="mb-0 text-xs font-weight-bold">Country:</p>
-                            <h6 class="mb-0 text-sm">{{ sale.country }}</h6>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="text-center">
-                          <p class="mb-0 text-xs font-weight-bold">Sales:</p>
-                          <h6 class="mb-0 text-sm">{{ sale.sales }}</h6>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="text-center">
-                          <p class="mb-0 text-xs font-weight-bold">Value:</p>
-                          <h6 class="mb-0 text-sm">{{ sale.value }}</h6>
-                        </div>
-                      </td>
-                      <td class="text-sm align-middle">
-                        <div class="text-center col">
-                          <p class="mb-0 text-xs font-weight-bold">Bounce:</p>
-                          <h6 class="mb-0 text-sm">{{ sale.bounce }}</h6>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div class="card-body ms-2 px-0 pt-0 pb-2 mb-3" style="overflow-y: scroll">
+                <div class="card-body ps-2 pe-3 pt-0" >
+                  <ul class="list-group p-2" style="overflow-y: auto;max-height: 260px;" v-for="(data) in pengumuman" :key="data.id">
+                  <li
+                    class="list-group-item border-0 d-flex justify-content-between ps-0 mb-0 border-radius-md bg-white text-dark" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;"
+                  >
+                    <div class="d-flex align-items-center ms-3">
+                      <div class="d-flex flex-column">
+                        <h6 class="mb-1 text-dark text-sm">{{data.judul}} ({{data.tanggal_pengumuman}})</h6>
+                        <span class="text-xs text-secondary me-1" style=" text-overflow: ellipsis;--max-lines: 1; display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical;-webkit-line-clamp: var(--max-lines);"><i>{{data.isi}}</i></span>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center text-secondary text-xs">
+                      <span @click="detailpengumuman(data.id)" class="text-xs text-primary fw-bold" style="cursor:pointer">Detail</span>
+                    </div>
+                  </li>
+                </ul>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+  <div class="modal fade text-white" id="pengumumandetail" aria-labelledby="pengumumandetailLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content bg-white">
+      <div class="modal-header border-bottom-0" v-for="(data) in detpengumuman" :key="data.id">
+        <b class="modal-title text-dark" id="pengumumandetailLabel" >Detail Pengumuman Tanggal</b>
+        <b class="modal-title ms-2 text-dark">{{data.tanggal_pengumuman}}</b>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" v-for="(data) in detpengumuman" :key="data.id">
+        <b class="text-dark">{{data.judul}}</b>
+        <h6 class="text-dark me-1">{{data.isi}}</h6>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-primary text-white" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
   </div>
 </template>
 <script>
@@ -191,7 +162,9 @@ export default {
   data() {
     return {
       infopt:[],
-      absensigrafik: null,
+      absenpegawai: null,
+      pengumuman: [],
+      detpengumuman: [],
       notif: [],
       token: localStorage.getItem("token"),
       role: localStorage.getItem('role'),
@@ -262,13 +235,69 @@ export default {
   created(){
   },  
   methods:{
-    loadgrafik(){
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/grafikadmin',{
+    convertToRupiah(value) {
+            // value = value.toString()
+            value = parseFloat(value)
+            let rupiah = ''
+            let valueRev = value.toString().split('').reverse().join('')
+            for (let i = 0; i < valueRev.length; i++) {
+                if (i % 3 === 0) rupiah += `${valueRev.substr(i, 3)}.`
+            }
+
+            const rp = rupiah
+                .split('', rupiah.length - 1)
+                .reverse()
+                .join('')
+            // console.log('rupiah', isNaN(rp), rupiah.length, rp, rupiah)
+            if (rupiah === 'NaN.' || rupiah === 'NaN') {
+                return '...'
+            }
+            return `Rp ${rp}`
+        },
+       
+    dashpeg(){
+      this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/dashboardpeg',{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
-                    this.absensigrafik = response.data;
+                    this.stats.money.value = response.data.totaljob;
+                    this.stats.users.value = response.data.complete;
+                    this.stats.sales.value = response.data.totalgaji
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+    },
+    getpengumuman(){
+      this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/getpengumumanpeg',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.pengumuman = response.data.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+    },
+    detailpengumuman(id){
+      $('#pengumumandetail').modal('show')
+            this.$axios.get('/api/detailpengumuman/'+id,{
+                headers: { Authorization: "Bearer " + this.token }
+            }).then((response) => {
+                this.detpengumuman = response.data.data
+            })
+    },  
+    loadgrafik(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/grafikpegawai',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.absenpegawai = response.data;
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -312,8 +341,10 @@ export default {
   },
   mounted(){
     // this.dashsuperadmin()
-    // this.loadgrafik()
+    this.loadgrafik()
     this.aktivitas()
+    this.getpengumuman()
+    this.dashpeg()
   }
 };
 </script>

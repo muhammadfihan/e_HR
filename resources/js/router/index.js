@@ -5,6 +5,7 @@ import DashboardPegawai from "../views/DashboardPegawai.vue";
 import AdminPegawai from "../views/Admin/AdminPegawai.vue";
 import AdminAkun from "../views/Admin/AdminAkun.vue";
 import AdminPayroll from "../views/Admin/AdminPayroll.vue";
+import AdminRiwayat from "../views/Admin/AdminRiwayat.vue";
 import AdminTunjangan from "../views/Admin/AdminTunjangan.vue";
 import AdminBonus from "../views/Admin/AdminBonus.vue";
 import AdminPotongan from "../views/Admin/AdminPotongan.vue";
@@ -18,7 +19,9 @@ import ApproveCuti from "../views/Admin/ApproveCuti.vue";
 import ApproveLembur from "../views/Admin/ApproveLembur.vue";
 import ApproveReqabsen from "../views/Admin/ApproveReqabsen.vue";
 import ApproveIzin from "../views/Admin/ApproveIzin.vue";
+import AdminShift from "../views/Admin/AdminShift.vue";
 import AdminProfile from "../views/Admin/AdminProfile.vue";
+import AdminJob from "../views/Admin/AdminJob.vue";
 import Profile from "../views/Profile.vue";
 import Signup from "../views/Signup.vue";
 import Signin from "../views/Signin.vue";
@@ -41,6 +44,7 @@ import PegawaiProfile from "../views/Pegawai/PegawaiProfile.vue"
 import PegawaiAmbil from "../views/Pegawai/PegawaiAmbil.vue"
 import PegawaiCek from "../views/Pegawai/PegawaiCek.vue"
 import PegawaiRiwayat from "../views/Pegawai/PegawaiRiwayat.vue"
+import PegawaiJob from "../views/Pegawai/PegawaiJob.vue"
 
 import SuperadminApprove from "../views/SuperAdmin/SuperadminApr.vue";
 import SuperadminPt from "../views/SuperAdmin/SuperadminP.vue";
@@ -169,6 +173,11 @@ const routes = [
         component: AdminPegawai,
     },
     {
+        path: "/datajob",
+        name: "Data Job",
+        component: AdminJob,
+    },
+    {
         path: "/datakehadiran",
         name: "Data Kehadiran",
         component: AdminKehadiran,
@@ -209,6 +218,11 @@ const routes = [
         component: AdminPencairan,
     },
     {
+        path: "/rgaji",
+        name: "Riwayat Gaji",
+        component: AdminRiwayat
+    },
+    {
         path: "/tunjangan",
         name: "Tunjangan",
         component: AdminTunjangan,
@@ -227,6 +241,11 @@ const routes = [
         path: "/jabatan",
         name: "Jabatan",
         component: AdminJabatan,
+    },
+    {
+        path: "/shift",
+        name: "Shift",
+        component: AdminShift,
     },
     {
         path: "/approveizin",
@@ -272,6 +291,11 @@ const routes = [
         path: "/pegawailaporan",
         name: "Laporan Pegawai",
         component: PegawaiLaporan,
+    },
+    {
+        path: "/jobpegawai",
+        name: "Job Pegawai",
+        component: PegawaiJob,
     },
     {
         path: "/pengajuanizin",
