@@ -13,7 +13,7 @@
             <span class="input-group-text text-body bg-gray-100" style="outline-width: 2px; border:none">
               <i class="fas fa-search"></i>
             </span>
-            <input v-model="searchbon" style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Cari Jabatan..." >
+            <input v-model="search" style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Cari Jabatan..." >
           </div>
         </div>
       </div>
@@ -161,8 +161,7 @@ export default {
             {
                 this.allJabatan()
             }else {
-                axios
-                    .get('/api/searchjabatan/'+ val , {
+                this.$axios.get('/api/searchjabatan/'+ val , {
                         headers: {Authorization: "Bearer " + this.token},
                     })
                     .then((response) => {

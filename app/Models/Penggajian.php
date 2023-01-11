@@ -23,6 +23,7 @@ class Penggajian extends Model
         'id_tunjangan',
         'id_bonus',
         'id_potongan',
-        'total_gaji'
+        'total_gaji',
+        'no_transaksi'
     ];
 }

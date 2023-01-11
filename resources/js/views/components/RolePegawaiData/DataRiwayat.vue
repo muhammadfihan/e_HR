@@ -1,10 +1,9 @@
 <template>
-    
-    <div class="card">
+    <div class="card h-1000" style="height:630px !important">
       <div class="card-header pb-0">
         <div class="row">
           <div class="col-6 d-flex align-items-center">
-            <h6 class="mb-0">Penggajian Pegawai</h6>
+            <h6 class="mb-0">Riwayat Transaksi Penggajian</h6>
           </div>
           <div class="col-6 text-end" style="visibility:hidden">
             <argon-button  color="primary" size="sm" variant="gradient">Cek Penggajian</argon-button>
@@ -21,10 +20,49 @@
           </div>
       </div>
       <div class="card-body px-0 pt-0 pb-2 mb-3">
-        <div class="table-responsive p-0 border-bottom">
+        <div v-if="this.riwayatgaji.data == ''" class="table-responsive p-0">
+        <table class="table align-items-center mb-0">
+            <thead>
+                <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >No</th>
+                <th
+                  class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                >Periode</th>
+                <th
+                  class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                >Jabatan</th>
+                <th
+                  class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                >Gaji Bersih</th>
+                <th
+                  class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                >Gaji Kotor</th>
+                <th
+                  class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                >Total Tunjangan</th>
+                <th
+                  class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                >Total Bonus</th>
+                <th
+                  class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                >Total Potongan</th>
+                <th
+                  class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                >Transaksi</th>
+                <th
+                  class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                >Action</th>
+            </thead>
+        </table>
+        <p class="text-center text-secondary text-xl font-weight-bold mt-9" style="font-size:23px">Data Kosong</p>
+      </div>
+        <div v-else-if="this.riwayatgaji.data != ''" class="table-responsive p-0 border-bottom">
           <table class="table align-items-center mb-0">
             <thead>
-                <th></th>
+                <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >No</th>
                 <th
                   class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
                 >Periode</th>
@@ -54,8 +92,10 @@
                 >Action</th>
             </thead>
             <tbody >
-              <tr v-for="data in riwayatgaji.data" :key="data.id">
-                <td ></td>
+              <tr v-for="(data,index) in riwayatgaji.data" :key="data.id">
+                <td class="align-middle text-center">
+                  <span class="text-secondary text-xs font-weight-bold">{{index+1}} </span>
+                </td>
                 <td  class="align-middle">
                   <span class="text-secondary text-xs font-weight-bold">{{ data.tanggal_ambil}}</span>
                 </td>
@@ -107,17 +147,17 @@
   
     <div class="modal fade text-white" id="detailgaji" aria-labelledby="detailgajiLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content bg-gradient-primary">
+      <div class="modal-content bg-white">
         <div class="modal-header border-bottom-0">
-          <b class="modal-title" id="detailgajiLabel">Detail Gaji Pegawai</b>
+          <b class="modal-title text-dark" id="detailgajiLabel">Detail Gaji Pegawai</b>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body text-dark">
           <b class="modal-title" id="detailgaji" v-for="(data) in detgaji" :key="data.id">Detail Penggajian 
               <p style="font-weight:bolder">{{data.email}}</p></b>
           <br>
           <div class="table-responsive">
-              <table class="table table-borderless text-white"  v-for="(data) in detgaji" :key="data.id">
+              <table class="table table-borderless text-dark"  v-for="(data) in detgaji" :key="data.id">
                   <thead class="">
                       <tr class="text-bold">
                           <td>Jenis</td>
@@ -199,7 +239,7 @@
            </div>
         </div>
         <div class="modal-footer border-top-0">
-          <button type="button" class="btn btn-white text-primary" data-bs-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-primary text-white" data-bs-dismiss="modal">Tutup</button>
         </div>
       </div>
     </div>

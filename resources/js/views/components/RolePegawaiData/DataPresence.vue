@@ -1,9 +1,12 @@
 <template>
-  <div class="card">
+  <div class="card h-1000" style="height:630px !important">
     <div class="card-header pb-0">
       <div class="row">
         <div class="col-6 d-flex align-items-center">
           <h6 class="mb-0">Tabel Kehadiran Pegawai</h6>
+        </div>
+        <div class="col-6 text-end" style="visibility:hidden">
+          <argon-button color="primary" @click="showModal()" size="sm" variant="gradient">Buat Laporan</argon-button>
         </div>
       </div>
         <div class="col-md-4 mt-2 mb-3">
@@ -11,12 +14,42 @@
             <span class="input-group-text text-body bg-gray-100" style="outline-width: 2px; border:none">
               <i class="fas fa-search"></i>
             </span>
-            <input style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Cari..." >
+            <input v-model="search" style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Cari Berdasarkan Tanggal/Keterangan..." >
           </div>
         </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div class="table-responsive p-0 border-bottom">
+      <div v-if="this.absensipegawai.data == ''" class="table-responsive p-0">
+        <table class="table align-items-center mb-0">
+          <thead>
+            <tr>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >No</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Jam Masuk</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Jam Pulang</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Jam Kerja</th>
+              <th
+                class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Tanggal Absen</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Keterangan</th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >Detail Presensi</th>
+            </tr>
+          </thead>
+        </table>
+        <p class="text-center text-secondary text-xl font-weight-bold mt-9" style="font-size:23px">Data Kosong</p>
+      </div>
+      <div v-else-if="this.absensipegawai.data != ''" class="table-responsive p-0 border-bottom">
         <table class="table align-items-center mb-0">
           <thead>
             <tr>
@@ -332,8 +365,7 @@ methods:{
             {
                 this.tampilabsen()
             }else {
-                axios
-                    .get('/api/searchabsen/'+ val , {
+                this.$axios.get('/api/searchabsenpeg/'+ val , {
                         headers: {Authorization: "Bearer " + this.token},
                     })
                     .then((response) => {

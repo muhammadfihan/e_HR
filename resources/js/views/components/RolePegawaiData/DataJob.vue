@@ -13,13 +13,13 @@
             <span class="input-group-text text-body bg-gray-100" style="outline-width: 2px; border:none">
               <i class="fas fa-search"></i>
             </span>
-            <input v-model="searchbon" style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Pencarian..." >
+            <input v-model="search" style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Pencarian..." >
           </div>
         </div>
       </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-      <div v-if="this.job == ''" class="table-responsive p-0">
+      <div v-if="this.job.data == ''" class="table-responsive p-0">
         <table class="table align-items-center mb-0">
           <thead>
             <tr>
@@ -52,7 +52,7 @@
         </table>
         <p class="text-center text-secondary text-xl font-weight-bold mt-9" style="font-size:23px">Data Kosong</p>
       </div>
-      <div v-else-if="this.job != ''" class="table-responsive p-0 border-bottom">
+      <div v-else-if="this.job.data != ''" class="table-responsive p-0 border-bottom">
         <table class="table align-items-center mb-0">
           <thead>
             <tr>
@@ -83,7 +83,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(data,index) in job" :key="data.id">
+            <tr v-for="(data,index) in job.data" :key="data.id">
               <td class="align-middle text-center">
                   <span class="text-secondary text-xs font-weight-bold">{{index+1}} </span>
               </td>
@@ -120,7 +120,7 @@
         </table>
       </div>
       <div class="mt-4 mb-2">
-        <!-- <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="jabatan" @pagination-change-page="allJabatan" /> -->
+        <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="job" @pagination-change-page="alljob" />
       </div>
     </div>
   </div>
@@ -194,7 +194,11 @@
                         <div v-if="data.pengumpulan != null" class="form-control form-control-md"><a class="text-primary" :href="`files/${data.pengumpulan}`"  target="_blank"> {{data.pengumpulan}}</a></div>
                         <div v-else-if="data.pengumpulan == null" class="form-control form-control-md"><a class="text-dark">Null</a></div>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3" v-if="data.status == 'Revisi'" >
+                        <label class="form-label">Revisi</label>
+                        <textarea type="text" disabled placeholder="" v-model="data.revisi" class="form-control form-control-md bg-white border-danger"></textarea>
+                    </div>
+                    <div class="mb-3" v-else-if="data.status != 'Revisi'" style="display:none">
                         <label class="form-label">Revisi</label>
                         <textarea type="text" disabled placeholder="" v-model="data.revisi" class="form-control form-control-md bg-white border-danger"></textarea>
                     </div>
@@ -244,17 +248,17 @@ export default {
         }
     },
     created() {
-         this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/alljobpeg',{
-                headers: {Authorization: "Bearer " + this.token},
-            })
-                .then(response => {
-                    this.job = response.data.data;
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        })
+        //  this.$axios.get('/sanctum/csrf-cookie').then(response => {
+        //     this.$axios.get('/api/alljobpeg',{
+        //         headers: {Authorization: "Bearer " + this.token},
+        //     })
+        //         .then(response => {
+        //             this.job = response.data.data;
+        //         })
+        //         .catch(function (error) {
+        //             console.error(error);
+        //         });
+        // })
     },
     methods:{
        upload(e){
@@ -296,17 +300,16 @@ export default {
                 });
         })
         },
-        searchjabatan(val) {
+        searchjob(val) {
             if (val == "")
             {
-                this.allJabatan()
+                this.alljob()
             }else {
-                axios
-                    .get('/api/searchjabatan/'+ val , {
+                this.$axios.get('/api/searchjobpeg/'+ val , {
                         headers: {Authorization: "Bearer " + this.token},
                     })
                     .then((response) => {
-                        this.jabatan = response.data;
+                        this.job = response.data;
                     });
             }
         },
@@ -451,9 +454,9 @@ export default {
             )
           })
         },
-        alljob(){
+        alljob(page = 1){
           this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/alljobpeg',{
+            this.$axios.get('/api/alljobpeg?page=' + page,{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
@@ -504,13 +507,14 @@ export default {
     watch: {
                 search: function ()
                 {
-                    this.searchjabatan(this.search)
+                    this.searchjob(this.search)
                 }
         },
   mounted() {
     setNavPills();
     this.getpt();
     this.allJabatan();
+    this.alljob()
     this.getdataPegawai()
   }
 };

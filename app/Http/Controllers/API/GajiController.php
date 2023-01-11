@@ -71,7 +71,7 @@ class GajiController extends Controller
         $data = Tunjangan::findOrFail($id);
         $id = $data->id;
         $convert = strval($id);
-        $update = DB::table('penggajian')->select('*')->where('id_admin', Auth::user()->id)->pluck('id_tunjangan')->toArray();
+        $update = DB::table('penggajian')->select('*')->where('id_admin', Auth::user()->id)->where('status', "Belum Diambil")->pluck('id_tunjangan')->toArray();
         $string = implode(',',$update);
         $cek = Str::contains($string, $convert);
             if($cek){
@@ -92,6 +92,7 @@ class GajiController extends Controller
         $tunjangan = DB::table('tunjangan')
         ->select('*')
         ->where('email_admin', Auth::user()->email)
+        ->where('deleted_at',null)
         ->latest()
         ->get();
     return response([
@@ -104,7 +105,8 @@ class GajiController extends Controller
         $tunjangan = DB::table('tunjangan')
         ->select('*')
         ->where('email_admin', Auth::user()->email)
-        ->where('jenis_tunjangan','!=','Tidak Ada Tunjangan')
+        ->where('jenis_tunjangan','!=','-')
+        ->where('deleted_at',null)
         ->latest()
         ->get();
     return response([
@@ -117,10 +119,11 @@ class GajiController extends Controller
     {
                 $result = DB::table('tunjangan')
                 ->select('*')
-                ->where('jenis_tunjangan','!=','Tidak Ada Tunjangan')
+                ->where('tunjangan.jenis_tunjangan','!=','-')
                 ->where('tunjangan.email_admin', Auth::user()->email)
                 ->where('jenis_tunjangan', 'like', '%' . $key . '%')
                 ->where('tunjangan.email_admin', Auth::user()->email)
+                ->where('tunjangan.jenis_tunjangan','!=','-')
                 ->latest()
                 ->get();
             return $result;
@@ -172,7 +175,7 @@ class GajiController extends Controller
         $data = Bonus::findOrFail($id);
         $id = $data->id;
         $convert = strval($id);
-        $update = DB::table('penggajian')->select('*')->where('id_admin', Auth::user()->id)->pluck('id_bonus')->toArray();
+        $update = DB::table('penggajian')->select('*')->where('id_admin', Auth::user()->id)->where('status', "Belum Diambil")->pluck('id_bonus')->toArray();
         $string = implode(',',$update);
         $cek = Str::contains($string, $convert);
             if($cek){
@@ -193,6 +196,7 @@ class GajiController extends Controller
         $bonus = DB::table('bonus')
         ->select('*')
         ->where('email_admin', Auth::user()->email)
+        ->where('deleted_at',null)
         ->latest()
         ->get();
     return response([
@@ -205,7 +209,8 @@ class GajiController extends Controller
         $bonus = DB::table('bonus')
         ->select('*')
         ->where('email_admin', Auth::user()->email)
-        ->where('jenis_bonus','!=','Tidak Ada Bonus')
+        ->where('jenis_bonus','!=','-')
+        ->where('deleted_at',null)
         ->latest()
         ->get();
     return response([
@@ -218,10 +223,11 @@ class GajiController extends Controller
     {
             $result = DB::table('bonus')
                 ->select('*')
-                ->where('jenis_bonus','!=','Tidak Ada Bonus')
+                ->where('bonus.jenis_bonus','!=','-')
                 ->where('bonus.email_admin', Auth::user()->email)
                 ->where('jenis_bonus', 'like', '%' . $key . '%')
                 ->where('bonus.email_admin', Auth::user()->email)
+                ->where('bonus.jenis_bonus','!=','-')
                 ->latest()
                 ->get();
             return $result;
@@ -272,7 +278,7 @@ class GajiController extends Controller
         $data = Potongan::findOrFail($id);
         $id = $data->id;
         $convert = strval($id);
-        $update = DB::table('penggajian')->select('*')->where('id_admin', Auth::user()->id)->pluck('id_potongan')->toArray();
+        $update = DB::table('penggajian')->select('*')->where('id_admin', Auth::user()->id)->where('status', "Belum Diambil")->pluck('id_potongan')->toArray();
         $string = implode(',',$update);
         $cek = Str::contains($string, $convert);
             if($cek){
@@ -293,6 +299,7 @@ class GajiController extends Controller
         $bonus = DB::table('potongan')
         ->select('*')
         ->where('email_admin', Auth::user()->email)
+        ->where('deleted_at',null)
         ->latest()
         ->get();
     return response([
@@ -305,7 +312,8 @@ class GajiController extends Controller
         $bonus = DB::table('potongan')
         ->select('*')
         ->where('email_admin', Auth::user()->email)
-        ->where('jenis_potongan','!=','Tidak Ada Potongan')
+        ->where('jenis_potongan','!=','-')
+        ->where('deleted_at',null)
         ->latest()
         ->get();
     return response([
@@ -318,10 +326,11 @@ class GajiController extends Controller
     {
             $result = DB::table('potongan')
                 ->select('*')
-                ->where('jenis_potongan','!=', 'Tidak Ada Potongan')
+                ->where('potongan.jenis_potongan','!=','-')
                 ->where('potongan.email_admin', Auth::user()->email)
                 ->where('jenis_potongan', 'like', '%' . $key . '%')
                 ->where('potongan.email_admin', Auth::user()->email)
+                ->where('potongan.jenis_potongan','!=','-')
                 ->latest()
                 ->get();
             return $result;

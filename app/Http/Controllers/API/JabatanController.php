@@ -75,7 +75,7 @@ class JabatanController extends Controller
                 ->where('jabatan', 'like', '%' . $key . '%')
                 ->where('jabatan.id_admin', Auth::user()->id)
                 ->latest()
-                ->paginate(10);
+                ->paginate(8);
 
             return $result;
 

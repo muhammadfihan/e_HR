@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Absensi;
 use App\Models\AkunPegawai;
+use App\Models\Job;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
@@ -215,4 +216,21 @@ class DashboardController extends Controller
             'data' => $cek
         ]);
     }   
+
+    public function performajob(){
+        $complete = DB::table('job')
+            ->where('email_pegawai', Auth::user()->email)
+            ->where('status', 'Complete')
+            ->count();
+        $progress = DB::table('job')
+            ->where('email_pegawai', Auth::user()->email)
+            ->where('status', 'In Progress')
+            ->count();
+        $revisi = DB::table('job')
+            ->where('email_pegawai', Auth::user()->email)
+            ->where('status', 'Revisi')
+            ->count();
+        $simpan = [$complete, $progress, $revisi];
+        return response()->json($simpan);
+    }
 }

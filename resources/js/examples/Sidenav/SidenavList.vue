@@ -1,6 +1,6 @@
 <template>
   <div
-    class="collapse navbar-collapse w-auto h-auto h-100"
+    class="collapse navbar-collapse w-auto h-auto h-100 ms-2"
     id="sidenav-collapse-main"
   >
   <!-- Admin -->

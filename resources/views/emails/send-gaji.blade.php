@@ -1,434 +1,306 @@
-<!--
+<!DOCTYPE html>
+<html>
+<head>
 
-Follow me on
-Dribbble: https://dribbble.com/supahfunk
-Twitter: https://twitter.com/supahfunk
-Codepen: https://codepen.io/supah/
+    <style scoped>
+        .invoice-box {
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            font-size: 16px;
+            line-height: 24px;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #555;
+        }
+        
+        .invoice-box table {
+            width: 100%;
+            line-height: inherit;
+            text-align: left;
+        }
+        
+        .invoice-box table td {
+            padding: 5px;
+            vertical-align: top;
+        }
+        
+        .invoice-box table tr td:nth-child(2) {
+            text-align: right;
+        }
+        
+        .invoice-box table tr.top table td {
+            padding-bottom: 20px;
+        }
+        
+        .invoice-box table tr.top table td.title {
+            font-size: 45px;
+            line-height: 45px;
+            color: #333;
+        }
+        
+        .invoice-box table tr.information table td {
+            padding-bottom: 40px;
+        }
+        
+        .invoice-box table tr.heading td {
+            background: #eee;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+        }
+        
+        .invoice-box table tr.heading2 td {
+            background: rgb(255, 255, 255);
+        }
+        
+        .invoice-box table tr.details td {
+            padding-bottom: 20px;
+        }
+        
+        .invoice-box table tr.item td {
+            border-bottom: 1px solid #eee;
+        }
+        
+        .invoice-box table tr.item.last td {
+            border-bottom: none;
+        }
+        
+        .invoice-box table tr.total td:nth-child(2) {
+            border-top: 2px solid #eee;
+            font-weight: bold;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            .invoice-box table tr.top table td {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+            .invoice-box table tr.information table td {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+        }
+        /** RTL **/
+        
+        .invoice-box.rtl {
+            direction: rtl;
+            font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+        }
+        
+        .invoice-box.rtl table {
+            text-align: right;
+        }
+        
+        .invoice-box.rtl table tr td:nth-child(2) {
+            text-align: left;
+        }
+    </style>
+</head>
 
--->
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title> Order confirmation </title>
-<meta name="robots" content="noindex,nofollow" />
-<meta name="viewport" content="width=device-width; initial-scale=1.0;" />
-<style type="text/css">
-    @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
-    body {
-        margin: 0;
-        padding: 0;
-        background: #e1e1e1;
-    }
-    
-    div,
-    p,
-    a,
-    li,
-    td {
-        -webkit-text-size-adjust: none;
-    }
-    
-    .ReadMsgBody {
-        width: 100%;
-        background-color: #ffffff;
-    }
-    
-    .ExternalClass {
-        width: 100%;
-        background-color: #ffffff;
-    }
-    
-    body {
-        width: 100%;
-        height: 100%;
-        background-color: #e1e1e1;
-        margin: 0;
-        padding: 0;
-        -webkit-font-smoothing: antialiased;
-    }
-    
-    html {
-        width: 100%;
-    }
-    
-    p {
-        padding: 0 !important;
-        margin-top: 0 !important;
-        margin-right: 0 !important;
-        margin-bottom: 0 !important;
-        margin-left: 0 !important;
-    }
-    
-    .visibleMobile {
-        display: none;
-    }
-    
-    .hiddenMobile {
-        display: block;
-    }
-    
-    @media only screen and (max-width: 600px) {
-        body {
-            width: auto !important;
-        }
-        table[class=fullTable] {
-            width: 96% !important;
-            clear: both;
-        }
-        table[class=fullPadding] {
-            width: 85% !important;
-            clear: both;
-        }
-        table[class=col] {
-            width: 45% !important;
-        }
-        .erase {
-            display: none;
-        }
-    }
-    
-    @media only screen and (max-width: 420px) {
-        table[class=fullTable] {
-            width: 100% !important;
-            clear: both;
-        }
-        table[class=fullPadding] {
-            width: 85% !important;
-            clear: both;
-        }
-        table[class=col] {
-            width: 100% !important;
-            clear: both;
-        }
-        table[class=col] td {
-            text-align: left !important;
-        }
-        .erase {
-            display: none;
-            font-size: 0;
-            max-height: 0;
-            line-height: 0;
-            padding: 0;
-        }
-        .visibleMobile {
-            display: block !important;
-        }
-        .hiddenMobile {
-            display: none !important;
-        }
-    }
-</style>
-
-
-<!-- Header -->
-<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#e1e1e1">
-    <tr>
-        <td height="20"></td>
-    </tr>
-    <tr>
-        <td>
-            <table width="600" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#ffffff" style="border-radius: 10px 10px 0 0;">
-                <tr class="hiddenMobile">
-                    <td height="40"></td>
-                </tr>
-                <tr class="visibleMobile">
-                    <td height="30"></td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <table width="480" border="0" cellpadding="0" cellspacing="0" align="center" class="fullPadding">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <table width="220" border="0" cellpadding="0" cellspacing="0" align="left" class="col">
-                                            <tbody>
-                                                <tr>
-                                                    <td align="left">Logo Perusahaan</td>
-                                                </tr>
-                                                <tr class="hiddenMobile">
-                                                    <td height="40"></td>
-                                                </tr>
-                                                <tr class="visibleMobile">
-                                                    <td height="20"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: left;">
-                                                        Hello, {{$data['nama']}}.
-                                                        <br> Thank you for shopping from our store and for your order.
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <table width="220" border="0" cellpadding="0" cellspacing="0" align="right" class="col">
-                                            <tbody>
-                                                <tr class="visibleMobile">
-                                                    <td height="20"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td height="5"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="font-size: 21px; color: #0011ff; letter-spacing: -1px; font-family: 'Open Sans', sans-serif; line-height: 1; vertical-align: top; text-align: right;">
-                                                        Slip Gaji
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <tr class="hiddenMobile">
-                                                        <td height="50"></td>
-                                                    </tr>
-                                                    <tr class="visibleMobile">
-                                                        <td height="20"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: right;">
-                                                            <small>NIP</small>.{{$data['nopegawai']}}<br />
-                                                            <small>{{$data['tanggal']}}</small>
-                                                        </td>
-                                                    </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                    </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                    </tr>
-            </table>
-        </td>
-        </tr>
-</table>
-<!-- /Header -->
-<!-- Order Details -->
-<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#e1e1e1">
-    <tbody>
-        <tr>
-            <td>
-                <table width="600" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#ffffff">
-                    <tbody>
+<body>
+    <div class="invoice-box" style="margin-top: 5rem; margin-bottom: 5rem">
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top">
+                <td colspan="2">
+                    <table>
                         <tr>
-                            <tr class="hiddenMobile">
-                                <td height="60"></td>
-                            </tr>
-                            <tr class="visibleMobile">
-                                <td height="40"></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <table width="480" border="0" cellpadding="0" cellspacing="0" align="center" class="fullPadding">
-                                        <tbody>
-                                            <tr>
-                                                <th style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #5b5b5b; font-weight: normal; line-height: 1; vertical-align: top; padding: 0 10px 7px 0;" width="52%" align="left">
-                                                    Jenis
-                                                </th>
-                                                <th style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33; font-weight: normal; line-height: 1; vertical-align: top; padding: 0 0 7px;" align="right">
-                                                    Nominal
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <td height="1" style="background: #bebebe;" colspan="4"></td>
-                                            </tr>
-                                            <tr>
-                                                <td height="10" colspan="4"></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: black;  line-height: 18px;  vertical-align: top; padding:10px 0;" class="article">
-                                                    @foreach ($data['tunjangan'] as $item)
-                                                        <p>{{$item}}</p>
-                                                    @endforeach
-                                                </td>
-                                                <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0;" align="right">
-                                                    @foreach ($data['nomtun'] as $item)
-                                                        <p>Rp. {{number_format($item,2)}}</p>
-                                                    @endforeach
-                                            </td>
-                                            </tr>
-                                            <tr>
-                                                <td height="1" colspan="4" style="border-bottom:1px solid #e4e4e4"></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: black;  line-height: 18px;  vertical-align: top; padding:10px 0;" class="article">
-                                                    @foreach ($data['bonus'] as $item)
-                                                        <p>{{$item}}</p>
-                                                    @endforeach
-                                                </td>
-                                                <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0;" align="right">
-                                                    @foreach ($data['nombon'] as $item)
-                                                        <p>Rp. {{number_format($item,2)}}</p>
-                                                    @endforeach
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                              <td height="1" colspan="4" style="border-bottom:1px solid #e4e4e4"></td>
-                                             </tr>
-                                            <tr>
-                                              <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: black;  line-height: 18px;  vertical-align: top; padding:10px 0;" class="article">
-                                                  @foreach ($data['potongan'] as $item)
-                                                      <p>{{$item}}</p>
-                                                  @endforeach
-                                              </td>
-                                              <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0;" align="right">
-                                                  @foreach ($data['nompot'] as $item)
-                                                      <p>Rp. {{number_format($item,2)}}</p>
-                                                  @endforeach
-                                              </td>
-                                          </tr>
-                                            <tr>
-                                                <td height="1" colspan="4" style="border-bottom:1px solid #e4e4e4"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="20"></td>
-                            </tr>
-                    </tbody>
-                </table>
-            </td>
-            </tr>
-    </tbody>
-</table>
-<!-- /Order Details -->
-<!-- Total -->
-<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#e1e1e1">
-    <tbody>
-        <tr>
-            <td>
-                <table width="600" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#ffffff">
-                    <tbody>
-                        <tr>
-                            <td>
+                            <td class="title">
+                                <img src="https://www.sparksuite.com/images/logo.png" style="width: 100%; max-width: 300px" />
+                            </td>
 
-                                <!-- Table Total -->
-                                <table width="480" border="0" cellpadding="0" cellspacing="0" align="center" class="fullPadding">
-                                    <tbody>
-                                        <tr>
-                                            <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 22px; vertical-align: top; text-align:right; ">
-                                                Gaji Pokok
-                                            </td>
-                                            <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 22px; vertical-align: top; text-align:right; white-space:nowrap;" width="80">
-                                               Rp. {{number_format($data['gajipokok'],2)}}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 22px; vertical-align: top; text-align:right; ">
-                                                Gaji Kotor
-                                            </td>
-                                            <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 22px; vertical-align: top; text-align:right; ">
-                                              Rp. {{number_format($data['gajikotor'],2)}}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                          <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 22px; vertical-align: top; text-align:right; ">
-                                              Total Potongan
-                                          </td>
-                                          <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 22px; vertical-align: top; text-align:right; ">
-                                           (-)Rp. {{number_format($data['totalpotongan'],2)}}
-                                          </td>
-                                      </tr>
-                                        <tr>
-                                            <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #000; line-height: 22px; vertical-align: top; text-align:right; ">
-                                                <strong>Gaji Bersih / Terima Bersih</strong>
-                                            </td>
-                                            <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #000; line-height: 22px; vertical-align: top; text-align:right; ">
-                                                <strong>Rp. {{number_format($data['gajibersih'],2)}}</strong>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <!-- /Table Total -->
-
+                            <td style=" text-align: right;">
+                                <span style="font-weight: 500;font-size: 25px;">Slip Penggajian</span><br><br /> No Transaksi. {{$data['no_transaksi']}}<br /> {{$data['tanggal']}}<br />
                             </td>
                         </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<!-- /Total -->
-<!-- Information -->
-<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#e1e1e1">
-    <tbody>
-        <tr>
-            <td>
-                <table width="600" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#ffffff">
-                    <tbody>
-                        <tr>
-                            <tr class="hiddenMobile">
-                                <td height="60"></td>
-                            </tr>
-                            <tr class="visibleMobile">
-                                <td height="40"></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <table width="480" border="0" cellpadding="0" cellspacing="0" align="center" class="fullPadding">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <table width="220" border="0" cellpadding="0" cellspacing="0" align="left" class="col">
-
-                                                        <tbody>
-                                                            <tr>
-                                                                <td style="font-size: 11px; font-family: 'Open Sans', sans-serif; color: #5b5b5b; line-height: 1; vertical-align: top; ">
-                                                                    <strong>{{$data['namapt']}}</strong>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="100%" height="10"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #5b5b5b; line-height: 20px; vertical-align: top; ">
-                                                                    Philip Brooks<br> Public Wales, Somewhere<br> New York NY<br> 4468, United States<br> T: 202-555-0133
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr class="hiddenMobile">
-                                <td height="60"></td>
-                            </tr>
-                            <tr class="visibleMobile">
-                                <td height="30"></td>
-                            </tr>
-                    </tbody>
-                </table>
-            </td>
+                    </table>
+                </td>
             </tr>
-    </tbody>
-</table>
-<!-- /Information -->
-<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#e1e1e1">
 
-    <tr>
-        <td>
-            <table width="600" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#ffffff" style="border-radius: 0 0 10px 10px;">
-                <tr>
-                    <td>
-                        <table width="480" border="0" cellpadding="0" cellspacing="0" align="center" class="fullPadding">
-                            <tbody>
-                                <tr>
-                                    <td style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: left;">
-                                        Have a nice day.
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                <tr class="spacer">
-                    <td height="50"></td>
-                </tr>
+            <tr class="information">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td>
+                                <span style="font-weight: 500;"> {{$data['namapt']}}</span><br /> {{$data['kota']}}, {{$data['provinsi']}}<br />{{$data['kodepos']}}
+                            </td>
 
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td height="20"></td>
-    </tr>
-</table>
+                            <td style=" text-align: right;">
+                                {{$data['nama']}}<br /> {{$data['jabatan']}}<br /> NIP.{{$data['nopegawai']}}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr class="heading">
+                <td>Pembayaran</td>
+
+                <td style=" text-align: right;">Status</td>
+            </tr>
+
+            <tr class="details">
+                <td><dt> Mandiri</dt></td>
+
+                <td style=" text-align: right;"><dt>Berhasil</dt></td>
+            </tr>
+            <tr class="heading">
+                <td>Gaji Pokok</td>
+
+                <td style=" text-align: right;">Nominal</td>
+            </tr>
+
+            <tr class="item">
+                <td>
+                    <dt>
+                        {{$data['jabatan']}}
+                    </dt>
+                </td>
+
+                <td style=" text-align: right;margin-top: -0,5rem">
+                    <dt>
+                        Rp. {{number_format($data['gajipokok'],2)}}
+                    </dt>
+                </td>
+            </tr>
+            <tr class="heading">
+                <td>Tunjangan</td>
+
+                <td style=" text-align: right;">Nominal</td>
+            </tr>
+
+            <tr class="item">
+                <td>
+                    @foreach ($data['tunjangan'] as $item)
+                        @if($item == "-")
+                        <dt style="display: none">{{$item}}</dt>
+                         @endif
+                        @if($item != "-")
+                        <dt>{{$item}}</dt>
+                         @endif 
+                     @endforeach
+                </td>
+
+                <td style=" text-align: right;margin-top: -0,5rem">
+                    @foreach ($data['nomtun'] as $item)
+                    @if($item == 0)
+                    <dt style="display: none">Rp. {{number_format($item,2)}}</dt>
+                    @endif
+                    @if($item != 0)
+                    <dt>Rp. {{number_format($item,2)}}</dt>
+                    @endif    
+                    @endforeach
+                </td>
+            </tr>
+            <tr class="heading">
+                <td>Bonus</td>
+
+                <td style=" text-align: right;">Nominal</td>
+            </tr>
+            <tr class="item">
+                <td>
+                    @foreach ($data['bonus'] as $item)
+                        @if($item == "-")
+                         <dt style="display: none">{{$item}}</dt>
+                        @endif
+                        @if($item != "-")
+                         <dt>{{$item}}</dt>
+                        @endif 
+                     @endforeach
+                </td>
+
+                <td style=" text-align: right;">
+                    @foreach ($data['nombon'] as $item)
+                        @if($item == 0)
+                        <dt style="display: none">Rp. {{number_format($item,2)}}</dt>
+                        @endif
+                        @if($item != 0)
+                        <dt>Rp. {{number_format($item,2)}}</dt>
+                        @endif    
+                    @endforeach
+                </td>
+            </tr>
+            <tr class="heading">
+                <td>Potongan</td>
+
+                <td style=" text-align: right;">Nominal</td>
+            </tr>
+            <tr class="item">
+                <td>
+                    @foreach ($data['potongan'] as $item)
+                    @if($item == "-")
+                    <dt style="display: none">{{$item}}</dt>
+                   @endif
+                   @if($item != "-")
+                    <dt>{{$item}}</dt>
+                   @endif 
+                     @endforeach
+                </td>
+
+                <td style=" text-align: right;">
+                    @foreach ($data['nompot'] as $item)
+                    @if($item == 0)
+                    <dt style="display: none">Rp. {{number_format($item,2)}}</dt>
+                    @endif
+                    @if($item != 0)
+                    <dt>Rp. {{number_format($item,2)}}</dt>
+                    @endif    
+                    @endforeach
+                </td>
+            </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0" style="margin-top: 1rem;padding-left:10rem;">
+            <tr class="heading2">
+                <td>Gaji Pokok</td>
+
+                <td style=" text-align: right;">Rp. {{number_format($data['gajipokok'],2)}}</td>
+            </tr>
+            <tr class="heading2">
+                <td>Total Tunjangan</td>
+
+                <td style=" text-align: right;">Rp. {{number_format($data['totaltunjangan'],2)}}</td>
+            </tr>
+            <tr class="heading2">
+                <td>Total Bonus</td>
+
+                <td style=" text-align: right;">Rp. {{number_format($data['totalbonus'],2)}}</td>
+            </tr>
+            <tr class="heading2">
+                <td>Total Potongan</td>
+
+                <td style=" text-align: right;"> (-)Rp. {{number_format($data['totalpotongan'],2)}}</td>
+            </tr>
+            <tr class="heading2">
+                <td>Gaji Kotor</td>
+
+                <td style=" text-align: right;"> Rp. {{number_format($data['gajikotor'],2)}}</td>
+            </tr>
+            <tr class="heading" style="font-size: large;">
+                <td>Terima Bersih</td>
+
+                <td style=" text-align: right;">Rp. {{number_format($data['gajibersih'],2)}}</td>
+            </tr>
+
+        </table>
+        <div style="margin-top: 4rem; margin-bottom: 4rem">
+            <tr class="">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td>
+                                <span>Mengetahui</span><br /> <br /><br /><br /> {{$data['jabatanadmin']}} {{$data['namapt']}}
+                            </td>
+                            <td style=" text-align: right;">
+                                <span>Diterima Oleh</span><br /> <br /><br /><br /> {{$data['nama']}}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </div>
+    </div>
+</body>
+
+</html>

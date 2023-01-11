@@ -1,5 +1,8 @@
 <template>
   <div class="card">
+    <div class="pb-0 card-header mb-0">
+      <h6>Performa Kehadiran</h6>
+    </div>
     <div class="p-3 card-body mb-3 mt-1">
       <Pie :chart-data="chartData" :chart-options="chartOptions" :height=363 />
     </div>

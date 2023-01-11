@@ -15,13 +15,24 @@ class CutiTahunanController extends Controller
             ->select('*')
             ->where('id_admin', Auth::user()->id)
             ->latest()
-            ->paginate(10);
+            ->paginate(8);
 
             return response()->json([
                 'status' => true,
                 'message' => 'Get data berhasil TESSS',
                 'data' => $cuti
             ]);
+    }
+    public function searchjatahcuti($key){
+        $result = DB::table('table_master_cuti_tahunan')
+                ->select('*')
+                ->where('table_master_cuti_tahunan.id_admin', Auth::user()->id)
+                ->where('email', 'like', '%' . $key . '%')
+                ->where('table_master_cuti_tahunan.id_admin', Auth::user()->id)
+                ->latest()
+                ->paginate(8);
+
+            return $result;
     }
     public function CutiTahunanP(){
         $cuti = DB::table('table_master_cuti_tahunan')

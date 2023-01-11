@@ -71,13 +71,19 @@ class DataGajiController extends Controller
             $hasil = DB::table('riwayatgaji')->where('id', $request->id)->first();
             $akun = DB::table('pegawais')->where('email', $hasil->email)->first();
             $infopt = DB::table('users')->where('id', $akun->id_admin)->first();
+            $jabatan = DB::table('jabatan')->where('id_admin', $akun->id_admin)->where('id',$akun->id_jabatan)->pluck('jabatan')->first();
 
             $data = [
                 'namapt' => $infopt->nama_perusahaan,
                 'kota' => $infopt->kota,
+                'provinsi' => $infopt->provinsi,
                 'detalamat' => $infopt->det_alamat,
+                'kodepos' => $infopt->kode_pos,
                 'nama' => $akun->nama_lengkap,
+                'no_transaksi' => $hasil->no_transaksi,
                 'nopegawai' => $akun->no_pegawai,
+                'jabatanadmin' => $infopt->jabatan,
+                'jabatan' => $jabatan,
                 'judul' => "Pencairan Gaji",
                 'email' => $hasil->email,
                 'gajibersih' => $hasil->gaji_bersih,
@@ -90,6 +96,8 @@ class DataGajiController extends Controller
                 'potongan' => explode(',', $hasil->potongan),
                 'nompot' => explode(',', $hasil->nominal_potongan),
                 'totalpotongan' => $hasil->total_potongan,
+                'totaltunjangan' => $hasil->total_tunjangan,
+                'totalbonus' => $hasil->total_bonus,
                 'tanggal' => $hasil->tanggal_ambil
             ];
             $timezone = 'Asia/Jakarta'; 
@@ -130,8 +138,10 @@ class DataGajiController extends Controller
     }
     public function riwayatpenggajian(Request $request){
         $riwayat = RiwayatGaji::where('id_admin' ,Auth::user()->id)->where('status','=',"Cair")->latest()->paginate(8);
+        $number = RiwayatGaji::where('id_admin', Auth::user()->id)->where('status', '=', "Cair")->get()->toArray();
             return response([
                 'data' => $riwayat,
+                'number' => count($number),
                 'message' => 'get data berhasil',
                 'status' => true,
             ]);
@@ -146,6 +156,20 @@ class DataGajiController extends Controller
                 ->where('email', 'like', '%' . $key . '%')
                 ->orWhere('tanggal_ambil', 'like', '%' . $key . '%')
                 ->where('riwayatgaji.status', 'Cair')
+                ->where('riwayatgaji.id_admin', Auth::user()->id)
+                ->latest()
+                ->paginate(8);
+            return $result;
+
+    }
+    public function searchcair($key)
+    {
+            $result = DB::table('riwayatgaji')
+                ->select('*')
+                ->where('riwayatgaji.id_admin', Auth::user()->id)
+                ->where('riwayatgaji.status', 'Mengajukan')
+                ->where('email', 'like', '%' . $key . '%')
+                ->where('riwayatgaji.status', 'Mengajukan')
                 ->where('riwayatgaji.id_admin', Auth::user()->id)
                 ->latest()
                 ->paginate(8);
@@ -186,11 +210,8 @@ class DataGajiController extends Controller
     {
             $result = DB::table('penggajian')
                 ->select('*')
-                ->where('gaji_bersih', '!=', null)
                 ->where('penggajian.id_admin', Auth::user()->id)
                 ->where('email', 'like', '%' . $key . '%')
-                ->orWhere('tanggal', 'like', '%' . $key . '%')
-                ->orWhere('status', 'like', '%' . $key . '%')
                 ->where('penggajian.id_admin', Auth::user()->id)
                 ->latest()
                 ->get()->toArray();
@@ -270,15 +291,13 @@ class DataGajiController extends Controller
                         'message' => 'tidak ada data',
                         'status' => true
                     ]);
-                }
-                
-                
-
+                }    
     }
     public function allgaji(Request $request){
         $tunjangan = DB::table('penggajian')
         ->select('*')
         ->where('id_admin', Auth::user()->id)
+        ->where('status', 'Belum Diambil')
         ->latest()
         ->get()->toArray();
         $status = DB::table('penggajian')
@@ -360,7 +379,7 @@ class DataGajiController extends Controller
             }else{
                 return response()->json([
                     'message' => 'tidak ada data',
-                    'status' => true
+                    'status' => null
                 ]);
             }
     }
@@ -368,9 +387,9 @@ class DataGajiController extends Controller
     {   
         $validate = Validator::make($request->all(), [
             'email' => 'required|email',
-            'id_bonus' => 'required',
-            'id_tunjangan' => 'required',
-            'id_potongan' => 'required'
+            // 'id_bonus' => 'required',
+            // 'id_tunjangan' => 'required',
+            // 'id_potongan' => 'required'
         ]);
 
         if ($validate->fails()) {
@@ -384,76 +403,406 @@ class DataGajiController extends Controller
             $potonganArray = implode(",",$request->id_potongan);
             $user = Gaji::where('email', $request->email)->first();
             $jabat = $user->id_jabatan;
+            $transaksi = random_int(10000000, 99999999);
 
-            $buatgaji =  Penggajian::create([
-                'id_admin' => Auth::user()->id,
-                'email' => $request->email,
-                'id_jabatan' => $jabat,
-                'id_golongan' => $request->id_golongan,
-                'tanggal' => Carbon::now(),
-                'id_tunjangan' => $tunjanganArray,
-                'id_bonus' => $bonusArray,
-                'id_potongan' =>  $potonganArray
-            ]);
-            
-            $buatgaji2 =  RiwayatGaji::create([
-                'id_admin' => Auth::user()->id,
-                'email' => $request->email,
-                'id_jabatan' => $jabat,
-                'tanggal_ambil' => Carbon::now(),
-                'id_golongan' => $request->id_golongan,
-            ]);
-            $timezone = 'Asia/Jakarta'; 
-            $date = new DateTime('now', new DateTimeZone($timezone)); 
-            $tanggal = $date->format('Y-m-d');
-            $localtime = $date->format('H:i:s');
-            Pemberitahuan::create([
-                'id_admin' => Auth::user()->id,
-                'email' => $buatgaji2->email,
-                'judul' => 'Gaji Anda Telah Dibuat',
-                'jenis' => 'Penggajian',
-                'status' => 'Belum Diambil',
-                'tanggal' => $tanggal,
-                'jam' => $localtime
-            ]);
-                return response()->json([
-                    'data' => $buatgaji,
-                    'riwayat' => $buatgaji2,
-                    'success' => true,
-                    'message' => 'Buat Gaji Berhasil!',
+            $tanpatun = DB::table('tunjangan')->where('email_admin', Auth::user()->email)->where('jenis_tunjangan', '-')->pluck('id')->first();
+            $tanpabon = DB::table('bonus')->where('email_admin', Auth::user()->email)->where('jenis_bonus', '-')->pluck('id')->first();
+            $tanpapot = DB::table('potongan')->where('email_admin', Auth::user()->email)->where('jenis_potongan', '-')->pluck('id')->first();
+            if($tunjanganArray == null && $bonusArray == null && $potonganArray == null){
+                $buatgaji =  Penggajian::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'id_golongan' => $request->id_golongan,
+                    'tanggal' => Carbon::now(),
+                    'id_tunjangan' => $tanpatun,
+                    'id_bonus' => $tanpabon,
+                    'id_potongan' =>  $tanpapot,
+                    'no_transaksi' => $transaksi
                 ]);
+                
+                $buatgaji2 =  RiwayatGaji::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'tanggal_ambil' => Carbon::now(),
+                    'id_golongan' => $request->id_golongan,
+                    'no_transaksi' => $buatgaji->no_transaksi
+                ]);
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $buatgaji2->email,
+                    'judul' => 'Gaji Anda Telah Dibuat',
+                    'jenis' => 'Penggajian',
+                    'status' => 'Belum Diambil',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
+                    return response()->json([
+                        'data' => $buatgaji,
+                        'riwayat' => $buatgaji2,
+                        'success' => true,
+                        'message' => 'Buat Gaji Berhasil!',
+                    ]);
+            }
+            if($bonusArray == null && $potonganArray == null && $tunjanganArray != null){
+                $buatgaji =  Penggajian::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'id_golongan' => $request->id_golongan,
+                    'tanggal' => Carbon::now(),
+                    'id_tunjangan' => $tunjanganArray,
+                    'id_bonus' => $tanpabon,
+                    'id_potongan' =>  $tanpapot,
+                    'no_transaksi' => $transaksi
+                ]);
+                
+                $buatgaji2 =  RiwayatGaji::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'tanggal_ambil' => Carbon::now(),
+                    'id_golongan' => $request->id_golongan,
+                    'no_transaksi' => $buatgaji->no_transaksi
+                ]);
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $buatgaji2->email,
+                    'judul' => 'Gaji Anda Telah Dibuat',
+                    'jenis' => 'Penggajian',
+                    'status' => 'Belum Diambil',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
+                    return response()->json([
+                        'data' => $buatgaji,
+                        'riwayat' => $buatgaji2,
+                        'success' => true,
+                        'message' => 'Buat Gaji Berhasil!',
+                    ]);
+            }
+            if($tunjanganArray == null && $potonganArray == null && $bonusArray != null){
+                $buatgaji =  Penggajian::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'id_golongan' => $request->id_golongan,
+                    'tanggal' => Carbon::now(),
+                    'id_tunjangan' => $tanpatun,
+                    'id_bonus' => $bonusArray,
+                    'id_potongan' => $tanpapot,
+                    'no_transaksi' => $transaksi
+                ]);
+                
+                $buatgaji2 =  RiwayatGaji::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'tanggal_ambil' => Carbon::now(),
+                    'id_golongan' => $request->id_golongan,
+                    'no_transaksi' => $buatgaji->no_transaksi
+                ]);
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $buatgaji2->email,
+                    'judul' => 'Gaji Anda Telah Dibuat',
+                    'jenis' => 'Penggajian',
+                    'status' => 'Belum Diambil',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
+                    return response()->json([
+                        'data' => $buatgaji,
+                        'riwayat' => $buatgaji2,
+                        'success' => true,
+                        'message' => 'Buat Gaji Berhasil!',
+                    ]);
+            }
+            if($tunjanganArray == null && $bonusArray == null && $potonganArray != null){
+                $buatgaji =  Penggajian::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'id_golongan' => $request->id_golongan,
+                    'tanggal' => Carbon::now(),
+                    'id_tunjangan' => $tanpatun,
+                    'id_bonus' => $tanpabon,
+                    'id_potongan' =>  $potonganArray,
+                    'no_transaksi' => $transaksi
+                ]);
+                $buatgaji2 =  RiwayatGaji::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'tanggal_ambil' => Carbon::now(),
+                    'id_golongan' => $request->id_golongan,
+                    'no_transaksi' => $buatgaji->no_transaksi
+                ]);
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $buatgaji2->email,
+                    'judul' => 'Gaji Anda Telah Dibuat',
+                    'jenis' => 'Penggajian',
+                    'status' => 'Belum Diambil',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
+                    return response()->json([
+                        'data' => $buatgaji,
+                        'riwayat' => $buatgaji2,
+                        'success' => true,
+                        'message' => 'Buat Gaji Berhasil!',
+                    ]);
+            }
+            if($tunjanganArray == null && $bonusArray != null && $potonganArray != null){
+                $buatgaji =  Penggajian::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'id_golongan' => $request->id_golongan,
+                    'tanggal' => Carbon::now(),
+                    'id_tunjangan' => $tanpatun,
+                    'id_bonus' => $bonusArray,
+                    'id_potongan' =>  $potonganArray,
+                    'no_transaksi' => $transaksi
+                ]);
+                
+                $buatgaji2 =  RiwayatGaji::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'tanggal_ambil' => Carbon::now(),
+                    'id_golongan' => $request->id_golongan,
+                    'no_transaksi' => $buatgaji->no_transaksi
+                ]);
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $buatgaji2->email,
+                    'judul' => 'Gaji Anda Telah Dibuat',
+                    'jenis' => 'Penggajian',
+                    'status' => 'Belum Diambil',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
+                    return response()->json([
+                        'data' => $buatgaji,
+                        'riwayat' => $buatgaji2,
+                        'success' => true,
+                        'message' => 'Buat Gaji Berhasil!',
+                    ]);
+            }
+            if($bonusArray == null && $tunjanganArray != null && $potonganArray != null){
+                $buatgaji =  Penggajian::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'id_golongan' => $request->id_golongan,
+                    'tanggal' => Carbon::now(),
+                    'id_tunjangan' => $tunjanganArray,
+                    'id_bonus' => $tanpabon,
+                    'id_potongan' =>  $potonganArray,
+                    'no_transaksi' => $transaksi
+                ]);
+                
+                $buatgaji2 =  RiwayatGaji::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'tanggal_ambil' => Carbon::now(),
+                    'id_golongan' => $request->id_golongan,
+                    'no_transaksi' => $buatgaji->no_transaksi
+                ]);
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $buatgaji2->email,
+                    'judul' => 'Gaji Anda Telah Dibuat',
+                    'jenis' => 'Penggajian',
+                    'status' => 'Belum Diambil',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
+                    return response()->json([
+                        'data' => $buatgaji,
+                        'riwayat' => $buatgaji2,
+                        'success' => true,
+                        'message' => 'Buat Gaji Berhasil!',
+                    ]);
+            }
+            if($potonganArray == null && $bonusArray != null && $tunjanganArray != null){
+                $buatgaji =  Penggajian::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'id_golongan' => $request->id_golongan,
+                    'tanggal' => Carbon::now(),
+                    'id_tunjangan' => $tunjanganArray,
+                    'id_bonus' => $bonusArray,
+                    'id_potongan' =>  $tanpapot,
+                    'no_transaksi' => $transaksi
+                ]);
+                
+                $buatgaji2 =  RiwayatGaji::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'tanggal_ambil' => Carbon::now(),
+                    'id_golongan' => $request->id_golongan,
+                    'no_transaksi' => $buatgaji->no_transaksi
+                ]);
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $buatgaji2->email,
+                    'judul' => 'Gaji Anda Telah Dibuat',
+                    'jenis' => 'Penggajian',
+                    'status' => 'Belum Diambil',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
+                    return response()->json([
+                        'data' => $buatgaji,
+                        'riwayat' => $buatgaji2,
+                        'success' => true,
+                        'message' => 'Buat Gaji Berhasil!',
+                    ]);
+            }if($tunjanganArray != null && $bonusArray != null && $potonganArray != null){
+                $buatgaji =  Penggajian::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'id_golongan' => $request->id_golongan,
+                    'tanggal' => Carbon::now(),
+                    'id_tunjangan' => $tunjanganArray,
+                    'id_bonus' => $bonusArray,
+                    'id_potongan' =>  $potonganArray,
+                    'no_transaksi' => $transaksi
+                ]);
+                
+                $buatgaji2 =  RiwayatGaji::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $request->email,
+                    'id_jabatan' => $jabat,
+                    'tanggal_ambil' => Carbon::now(),
+                    'id_golongan' => $request->id_golongan,
+                    'no_transaksi' => $buatgaji->no_transaksi
+                ]);
+                $timezone = 'Asia/Jakarta'; 
+                $date = new DateTime('now', new DateTimeZone($timezone)); 
+                $tanggal = $date->format('Y-m-d');
+                $localtime = $date->format('H:i:s');
+                Pemberitahuan::create([
+                    'id_admin' => Auth::user()->id,
+                    'email' => $buatgaji2->email,
+                    'judul' => 'Gaji Anda Telah Dibuat',
+                    'jenis' => 'Penggajian',
+                    'status' => 'Belum Diambil',
+                    'tanggal' => $tanggal,
+                    'jam' => $localtime
+                ]);
+                    return response()->json([
+                        'data' => $buatgaji,
+                        'riwayat' => $buatgaji2,
+                        'success' => true,
+                        'message' => 'Buat Gaji Berhasil!',
+                    ]);
+            }
         }
         
 
     }
     public function updategaji(Request $request)
     {    
-        $validate = Validator::make($request->all(), [
-        'id_bonus' => 'required',
-        'id_tunjangan' => 'required',
-        'id_potongan' => 'required'
-        ]);
 
-        if ($validate->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data tidak lengkap',
-            ]);
-        }else{
-            $tunjanganArray = implode(",",$request->id_tunjangan);
-            $bonusArray = implode(",",$request->id_bonus);
-            $potonganArray = implode(",",$request->id_potongan);
-            $updategaji = DB::table('penggajian')->where('id', $request->id)->update([
+        $tanpatun = DB::table('tunjangan')->where('email_admin', Auth::user()->email)->where('jenis_tunjangan', '-')->pluck('id')->first();
+        $tanpabon = DB::table('bonus')->where('email_admin', Auth::user()->email)->where('jenis_bonus', '-')->pluck('id')->first();
+        $tanpapot = DB::table('potongan')->where('email_admin', Auth::user()->email)->where('jenis_potongan', '-')->pluck('id')->first();
+
+        $tunjanganArray = implode(",",$request->id_tunjangan);
+        $bonusArray = implode(",",$request->id_bonus);
+        $potonganArray = implode(",",$request->id_potongan);
+        $updategaji = DB::table('penggajian')->where('id', $request->id)->update([
             'id_tunjangan' => $tunjanganArray,
             'id_bonus' => $bonusArray,
             'id_potongan' => $potonganArray,
         ]);
+        $gaji = DB::table('penggajian')->where('id', $request->id)->first();
+        if($tunjanganArray == null && $bonusArray == null && $potonganArray == null){
+            $updategaji = DB::table('penggajian')->where('id', $request->id)->update([
+                'id_tunjangan' => $tanpatun,
+                'id_bonus' => $tanpabon,
+                'id_potongan' => $tanpapot,
+            ]);
+        }if($tunjanganArray == null && $bonusArray == null && $potonganArray != null){
+            $updategaji = DB::table('penggajian')->where('id', $request->id)->update([
+                'id_tunjangan' => $tanpatun,
+                'id_bonus' => $tanpabon,
+                'id_potongan' => $potonganArray,
+            ]);
+        }if($tunjanganArray == null && $potonganArray == null && $bonusArray != null){
+            $updategaji = DB::table('penggajian')->where('id', $request->id)->update([
+                'id_tunjangan' => $tanpatun,
+                'id_bonus' => $bonusArray,
+                'id_potongan' => $tanpapot,
+            ]);
+        }if($bonusArray == null && $potonganArray == null && $tunjanganArray != null){
+            $updategaji = DB::table('penggajian')->where('id', $request->id)->update([
+                'id_tunjangan' => $tunjanganArray,
+                'id_bonus' => $tanpabon,
+                'id_potongan' => $tanpapot,
+            ]);
+        }if($tunjanganArray == null && $potonganArray != null && $bonusArray != null){
+            $updategaji = DB::table('penggajian')->where('id', $request->id)->update([
+                'id_tunjangan' => $tanpatun,
+                'id_bonus' => $bonusArray,
+                'id_potongan' => $potonganArray,
+            ]);
+        }if($bonusArray == null && $potonganArray != null && $tunjanganArray != null){
+            $updategaji = DB::table('penggajian')->where('id', $request->id)->update([
+                'id_tunjangan' => $tunjanganArray,
+                'id_bonus' => $tanpabon,
+                'id_potongan' => $potonganArray,
+            ]);
+        }if($potonganArray == null && $tunjanganArray != null && $bonusArray != null){
+            $updategaji = DB::table('penggajian')->where('id', $request->id)->update([
+                'id_tunjangan' => $tunjanganArray,
+                'id_bonus' => $bonusArray,
+                'id_potongan' => $tanpapot,
+            ]);
+        }
             return response()->json([
                 'data' => $updategaji,
+                'tes' => count(explode(',',$gaji->id_tunjangan)),
                 'success' => true,
                 'message' => 'Update Gaji Berhasil!',
             ]);
-        }
            
 
     }
@@ -869,6 +1218,7 @@ class DataGajiController extends Controller
     {
         $data = Penggajian::findOrFail($id);
         $data->delete();
+        DB::table('riwayatgaji')->where('id_admin', Auth::user()->id)->where('no_transaksi', $data->no_transaksi)->delete();
         return response()->json([
             'success' => true,
             'message' => 'Hapus data berhasil'

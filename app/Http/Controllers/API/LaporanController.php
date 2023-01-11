@@ -34,10 +34,8 @@ class LaporanController extends Controller
             $result = DB::table('laporan')
                 ->select('*')
                 ->where('laporan.id_admin', Auth::user()->id)
-                ->where('tanggal_laporan', 'like', '%' . $key . '%')
                 ->orWhere('email', 'like', '%' . $key . '%')
                 ->orWhere('nama_lengkap', 'like', '%' . $key . '%')
-                ->orWhere('status_laporan', 'like', '%' . $key . '%')
                 ->where('laporan.id_admin', Auth::user()->id)
                 ->latest()
                 ->paginate(10);
@@ -49,7 +47,7 @@ class LaporanController extends Controller
             ->select('*')
             ->where('email', Auth::user()->email)
             ->latest()
-            ->paginate(10);
+            ->paginate(8);
         return response()->json([
             'status' => true,
             'message' => 'Get data berhasil',
@@ -65,7 +63,7 @@ class LaporanController extends Controller
                 ->orWhere('status_laporan', 'like', '%' . $key . '%')
                 ->where('laporan.email', Auth::user()->email)
                 ->latest()
-                ->paginate(10);
+                ->paginate(8);
             return $result;
     }
 

@@ -14,7 +14,7 @@
             <span class="input-group-text text-body bg-gray-100" style="outline-width: 2px; border:none">
               <i class="fas fa-search"></i>
             </span>
-            <input style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Cari..." >
+            <input v-model="search" style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Cari..." >
           </div>
       </div>
       </div>
@@ -170,7 +170,7 @@ export default {
           LaravelVuePagination:{
             'current_page': 1
           },
-          search2: '',
+          search: '',
           infopt:[],
           lembur:[],
           detlembur:[],
@@ -270,8 +270,7 @@ export default {
             {
                 this.tampillembur()
             }else {
-                axios
-                    .get('/api/searchlembur/'+ val , {
+               this.$axios.get('/api/searchlembur/'+ val , {
                         headers: {Authorization: "Bearer " + this.token},
                     })
                     .then((response) => {
@@ -324,9 +323,9 @@ export default {
         },
     },
 	watch: {
-        search2: function ()
+        search: function ()
         {
-            this.searchlembur(this.search2)
+            this.searchlembur(this.search)
         },
     },
     

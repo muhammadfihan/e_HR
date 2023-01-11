@@ -40,24 +40,12 @@
         <div class="row">
           <div class="col-lg-7 mb-lg-0 mb-4">
             <!-- line chart -->
-            <div class="card" style="height:415px !important; ">
-              <div class="p-3 pb-0 card-header">
-                <div class="d-flex justify-content-between">
-                  <h6 class="mb-2 ms-2">Job Performance</h6>
-                </div>
-              </div>
-              <div class="card-body ms-2 px-0 pt-0 pb-2 mb-3" style="overflow-y: scroll">
-                <div class="card-body ps-2 pe-3 pt-0" >
-                  <div class="table-responsive">
-                <table class="table align-items-center">
-                </table>
-              </div>
-                </div>
-              </div>
+            <div class="card">
+              <polar v-if="job != null" :job="job" />
             </div>
           </div>
-          <div class="col-lg-5">
-            <div class="card">
+          <div class="col-lg-5" >
+            <div class="card" >
               <gradient-line-chart v-if="absenpegawai != null" :absenpegawai="absenpegawai" />
             </div>
           </div>
@@ -146,6 +134,7 @@
 <script>
 import Card from "../examples/Cards/Card.vue";
 import GradientLineChart from "../examples/Charts/GradientLineChartPegawai.vue";
+import Polar from "../examples/Charts/Polar.vue";
 import Carousel from "./components/CarouselPegawai.vue";
 import CategoriesCard from "./components/CategoriesCard.vue";
 import ArgonButton from "../components/ArgonButton.vue";
@@ -161,6 +150,7 @@ export default {
   components: { ArgonButton },
   data() {
     return {
+      job: null,
       infopt:[],
       absenpegawai: null,
       pengumuman: [],
@@ -231,6 +221,7 @@ export default {
     GradientLineChart,
     Carousel,
     CategoriesCard,
+    Polar
   },
   created(){
   },  
@@ -304,6 +295,19 @@ export default {
                 });
         })
         },
+    loadperforma(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.get('/api/performajob',{
+                headers: {Authorization: "Bearer " + this.token},
+            })
+                .then(response => {
+                    this.job = response.data;
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        })
+        },   
      aktivitas(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/pemberitahuan',{
@@ -341,6 +345,7 @@ export default {
   },
   mounted(){
     // this.dashsuperadmin()
+    this.loadperforma()
     this.loadgrafik()
     this.aktivitas()
     this.getpengumuman()

@@ -173,14 +173,13 @@ export default {
         searchjatahcuti(val) {
             if (val == "")
             {
-                this.allJabatan()
+                this.allcuti()
             }else {
-                axios
-                    .get('/api/searchjatahcuti/'+ val , {
+                this.$axios.get('/api/searchjatahcuti/'+ val , {
                         headers: {Authorization: "Bearer " + this.token},
                     })
                     .then((response) => {
-                        this.jatahcuti = response.data;
+                        this.totalcuti = response.data;
                     });
             }
         },
@@ -267,13 +266,13 @@ export default {
                 });
         })
 		},
+    },
     watch: {
                 search: function ()
                 {
                     this.searchjatahcuti(this.search)
                 }
         },
-    },
   mounted() {
     setNavPills();
     this.getpt();

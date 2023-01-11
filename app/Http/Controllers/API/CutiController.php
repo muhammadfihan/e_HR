@@ -35,16 +35,10 @@ class CutiController extends Controller
                 ->select('*')
                 ->where('cuti.id_admin', Auth::user()->id)
                 ->where('email', 'like', '%' . $key . '%')
-                ->orWhere('no_pegawai', 'like', '%' . $key . '%')
-                ->orWhere('nama_lengkap', 'like', '%' . $key . '%')
-                ->orWhere('tanggal_mulai', 'like', '%' . $key . '%')
-                ->orWhere('tanggal_akhir', 'like', '%' . $key . '%')
-                ->orWhere('tanggal_cuti', 'like', '%' . $key . '%')
-                ->orWhere('jenis_cuti', 'like', '%' . $key . '%')
-                ->orWhere('status_cuti', 'like', '%' . $key . '%')
+                ->orWhere('name', 'like', '%' . $key . '%')
                 ->where('cuti.id_admin', Auth::user()->id)
                 ->latest()
-                ->paginate(10);
+                ->paginate(8);
 
             return $result;
 
@@ -54,11 +48,7 @@ class CutiController extends Controller
             $result = DB::table('cuti')
                 ->select('*')
                 ->where('cuti.email', Auth::user()->email)
-                ->where('tanggal_mulai', 'like', '%' . $key . '%')
-                ->orWhere('tanggal_akhir', 'like', '%' . $key . '%')
-                ->orWhere('tanggal_cuti', 'like', '%' . $key . '%')
-                ->orWhere('jenis_cuti', 'like', '%' . $key . '%')
-                ->orWhere('status_cuti', 'like', '%' . $key . '%')
+                ->where('jenis_cuti', 'like', '%' . $key . '%')
                 ->where('cuti.email', Auth::user()->email)
                 ->latest()
                 ->paginate(10);

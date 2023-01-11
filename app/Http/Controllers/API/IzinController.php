@@ -34,17 +34,11 @@ class IzinController extends Controller
             $result = DB::table('izin')
                 ->select('*')
                 ->where('izin.id_admin', Auth::user()->id)
-                ->where('name', 'like', '%' . $key . '%')
-                ->orWhere('name', 'like', '%' . $key . '%')
+                ->where('email', 'like', '%' . $key . '%')
                 ->orWhere('nama_lengkap', 'like', '%' . $key . '%')
-                ->orWhere('email', 'like', '%' . $key . '%')
-                ->orWhere('no_pegawai', 'like', '%' . $key . '%')
-                ->orWhere('jenis_izin', 'like', '%' . $key . '%')
-                ->orWhere('status_izin', 'like', '%' . $key . '%')
-                ->orWhere('tanggal', 'like', '%' . $key . '%')
                 ->where('izin.id_admin', Auth::user()->id)
                 ->latest()
-                ->paginate(10);
+                ->paginate(8);
 
             return $result;
 

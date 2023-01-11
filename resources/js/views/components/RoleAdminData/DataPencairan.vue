@@ -23,7 +23,9 @@
         <div v-if="this.riwayatgaji.data == ''" class="table-responsive p-0">
         <table class="table align-items-center mb-0">
           <thead>
-              <th></th>
+            <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                >No</th>
               <th
                 class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >Email</th>
@@ -49,10 +51,12 @@
         </table>
         <p class="text-center text-secondary text-xl font-weight-bold mt-9" style="font-size:23px">Data Kosong</p>
       </div>
-      <div v-else-if="this.riwayatgaji.data != ''" class="table-responsive p-0">
+      <div v-else-if="this.riwayatgaji.data != ''" class="table-responsive p-0 border-bottom">
         <table class="table align-items-center mb-0">
           <thead>
-              <th></th>
+            <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                >No</th>
               <th
                 class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >Email</th>
@@ -73,8 +77,10 @@
               >Action</th>
           </thead>
           <tbody >
-            <tr v-for="data in riwayatgaji.data" :key="data.id">
-              <td ></td>
+            <tr v-for="(data, index) in riwayatgaji.data" :key="data.id">
+             <td class="align-middle text-center">
+                <span class="text-secondary text-xs font-weight-bold">{{index+1}}</span>
+             </td>
               <td class="align-middle">
                   <span class="text-secondary text-xs font-weight-bold">{{ data.email }}</span>
               </td>
@@ -103,7 +109,6 @@
             </tr>
           </tbody>
         </table>
-        <hr style="border-top: 1.5px solid #bbb;">
       </div>
       <div class="mt-4 mb-2">
         <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="riwayatgaji" @pagination-change-page="riwayat" />
@@ -228,11 +233,6 @@ export default {
   name: "data-payroll",
   data() {
         return {
-            searchpot: '',
-            searchtun: '',
-            searchbon: '',
-            searchgol: '',
-            search2: '', 
             search: '',
             detritun: [],
             detrinomtun: [],
@@ -260,9 +260,6 @@ export default {
             potong: [],
             cekbok:[],
             infopt:[],
-            gajiMultiple: [],
-            bonusMultiple: [],
-            potonganMultiple: [],
             tunjangan:[],
             bonus:[],
             potongan:[],
@@ -310,26 +307,6 @@ export default {
             {
                 this.searchriwayat(this.search)
             },
-        search2: function ()
-            {
-                this.searchgaji(this.search2)
-            },
-         searchtun: function ()
-            {
-                this.searchtunjangan(this.searchtun)
-            },
-         searchbon: function ()
-            {
-                this.searchbonus(this.searchbon)
-            },
-         searchgol: function ()
-            {
-                this.searchgolongan(this.searchgol)
-            },
-        searchpot: function ()
-            {
-                this.searchpotongan(this.searchpot)
-            },               
         },
         
     methods:{
@@ -377,11 +354,6 @@ export default {
             }
           })
         },
-        select() {
-            console.log(this.gajiMultiple)
-            console.log(this.bonusMultiple)
-            console.log(this.potonganMultiple)
-        },
         format(time){
         return time.replace(/(?:0)?(\d+):(?:0)?(\d+).*/,'$1 Jam');
 		},
@@ -406,62 +378,6 @@ export default {
             }
             return sum;
         },
-         searchtunjangan(val) {
-            if (val == "")
-            {
-                this.alltunjangan()
-            }else {
-                this.$axios
-                    .get('/api/searchtunjangan/'+ val , {
-                        headers: {Authorization: "Bearer " + this.token},
-                    })
-                    .then((response) => {
-                        this.tunjangan = response.data;
-                    });
-            }
-        },
-         searchbonus(val) {
-            if (val == "")
-            {
-                this.allbonus()
-            }else {
-                this.$axios
-                    .get('/api/searchbonus/'+ val , {
-                        headers: {Authorization: "Bearer " + this.token},
-                    })
-                    .then((response) => {
-                        this.bonus = response.data;
-                    });
-            }
-        },
-         searchgolongan(val) {
-            if (val == "")
-            {
-                this.allgolongan()
-            }else {
-                this.$axios
-                    .get('/api/searchgolongan/'+ val , {
-                        headers: {Authorization: "Bearer " + this.token},
-                    })
-                    .then((response) => {
-                        this.golongan = response.data;
-                    });
-            }
-        },
-         searchpotongan(val) {
-            if (val == "")
-            {
-                this.allpotongan()
-            }else {
-                this.$axios
-                    .get('/api/searchpotongan/'+ val , {
-                        headers: {Authorization: "Bearer " + this.token},
-                    })
-                    .then((response) => {
-                        this.potongan = response.data;
-                    });
-            }
-        },
         //GAJI
          searchriwayat(val) {
             if (val == "")
@@ -469,7 +385,7 @@ export default {
                 this.riwayat()
             }else {
                 this.$axios
-                    .get('/api/searchriwayat/'+ val , {
+                    .get('/api/searchcair/'+ val , {
                         headers: {Authorization: "Bearer " + this.token},
                     })
                     .then((response) => {
@@ -533,18 +449,21 @@ export default {
                     this.bon = response.data.bonus;
                     this.potong = response.data.potongan;
                     this.akhir = response.data.hasil;
-
-                    for (let i = 0; i < this.nilai.length; i++) {
+                    if(response.data.status == null){
+                        return
+                    }else{
+                        for (let i = 0; i < this.nilai.length; i++) {
                         Object.assign(this.datagajipeg[i], { nilai: this.nilai[i] })
-                    }
-                    for (let i = 0; i < this.bon.length; i++) {
-                        Object.assign(this.datagajipeg[i], { bon: this.bon[i] })
-                    }
-                    for (let i = 0; i < this.potong.length; i++) {
-                        Object.assign(this.datagajipeg[i], { potong: this.potong[i] })
-                    }
-                    for (let i = 0; i < this.akhir.length; i++) {
-                        Object.assign(this.datagajipeg[i], { akhir: this.akhir[i] })
+                        }
+                        for (let i = 0; i < this.bon.length; i++) {
+                            Object.assign(this.datagajipeg[i], { bon: this.bon[i] })
+                        }
+                        for (let i = 0; i < this.potong.length; i++) {
+                            Object.assign(this.datagajipeg[i], { potong: this.potong[i] })
+                        }
+                        for (let i = 0; i < this.akhir.length; i++) {
+                            Object.assign(this.datagajipeg[i], { akhir: this.akhir[i] })
+                        }
                     }
                 })
                 .catch(function (error) {
@@ -601,72 +520,7 @@ export default {
             this.form.reset();
             $("#detailgaji").modal("hide");
         },
-         submiteditgaji(){
-            this.$axios.post('/api/updategaji',
-                {
-                    id: parseInt(this.idModal),
-                    id_tunjangan: this.gajiMultiple,
-                    id_bonus: this.bonusMultiple,
-                    id_potongan:this.potonganMultiple
-                },
-                {
-                    headers: { Authorization: "Bearer " + this.token }
-                }).then((response) => {
-                if (response.data.success){
-                    Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Data Berhasil Diupdate",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    }),
-                     $("#editgaji").modal("hide");
-                    this.tampilgaji();
-                }else{
-                    Swal.fire({
-                        icon: "error",
-                        title: "Gagal",
-                        text: "Data Kurang Lengkap",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                }
-            })
-        },
-        hapusgaji(id){
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            Swal.fire({
-            title: 'Hapus Gaji Pegawai ?',
-            text: "Anda tidak akan bisa mengembalikannya lagi!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#1BC5BD',
-            cancelButtonColor: '',
-            confirmButtonText: 'Hapus',
-            cancelButtonText: 'Batal',
-            }).then((result) => {
-                 if (result.isConfirmed) {
-                 this.$axios.delete('/api/hapusgaji/'+id,  {
-                headers: { Authorization: "Bearer " + this.token },
-                },
-                )
-                  Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Berhasil Menghapus Gaji Pegawai",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                    };
-           
-                    this.tampilgaji()
-
-            },
-
-            )
-
-            })
-        },
+        
         detailGaji(id){
             $('#detailgaji').modal('show')
             this.$axios.get('/api/detailgaji/'+id,{
@@ -769,43 +623,7 @@ export default {
                     }        
             })
         },
-        submitgaji(){
-             this.$axios.post('/api/buatgaji',
-                {
-                    id: this.form.id,
-                    email: this.form.email,
-                    // id_jabatan: this.form.id_jabatan,
-                    id_tunjangan: this.gajiMultiple,
-                    id_bonus: this.bonusMultiple,
-                    id_potongan:this.potonganMultiple
-                },
-                {
-                    headers: { Authorization: "Bearer " + this.token }
-                }).then((response) => {
-                if (response.data.success){
-                    Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Berhasil Membuat Gaji",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                    this.form.reset();
-                    $("#buatgaji").modal("hide");
-                    this.tampilgaji()
-                }else{
-                    Swal.fire({
-                        icon: "error",
-                        title: "Gagal",
-                        text: "Data Kurang Lengkap",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                }
-            
-
-           })
-        },
+   
         showgaji(id){
             this.$axios.get('/api/detailpegawai/'+id,{
                 headers: { Authorization: "Bearer " + this.token }
@@ -830,71 +648,7 @@ export default {
                 });
         })
         },
-        //TUNJANGAN
-         showModal() {
-            this.statusmodal = false;
-            this.form.reset();
-            $("#tambahtunjangan").modal("show");
-        },
-        showModalEdit(data) {
-            this.statusmodal = true;
-            this.form.reset();
-            $("#tambahtunjangan").modal("show");
-            this.form.fill(data);
-        },
-        closeModal() {
-            this.form.reset();
-            $("#tambahtunjangan").modal("hide");
-        },
-        //BONUS
-         showModal2() {
-            this.statusmodal2 = false;
-            this.form.reset();
-            $("#tambahbonus").modal("show");
-        },
-        showModalEdit2(data) {
-            this.statusmodal2 = true;
-            this.form.reset();
-            $("#tambahbonus").modal("show");
-            this.form.fill(data);
-        },
-        closeModal2() {
-            this.form.reset();
-            $("#tambahbonus").modal("hide");
-        },
-        //GOLONGAN
-        showModal3() {
-            this.statusmodal3 = false;
-            this.form.reset();
-            $("#tambahgolongan").modal("show");
-        },
-        showModalEdit3(data) {
-            this.statusmodal3 = true;
-            this.form.reset();
-            $("#tambahgolongan").modal("show");
-            this.form.fill(data);
-        },
-        closeModal3() {
-            this.form.reset();
-            $("#tambahgolongan").modal("hide");
-        },
-         //POTONGAN
-        showModal4() {
-            this.statusmodal3 = false;
-            this.form.reset();
-            $("#tambahpotongan").modal("show");
-        },
-        showModalEdit4(data) {
-            this.statusmodal3 = true;
-            this.form.reset();
-            $("#tambahpotongan").modal("show");
-            this.form.fill(data);
-        },
-        closeModal4() {
-            this.form.reset();
-            $("#tambahpotongan").modal("hide");
-        },
-
+       
          getpt(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.get('/api/infopt',{
@@ -909,394 +663,6 @@ export default {
         })
         },
       
-        //TUNJANGAN
-        edittunjangan(){
-        
-              this.$axios.post('/api/updatetunjangan',
-                {
-                    id: this.form.id,
-                    jenis_tunjangan: this.form.jenis_tunjangan,
-                    nominal: this.form.nominal,
-                },
-                {
-                    headers: { Authorization: "Bearer " + this.token }
-                }).then((response) => {
-                if (response.data.success){
-                    Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Berhasil Update Tunjangan",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                    this.form.reset();
-                    $("#tambahtunjangan").modal("hide");
-                    this.alltunjangan()
-                }
-            
-
-           })
-        },
-        addtunjangan() {
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.form.post('/api/tambahtunjangan', {
-                headers : { Authorization: "Bearer " + this.token },
-            }).then((response) => {
-                if (response.data.success){
-                    Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Berhasil Menambahkan Tunjangan",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                    this.form.reset();
-                    $('#tambahtunjangan').modal('hide')
-                    this.alltunjangan()
-                }
-                    
-                    }
-                )
-                    })
-        },
-         alltunjangan(){
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/alltunjangan',{
-                headers: {Authorization: "Bearer " + this.token},
-            })
-                .then(response => {
-                    this.tunjangan = response.data.data;
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        })
-        },
-         hapustunjangan(id){
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            Swal.fire({
-            title: 'Hapus Tunjangan ?',
-            text: "Anda tidak akan bisa mengembalikannya lagi!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#1BC5BD',
-            cancelButtonColor: '',
-            confirmButtonText: 'Hapus',
-            cancelButtonText: 'Batal',
-            }).then((result) => {
-                 if (result.isConfirmed) {
-                 this.$axios.delete('/api/hapustunjangan/'+id,  {
-                headers: { Authorization: "Bearer " + this.token },
-                },
-                )
-                  Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Berhasil Menghapus Tunjangan Pegawai",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                    };
-           
-                    this.alltunjangan()
-
-            },
-
-            )
-
-            })
-        },
-        //BONUS
-        editbonus(){
-        
-              this.$axios.post('/api/updatebonus',
-                {
-                    id: this.form.id,
-                    jenis_bonus: this.form.jenis_bonus,
-                    nominal: this.form.nominal,
-                },
-                {
-                    headers: { Authorization: "Bearer " + this.token }
-                }).then((response) => {
-                if (response.data.success){
-                    Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Berhasil Update Bonus",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                    this.form.reset();
-                    $("#tambahbonus").modal("hide");
-                    this.allbonus()
-                }
-            
-
-           })
-        },
-        addbonus() {
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.form.post('/api/tambahbonus', {
-                headers : { Authorization: "Bearer " + this.token },
-            }).then((response) => {
-                if (response.data.success){
-                    Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Berhasil Menambahkan Bonus",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                    this.form.reset();
-                    $('#tambahbonus').modal('hide')
-                    this.allbonus()
-                }
-                    
-                    }
-                )
-                    })
-        },
-         allbonus(){
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/allbonus',{
-                headers: {Authorization: "Bearer " + this.token},
-            })
-                .then(response => {
-                    this.bonus = response.data.data;
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        })
-        },
-         hapusbonus(id){
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            Swal.fire({
-            title: 'Hapus Bonus ?',
-            text: "Anda tidak akan bisa mengembalikannya lagi!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#1BC5BD',
-            cancelButtonColor: '',
-            confirmButtonText: 'Hapus',
-            cancelButtonText: 'Batal',
-            }).then((result) => {
-                 if (result.isConfirmed) {
-                 this.$axios.delete('/api/hapusbonus/'+id,  {
-                headers: { Authorization: "Bearer " + this.token },
-                },
-                )
-                  Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Berhasil Menghapus Bonus Pegawai",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                    };
-           
-                    this.allbonus()
-
-            },
-
-            )
-
-            })
-        },
-         //BONUS
-        editpotongan(){
-              this.$axios.post('/api/updatepotongan',
-                {
-                    id: this.form.id,
-                    jenis_potongan: this.form.jenis_potongan,
-                    nominal: this.form.nominal,
-                },
-                {
-                    headers: { Authorization: "Bearer " + this.token }
-                }).then((response) => {
-                if (response.data.success){
-                    Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Berhasil Update Akun Pegawai",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                    this.form.reset();
-                    $("#tambahpotongan").modal("hide");
-                    this.allpotongan()
-                }
-            
-
-           })
-        },
-        addpotongan() {
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.form.post('/api/tambahpotongan', {
-                headers : { Authorization: "Bearer " + this.token },
-            }).then((response) => {
-                if (response.data.success){
-                    Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Berhasil Menambahkan Potongan",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                    this.form.reset();
-                    $('#tambahpotongan').modal('hide')
-                    this.allpotongan()
-                }
-                    
-                    }
-                )
-                    })
-        },
-         allpotongan(){
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/allpotongan',{
-                headers: {Authorization: "Bearer " + this.token},
-            })
-                .then(response => {
-                    this.potongan = response.data.data;
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        })
-        },
-         hapuspotongan(id){
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            Swal.fire({
-            title: 'Hapus Potongan ?',
-            text: "Anda tidak akan bisa mengembalikannya lagi!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#1BC5BD',
-            cancelButtonColor: '',
-            confirmButtonText: 'Hapus',
-            cancelButtonText: 'Batal',
-            }).then((result) => {
-                 if (result.isConfirmed) {
-                 this.$axios.delete('/api/hapuspotongan/'+id,  {
-                headers: { Authorization: "Bearer " + this.token },
-                },
-                )
-                  Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Berhasil Menghapus Potongan Pegawai",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                    };
-           
-                    this.allpotongan()
-
-            },
-
-            )
-
-            })
-        },
-        //GOLONGAN
-        editgolongan(){
-        
-              this.$axios.post('/api/updategolongan',
-                {
-                    id: this.form.id,
-                    golongan: this.form.golongan,
-                    pendidikan: this.form.pendidikan,
-                    nominal: this.form.nominal,
-                },
-                {
-                    headers: { Authorization: "Bearer " + this.token }
-                }).then((response) => {
-                if (response.data.success){
-                    Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Berhasil Update Akun Pegawai",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                    this.form.reset();
-                    $("#tambahgolongan").modal("hide");
-                    this.allgolongan()
-                }
-            
-
-           })
-        },
-        addgolongan() {
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.form.post('/api/tambahgolongan', {
-                headers : { Authorization: "Bearer " + this.token },
-            }).then((response) => {
-                if (response.data.success){
-                    Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Berhasil Menambahkan Golongan",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                    this.form.reset();
-                    $('#tambahgolongan').modal('hide')
-                    this.allgolongan()
-                }
-                    
-                    }
-                )
-                    })
-        },
-         allgolongan(){
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/allgolongan',{
-                headers: {Authorization: "Bearer " + this.token},
-            })
-                .then(response => {
-                    this.golongan = response.data.data;
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        })
-        },
-         hapusgolongan(id){
-            this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            Swal.fire({
-            title: 'Hapus Golongan ?',
-            text: "Anda tidak akan bisa mengembalikannya lagi!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#1BC5BD',
-            cancelButtonColor: '',
-            confirmButtonText: 'Hapus',
-            cancelButtonText: 'Batal',
-            }).then((result) => {
-                 if (result.isConfirmed) {
-                 this.$axios.delete('/api/hapusgolongan/'+id,  {
-                headers: { Authorization: "Bearer " + this.token },
-                },
-                )
-                  Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: "Berhasil Menghapus Golongan Pegawai",
-                        showConfirmButton: false,
-                        timer: 1600,
-                    })
-                    };
-           
-                    this.allgolongan()
-
-            },
-
-            )
-
-            })
-        },
 
           convertToRupiah(value) {
             // value = value.toString()
@@ -1328,10 +694,6 @@ export default {
     mounted () {
             setNavPills();
             this.riwayat();
-            this.alltunjangan();
-            this.allgolongan();
-            this.allpotongan();
-            this.allbonus();
             this.getpt();
             this.tampilgaji();
             this.allJabatan();

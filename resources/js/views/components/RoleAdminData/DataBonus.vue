@@ -88,8 +88,8 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="tambahbonusLabel" v-show="!statusmodal">Tambah Bonus</h5>
-        <h5 class="modal-title" id="tambahbonusLabel" v-show="statusmodal">Update Bonus</h5>
+        <h5 class="modal-title" id="tambahbonusLabel" v-show="!statusmodal2">Tambah Bonus</h5>
+        <h5 class="modal-title" id="tambahbonusLabel" v-show="statusmodal2">Update Bonus</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal2()"></button>
       </div>
       <div class="modal-body">

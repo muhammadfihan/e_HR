@@ -1,5 +1,4 @@
-<template>
-    
+<template>    
   <div class="card h-1000" style="height:630px !important">
     <div class="card-header pb-0">
       <div class="row">
@@ -45,11 +44,11 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content bg-gradient-primary">
       <div class="modal-body">
-        <b class="modal-title" id="detailgaji" v-for="(data) in detgaji" :key="data.id">Detail Penggajian {{data.email}}</b>
+        <b class="modal-title text-dark" id="detailgaji" v-for="(data) in detgaji" :key="data.id">Detail Penggajian {{data.email}}</b>
         <tr></tr>
         <br>
         <div class="table-responsive">
-            <table class="table table-borderless text-white"  v-for="(data) in detgaji" :key="data.id">
+            <table class="table table-borderless text-dark"  v-for="(data) in detgaji" :key="data.id">
                 <thead class="">
                     <tr class="text-bold">
                         <td>Jenis</td>
@@ -131,7 +130,7 @@
          </div>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-white text-primary" data-bs-dismiss="modal">Tutup</button>
+        <button type="button" class="btn btn-primary text-white" data-bs-dismiss="modal">Tutup</button>
       </div>
     </div>
   </div>

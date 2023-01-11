@@ -151,7 +151,7 @@ class JobController extends Controller
             ->select('*')
             ->where('id_admin', Auth::user()->id)
             ->latest()
-            ->get();
+            ->paginate(8);
         return response()->json([
             'success' => true,
             'data' => $getjob,
@@ -163,10 +163,33 @@ class JobController extends Controller
             ->select('*')
             ->where('email_pegawai', Auth::user()->email)
             ->latest()
-            ->get();
+            ->paginate(8);
         return response()->json([
             'success' => true,
             'data' => $getjob,
         ]);
+    }
+    public function searchjob($key){
+        $result = DB::table('job')
+        ->select('*')
+        ->where('job.id_admin', Auth::user()->id)
+        ->where('email_pegawai', 'like', '%' . $key . '%')
+        ->orWhere('judul_job', 'like', '%' . $key . '%')
+        ->where('job.id_admin', Auth::user()->id)
+        ->latest()
+        ->paginate(8);
+
+    return $result;
+    }
+    public function searchjobpeg($key){
+        $result = DB::table('job')
+        ->select('*')
+        ->where('job.email_pegawai', Auth::user()->email)
+        ->where('judul_job', 'like', '%' . $key . '%')
+        ->where('job.email_pegawai', Auth::user()->email)
+        ->latest()
+        ->paginate(8);
+
+    return $result;
     }
 }

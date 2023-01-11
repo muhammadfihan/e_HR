@@ -32,16 +32,12 @@ class ReqAbsenController extends Controller
     {
             $result = DB::table('reqabsen')
                 ->select('*')
-                ->where('name', 'like', '%' . $key . '%')
+                ->where('reqabsen.id_admin', Auth::user()->id)
+                ->where('email', 'like', '%' . $key . '%')
                 ->orWhere('name', 'like', '%' . $key . '%')
-                ->orWhere('nama_lengkap', 'like', '%' . $key . '%')
-                ->orWhere('email', 'like', '%' . $key . '%')
-                ->orWhere('alasan', 'like', '%' . $key . '%')
-                ->orWhere('no_pegawai', 'like', '%' . $key . '%')
-                ->orWhere('status_req', 'like', '%' . $key . '%')
-                ->orWhere('tanggal_req', 'like', '%' . $key . '%')
+                ->where('reqabsen.id_admin', Auth::user()->id)
                 ->latest()
-                ->paginate(10);
+                ->paginate(8);
 
             return $result;
 

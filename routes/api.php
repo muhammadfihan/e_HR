@@ -60,6 +60,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('grafikpegawai', [DashboardController::class, 'grafikpegawai'])->middleware('role:Pegawai');
     Route::get('dashboardpeg', [DashboardController::class, 'dashboardpeg'])->middleware('role:Pegawai');
     Route::get('useractive', [DashboardController::class, 'useractive'])->middleware('role:Admin');
+    Route::get('performajob', [DashboardController::class, 'performajob'])->middleware('role:Pegawai');
 
     Route::get('dashlaporan', [DashboardController::class, 'dashlaporan'])->middleware('role:Admin');
     Route::get('dashakunpegawai', [DashboardController::class, 'dashakunpegawai'])->middleware('role:Admin');
@@ -74,6 +75,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('cekcuti', [MasterCutiPerusahaanController::class, 'cekcuti'])->middleware('role:Admin');
     Route::get('mastercutiperusahaanpeg', [MasterCutiPerusahaanController::class, 'CutiPerusahanPeg'])->middleware('role:Pegawai');
     Route::get('mastercutitahunan',[CutiTahunanController::class,'CutiTahunanAll'])->middleware('role:Admin');
+    Route::get('searchjatahcuti/{data}',[CutiTahunanController::class,'searchjatahcuti'])->middleware('role:Admin');
     Route::get('mastercutipegawai',[CutiTahunanController::class,'CutiTahunanP'])->middleware('role:Pegawai');
    
     Route::post('addAkunPegawai', [UserController::class, 'addAkunPegawai'])->middleware('role:Manager,Admin');
@@ -226,7 +228,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('searchcuti/{data}',[CutiController::class, 'searchcuti'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('searchcutipeg/{data}',[CutiController::class, 'searchcutipeg'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('searchjabatan/{data}',[JabatanController::class, 'searchjabatan'])->middleware('role:Manager,Admin,Pegawai');
-    Route::get('searchriwayat/{data}',[DataGajiController::class, 'searchriwayat'])->middleware('role:Manager,Admin,Pegawai');
+    Route::get('searchriwayat/{data}',[DataGajiController::class, 'searchriwayat'])->middleware('role:Manager,Admin');
+    Route::get('searchcair/{data}',[DataGajiController::class, 'searchcair'])->middleware('role:Manager,Admin');
     Route::get('searchriwayatpeg/{data}',[DataGajiController::class, 'searchriwayatpeg'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('searchgaji/{data}',[DataGajiController::class, 'searchgaji'])->middleware('role:Manager,Admin,Pegawai');
     Route::get('searchlembur/{data}',[LemburController::class, 'searchlembur'])->middleware('role:Manager,Admin,Pegawai');
@@ -282,6 +285,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('updatejob',[JobController::class, 'updatejob'])->middleware('role:Admin');
     Route::delete('hapusjob/{id}',[JobController::class, 'hapusjob'])->middleware('role:Admin');
     Route::get('detailjob/{id}',[JobController::class, 'detailjob'])->middleware('role:Admin,Pegawai');
+    Route::get('searchjob/{data}',[JobController::class, 'searchjob'])->middleware('role:Admin');
+    Route::get('searchjobpeg/{data}',[JobController::class, 'searchjobpeg'])->middleware('role:Pegawai');
     Route::post('approvejob',[JobController::class, 'approvejob'])->middleware('role:Admin');
     Route::post('submitjob',[JobController::class, 'submitjob'])->middleware('role:Pegawai');
     Route::post('submitrevisi',[JobController::class, 'submitrevisi'])->middleware('role:Pegawai');

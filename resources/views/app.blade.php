@@ -9,7 +9,7 @@
     
     
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-  
+  <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
 
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCm-MGSRUy8at7SsOpUKtjqfQI9sayHIns&callback=initMap&v=weekly" defer></script> -->

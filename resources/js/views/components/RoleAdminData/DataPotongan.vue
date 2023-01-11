@@ -174,12 +174,12 @@ export default {
             return `Rp ${rp}`
         },
         showModal4() {
-            this.statusmodal3 = false;
+            this.statusmodal4 = false;
             this.form.reset();
             $("#tambahpotongan").modal("show");
         },
         showModalEdit4(data) {
-            this.statusmodal3 = true;
+            this.statusmodal4 = true;
             this.form.reset();
             $("#tambahpotongan").modal("show");
             this.form.fill(data);
@@ -299,8 +299,7 @@ export default {
             {
                 this.allpotongan()
             }else {
-                axios
-                    .get('/api/searchpotongan/'+ val , {
+                this.$axios.get('/api/searchpotongan/'+ val , {
                         headers: {Authorization: "Bearer " + this.token},
                     })
                     .then((response) => {

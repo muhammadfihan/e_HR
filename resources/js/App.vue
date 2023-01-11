@@ -7,18 +7,14 @@
     <div v-if="!loggedIn" style="visibility: hidden !important">
     </div>
     <sidenav  v-if="loggedIn"/>
-  <main class="main-content max-height-vh-100 h-100 border-radius-lg">
+  <main class="main-content max-height-vh-100 h-100">
     <!-- nav -->
-    <navbar class="position-sticky bg-primary left-auto top-2 "
-      :class="[navClasses]"
-      :textWhite="this.$store.state.isAbsolute ? 'text-white opacity-8' : 'text-white'"
-      :minNav="navbarMinimize"
-      v-if="this.$store.state.showNavbar"
-    />
-    <div v-if="loggedIn" class="mt-3">
+    <navbar v-if="loggedIn" class="position-sticky bg-primary left-auto top-2 "/>
+    <navbar v-else-if="!loggedIn" class="position-sticky bg-primary left-auto top-2" style="display:none"/>
+    <div v-if="loggedIn" class="mt-3" style="margin-start: -1rem">
      <router-view />
     </div>
-    <div v-else-if="!loggedIn" class="">
+    <div v-else-if="!loggedIn">
      <router-view />
     </div>
   </main>
@@ -157,7 +153,7 @@ export default {
     }, function (error) {
     if(error.response.status === 401) {
         localStorage.clear()
-        window.location.href = "/";
+        window.location.href = "/login";
     }
     return Promise.reject(error);
   });

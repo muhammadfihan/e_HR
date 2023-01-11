@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card shadow-none">
     <div class="pb-0 card-header mb-0">
       <h6>Grafik Absensi Pegawai Hari Ini</h6>
       <p class="text-sm">
@@ -33,27 +33,6 @@ export default {
   components: {Bar},
   extends: Bar,
   props: ["absensigrafik"],
-  // props:
-  // {
-
-  //   height: {
-  //     type: Number,
-  //     default: 280
-  //   },
-  //   title: {
-  //     type: String,
-  //     default: "Grafik Absensi Pegawai",
-  //   },
-  //   detail1: {
-  //     type: String,
-  //     default: "",
-  //   },
-  //   detail2: {
-  //     type: String,
-  //     default: "Ditampilkan secara mingguan",
-  //   },
-  // },
-  
   data(){
     return{
       chartData: {

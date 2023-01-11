@@ -396,12 +396,10 @@ class AbsensiController extends Controller
     {
             $result = DB::table('absensipegawai')
                 ->select('*')
-                ->where('absensipegawai.id_admin', Auth::user()->id)
+                ->where('absensipegawai.email', Auth::user()->email)
                 ->where('keterangan', 'like', '%' . $key . '%')
-                ->orWhere('jam_masuk', 'like', '%' . $key . '%')
-                ->orWhere('jam_pulang', 'like', '%' . $key . '%')
                 ->orWhere('tanggal', 'like', '%' . $key . '%')
-                ->where('absensipegawai.id_admin', Auth::user()->id)
+                ->where('absensipegawai.email', Auth::user()->email)
                 ->latest()
                 ->paginate(8);
 

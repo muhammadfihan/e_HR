@@ -13,7 +13,7 @@
             <span class="input-group-text text-body bg-gray-100" style="outline-width: 2px; border:none">
               <i class="fas fa-search"></i>
             </span>
-            <input style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Pencarian..." >
+            <input v-model="search" style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Cari Berdasar Nama/Job..." >
           </div>
         </div>
       </div>
@@ -92,7 +92,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(data,index) in job" :key="data.id">
+            <tr v-for="(data,index) in job.data" :key="data.id">
               <td class="align-middle text-center">
                   <span class="text-secondary text-xs font-weight-bold">{{index+1}} </span>
               </td>
@@ -147,7 +147,7 @@
         </table>
       </div>
       <div class="mt-4 mb-2">
-        <!-- <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="jabatan" @pagination-change-page="allJabatan" /> -->
+        <Pagination class="pagination pagination-sm pagination justify-content-end" align="center" size="small" :data="job" @pagination-change-page="alljob" />
       </div>
     </div>
   </div>
@@ -292,17 +292,17 @@ export default {
         }
     },
     created() {
-         this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/alljob',{
-                headers: {Authorization: "Bearer " + this.token},
-            })
-                .then(response => {
-                    this.job = response.data.data;
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        })
+        //  this.$axios.get('/sanctum/csrf-cookie').then(response => {
+        //     this.$axios.get('/api/alljob',{
+        //         headers: {Authorization: "Bearer " + this.token},
+        //     })
+        //         .then(response => {
+        //             this.job = response.data.data;
+        //         })
+        //         .catch(function (error) {
+        //             console.error(error);
+        //         });
+        // })
     },
     methods:{
       modalapprove(id){
@@ -385,17 +385,16 @@ export default {
                 });
         })
         },
-        searchjabatan(val) {
+        searchjob(val) {
             if (val == "")
             {
-                this.allJabatan()
+                this.alljob()
             }else {
-                axios
-                    .get('/api/searchjabatan/'+ val , {
+                this.$axios.get('/api/searchjob/'+ val , {
                         headers: {Authorization: "Bearer " + this.token},
                     })
                     .then((response) => {
-                        this.jabatan = response.data;
+                        this.job = response.data;
                     });
             }
         },
@@ -517,9 +516,9 @@ export default {
             )
           })
         },
-        alljob(){
+        alljob(page = 1){
           this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/alljob',{
+            this.$axios.get('/api/alljob?page=' + page,{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
@@ -570,12 +569,13 @@ export default {
     watch: {
                 search: function ()
                 {
-                    this.searchjabatan(this.search)
+                    this.searchjob(this.search)
                 }
         },
   mounted() {
     setNavPills();
     this.getpt();
+    this.alljob()
     this.allJabatan();
     this.getdataPegawai()
   }

@@ -34,13 +34,9 @@ class LemburController extends Controller
                 ->select('*')
                 ->where('lembur.id_admin', Auth::user()->id)
                 ->where('email', 'like', '%' . $key . '%')
-                ->orWhere('tanggal_lembur', 'like', '%' . $key . '%')
-                ->orWhere('nama_lengkap', 'like', '%' . $key . '%')
-                ->orWhere('no_pegawai', 'like', '%' . $key . '%')
-                ->orWhere('status_lembur', 'like', '%' . $key . '%')
                 ->where('lembur.id_admin', Auth::user()->id)
                 ->latest()
-                ->paginate(10);
+                ->paginate(8);
 
             return $result;
 

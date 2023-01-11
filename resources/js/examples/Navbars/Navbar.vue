@@ -1,7 +1,7 @@
 <template>
   <nav
     style="z-index: 1 !important; "
-    class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl"
+    class="navbar navbar-main navbar-expand-lg px-0 ms-2 me-4 border-radius-lg"
     :class="
       this.$store.state.isRTL ? 'top-0 position-sticky' : ''
     "
@@ -22,44 +22,28 @@
           :class="this.$store.state.isRTL ? 'me-md-auto' : 'ms-md-auto'"
         >
         </div>
-        <ul class="navbar-nav justify-content-end">
-          <li class="nav-item ps-3 d-flex align-items-center">
-            <a
-              href="#"
-              @click="toggleSidebar"
-              v-click-outside="navbarMinimize"
-              class="p-0 nav-link text-white"
-              id="iconNavbarSidenav"
-            >
-              <div class="sidenav-toggler-inner">
-                <i class="sidenav-toggler-line bg-white"></i>
-                <i class="sidenav-toggler-line bg-white"></i>
-                <i class="sidenav-toggler-line bg-white"></i>
-              </div>
-            </a>
-          </li>
-          <li class="px-3 nav-item d-flex align-items-center ">
-          </li>
-        </ul>
       </div>
-      <div class="btn-group">
-        <argon-button
+        <img :src="sidebar" style="width:16px; height:16px; cursor:pointer" class="me-3" @click="toggleSidebar"  id="iconNavbarSidenav"/>
+      <!-- <i style="cursor:pointer" class="fa-solid fa-bars text-white me-3 fs-6"  @click="toggleSidebar"  id="iconNavbarSidenav"></i> -->
+      <i class="fa-solid fa-bell text-white me-3 fs-6"></i>
+      <div class="btn-group me-3">
+        <span
               href="#"
-              class="text-primary dropdown-toggle"
-              color="white" size="sm"
+              class="text-white border-none shadow-none dropdown-toggle bg-transparent fw-bold fs-7"
               data-bs-toggle="dropdown"
               aria-expanded="false"
+              style="cursor:pointer"
             >
             
             <i
-                class="fa fa-user"
+                class="fa fa-user bg-white text-primary p-1" style="border-radius: 50%"
                 :class="this.$store.state.isRTL ? 'ms-sm-2' : 'me-sm-2'"
               ></i>
               <span v-if="this.$store.state.isRTL" class="d-sm-inline d-none"
                 >يسجل دخول</span
               >
               <span v-else class="d-sm-inline d-none" >{{name}}</span>
-          </argon-button>
+          </span>
           <ul v-if="role == 'Admin'"
               class="dropdown-menu dropdown-menu-end" style="margin-top:10px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);"
               aria-labelledby="dropdownMenuButton"
@@ -159,6 +143,7 @@ import Breadcrumbs from "../Breadcrumbs.vue";
 import { mapMutations, mapActions } from "vuex";
 import ArgonButton from "../../components/ArgonButton.vue";
 import ClickOutside from 'vue-click-outside'
+import sidebar from "../../assets/img/menu.png";
 
 export default {
   components: {
@@ -172,6 +157,7 @@ export default {
     return {
       cek:[],
       infopt:[],
+      sidebar,
       superadmindata:[],
       showMenu: false,
       loggedIn: localStorage.getItem("loggedIn"),

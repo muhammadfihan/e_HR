@@ -27,7 +27,8 @@ class RiwayatGaji extends Model
         'gaji_kotor',
         'gaji_bersih',
         'gaji_pokok',
-        'status'
+        'status',
+        'no_transaksi'
 
     ];
 }

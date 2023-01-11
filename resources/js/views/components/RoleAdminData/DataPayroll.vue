@@ -19,10 +19,12 @@
       </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2 mb-3">
-        <div v-if="this.cekstatus == ''" class="table-responsive p-0">
+        <div v-if="this.cekstatus == null" class="table-responsive p-0">
         <table class="table align-items-center mb-0">
           <thead>
-              <th></th>
+            <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                >No</th>
               <th
                 class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >Email</th>
@@ -48,7 +50,9 @@
       <div v-else-if="this.cekstatus != ''" class="table-responsive p-0 border-bottom">
         <table class="table align-items-center mb-0">
           <thead>
-              <th></th>
+              <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                >No</th>
               <th
                 class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >Email</th>
@@ -69,8 +73,10 @@
               >Action</th>
           </thead>
           <tbody >
-            <tr v-for="data in datagajipeg" :key="data.id">
-              <td v-if="data.status == 'Belum Diambil'"></td>
+            <tr v-for="(data,index) in datagajipeg" :key="data.id">
+             <td class="align-middle text-center" v-if="data.status == 'Belum Diambil'">
+                <span class="text-secondary text-xs font-weight-bold">{{index+1}}</span>
+             </td>
               <td v-if="data.status == 'Belum Diambil'" class="align-middle">
                   <span class="text-secondary text-xs font-weight-bold">{{ data.email }}</span>
               </td>
@@ -156,8 +162,8 @@
                 </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-warning" @click="clear()">Clear</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-warning" @click="clear()">Clear</button>
         <button class="btn btn-primary" type="submit" @click="submitgaji()" >Buat Gaji</button>
       </div>
     </div>
@@ -592,23 +598,27 @@ export default {
             })
                 .then(response => {
                     this.datagajipeg = response.data.data;
-                    this.cekstatus = response.data.cekstatus
+                    this.cekstatus = response.data.status
                     this.nilai = response.data.tunjangan;
                     this.bon = response.data.bonus;
                     this.potong = response.data.potongan;
                     this.akhir = response.data.hasil;
-
-                    for (let i = 0; i < this.nilai.length; i++) {
+                    
+                    if(response.data.status == null){
+                        return
+                    }else{
+                        for (let i = 0; i < this.nilai.length; i++) {
                         Object.assign(this.datagajipeg[i], { nilai: this.nilai[i] })
-                    }
-                    for (let i = 0; i < this.bon.length; i++) {
-                        Object.assign(this.datagajipeg[i], { bon: this.bon[i] })
-                    }
-                    for (let i = 0; i < this.potong.length; i++) {
-                        Object.assign(this.datagajipeg[i], { potong: this.potong[i] })
-                    }
-                    for (let i = 0; i < this.akhir.length; i++) {
-                        Object.assign(this.datagajipeg[i], { akhir: this.akhir[i] })
+                        }
+                        for (let i = 0; i < this.bon.length; i++) {
+                            Object.assign(this.datagajipeg[i], { bon: this.bon[i] })
+                        }
+                        for (let i = 0; i < this.potong.length; i++) {
+                            Object.assign(this.datagajipeg[i], { potong: this.potong[i] })
+                        }
+                        for (let i = 0; i < this.akhir.length; i++) {
+                            Object.assign(this.datagajipeg[i], { akhir: this.akhir[i] })
+                        }
                     }
                 })
                 .catch(function (error) {
@@ -1035,7 +1045,7 @@ export default {
         },
          alltunjangan(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/alltunjangan',{
+            this.$axios.get('/api/alltunjangan2',{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
@@ -1132,7 +1142,7 @@ export default {
         },
          allbonus(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/allbonus',{
+            this.$axios.get('/api/allbonus2',{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {
@@ -1228,7 +1238,7 @@ export default {
         },
          allpotongan(){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.get('/api/allpotongan',{
+            this.$axios.get('/api/allpotongan2',{
                 headers: {Authorization: "Bearer " + this.token},
             })
                 .then(response => {

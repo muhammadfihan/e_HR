@@ -13,7 +13,7 @@
             <span class="input-group-text text-body bg-gray-100" style="outline-width: 2px; border:none">
               <i class="fas fa-search"></i>
             </span>
-            <input style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Cari Tunjangan..." >
+            <input v-model="searchtun" style="border:none; box-shadow: none;" class="form-control form-control-md bg-gray-100" type="text" placeholder="Cari Tunjangan..." >
           </div>
         </div>
       </div>
@@ -182,8 +182,7 @@ export default {
             {
                 this.alltunjangan()
             }else {
-                axios
-                    .get('/api/searchtunjangan/'+ val , {
+                this.$axios.get('/api/searchtunjangan/'+ val , {
                         headers: {Authorization: "Bearer " + this.token},
                     })
                     .then((response) => {
