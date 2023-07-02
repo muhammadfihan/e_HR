@@ -23,14 +23,11 @@ This is a repository for the HR Management website, a web application designed t
 
 ## Technologies Used
 
-- Frontend: React.js, Next.js, Tailwind CSS
-- Backend: Node.js, Express.js
-- Database: MongoDB
+- Frontend: Vue JS, Template Argon Material Design
+- Backend: Laravel 8
+- Database: MySql
 - Authentication: JSON Web Tokens (JWT)
-- State Management: Redux
 - API Integration: Axios
-- Testing: Jest, React Testing Library
-- Deployment: Heroku, Netlify
 
 ## Installation
 
